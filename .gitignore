@@ -1,6 +1,6 @@
 
 #Ignore thumbnails created by Windows
-Thumbs.db
+Thumbs.ru.innopolis.stc9.db
 #Ignore files built by Visual Studio
 *.obj
 *.exe
