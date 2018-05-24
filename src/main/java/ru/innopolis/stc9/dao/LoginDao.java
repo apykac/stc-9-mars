@@ -1,6 +1,6 @@
 package ru.innopolis.stc9.dao;
 
-import ru.innopolis.stc9.pogo.Login;
+import ru.innopolis.stc9.pojo.Login;
 
 /**
  * Created by Семушев on 24.05.2018.

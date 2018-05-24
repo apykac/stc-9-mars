@@ -4,12 +4,12 @@ import org.apache.log4j.Logger;
 import ru.innopolis.stc9.service.GroupService;
 import ru.innopolis.stc9.service.GroupServiceImpl;
 
-import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
 
 /**
  * Created by Сергей on 23.05.2018.
@@ -22,11 +22,21 @@ public class DeleteGroupController extends HttpServlet {
     private final GroupService service = new GroupServiceImpl();
 
     @Override
-    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        req.setCharacterEncoding(ENCODING);
-        resp.setCharacterEncoding(ENCODING);
-        service.deleteGroup(Integer.parseInt(req.getParameter("id")));
-        logger.info("group deleted");
-        resp.sendRedirect(req.getContextPath() + "/views/allgroup");
+    protected void doPost(HttpServletRequest req, HttpServletResponse resp) {
+        if ((req == null) || (resp == null)) return;
+        try {
+            req.setCharacterEncoding(ENCODING);
+            resp.setCharacterEncoding(ENCODING);
+            int id = Integer.parseInt(req.getParameter("id"));
+            service.deleteGroup(id);
+            logger.info("group deleted");
+            resp.sendRedirect(req.getContextPath() + "/views/allgroup");
+        } catch (UnsupportedEncodingException e) {
+            logger.error("UnsupportedEncodingException: " + e.getMessage());
+        } catch (NumberFormatException e) {
+            logger.error("NumberFormatException: " + e.getMessage());
+        } catch (IOException e) {
+            logger.error("IOException: " + e.getMessage());
+        }
     }
 }

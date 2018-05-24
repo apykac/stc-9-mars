@@ -1,4 +1,4 @@
-package ru.innopolis.stc9.pogo;
+package ru.innopolis.stc9.pojo;
 
 /**
  * Created by Семушев on 24.05.2018.
@@ -7,9 +7,19 @@ public class User {
     private int id;
     private String firstName;
     private String secondName;
-    private String mddleName;
-    private int groupId;
+    private String middleName;
+    private Integer groupId;
     private Group group;
+
+    public User() {
+    }
+
+    public User(String firstName, String secondName, String mddleName, Integer groupId) {
+        this.firstName = firstName;
+        this.secondName = secondName;
+        this.middleName = mddleName;
+        this.groupId = groupId;
+    }
 
     public int getId() {
         return id;
@@ -35,19 +45,19 @@ public class User {
         this.secondName = secondName;
     }
 
-    public String getMddleName() {
-        return mddleName;
+    public String getMiddleName() {
+        return middleName;
     }
 
-    public void setMddleName(String mddleName) {
-        this.mddleName = mddleName;
+    public void setMiddleName(String middleName) {
+        this.middleName = middleName;
     }
 
-    public int getGroupId() {
+    public Integer getGroupId() {
         return groupId;
     }
 
-    public void setGroupId(int groupId) {
+    public void setGroupId(Integer groupId) {
         this.groupId = groupId;
     }
 
