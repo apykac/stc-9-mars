@@ -9,7 +9,7 @@
     <div id="menu">
         <ul>
             <li class="active"> <a> Добро пожаловать, ${sessionScope.get("name")} </a></li>
-            <li><a href="${pageContext.request.contextPath}/logout">Выйти</a> </li>
+            <li><a href="${pageContext.request.contextPath}/login?action=logout">Выйти</a></li>
 
         </ul>
     </div>

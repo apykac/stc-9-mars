@@ -62,7 +62,7 @@ public class LoginDaoImpl implements LoginDao {
         logger.info("Start find login by name");
         try (Connection connection = connectionManager.getConnection();
              PreparedStatement statement = connection.prepareStatement(
-                     "DELETE FROM login WHERE login = ?")) {
+                     "SELECT * FROM login WHERE login = ?")) {
             statement.setString(1, name);
             ResultSet resultSet = statement.executeQuery();
             if (resultSet.next()) {
