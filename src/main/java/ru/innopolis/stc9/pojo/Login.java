@@ -7,9 +7,18 @@ public class Login {
     private int id;
     private String userName;
     private long hashPassword;
-    private int premissionGroup;
-    private int userId;
+    private int permissionGroup;
+    private Integer userId;
     private User user;
+
+    public Login() {
+    }
+
+    public Login(String userName, long hashPassword, Integer userId) {
+        this.userName = userName;
+        this.hashPassword = hashPassword;
+        this.userId = userId;
+    }
 
     public int getId() {
         return id;
@@ -35,19 +44,19 @@ public class Login {
         this.hashPassword = hashPassword;
     }
 
-    public int getPremissionGroup() {
-        return premissionGroup;
+    public int getPermissionGroup() {
+        return permissionGroup;
     }
 
-    public void setPremissionGroup(int premissionGroup) {
-        this.premissionGroup = premissionGroup;
+    public void setPermissionGroup(int permissionGroup) {
+        this.permissionGroup = permissionGroup;
     }
 
-    public int getUserId() {
+    public Integer getUserId() {
         return userId;
     }
 
-    public void setUserId(int userId) {
+    public void setUserId(Integer userId) {
         this.userId = userId;
     }
 

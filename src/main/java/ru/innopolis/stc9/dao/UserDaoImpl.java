@@ -71,14 +71,12 @@ public class UserDaoImpl implements UserDao {
     }
 
     public User getUser(int id) {
-        User result=null;
-        try(Connection connection = connectionManager.getConnection();
-            PreparedStatement statement = connection.prepareStatement(
-                    "SELECT * from users WHERE id=?"
-            )) {
-            statement.setInt(1,id);
+        User result = null;
+        try (Connection connection = connectionManager.getConnection();
+             PreparedStatement statement = connection.prepareStatement("SELECT * FROM users WHERE id=?")) {
+            statement.setInt(1, id);
             try (ResultSet resultSet = statement.executeQuery()) {
-                    result = userMapper.getUserFromResultSet(resultSet);
+                if (resultSet.next()) result = UserMapper.getByResultSet(resultSet);
             }
         } catch (SQLException e) {
             logger.error(e.getMessage());
@@ -91,15 +89,10 @@ public class UserDaoImpl implements UserDao {
         logger.info("Users list requested.");
         List<User> result = new ArrayList<>();
         try (Connection connection = connectionManager.getConnection();
-            PreparedStatement statement = connection.prepareStatement(
-                    "SELECT * FROM users"
-            )) {
+             PreparedStatement statement = connection.prepareStatement("SELECT * FROM users")) {
             try (ResultSet resultSet = statement.executeQuery()) {
                 while (resultSet.next()) {
-                    User user = new User();
-                    user.setId(resultSet.getInt("id"));
-                    user.setFirstName(resultSet.getString("first_name"));
-                    user.setSecondName(resultSet.getString("second_name"));
+                    User user = UserMapper.getByResultSet(resultSet);
                     result.add(user);
                 }
                 logger.info("Users list returned successfully");

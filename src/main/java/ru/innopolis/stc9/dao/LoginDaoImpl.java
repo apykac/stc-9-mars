@@ -74,14 +74,12 @@ public class LoginDaoImpl implements LoginDao {
     public Login findLoginByUserId(int id) {
         Login result = null;
         try (Connection connection = connectionManager.getConnection();
-            PreparedStatement statement = connection.prepareStatement(
-                    "SELECT * FROM login where user_id=?")) {
-            statement.setInt(1,id);
+             PreparedStatement statement = connection.prepareStatement(
+                     "SELECT * FROM login where user_id=?")) {
+            statement.setInt(1, id);
             try (ResultSet resultSet = statement.executeQuery()) {
-                result=new Login();
-                loginMapper.setLoginFields(result, resultSet);
+                if (resultSet.next()) result = LoginMapper.getByResultSet(resultSet);
             }
-
         } catch (SQLException e) {
             logger.info(e.getMessage());
         }
@@ -91,6 +89,7 @@ public class LoginDaoImpl implements LoginDao {
     @Override
     public boolean updateLogin(Login login) {
         logger.info("Start update login");
+        if (login == null) return false;
         try (Connection connection = connectionManager.getConnection();
              PreparedStatement statement = connection.prepareStatement(
                      "UPDATE login SET userName = ?, hash_password = ?, permission_group = ?, user_id = ? WHERE id = ?")) {

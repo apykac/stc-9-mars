@@ -1,7 +1,6 @@
 package ru.innopolis.stc9.dao;
 
 import ru.innopolis.stc9.pojo.User;
-import ru.innopolis.stc9.pojo.User;
 
 import java.util.List;
 
@@ -14,5 +13,6 @@ public interface UserDao {
     Integer maxId();
 
     Integer addUserWithoutAutoInc(User user);
+
     List<User> getUsersList();
 }

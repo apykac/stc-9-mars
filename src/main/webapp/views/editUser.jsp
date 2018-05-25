@@ -1,5 +1,5 @@
-<%@ page import="ru.innopolis.stc9.pojo.User" %>
 <%@ page import="ru.innopolis.stc9.pojo.Login" %>
+<%@ page import="ru.innopolis.stc9.pojo.User" %>
 <%@ page language="java" contentType="text/html; charset=UTF-8" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <%
@@ -40,7 +40,8 @@
                 </div>
                 <div>
                     <label for="editMiddleName">Отчество</label>
-                    <input type="text" class="form-control" id="editMiddleName" placeholder="Middle name" name="editMiddleName" value="<%=user.getMddleName()%>">
+                    <input type="text" class="form-control" id="editMiddleName" placeholder="Middle name"
+                           name="editMiddleName" value="<%=user.getMiddleName()%>">
                 </div>
                 <b>Роль пользователя</b>
                 <div>

@@ -26,7 +26,7 @@ public class ConnectionManagerImpl implements ConnectionManager {
     public Connection getConnection() {
         Connection connection = null;
         try {
-            Class.forName("com.mysql.cj.jdbc.Driver");
+            Class.forName("com.mysql.jdbc.Driver");
             connection = DriverManager.getConnection(
                     "jdbc:mysql://sql7.freesqldatabase.com:3306/sql7239469",
                     "sql7239469",
