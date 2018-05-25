@@ -22,6 +22,5 @@ dependencies {
     compile group: 'javax.servlet', name: 'jstl', version: '1.2'
     compile group: 'mysql', name: 'mysql-connector-java', version: '6.0.6'
     testCompile group: 'org.powermock', name: 'powermock-api-mockito', version: '1.7.3'
-
-
+    compile group: 'org.springframework', name: 'spring-context', version: '4.3.17.RELEASE'
 }

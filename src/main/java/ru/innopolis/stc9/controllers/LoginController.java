@@ -15,7 +15,8 @@ public class LoginController extends HttpServlet {
     private final LoginService loginService = new LoginServiceImpl();
 
     @Override
-    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+    protected void doGet(HttpServletRequest req, HttpServletResponse resp) {
+        if ((req == null) || (resp == null)) return;
         String action = req.getParameter("action");
         if ("logout".equals(action)) {
             logger.info("logout: " + req.getSession().getAttribute("login"));
@@ -29,17 +30,24 @@ public class LoginController extends HttpServlet {
     }
 
     @Override
-    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+    protected void doPost(HttpServletRequest req, HttpServletResponse resp) {
+        if ((req == null) || (resp == null)) return;
         String login = req.getParameter("userName");
         String password = req.getParameter("userPassword");
+        String redirectPath;
         if (loginService.checkAuth(login, password)) {
             Integer role = loginService.getRole(login);
             logger.info("login: " + login + ", role: " + role);
             req.getSession().setAttribute("login", login);
             req.getSession().setAttribute("role", role);
-            resp.sendRedirect(req.getContextPath() + "/views");
+            redirectPath = req.getContextPath() + "/views";
         } else {
-            resp.sendRedirect(req.getContextPath() + "/login?errorMsg=authError");
+            redirectPath = req.getContextPath() + "/login?errorMsg=authError";
+        }
+        try {
+            resp.sendRedirect(redirectPath);
+        } catch (IOException e) {
+            logger.error("IOException: " + e.getMessage());
         }
     }
 }

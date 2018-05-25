@@ -1,8 +1,8 @@
 package ru.innopolis.stc9.dao;
 
+import org.apache.log4j.Logger;
 import ru.innopolis.stc9.db.connection.ConnectionManager;
 import ru.innopolis.stc9.db.connection.ConnectionManagerImpl;
-import org.apache.log4j.Logger;
 import ru.innopolis.stc9.pojo.Group;
 
 import java.sql.Connection;
@@ -10,7 +10,6 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 /**
@@ -21,14 +20,14 @@ public class GroupDaoImpl implements GroupDao {
     private Logger logger = Logger.getLogger(GroupDaoImpl.class);
     private static ConnectionManager connectionManager = ConnectionManagerImpl.getInstance();
     private String errMessage = "SQLException. ";
+
     @Override
     public boolean addGroup(Group group) {
         if (group == null) return false;
         try (Connection connection = connectionManager.getConnection();
              PreparedStatement statement = connection.prepareStatement(
                      "INSERT INTO stgroup (gname) " +
-                             "VALUES (?)\n"))
-        {
+                             "VALUES (?)\n")) {
             statement.setString(1, group.getName());
             statement.execute();
             logger.info("group added to DB");
@@ -41,14 +40,10 @@ public class GroupDaoImpl implements GroupDao {
 
     @Override
     public boolean updateGroup(Group group) {
-        if (group == null) {
-            return false;
-        }
-
+        if (group == null) return false;
         try (Connection connection = connectionManager.getConnection();
              PreparedStatement statement = connection.prepareStatement(
-                     "UPDATE stgroup SET gname = ? WHERE id = ?"))
-        {
+                     "UPDATE stgroup SET gname = ? WHERE id = ?")) {
             statement.setString(1, group.getName());
             statement.setInt(2, group.getId());
             statement.executeUpdate();
@@ -62,10 +57,10 @@ public class GroupDaoImpl implements GroupDao {
 
     @Override
     public boolean deleteGroup(int groupId) {
+        if (groupId < 0) return false;
         try (Connection connection = connectionManager.getConnection();
              PreparedStatement statement = connection.prepareStatement(
-                     "DELETE  FROM stgroup WHERE id =?"))
-        {
+                     "DELETE  FROM stgroup WHERE id =?")) {
             statement.setInt(1, groupId);
             statement.execute();
             logger.info(" delete group");
@@ -78,51 +73,48 @@ public class GroupDaoImpl implements GroupDao {
 
     @Override
     public Group findGroupById(int id) {
-        try (Connection connection = connectionManager.getConnection()) {
-            PreparedStatement statement = connection.prepareStatement(
-                    "SELECT * FROM stgroup WHERE id = ?");
+        Group group = null;
+        if (id < 0) return group;
+        try (Connection connection = connectionManager.getConnection();
+             PreparedStatement statement = connection.prepareStatement("SELECT * FROM stgroup WHERE id = ?")) {
             statement.setInt(1, id);
-            ResultSet set = statement.executeQuery();
-            Group group = null;
-            while (set.next()) {
-                group = new Group(set.getInt("id"),set.getString("gname"));
-                logger.info("get group by id");
+            try (ResultSet set = statement.executeQuery()) {
+                while (set.next()) group = new Group(set.getInt("id"), set.getString("gname"));
             }
+            logger.info("get group by id");
             return group;
         } catch (SQLException e) {
             logger.error(errMessage + e.getMessage());
         }
-        return null;
+        return group;
     }
 
     @Override
     public Group findGroupByName(String name) {
-        try (Connection connection = connectionManager.getConnection()) {
-            PreparedStatement statement = connection.prepareStatement(
-                    "SELECT * FROM stgroup WHERE gname = ?");
+        Group group = null;
+        if ((name == null) || name.isEmpty()) return group;
+        try (Connection connection = connectionManager.getConnection();
+             PreparedStatement statement = connection.prepareStatement("SELECT * FROM stgroup WHERE gname = ?")) {
             statement.setString(1, name);
-            ResultSet set = statement.executeQuery();
-            Group group = null;
-            while (set.next()) {
-                group = new Group(set.getString("gname"));
-                logger.info("get group by name");
+            try (ResultSet set = statement.executeQuery()) {
+                while (set.next()) {
+                    group = new Group(set.getString("gname"));
+                    logger.info("get group by name");
+                }
             }
             return group;
         } catch (SQLException e) {
             logger.error(errMessage + e.getMessage());
         }
-        return null;
+        return group;
     }
 
     @Override
     public List<Group> findAllGroups() {
         List<Group> list = new ArrayList<>();
-
         try (Connection connection = connectionManager.getConnection();
-             PreparedStatement statement = connection.prepareStatement(
-                     "SELECT * FROM stgroup");
-             ResultSet set = statement.executeQuery())
-        {
+             PreparedStatement statement = connection.prepareStatement("SELECT * FROM stgroup");
+             ResultSet set = statement.executeQuery()) {
             while (set.next()) {
                 Group group = findGroupById(set.getInt("id"));
                 list.add(group);
@@ -132,6 +124,6 @@ public class GroupDaoImpl implements GroupDao {
         } catch (SQLException e) {
             logger.error(errMessage + e.getMessage());
         }
-        return Collections.emptyList();
+        return list;
     }
 }

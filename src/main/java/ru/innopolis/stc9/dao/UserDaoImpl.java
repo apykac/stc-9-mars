@@ -1,7 +1,6 @@
 package ru.innopolis.stc9.dao;
 
 import org.apache.log4j.Logger;
-import ru.innopolis.stc9.dao.mapper.UserMapper;
 import ru.innopolis.stc9.db.connection.ConnectionManager;
 import ru.innopolis.stc9.db.connection.ConnectionManagerImpl;
 import ru.innopolis.stc9.pojo.User;
@@ -18,7 +17,6 @@ import java.util.List;
  */
 public class UserDaoImpl implements UserDao {
     private static ConnectionManager connectionManager = ConnectionManagerImpl.getInstance();
-    private UserMapper userMapper = new UserMapper();
     private Logger logger = Logger.getLogger(UserDaoImpl.class);
 
     @Override
@@ -27,12 +25,8 @@ public class UserDaoImpl implements UserDao {
         logger.info("Start add user");
         try (Connection connection = connectionManager.getConnection();
              PreparedStatement statement = connection.prepareStatement(
-                     "INSERT INTO users (first_name, second_name, middle_name, group_id) " +
-                             "VALUES (?, ?, ?, ?)")) {
-            statement.setString(1, user.getFirstName());
-            statement.setString(2, user.getSecondName());
-            statement.setString(3, user.getMddleName());
-            statement.setInt(4, user.getGroupId());
+                     "INSERT INTO users (first_name, second_name, middle_name, group_id) VALUES (?, ?, ?, ?)")) {
+            UserMapper.statementSetter(statement, user, 4);
             statement.execute();
             logger.info("Adding user successfully");
         } catch (SQLException e) {
@@ -40,6 +34,40 @@ public class UserDaoImpl implements UserDao {
             return false;
         }
         return true;
+    }
+
+    @Override
+    public Integer maxId() {
+        Integer result = null;
+        try (Connection connection = connectionManager.getConnection();
+             PreparedStatement statement = connection.prepareStatement("SELECT MAX(id) maxid FROM users")) {
+            statement.execute();
+            try (ResultSet resultSet = statement.executeQuery()) {
+                if (resultSet.next()) result = resultSet.getInt("maxid");
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return result;
+    }
+
+    @Override
+    public Integer addUserWithoutAutoInc(User user) {
+        Integer result = maxId() + 1;
+        if (user == null) return result;
+        user.setId(result);
+        logger.info("Start add user");
+        try (Connection connection = connectionManager.getConnection();
+             PreparedStatement statement = connection.prepareStatement(
+                     "INSERT INTO users (first_name, second_name, middle_name, group_id, id) VALUES (?, ?, ?, ?, ?)")) {
+            UserMapper.statementSetter(statement, user, 5);
+            statement.execute();
+            logger.info("Adding user successfully");
+        } catch (SQLException e) {
+            logger.error(e.getMessage());
+            return null;
+        }
+        return result;
     }
 
     public User getUser(int id) {

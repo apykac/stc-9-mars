@@ -1,7 +1,6 @@
 package ru.innopolis.stc9.dao;
 
 import org.apache.log4j.Logger;
-import ru.innopolis.stc9.dao.mapper.LoginMapper;
 import ru.innopolis.stc9.db.connection.ConnectionManager;
 import ru.innopolis.stc9.db.connection.ConnectionManagerImpl;
 import ru.innopolis.stc9.pojo.Login;
@@ -17,7 +16,6 @@ import java.sql.SQLException;
 public class LoginDaoImpl implements LoginDao {
     private static ConnectionManager connectionManager = ConnectionManagerImpl.getInstance();
     private Logger logger = Logger.getLogger(LoginDaoImpl.class);
-    private LoginMapper loginMapper = new LoginMapper();
 
     @Override
     public boolean addLogin(Login login) {
@@ -27,10 +25,7 @@ public class LoginDaoImpl implements LoginDao {
              PreparedStatement statement = connection.prepareStatement(
                      "INSERT INTO login (userName, hash_password, permission_group, user_id) " +
                              "VALUES (?, ?, ?, ?)")) {
-            statement.setString(1, login.getUserName());
-            statement.setLong(2, login.getHashPassword());
-            statement.setInt(3, login.getPremissionGroup());
-            statement.setInt(4, login.getUserId());
+            LoginMapper.statementSetter(statement, login, 4);
             statement.execute();
             logger.info("Adding login successfully");
         } catch (SQLException e) {
@@ -67,14 +62,7 @@ public class LoginDaoImpl implements LoginDao {
                      "SELECT * FROM login WHERE userName = ?")) {
             statement.setString(1, name);
             try (ResultSet resultSet = statement.executeQuery()) {
-                if (resultSet.next()) {
-                    login = new Login();
-                    login.setId(resultSet.getInt("id"));
-                    login.setUserName(resultSet.getString("userName"));
-                    login.setHashPassword(resultSet.getInt("hash_password"));
-                    login.setPremissionGroup(resultSet.getInt("permission_group"));
-                    login.setUserId(resultSet.getInt("user_id"));
-                }
+                if (resultSet.next()) login = LoginMapper.getByResultSet(resultSet);
             }
         } catch (SQLException e) {
             logger.error(e.getMessage());
@@ -105,11 +93,8 @@ public class LoginDaoImpl implements LoginDao {
         logger.info("Start update login");
         try (Connection connection = connectionManager.getConnection();
              PreparedStatement statement = connection.prepareStatement(
-                     "UPDATE login SET hash_password = ?, permission_group = ?, user_id = ? WHERE id = ?")) {
-            statement.setLong(1, login.getHashPassword());
-            statement.setInt(2, login.getPremissionGroup());
-            statement.setInt(3, login.getUserId());
-            statement.setInt(4, login.getId());
+                     "UPDATE login SET userName = ?, hash_password = ?, permission_group = ?, user_id = ? WHERE id = ?")) {
+            LoginMapper.statementSetter(statement, login, 5);
             statement.execute();
             logger.info("Updating login successfully");
         } catch (SQLException e) {

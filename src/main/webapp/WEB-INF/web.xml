@@ -48,6 +48,15 @@
         <url-pattern>/login</url-pattern>
     </servlet-mapping>
 
+    <servlet>
+        <servlet-name>RegistrationController</servlet-name>
+        <servlet-class>ru.innopolis.stc9.controllers.RegistrationController</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>RegistrationController</servlet-name>
+        <url-pattern>/registration</url-pattern>
+    </servlet-mapping>
+
     <filter>
         <filter-name>auth-filter</filter-name>
         <filter-class>ru.innopolis.stc9.controllers.filter.UserFilter</filter-class>
