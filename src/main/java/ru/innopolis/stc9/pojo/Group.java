@@ -1,4 +1,4 @@
-package ru.innopolis.stc9.pogo;
+package ru.innopolis.stc9.pojo;
 
 /**
  * Created by Сергей on 23.05.2018.

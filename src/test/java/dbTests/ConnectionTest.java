@@ -1,6 +1,6 @@
 package dbTests;
 
-import com.mysql.jdbc.ConnectionImpl;
+import com.mysql.cj.jdbc.ConnectionImpl;
 import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;

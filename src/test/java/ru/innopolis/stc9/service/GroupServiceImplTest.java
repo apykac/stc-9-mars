@@ -8,7 +8,7 @@ import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.PowerMockRunner;
 import ru.innopolis.stc9.dao.GroupDao;
 import ru.innopolis.stc9.dao.GroupDaoImpl;
-import ru.innopolis.stc9.pogo.Group;
+import ru.innopolis.stc9.pojo.Group;
 
 import java.lang.reflect.Field;
 import java.util.ArrayList;

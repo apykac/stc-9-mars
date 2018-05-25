@@ -1,6 +1,6 @@
 package ru.innopolis.stc9.dao;
 
-import ru.innopolis.stc9.pogo.Group;
+import ru.innopolis.stc9.pojo.Group;
 
 import java.util.List;
 

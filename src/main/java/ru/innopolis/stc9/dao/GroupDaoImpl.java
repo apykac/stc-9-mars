@@ -3,7 +3,7 @@ package ru.innopolis.stc9.dao;
 import ru.innopolis.stc9.db.connection.ConnectionManager;
 import ru.innopolis.stc9.db.connection.ConnectionManagerImpl;
 import org.apache.log4j.Logger;
-import ru.innopolis.stc9.pogo.Group;
+import ru.innopolis.stc9.pojo.Group;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;

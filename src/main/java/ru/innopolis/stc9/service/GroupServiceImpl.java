@@ -2,7 +2,7 @@ package ru.innopolis.stc9.service;
 
 import ru.innopolis.stc9.dao.GroupDao;
 import ru.innopolis.stc9.dao.GroupDaoImpl;
-import ru.innopolis.stc9.pogo.Group;
+import ru.innopolis.stc9.pojo.Group;
 
 import java.util.List;
 

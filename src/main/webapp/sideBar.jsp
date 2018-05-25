@@ -16,7 +16,7 @@
                     тут еще ссылка
                 </li>
                 <li>
-                    тут еще ссылка
+                    <h3><a href="${pageContext.request.contextPath}/views/users-list">Список пользователей</a></h3>
                 </li>
                 <li>
                     тут еще ссылка

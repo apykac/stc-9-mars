@@ -1,9 +1,10 @@
 package ru.innopolis.stc9.dao;
 
 import org.apache.log4j.Logger;
+import ru.innopolis.stc9.dao.mapper.LoginMapper;
 import ru.innopolis.stc9.db.connection.ConnectionManager;
 import ru.innopolis.stc9.db.connection.ConnectionManagerImpl;
-import ru.innopolis.stc9.pogo.Login;
+import ru.innopolis.stc9.pojo.Login;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -16,6 +17,7 @@ import java.sql.SQLException;
 public class LoginDaoImpl implements LoginDao {
     private static ConnectionManager connectionManager = ConnectionManagerImpl.getInstance();
     private Logger logger = Logger.getLogger(LoginDaoImpl.class);
+    private LoginMapper loginMapper = new LoginMapper();
 
     @Override
     public boolean addLogin(Login login) {
@@ -23,9 +25,9 @@ public class LoginDaoImpl implements LoginDao {
         logger.info("Start add login");
         try (Connection connection = connectionManager.getConnection();
              PreparedStatement statement = connection.prepareStatement(
-                     "INSERT INTO login (login, hash_password, permission_group, user_id) " +
+                     "INSERT INTO login (userName, hash_password, permission_group, user_id) " +
                              "VALUES (?, ?, ?, ?)")) {
-            statement.setString(1, login.getLogin());
+            statement.setString(1, login.getUserName());
             statement.setLong(2, login.getHashPassword());
             statement.setInt(3, login.getPremissionGroup());
             statement.setInt(4, login.getUserId());
@@ -44,7 +46,7 @@ public class LoginDaoImpl implements LoginDao {
         logger.info("Start delete login by name");
         try (Connection connection = connectionManager.getConnection();
              PreparedStatement statement = connection.prepareStatement(
-                     "DELETE FROM login WHERE login = ?")) {
+                     "DELETE FROM login WHERE userName = ?")) {
             statement.setString(1, name);
             statement.execute();
             logger.info("Deleting login successfully");
@@ -62,22 +64,40 @@ public class LoginDaoImpl implements LoginDao {
         logger.info("Start find login by name");
         try (Connection connection = connectionManager.getConnection();
              PreparedStatement statement = connection.prepareStatement(
-                     "SELECT * FROM login WHERE login = ?")) {
+                     "SELECT * FROM login WHERE userName = ?")) {
             statement.setString(1, name);
-            ResultSet resultSet = statement.executeQuery();
-            if (resultSet.next()) {
-                login = new Login();
-                login.setId(resultSet.getInt("id"));
-                login.setLogin(resultSet.getString("login"));
-                login.setHashPassword(resultSet.getInt("hash_password"));
-                login.setPremissionGroup(resultSet.getInt("permission_group"));
-                login.setUserId(resultSet.getInt("user_id"));
+            try (ResultSet resultSet = statement.executeQuery()) {
+                if (resultSet.next()) {
+                    login = new Login();
+                    login.setId(resultSet.getInt("id"));
+                    login.setUserName(resultSet.getString("userName"));
+                    login.setHashPassword(resultSet.getInt("hash_password"));
+                    login.setPremissionGroup(resultSet.getInt("permission_group"));
+                    login.setUserId(resultSet.getInt("user_id"));
+                }
             }
         } catch (SQLException e) {
             logger.error(e.getMessage());
             return null;
         }
         return login;
+    }
+
+    public Login findLoginByUserId(int id) {
+        Login result = null;
+        try (Connection connection = connectionManager.getConnection();
+            PreparedStatement statement = connection.prepareStatement(
+                    "SELECT * FROM login where user_id=?")) {
+            statement.setInt(1,id);
+            try (ResultSet resultSet = statement.executeQuery()) {
+                result=new Login();
+                loginMapper.setLoginFields(result, resultSet);
+            }
+
+        } catch (SQLException e) {
+            logger.info(e.getMessage());
+        }
+        return result;
     }
 
     @Override

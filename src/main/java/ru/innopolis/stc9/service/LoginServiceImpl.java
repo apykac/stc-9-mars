@@ -2,7 +2,7 @@ package ru.innopolis.stc9.service;
 
 import ru.innopolis.stc9.dao.LoginDao;
 import ru.innopolis.stc9.dao.LoginDaoImpl;
-import ru.innopolis.stc9.pogo.Login;
+import ru.innopolis.stc9.pojo.Login;
 
 /**
  * Created by aldar on 24.05.2018.

@@ -14,6 +14,24 @@
         <url-pattern>/</url-pattern>
     </servlet-mapping>
 
+    <servlet>
+        <servlet-name>UsersListController</servlet-name>
+        <servlet-class>ru.innopolis.stc9.controllers.UsersListController</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>UsersListController</servlet-name>
+        <url-pattern>/users-list/</url-pattern>
+    </servlet-mapping>
+
+    <servlet>
+        <servlet-name>EditUserController</servlet-name>
+        <servlet-class>ru.innopolis.stc9.controllers.EditUserController</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>EditUserController</servlet-name>
+        <url-pattern>/edit-user/</url-pattern>
+    </servlet-mapping>
+    
     <servlet-mapping>
         <servlet-name>default</servlet-name>
         <url-pattern>*.jpg</url-pattern>

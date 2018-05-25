@@ -1,7 +1,7 @@
 package ru.innopolis.stc9.controllers;
 
 import org.apache.log4j.Logger;
-import ru.innopolis.stc9.pogo.Group;
+import ru.innopolis.stc9.pojo.Group;
 import ru.innopolis.stc9.service.GroupService;
 import ru.innopolis.stc9.service.GroupServiceImpl;
 
