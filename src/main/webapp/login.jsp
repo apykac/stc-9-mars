@@ -31,9 +31,15 @@
                 <div class="row">
                     <div class="col-md-10">
                         <button class="btn btn-primary btn-cons pull-right" type="submit">Login</button>
+                        <a class="btn btn-primary btn-cons pull-right"
+                           href="${pageContext.request.contextPath}/registration">Registration</a>
                     </div>
                 </div>
+                <br>
             </form>
+            <%if ((request.getParameter("registration") != null) && request.getParameter("registration").equals("true")) {%>
+            Регистрация прошла успешно
+            <%}%>
         </div>
     </div>
 </div>
