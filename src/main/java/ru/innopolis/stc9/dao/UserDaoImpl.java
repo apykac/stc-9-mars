@@ -50,7 +50,7 @@ public class UserDaoImpl implements UserDao {
             )) {
             statement.setInt(1,id);
             try (ResultSet resultSet = statement.executeQuery()) {
-                    result = userMapper.setUserFields(resultSet);
+                    result = userMapper.getUserFromResultSet(resultSet);
             }
         } catch (SQLException e) {
             logger.error(e.getMessage());

@@ -10,7 +10,7 @@ import java.sql.SQLException;
 public class UserMapper {
     private Logger logger = Logger.getLogger(UserDaoImpl.class);
 
-    public User setUserFields(ResultSet resultSet) {
+    public User getUserFromResultSet(ResultSet resultSet) {
         User user=null;
         try {
             if (resultSet.next()) {
