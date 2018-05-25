@@ -22,12 +22,8 @@ public class LoginServiceImpl implements LoginService {
         if (incParam == null || incParam.isEmpty()) return result;
         if ((incParam.get(userName) != null) && incParam.get(userName)[0].equals(""))
             result.add("Invalid/Exist Login");
-        if (incParam.get(hashPss) != null)
-            try {
-                Long.parseLong(incParam.get(hashPss)[0]);
-            } catch (NumberFormatException e) {
-                result.add("Invalid password");
-            }
+        if (incParam.get(hashPss) != null && incParam.get(hashPss)[0].equals(""))
+            result.add("Invalid password");
         return result;
     }
 
@@ -35,7 +31,7 @@ public class LoginServiceImpl implements LoginService {
     public boolean checkAuth(String login, String password) {
         if ((login == null) || (password == null) || login.isEmpty() || password.isEmpty()) return false;
         Login loginPojo = loginDao.findLoginByName(login);
-        return (loginPojo != null) && (Long.toString(loginPojo.getHashPassword()).equals(password));
+        return (loginPojo != null) && (CryptService.isMatched(password, loginPojo.getHashPassword()));
     }
 
     @Override
@@ -59,7 +55,7 @@ public class LoginServiceImpl implements LoginService {
     public boolean addLogin(Map<String, String[]> incParam, Integer userId) {
         return loginDao.addLogin(
                 new Login(incParam.get(userName)[0],
-                        Long.parseLong(incParam.get(hashPss)[0]),
+                        CryptService.crypting(incParam.get(hashPss)[0]),
                         userId)
         );
     }

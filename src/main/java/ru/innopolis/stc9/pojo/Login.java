@@ -6,7 +6,7 @@ package ru.innopolis.stc9.pojo;
 public class Login {
     private int id;
     private String userName;
-    private long hashPassword;
+    private String hashPassword;
     private int permissionGroup;
     private Integer userId;
     private User user;
@@ -14,7 +14,7 @@ public class Login {
     public Login() {
     }
 
-    public Login(String userName, long hashPassword, Integer userId) {
+    public Login(String userName, String hashPassword, Integer userId) {
         this.userName = userName;
         this.hashPassword = hashPassword;
         this.userId = userId;
@@ -36,11 +36,11 @@ public class Login {
         this.userName = userName;
     }
 
-    public long getHashPassword() {
+    public String getHashPassword() {
         return hashPassword;
     }
 
-    public void setHashPassword(long hashPassword) {
+    public void setHashPassword(String hashPassword) {
         this.hashPassword = hashPassword;
     }
 
