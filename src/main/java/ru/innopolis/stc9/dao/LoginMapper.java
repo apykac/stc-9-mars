@@ -16,7 +16,7 @@ public class LoginMapper {
         Login login = new Login();
         login.setId(resultSet.getInt("id"));
         login.setUserName(resultSet.getString("userName"));
-        login.setHashPassword(resultSet.getInt("hash_password"));
+        login.setHashPassword(resultSet.getString("hash_password"));
         login.setPermissionGroup(resultSet.getInt("permission_group"));
         login.setUserId(resultSet.getInt("user_id"));
         return login;
@@ -26,7 +26,7 @@ public class LoginMapper {
         if ((statement == null) || (login == null) || (length < 1)) return;
         statement.setString(1, login.getUserName());
         if ((--length) == 0) return;
-        statement.setLong(2, login.getHashPassword());
+        statement.setString(2, login.getHashPassword());
         if ((--length) == 0) return;
         statement.setInt(3, login.getPermissionGroup());
         if ((--length) == 0) return;

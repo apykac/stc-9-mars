@@ -9,6 +9,8 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by Семушев on 24.05.2018.
@@ -64,6 +66,39 @@ public class UserDaoImpl implements UserDao {
         } catch (SQLException e) {
             logger.error(e.getMessage());
             return null;
+        }
+        return result;
+    }
+
+    public User getUser(int id) {
+        User result = null;
+        try (Connection connection = connectionManager.getConnection();
+             PreparedStatement statement = connection.prepareStatement("SELECT * FROM users WHERE id=?")) {
+            statement.setInt(1, id);
+            try (ResultSet resultSet = statement.executeQuery()) {
+                if (resultSet.next()) result = UserMapper.getByResultSet(resultSet);
+            }
+        } catch (SQLException e) {
+            logger.error(e.getMessage());
+        }
+        return result;
+    }
+
+    @Override
+    public List<User> getUsersList() {
+        logger.info("Users list requested.");
+        List<User> result = new ArrayList<>();
+        try (Connection connection = connectionManager.getConnection();
+             PreparedStatement statement = connection.prepareStatement("SELECT * FROM users")) {
+            try (ResultSet resultSet = statement.executeQuery()) {
+                while (resultSet.next()) {
+                    User user = UserMapper.getByResultSet(resultSet);
+                    result.add(user);
+                }
+                logger.info("Users list returned successfully");
+            }
+        } catch (SQLException e) {
+            logger.info(e.getMessage());
         }
         return result;
     }
