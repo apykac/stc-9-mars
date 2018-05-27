@@ -27,33 +27,7 @@ public class AdminService {
         return loginDao.findLoginByUserId(id);
     }
 
-    public String editUser(HttpServletRequest req) {
-        String result = "";
-        int userId = (Integer) getSessionAttribute(req, "user-id");
-        User user = getUserFromHttpRequest(req);
-        Login login = null;
-        String oldPassword = req.getParameter("oldPassword");
-        String newPassword = req.getParameter("newPassword");
-        String repeatNewPassword = req.getParameter("repeatNewPassword");
-        if (oldPassword != null && !oldPassword.isEmpty()) {
-            if (CryptService.isMatched(oldPassword, loginDao.findLoginByUserId(userId).getHashPassword())) {
-                if (checkNewPassword(newPassword, repeatNewPassword)) {
-                    login = getLoginFromResultSet(req);
-                }
-            }
-        }
-        String userUpdateMsg = "";
-        String loginUpdateMsg = "";
-        if (userDao.updateUser(userId, user)) {
-            userUpdateMsg = "updated";
-        }
-        if (login != null) {
-            if (loginDao.updateLogin(login)) {
-                loginUpdateMsg = "updated";
-            }
-        }
-        return "?user-id=" + userId + "&user-edit=" + userUpdateMsg + "&login-edit=" + loginUpdateMsg;
-    }
+    private boolean passwordUpdateIsPossible;
 
     private User getUserFromHttpRequest(HttpServletRequest req) {
         User result = new User();
@@ -70,7 +44,41 @@ public class AdminService {
         return result;
     }
 
-    private Login getLoginFromResultSet(HttpServletRequest req) {
+    public String editUser(HttpServletRequest req) {
+        String userUpdateMsg = "";
+        String loginUpdateMsg = "";
+        String passwordUpdateMsg = "";
+        String result = "";
+        int userId = (Integer) getSessionAttribute(req, "user-id");
+        User user = getUserFromHttpRequest(req);
+        int role = Integer.parseInt(req.getParameter("editRole"));
+        Login login = loginDao.findLoginByUserId(userId);
+        login.setPermissionGroup(role);
+        if (userDao.updateUser(userId, user)) {
+            userUpdateMsg = "updated";
+        } else {
+            userUpdateMsg = "error";
+        }
+        if (loginDao.updateLogin(login)) {
+            loginUpdateMsg = "updated";
+        } else {
+            loginUpdateMsg = "error";
+        }
+        if (req.getParameter("oldPassword") != null && !req.getParameter("oldPassword").isEmpty()) {
+            passwordUpdateMsg = checkPasswordUpdateIsPossible(req);
+            logger.info(passwordUpdateMsg);
+            if (passwordUpdateIsPossible) {
+                login = getLoginFromHttpRequest(req);
+                if (loginDao.updateLogin(login)) {
+                } else {
+                    passwordUpdateMsg = "error";
+                }
+            }
+        }
+        return "?user-id=" + userId + "&user-msg=" + userUpdateMsg + "&login-msg=" + loginUpdateMsg + "&pass-msg=" + passwordUpdateMsg;
+    }
+
+    private Login getLoginFromHttpRequest(HttpServletRequest req) {
         Login result = new Login();
         String userName = req.getParameter("editUsername");
         String password = req.getParameter("newPassword");
@@ -83,6 +91,31 @@ public class AdminService {
         result.setHashPassword(hashPassword);
         result.setPermissionGroup(role);
         result.setUserId(userId);
+        return result;
+    }
+
+    private String checkPasswordUpdateIsPossible(HttpServletRequest req) {
+        passwordUpdateIsPossible = false;
+        String result = "";
+        int userId = Integer.parseInt(req.getParameter("userId"));
+        String oldPassword = req.getParameter("oldPassword");
+        String newPassword = req.getParameter("newPassword");
+        String repeatNewPassword = req.getParameter("repeatNewPassword");
+        if (oldPassword != null && !oldPassword.isEmpty()) {
+            if (CryptService.isMatched(oldPassword, loginDao.findLoginByUserId(userId).getHashPassword())) {
+                if (checkNewPassword(newPassword, repeatNewPassword)) {
+                    passwordUpdateIsPossible = true;
+                    result = "updated";
+                } else {
+                    result = "passwords-not-match";
+                    //result = "Ошибка обновления пароля. Введенные пароли не совпадают.";
+                }
+            } else {
+                result = "wrong-old-password";
+                //result = "Ошибка обновления пароля. Старый пароль указан неверно.";
+
+            }
+        }
         return result;
     }
 
@@ -101,6 +134,66 @@ public class AdminService {
         if (req.getSession().getAttribute(attribute) != null) {
             result = req.getSession().getAttribute(attribute);
             req.getSession().setAttribute(attribute, null);
+        }
+        return result;
+    }
+
+    public String getUserUpdateMessage(HttpServletRequest req) {
+        String result = "";
+        String userMsg = req.getParameter("user-msg");
+        if (userMsg != null) {
+            switch (userMsg) {
+                case "updated":
+                    result = "Ф.И.О. пользователя успешно обновлены";
+                    break;
+                case "error":
+                    result = "Ошибка. Невозможно обновить Ф.И.О. пользователя";
+                    break;
+                default:
+                    break;
+            }
+        }
+        return result;
+    }
+
+    public String getLoginUpdateMessage(HttpServletRequest req) {
+        String result = "";
+        String loginMsg = req.getParameter("login-msg");
+        if (loginMsg != null) {
+            switch (loginMsg) {
+                case "updated":
+                    result = "Учетные данные пользователя успешно обновлены";
+                    break;
+                case "error":
+                    result = "Ошибка. Невозможно обновить учетные даные пользователя.";
+                    break;
+                default:
+                    break;
+            }
+        }
+        return result;
+    }
+
+    public String getPasswordUpdateMessage(HttpServletRequest req) {
+        String result = "";
+        String userMsg = req.getParameter("pass-msg");
+        if (userMsg != null) {
+            switch (userMsg) {
+                case "updated":
+                    result = "Пароль пользователя успешно обновлен";
+                    break;
+                case "error":
+                    result = "Ошибка. Невозможно обновить пароль пользователя";
+                    break;
+                case "passwords-not-match":
+                    result = "Ошибка. Введенные пароли не совпадают.";
+                    break;
+                case "wrong-old-password":
+                    result = "Ошибка. Старый пароль указан неверно.";
+                    break;
+                default:
+                    break;
+            }
         }
         return result;
     }

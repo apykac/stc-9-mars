@@ -5,6 +5,9 @@
 <%
     User user = (User)request.getAttribute("user");
     Login login = (Login)request.getAttribute("login");
+    String loginUpdateMessage = (String) request.getAttribute("loginUpdateMessage");
+    String userUpdateMessage = (String) request.getAttribute("userUpdateMessage");
+    String passwordUpdateMessage = (String) request.getAttribute("passwordUpdateMessage");
 %>
 <html>
 <head>
@@ -62,11 +65,20 @@
                     <input type="password" id="newPassword" plaseholder="New password" name="newPassword" value="">
                 </div>
                 <div>
-                    <label for="repeatNewPassword">Поатор</label>
+                    <label for="repeatNewPassword">Повтор</label>
                     <input type="password" id="repeatNewPassword" plaseholder="Repeat new password" name="repeatNewPassword" value="">
                 </div>
                 <div>
                     <input type="submit" value="Сохранить">
+                </div>
+                <div>
+                    <%=userUpdateMessage%>
+                </div>
+                <div>
+                    <%=loginUpdateMessage%>
+                </div>
+                <div>
+                    <%=passwordUpdateMessage == null ? "" : passwordUpdateMessage%>
                 </div>
             </form>
         </div>
