@@ -26,7 +26,7 @@ public class UserDaoImpl implements UserDao {
         try (Connection connection = connectionManager.getConnection();
              PreparedStatement statement = connection.prepareStatement(
                      "INSERT INTO users (first_name, second_name, middle_name, group_id) VALUES (?, ?, ?, ?)")) {
-            UserMapper.statementSetter(statement, user, 4);
+            UserMapper.statementSetter(statement, user, 4, 4);
             statement.execute();
             logger.info("Adding user successfully");
         } catch (SQLException e) {
@@ -60,7 +60,7 @@ public class UserDaoImpl implements UserDao {
         try (Connection connection = connectionManager.getConnection();
              PreparedStatement statement = connection.prepareStatement(
                      "INSERT INTO users (first_name, second_name, middle_name, group_id, id) VALUES (?, ?, ?, ?, ?)")) {
-            UserMapper.statementSetter(statement, user, 5);
+            UserMapper.statementSetter(statement, user, 4, 5);
             statement.execute();
             logger.info("Adding user successfully");
         } catch (SQLException e) {
@@ -104,19 +104,13 @@ public class UserDaoImpl implements UserDao {
     }
 
     public boolean updateUser(int id, User newUser) {
-        if (newUser == null) {
-            return false;
-        }
+        if (newUser == null) return false;
         logger.info("Started updating user.");
         try (Connection connection = connectionManager.getConnection();
              PreparedStatement statement = connection.prepareStatement(
-                     "UPDATE users SET first_name = ?, second_name = ?, middle_name = ?" +
-                             "WHERE id = ?"
-             )) {
-            statement.setString(1, newUser.getFirstName());
-            statement.setString(2, newUser.getSecondName());
-            statement.setString(3, newUser.getMiddleName());
-            statement.setInt(4, id);
+                     "UPDATE users SET first_name = ?, second_name = ?, middle_name = ?, group_id = ?" +
+                             "WHERE id = ?")) {
+            UserMapper.statementSetter(statement, newUser, 4, 5);
             statement.execute();
             logger.info("User updated successfully");
         } catch (SQLException e) {

@@ -15,6 +15,11 @@ public class UserServiceImpl implements UserService {
     public List<String> isCorrectData(Map<String, String[]> incParam) {
         List<String> result = new ArrayList<>();
         if (incParam == null || incParam.isEmpty()) return result;
+        if ((incParam.get("userName") != null) && incParam.get("userName")[0].equals(""))
+            result.add("Invalid/Exist Login");
+        if (incParam.get("hash_password") != null && incParam.get("hash_password")[0].equals(""))
+            result.add("Invalid password");
+        if (incParam == null || incParam.isEmpty()) return result;
         if ((incParam.get("first_name") != null) && incParam.get("first_name")[0].equals(""))
             result.add("Invalid first name");
         if ((incParam.get("second_name") != null) && incParam.get("second_name")[0].equals(""))
@@ -42,5 +47,17 @@ public class UserServiceImpl implements UserService {
                         incParam.get("middle_name")[0],
                         null)
         );
+    }
+
+    @Override
+    public boolean addUserByParam(Map<String, String[]> incParam) {
+        if ((incParam == null) || incParam.isEmpty()) return false;
+        User user = new User(
+                incParam.get("login")[0],
+                incParam.get("hash_password")[0],
+                incParam.get("first_name")[0],
+                incParam.get("second_name")[0],
+                incParam.get("middle_name")[0]);
+        return userDao.addUser(user);
     }
 }

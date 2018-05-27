@@ -47,15 +47,13 @@ public class RegistrationController extends HttpServlet {
             logger.error("UnsupportedEncodingException: " + e.getMessage());
         }
         Map<String, String[]> incParam = req.getParameterMap();
-        List<String> errorList = loginService.isCorrectData(incParam);
+        List<String> errorList = userService.isCorrectData(incParam);
         if (loginService.isExist(incParam.get("userName")[0])) errorList.add("Login is Exist");
         if (!errorList.isEmpty()) {
             req.setAttribute("errorMsg", errorList);
             forwardErrors(req, resp);
             return;
         }
-        errorList = userService.isCorrectData(incParam);
-        req.setAttribute("errorMsg", errorList);
         if (incParam.get("first_name")[0].equals("") &&
                 incParam.get("second_name")[0].equals("") &&
                 incParam.get("middle_name")[0].equals("")) {

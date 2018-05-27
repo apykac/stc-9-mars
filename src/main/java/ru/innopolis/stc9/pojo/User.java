@@ -5,6 +5,9 @@ package ru.innopolis.stc9.pojo;
  */
 public class User {
     private int id;
+    private String login;
+    private String hashPassword;
+    private int permissionGroup;
     private String firstName;
     private String secondName;
     private String middleName;
@@ -14,10 +17,18 @@ public class User {
     public User() {
     }
 
-    public User(String firstName, String secondName, String mddleName, Integer groupId) {
+    public User(String login, String hashPassword, String firstName, String secondName, String middleName) {
+        this.login = login;
+        this.hashPassword = hashPassword;
         this.firstName = firstName;
         this.secondName = secondName;
-        this.middleName = mddleName;
+        this.middleName = middleName;
+    }
+
+    public User(String firstName, String secondName, String middleName, Integer groupId) {
+        this.firstName = firstName;
+        this.secondName = secondName;
+        this.middleName = middleName;
         this.groupId = groupId;
     }
 
@@ -27,6 +38,30 @@ public class User {
 
     public void setId(int id) {
         this.id = id;
+    }
+
+    public String getLogin() {
+        return login;
+    }
+
+    public void setLogin(String login) {
+        this.login = login;
+    }
+
+    public String getHashPassword() {
+        return hashPassword;
+    }
+
+    public void setHashPassword(String hashPassword) {
+        this.hashPassword = hashPassword;
+    }
+
+    public int getPermissionGroup() {
+        return permissionGroup;
+    }
+
+    public void setPermissionGroup(int permissionGroup) {
+        this.permissionGroup = permissionGroup;
     }
 
     public String getFirstName() {

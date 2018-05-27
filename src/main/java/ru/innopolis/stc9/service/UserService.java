@@ -11,4 +11,6 @@ public interface UserService {
     boolean addUser(User user);
 
     Integer addUserWithoutAutoInc(Map<String, String[]> incParam);
+
+    boolean addUserByParam(Map<String, String[]> incParam);
 }
