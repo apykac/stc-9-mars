@@ -24,7 +24,8 @@
                             <td>${user.firstName}</td>
                             <td>${user.secondName}</td>
                             <td><a href="${pageContext.request.contextPath}/views/edit-user?user-id=${user.id}"
-                                   name="${user.firstName}">Информация</a></td>
+                                   name="${user.firstName}">Информация</a>
+                            </td>
                         </tr>
                     </c:forEach>
                     </tbody>
