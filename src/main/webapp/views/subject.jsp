@@ -1,30 +1,28 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8" %>
+<%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="t" tagdir="/WEB-INF/tags" %>
 <t:wrapper>
     <div class="row">
         <div class="col-md-12 panel-warning">
             <div class="content-box-header">
-                <div class="panel-title ">Список пользователей</div>
+                <div class="panel-title ">Список предметов</div>
             </div>
             <div class="content-box-large box-with-header">
                 <table class="table">
                     <thead>
                     <tr>
                         <th>#</th>
-                        <th>Имя</th>
-                        <th>Фамилия</th>
+                        <th>Предмет</th>
                         <th>Действие</th>
                     </tr>
                     </thead>
                     <tbody>
-                    <c:forEach items="${requestScope.get('usersList')}" var="user">
+                    <c:forEach items="${requestScope.get('subjects')}" var="subjects">
                         <tr>
-                            <td>${user.id}</td>
-                            <td>${user.firstName}</td>
-                            <td>${user.secondName}</td>
-                            <td><a href="${pageContext.request.contextPath}/views/edit-user?user-id=${user.id}"
-                                   name="${user.firstName}">Информация</a></td>
+                            <td>${subjects.id}</td>
+                            <td>${subjects.name}</td>
+                            <td><a href="${pageContext.request.contextPath}/views"
+                                   name="${subjects.name}">Информация</a></td>
                         </tr>
                     </c:forEach>
                     </tbody>

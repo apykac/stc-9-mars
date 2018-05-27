@@ -6,32 +6,66 @@
   To change this template use File | Settings | File Templates.
 --%>
 <%@ page language="java" contentType="text/html; charset=UTF-8" %>
-<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
-<html>
-<head>
-    <meta http-equiv="content-type" content="text/html; charset=utf-8" />
-    <title>Groups</title>
-    <link href="/css/default.css" rel="stylesheet" type="text/css" />
-</head>
-<body>
-<%@include file="../header.jsp"%>
-<%@include file="../sideBar.jsp"%>
-<div id="page">
-    <div id="content">
-        <div style="margin-bottom: 20px;">
-            <h1 class="title">Список групп:</h1>
-            <c:forEach items="${requestScope.get(\"groups\")}" var="group">
-                <a href="${pageContext.request.contextPath}/views/group?id=${group.id}" name="${group.name}">${group.name} </a><br>
-            </c:forEach>
-            <br>
-            <h1 class="title">Добавление группы:</h1>
-            <form id="add" action="${pageContext.request.contextPath}/views/allgroup" method="post">
-                <input type="text" value="" name="name"> Название группы<BR>
-                <input type="submit" value="OK">
-            </form>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="t" tagdir="/WEB-INF/tags" %>
+<t:wrapper>
+    <div class="row">
+        <div class="col-md-8 panel-warning">
+            <div class="content-box-header">
+                <div class="panel-title ">Список групп</div>
+            </div>
+            <div class="content-box-large box-with-header">
+                <table class="table">
+                    <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>Группа</th>
+                        <th>Действие</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <c:forEach items="${requestScope.get('groups')}" var="group">
+                        <tr>
+                            <td>${group.id}</td>
+                            <td>${group.name}</td>
+                            <td><a href="${pageContext.request.contextPath}/views/group?id=${group.id}"
+                                   name="${group.name}">Информация</a></td>
+                        </tr>
+                    </c:forEach>
+                    </tbody>
+                </table>
+                <br/><br/>
+            </div>
         </div>
     </div>
-</div>
 
-</body>
-</html>
+    <div class="row">
+        <div class="col-md-5">
+            <div class="content-box-header">
+                <div class="panel-title ">Добавление группы</div>
+            </div>
+            <div class="content-box-large box-with-header">
+                <form class="form-horizontal" id="add" action="${pageContext.request.contextPath}/views/allgroup"
+                      method="post">
+                    <div class="form-group">
+                        <label for="nameGr" class="col-sm-2 control-label">Введите</label>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" id="nameGr" placeholder="Название группы"
+                                   name="name">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-sm-offset-2 col-sm-10">
+                            <button type="submit" class="btn btn-primary">OK</button>
+                        </div>
+                    </div>
+                </form>
+                <br/><br/>
+            </div>
+        </div>
+    </div>
+</t:wrapper>
+
+
+
+
