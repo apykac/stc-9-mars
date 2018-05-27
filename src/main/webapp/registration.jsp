@@ -2,70 +2,63 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
 <head>
-    <meta http-equiv="content-type" content="text/html;charset=UTF-8"/>
-    <meta charset="utf-8"/>
-    <title>Registration</title>
-    <link href="css/bootstrap.min.css" rel="stylesheet" type="text/css"/>
-    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <title>Admin dashboard | Registration Page</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="css/bootstrap.min.css" rel="stylesheet">
+    <link href="css/styles.css" rel="stylesheet">
 </head>
-<body class="error-body">
-<div class="container">
-    <div class="row login-container column-seperation">
-        <div class="col-md-4">
-            <form action="${pageContext.request.contextPath}/registration" class="login-form validate" id="login-form"
-                  method="post" name="login-form">
-                <div class="row">
-                    <div class="form-group col-md-10">
-                        <label class="form-label">Логин*</label><br>
-                        <input class="form-control" id="txtusername" name="userName" type="text" required>
-                    </div>
+<body class="login-bg">
+<div class="header">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12">
+                <!-- Logo -->
+                <div class="logo">
+                    <h1><a href="${pageContext.request.contextPath}/">Admin dashboard | Registration Page</a></h1>
                 </div>
-                <div class="row">
-                    <div class="form-group col-md-10">
-                        <label class="form-label">Пароль*</label> <span class="help"></span>
-                        <input class="form-control" id="txtpassword" name="hash_password" type="password" required>
-                    </div>
-                </div>
-                <br>
-                <br>
-                <br>
-                <b>Ввод ФИО</b>
-                <br>
-                <br>
-                <div class="row">
-                    <div class="form-group col-md-10">
-                        <label class="form-label">Имя*</label><br>
-                        <input class="form-control" name="first_name" type="text">
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="form-group col-md-10">
-                        <label class="form-label">Фамилия*</label><br>
-                        <input class="form-control" name="second_name" type="text">
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="form-group col-md-10">
-                        <label class="form-label">Отчество</label><br>
-                        <input class="form-control" name="middle_name" type="text">
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col-md-10">
-                        <button class="btn btn-primary btn-cons pull-right" type="submit">Register</button>
-                    </div>
-                </div>
-            </form>
+            </div>
         </div>
-        <i>
-            Логин/пароль не должны быть пустыми, пароль - цифры<br>
-            По желанию введите свои ФИО (при вводе Имя/Фамилия обязательны)
-        </i>
-        <br>
-        <c:forEach items="${requestScope.get(\"errorMsg\")}" var="msg">
-            <b>${msg}</b><br>
-        </c:forEach>
     </div>
 </div>
+
+<div class="page-content container">
+    <div class="row">
+        <div class="col-md-4 col-md-offset-4">
+            <div class="login-wrapper">
+                <div class="box">
+                    <div class="content-wrap">
+                        <form action="${pageContext.request.contextPath}/registration" class="login-form validate"
+                              method="post">
+                            <h6>Регистрация</h6>
+                            <input class="form-control" type="text" placeholder="Логин" name="userName" required>
+                            <input class="form-control" type="password" placeholder="Пароль" name="hash_password"
+                                   required>
+                            <input class="form-control" type="text" placeholder="Имя" name="first_name">
+                            <input class="form-control" type="text" placeholder="Фамилия" name="second_name">
+                            <input class="form-control" type="text" placeholder="Отчество" name="middle_name">
+                            <div class="alert alert-info">
+                                Логин/пароль не должны быть пустыми, пароль - цифры<br/>
+                                По желанию введите свои ФИО (при вводе Имя/Фамилия обязательны)
+                            </div>
+                            <c:forEach items="${requestScope.get(\"errorMsg\")}" var="msg">
+                                <div class="alert alert-danger">
+                                        ${msg}
+                                </div>
+                            </c:forEach>
+                            <div class="action">
+                                <button class="btn btn-primary signup" type="submit">Регистрация</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+                <div class="already">
+                    <p>Уже есть аккаунт?</p>
+                    <a href="${pageContext.request.contextPath}/login">Логин</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="css/bootstrap.min.js"></script>
 </body>
 </html>

@@ -31,7 +31,7 @@
         <servlet-name>EditUserController</servlet-name>
         <url-pattern>/edit-user</url-pattern>
     </servlet-mapping>
-    
+
     <servlet-mapping>
         <servlet-name>default</servlet-name>
         <url-pattern>*.jpg</url-pattern>
@@ -55,6 +55,15 @@
     <servlet-mapping>
         <servlet-name>RegistrationController</servlet-name>
         <url-pattern>/registration</url-pattern>
+    </servlet-mapping>
+
+    <servlet>
+        <servlet-name>SubjectController</servlet-name>
+        <servlet-class>ru.innopolis.stc9.controllers.SubjectController</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>SubjectController</servlet-name>
+        <url-pattern>/views/subject</url-pattern>
     </servlet-mapping>
 
     <filter>

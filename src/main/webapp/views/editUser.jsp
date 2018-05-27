@@ -17,8 +17,7 @@
     <!--link href="/css/bootstrap.min.css" rel="stylesheet" type="text/css"/-->
 </head>
 <body>
-<%@include file="../header.jsp"%>
-<%@include file="../sideBar.jsp"%>
+<%@include file="../pageSidebar.jsp" %>
 <div id="page">
     <div id="content">
         <div style="margin-bottom: 20px;">
