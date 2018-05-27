@@ -1,6 +1,7 @@
 package ru.innopolis.stc9.dao;
 
 import org.apache.log4j.Logger;
+import org.springframework.stereotype.Component;
 import ru.innopolis.stc9.db.connection.ConnectionManager;
 import ru.innopolis.stc9.db.connection.ConnectionManagerImpl;
 import ru.innopolis.stc9.pojo.Subject;
@@ -12,6 +13,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
+@Component
 public class SubjectDaoImpl implements SubjectDao {
     private static ConnectionManager connectionManager = ConnectionManagerImpl.getInstance();
     private Logger logger = Logger.getLogger(SubjectDaoImpl.class);

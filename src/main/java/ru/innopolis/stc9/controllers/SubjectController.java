@@ -1,27 +1,21 @@
 package ru.innopolis.stc9.controllers;
 
-import org.apache.log4j.Logger;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import ru.innopolis.stc9.service.SubjectService;
 import ru.innopolis.stc9.service.SubjectServiceImpl;
 
-import javax.servlet.ServletException;
-import javax.servlet.http.HttpServlet;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
-
-public class SubjectController extends HttpServlet {
-    private final Logger logger = Logger.getLogger(GroupController.class);
+@Controller
+public class SubjectController {
+    @Autowired
     private final SubjectService subjectService = new SubjectServiceImpl();
 
-    @Override
-    protected void doGet(HttpServletRequest req, HttpServletResponse resp) {
-        req.setAttribute("subjects", subjectService.findAllSubject());
-        try {
-            req.getRequestDispatcher(req.getContextPath() + "/views/subject.jsp").forward(req, resp);
-        } catch (ServletException | IOException e) {
-            logger.error(e.getMessage());
-        }
-
+    @RequestMapping(value = "/views/subject", method = RequestMethod.GET)
+    private String doGet(Model model) {
+        model.addAttribute("subjects", subjectService.findAllSubject());
+        return "views/subject";
     }
 }
