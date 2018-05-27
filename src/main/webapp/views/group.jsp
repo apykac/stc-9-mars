@@ -6,32 +6,62 @@
   To change this template use File | Settings | File Templates.
 --%>
 <%@ page language="java" contentType="text/html; charset=UTF-8" %>
-<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
-<html>
-<head>
-    <meta http-equiv="content-type" content="text/html; charset=utf-8" />
-    <title>Groups</title>
-    <link href="/css/default.css" rel="stylesheet" type="text/css" />
-</head>
-<body>
-<%@include file="../header.jsp"%>
-<%@include file="../sideBar.jsp"%>
-<div id="page">
-    <div id="content">
-        <div style="margin-bottom: 20px;">
-            <h1 class="title">Обновление группы:</h1>
-            <form id="add" action="${pageContext.request.contextPath}/views/group" method="post">
-                <input type="text" value="${requestScope.get("groupName")}" name="name"> Новое название группы<BR>
-                <input type="hidden" value="${requestScope.get("id")}" name="id">
-                <input type="submit" value="OK">
-            </form>
-            <form id="delete" action="${pageContext.request.contextPath}/views/deleteGroup" method="post">
-                <input type="hidden" value="${requestScope.get("id")}" name="id">
-                <input type="submit" value="Del"> удалить эту группу
-            </form>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="t" tagdir="/WEB-INF/tags" %>
+<t:wrapper>
+    <div class="row">
+        <div class="col-md-5">
+            <div class="content-box-header">
+                <div class="panel-title ">Обновление группы</div>
+            </div>
+            <div class="content-box-large box-with-header">
+                <form class="form-horizontal" id="add" action="${pageContext.request.contextPath}/views/group"
+                      method="post">
+                    <div class="form-group">
+                        <label for="nameGr" class="col-sm-2 control-label">Введите</label>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" id="nameGr" value="${requestScope.get("groupName")}"
+                                   name="name">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-sm-10">
+                            <input type="hidden" value="${requestScope.get("id")}" name="id">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-sm-offset-2 col-sm-10">
+                            <button type="submit" class="btn btn-primary">OK</button>
+                        </div>
+                    </div>
+                </form>
+                <br/><br/>
+            </div>
         </div>
     </div>
-</div>
-
-</body>
-</html>
+    <div class="row">
+        <div class="col-md-5">
+            <div class="content-box-header">
+                <div class="panel-title ">Удаление группы</div>
+            </div>
+            <div class="content-box-large box-with-header">
+                <form class="form-horizontal" id="delete" action="${pageContext.request.contextPath}/views/deleteGroup"
+                      method="post">
+                    <div class="form-group">
+                        <label for="id" class="col-sm-2 control-label">Введите</label>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" value="${requestScope.get("id")}" id="id" name="id"
+                                   readonly>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-sm-offset-2 col-sm-10">
+                            <button type="submit" class="btn btn-primary">удалить эту группу</button>
+                        </div>
+                    </div>
+                </form>
+                <br/><br/>
+            </div>
+        </div>
+    </div>
+</t:wrapper>

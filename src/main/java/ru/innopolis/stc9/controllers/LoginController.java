@@ -1,53 +1,59 @@
 package ru.innopolis.stc9.controllers;
 
 import org.apache.log4j.Logger;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import ru.innopolis.stc9.service.LoginService;
 import ru.innopolis.stc9.service.LoginServiceImpl;
 
-import javax.servlet.ServletException;
-import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import java.io.IOException;
 
-public class LoginController extends HttpServlet {
+@Controller
+public class LoginController {
     private final Logger logger = Logger.getLogger(LoginController.class);
+    @Autowired
     private final LoginService loginService = new LoginServiceImpl();
 
-    @Override
-    protected void doGet(HttpServletRequest req, HttpServletResponse resp) {
-        if ((req == null) || (resp == null)) return;
-        String action = req.getParameter("action");
+
+    @RequestMapping(value = "/login", method = RequestMethod.GET)
+    private String loginForm(@RequestParam(value = "action", required = false) String action,
+                             HttpSession session,
+                             Model model) {
         if ("logout".equals(action)) {
-            logger.info("logout: " + req.getSession().getAttribute("login"));
-            req.getSession().invalidate();
+            logger.info("logout: " + session.getAttribute("login"));
+            session.invalidate();
         }
-        try {
-            req.getRequestDispatcher("login.jsp").forward(req, resp);
-        } catch (ServletException | IOException e) {
-            logger.error("in forward - exception" + e.getMessage());
-        }
+        return "login";
     }
 
-    @Override
-    protected void doPost(HttpServletRequest req, HttpServletResponse resp) {
-        if ((req == null) || (resp == null)) return;
+    @RequestMapping(value = "/login", method = RequestMethod.POST)
+    private String postLoginForm(HttpServletRequest req,
+                                 HttpServletResponse resp,
+                                 Model model) {
         String login = req.getParameter("userName");
         String password = req.getParameter("userPassword");
-        String redirectPath;
+        String redirectPath = req.getContextPath();
         if (loginService.checkAuth(login, password)) {
             Integer role = loginService.getRole(login);
             logger.info("login: " + login + ", role: " + role);
             req.getSession().setAttribute("login", login);
             req.getSession().setAttribute("role", role);
-            redirectPath = req.getContextPath() + "/views";
+            redirectPath += "/views/";
         } else {
-            redirectPath = req.getContextPath() + "/login?errorMsg=authError";
+            redirectPath += "/login?errorMsg=authError";
         }
         try {
             resp.sendRedirect(redirectPath);
         } catch (IOException e) {
             logger.error("IOException: " + e.getMessage());
         }
+        return "login";
     }
 }

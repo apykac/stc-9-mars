@@ -1,5 +1,7 @@
 package ru.innopolis.stc9.service;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 import ru.innopolis.stc9.dao.LoginDao;
 import ru.innopolis.stc9.dao.LoginDaoImpl;
 import ru.innopolis.stc9.pojo.Login;
@@ -12,7 +14,9 @@ import java.util.Map;
  * Created by aldar on 24.05.2018.
  * Реализация интерфейса аутентификации
  */
+@Service
 public class LoginServiceImpl implements LoginService {
+    @Autowired
     private static LoginDao loginDao = new LoginDaoImpl();
     private String userName = "userName";
     private String hashPss = "hash_password";
@@ -37,8 +41,7 @@ public class LoginServiceImpl implements LoginService {
     @Override
     public boolean isExist(String login) {
         if ((login == null) || login.equals("")) return false;
-        if (loginDao.findLoginByName(login) != null) return true;
-        return false;
+        return loginDao.findLoginByName(login) != null;
     }
 
     @Override
