@@ -5,6 +5,9 @@
 <%
     User user = (User)request.getAttribute("user");
     Login login = (Login)request.getAttribute("login");
+    String loginUpdateMessage = (String) request.getAttribute("loginUpdateMessage");
+    String userUpdateMessage = (String) request.getAttribute("userUpdateMessage");
+    String passwordUpdateMessage = (String) request.getAttribute("passwordUpdateMessage");
 %>
 <html>
 <head>
@@ -24,7 +27,8 @@
             <form action="${pageContext.request.contextPath}/views/edit-user" method="post">
                 <div>
                     <label for="userId">Id</label>
-                    <input type="text" class="form-control" id="userId" placeholder="User ID" name="userId" value="<%=user.getId()%>" disabled>
+                    <input type="text" class="form-control" id="userId" placeholder="User ID" name="userId"
+                           value="<%=user.getId()%>" readonly>
                 </div>
                 <div>
                     <label for="editUsername">Логин</label>
@@ -46,9 +50,9 @@
                 <b>Роль пользователя</b>
                 <div>
                     <select name="editRole">
-                        <option value="admin">Admin</option>
-                        <option value="reacher">Teacher</option>
-                        <option value="student">Student</option>
+                        <option <%=login.getPermissionGroup() == 0 ? "selected" : ""%> value="0">Admin</option>
+                        <option <%=login.getPermissionGroup() == 1 ? "selected" : ""%> value="1">Teacher</option>
+                        <option <%=login.getPermissionGroup() == 2 ? "selected" : ""%> value="2">Student</option>
                     </select>
                 </div>
                 <b>Изменить пароль</b>
@@ -61,8 +65,20 @@
                     <input type="password" id="newPassword" plaseholder="New password" name="newPassword" value="">
                 </div>
                 <div>
-                    <label for="repeatNewPassword">Поатор</label>
+                    <label for="repeatNewPassword">Повтор</label>
                     <input type="password" id="repeatNewPassword" plaseholder="Repeat new password" name="repeatNewPassword" value="">
+                </div>
+                <div>
+                    <input type="submit" value="Сохранить">
+                </div>
+                <div>
+                    <%=userUpdateMessage%>
+                </div>
+                <div>
+                    <%=loginUpdateMessage%>
+                </div>
+                <div>
+                    <%=passwordUpdateMessage == null ? "" : passwordUpdateMessage%>
                 </div>
             </form>
         </div>

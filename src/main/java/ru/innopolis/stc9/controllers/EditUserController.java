@@ -2,8 +2,6 @@ package ru.innopolis.stc9.controllers;
 
 
 import org.apache.log4j.Logger;
-import ru.innopolis.stc9.pojo.Login;
-import ru.innopolis.stc9.pojo.User;
 import ru.innopolis.stc9.service.AdminService;
 
 import javax.servlet.ServletException;
@@ -25,12 +23,23 @@ public class EditUserController extends HttpServlet{
         if (id>0) {
             req.setAttribute("user", adminService.getUser(id));
             req.setAttribute("login", adminService.getLogin(id));
+            req.getSession().setAttribute("user-id", id);
+        }
+        if (adminService.getLoginUpdateMessage(req) != null) {
+            req.setAttribute("loginUpdateMessage", adminService.getLoginUpdateMessage(req));
+        }
+        if (adminService.getUserUpdateMessage(req) != null) {
+            req.setAttribute("userUpdateMessage", adminService.getUserUpdateMessage(req));
+        }
+        if (adminService.getPasswordUpdateMessage(req) != null && !adminService.getPasswordUpdateMessage(req).isEmpty()) {
+            req.setAttribute("passwordUpdateMessage", adminService.getPasswordUpdateMessage(req));
         }
         req.getRequestDispatcher(req.getContextPath() + "/views/editUser.jsp").forward(req,resp);
     }
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-
+        String msg = adminService.editUser(req);
+        resp.sendRedirect(req.getContextPath() + msg);
     }
 }

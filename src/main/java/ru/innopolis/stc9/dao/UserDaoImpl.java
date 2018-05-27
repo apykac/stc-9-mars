@@ -98,8 +98,31 @@ public class UserDaoImpl implements UserDao {
                 logger.info("Users list returned successfully");
             }
         } catch (SQLException e) {
-            logger.info(e.getMessage());
+            logger.error(e.getMessage());
         }
         return result;
+    }
+
+    public boolean updateUser(int id, User newUser) {
+        if (newUser == null) {
+            return false;
+        }
+        logger.info("Started updating user.");
+        try (Connection connection = connectionManager.getConnection();
+             PreparedStatement statement = connection.prepareStatement(
+                     "UPDATE users SET first_name = ?, second_name = ?, middle_name = ?" +
+                             "WHERE id = ?"
+             )) {
+            statement.setString(1, newUser.getFirstName());
+            statement.setString(2, newUser.getSecondName());
+            statement.setString(3, newUser.getMiddleName());
+            statement.setInt(4, id);
+            statement.execute();
+            logger.info("User updated successfully");
+        } catch (SQLException e) {
+            logger.error(e.getMessage());
+            return false;
+        }
+        return true;
     }
 }

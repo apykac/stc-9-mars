@@ -29,7 +29,7 @@
     </servlet>
     <servlet-mapping>
         <servlet-name>EditUserController</servlet-name>
-        <url-pattern>/edit-user/</url-pattern>
+        <url-pattern>/edit-user</url-pattern>
     </servlet-mapping>
     
     <servlet-mapping>
