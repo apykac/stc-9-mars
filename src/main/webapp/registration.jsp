@@ -30,7 +30,7 @@
                         <form action="${pageContext.request.contextPath}/registration" class="login-form validate"
                               method="post">
                             <h6>Регистрация</h6>
-                            <input class="form-control" type="text" placeholder="Логин" name="userName" required>
+                            <input class="form-control" type="text" placeholder="Логин" name="login" required>
                             <input class="form-control" type="password" placeholder="Пароль" name="hash_password"
                                    required>
                             <input class="form-control" type="text" placeholder="Имя" name="first_name">
@@ -38,7 +38,7 @@
                             <input class="form-control" type="text" placeholder="Отчество" name="middle_name">
                             <div class="alert alert-info">
                                 Логин/пароль не должны быть пустыми, пароль - цифры<br/>
-                                По желанию введите свои ФИО (при вводе Имя/Фамилия обязательны)
+                                По желанию введите свои ФИО
                             </div>
                             <c:forEach items="${requestScope.get(\"errorMsg\")}" var="msg">
                                 <div class="alert alert-danger">
@@ -50,10 +50,6 @@
                             </div>
                         </form>
                     </div>
-                </div>
-                <div class="already">
-                    <p>Уже есть аккаунт?</p>
-                    <a href="${pageContext.request.contextPath}/login">Логин</a>
                 </div>
             </div>
         </div>

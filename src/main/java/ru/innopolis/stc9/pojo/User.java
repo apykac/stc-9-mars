@@ -23,6 +23,7 @@ public class User {
         this.firstName = firstName;
         this.secondName = secondName;
         this.middleName = middleName;
+        this.permissionGroup = 2;
     }
 
     public User(String firstName, String secondName, String middleName, Integer groupId) {

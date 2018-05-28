@@ -1,3 +1,4 @@
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
 <head>
@@ -42,13 +43,14 @@
                         </form>
                     </div>
                 </div>
-
                 <div class="already">
                     <p>Еще нет аккаунта?</p>
                     <a href="${pageContext.request.contextPath}/registration">Регистрация</a>
                     <br/>
                     <p>Хотите вернуться?</p>
                     <a href="${pageContext.request.contextPath}/">Назад</a>
+                    <br/>
+                    <c:if test="${param.registration != null && param.registration == 'true'}"><p>Регистация прошла успешно</p></c:if>
                 </div>
             </div>
         </div>

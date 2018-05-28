@@ -15,20 +15,13 @@ public class UserServiceImpl implements UserService {
     public List<String> isCorrectData(Map<String, String[]> incParam) {
         List<String> result = new ArrayList<>();
         if (incParam == null || incParam.isEmpty()) return result;
-        if ((incParam.get("userName") != null) && incParam.get("userName")[0].equals(""))
+        if ((incParam.get("login") != null) && incParam.get("login")[0].equals("")) {
             result.add("Invalid/Exist Login");
-        if (incParam.get("hash_password") != null && incParam.get("hash_password")[0].equals(""))
+            return result;
+        }
+        if (incParam.get("hash_password") != null && incParam.get("hash_password")[0].equals("")) {
             result.add("Invalid password");
-        if (incParam == null || incParam.isEmpty()) return result;
-        if ((incParam.get("first_name") != null) && incParam.get("first_name")[0].equals(""))
-            result.add("Invalid first name");
-        if ((incParam.get("second_name") != null) && incParam.get("second_name")[0].equals(""))
-            result.add("Invalid second name");
-        try {
-            if (incParam.get("groupId") != null)
-                Integer.parseInt(incParam.get("groupId")[0]);
-        } catch (NumberFormatException e) {
-            result.add("Invalid ID of group");
+            return result;
         }
         return result;
     }
@@ -54,10 +47,16 @@ public class UserServiceImpl implements UserService {
         if ((incParam == null) || incParam.isEmpty()) return false;
         User user = new User(
                 incParam.get("login")[0],
-                incParam.get("hash_password")[0],
+                CryptService.crypting(incParam.get("hash_password")[0]),
                 incParam.get("first_name")[0],
                 incParam.get("second_name")[0],
                 incParam.get("middle_name")[0]);
         return userDao.addUser(user);
+    }
+
+    @Override
+    public boolean isExist(String login) {
+        if ((login == null) || login.equals("")) return false;
+        return userDao.findLoginByName(login) != null;
     }
 }

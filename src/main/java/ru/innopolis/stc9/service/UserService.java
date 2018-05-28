@@ -13,4 +13,6 @@ public interface UserService {
     Integer addUserWithoutAutoInc(Map<String, String[]> incParam);
 
     boolean addUserByParam(Map<String, String[]> incParam);
+
+    boolean isExist(String login);
 }

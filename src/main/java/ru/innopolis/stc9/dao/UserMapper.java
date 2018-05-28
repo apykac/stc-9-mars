@@ -35,22 +35,21 @@ public class UserMapper {
                 statement.setString(2, user.getHashPassword());
             case 3:
                 if ((--length) == 0) return;
-                statement.setInt(3, user.getPermissionGroup());
+                statement.setString(3, user.getFirstName());
             case 4:
                 if ((--length) == 0) return;
-                statement.setString(4, user.getFirstName());
-            case 5:
-                if ((--length) == 0) return;
-                statement.setString(5, user.getSecondName());
+                statement.setString(4, user.getSecondName());
             case 6:
                 if ((--length) == 0) return;
-                if (!user.getMiddleName().equals("")) statement.setString(6, user.getMiddleName());
-                else statement.setNull(6, Types.VARCHAR);
+                statement.setString(5, user.getMiddleName());
             case 7:
                 if ((--length) == 0) return;
                 if (user.getGroupId() != null) statement.setInt(7, user.getGroupId());
-                else statement.setNull(7, Types.INTEGER);
+                else statement.setNull(6, Types.INTEGER);
             case 8:
+                if ((--length) == 0) return;
+                statement.setInt(7, user.getPermissionGroup());
+            case 9:
                 if ((--length) == 0) return;
                 statement.setInt(8, user.getId());
         }

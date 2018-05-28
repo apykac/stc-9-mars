@@ -3,6 +3,7 @@ package ru.innopolis.stc9.dao;
 import org.apache.log4j.Logger;
 import ru.innopolis.stc9.db.connection.ConnectionManager;
 import ru.innopolis.stc9.db.connection.ConnectionManagerImpl;
+import ru.innopolis.stc9.pojo.Login;
 import ru.innopolis.stc9.pojo.User;
 
 import java.sql.Connection;
@@ -25,8 +26,8 @@ public class UserDaoImpl implements UserDao {
         logger.info("Start add user");
         try (Connection connection = connectionManager.getConnection();
              PreparedStatement statement = connection.prepareStatement(
-                     "INSERT INTO users (first_name, second_name, middle_name, group_id) VALUES (?, ?, ?, ?)")) {
-            UserMapper.statementSetter(statement, user, 4, 4);
+                     "INSERT INTO users (login, hash_password, first_name, second_name, middle_name) VALUES (?, ?, ?, ?, ?)")) {
+            UserMapper.statementSetter(statement, user, 1, 5);
             statement.execute();
             logger.info("Adding user successfully");
         } catch (SQLException e) {
@@ -103,6 +104,7 @@ public class UserDaoImpl implements UserDao {
         return result;
     }
 
+
     public boolean updateUser(int id, User newUser) {
         if (newUser == null) return false;
         logger.info("Started updating user.");
@@ -118,5 +120,24 @@ public class UserDaoImpl implements UserDao {
             return false;
         }
         return true;
+    }
+
+    @Override
+    public User findLoginByName(String login) {
+        if ((login == null) || login.isEmpty()) return null;
+        User user = null;
+        logger.info("Start find login by name");
+        try (Connection connection = connectionManager.getConnection();
+             PreparedStatement statement = connection.prepareStatement(
+                     "SELECT * FROM users WHERE login = ?")) {
+            statement.setString(1, login);
+            try (ResultSet resultSet = statement.executeQuery()) {
+                if (resultSet.next()) user = UserMapper.getByResultSet(resultSet);
+            }
+        } catch (SQLException e) {
+            logger.error(e.getMessage());
+            return null;
+        }
+        return user;
     }
 }
