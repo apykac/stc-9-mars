@@ -27,31 +27,33 @@ public class UserMapper {
 
     public static void statementSetter(PreparedStatement statement, User user, int begin, int length) throws SQLException {
         if ((statement == null) || (user == null) || (length < 1)) return;
+        int count = 1;
         switch (begin) {
             case 1:
-                statement.setString(1, user.getLogin());
+                statement.setString(count++, user.getLogin());
             case 2:
-                if ((--length) == 0) return;
-                statement.setString(2, user.getHashPassword());
+                if (count > length) return;
+                statement.setString(count++, user.getHashPassword());
             case 3:
-                if ((--length) == 0) return;
-                statement.setString(3, user.getFirstName());
+                if (count > length) return;
+                statement.setString(count++, user.getFirstName());
             case 4:
-                if ((--length) == 0) return;
-                statement.setString(4, user.getSecondName());
+                if (count > length) return;
+                statement.setString(count++, user.getSecondName());
+            case 5:
+                if (count > length) return;
+                statement.setString(count++, user.getMiddleName());
             case 6:
-                if ((--length) == 0) return;
-                statement.setString(5, user.getMiddleName());
+                if (count > length) return;
+                if (user.getGroupId() != null) statement.setInt(count++, user.getGroupId());
+                else statement.setNull(count++, Types.INTEGER);
             case 7:
-                if ((--length) == 0) return;
-                if (user.getGroupId() != null) statement.setInt(7, user.getGroupId());
-                else statement.setNull(6, Types.INTEGER);
+                if (count > length) return;
+                statement.setInt(count++, user.getId());
             case 8:
-                if ((--length) == 0) return;
-                statement.setInt(7, user.getPermissionGroup());
-            case 9:
-                if ((--length) == 0) return;
-                statement.setInt(8, user.getId());
+                if (count > length) return;
+                statement.setInt(count++, user.getPermissionGroup());
+
         }
     }
 }

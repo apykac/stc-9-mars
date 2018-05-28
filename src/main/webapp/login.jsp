@@ -31,12 +31,10 @@
                             <h6>Вход</h6>
                             <input class="form-control" type="text" placeholder="Логин" name="userName">
                             <input class="form-control" type="password" placeholder="Пароль" name="userPassword">
-                            <%=("authError".equals(request.getParameter("errorMsg"))) ? "<div class='alert alert-danger'>" +
-                                    "Неверное имя/пароль" +
-                                    "</div>" : ""%>
-                            <%=("noAuth".equals(request.getParameter("errorMsg"))) ? "<div class='alert alert-danger'>" +
-                                    "Ошибка авторизации" +
-                                    "</div>" : ""%>
+                            <c:if test="${param.errorMsg != null}">
+                                <c:if test="${param.errorMsg == 'authError'}"><div class='alert alert-danger'>Неверное имя/пароль</div></c:if>
+                                <c:if test="${param.errorMsg == 'noAuth'}"><div class='alert alert-danger'>Ошибка авторизации</div></c:if>
+                            </c:if>
                             <div class="action">
                                 <button class="btn btn-primary signup" type="submit">Логин</button>
                             </div>
@@ -50,7 +48,7 @@
                     <p>Хотите вернуться?</p>
                     <a href="${pageContext.request.contextPath}/">Назад</a>
                     <br/>
-                    <c:if test="${param.registration != null && param.registration == 'true'}"><p>Регистация прошла успешно</p></c:if>
+                    <c:if test="${param.registration != null && param.registration == 'true'}"><div class="alert alert-success"><p>Регистация прошла успешно</p></div></c:if>
                 </div>
             </div>
         </div>

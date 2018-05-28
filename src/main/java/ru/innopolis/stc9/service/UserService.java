@@ -10,9 +10,13 @@ public interface UserService {
 
     boolean addUser(User user);
 
-    Integer addUserWithoutAutoInc(Map<String, String[]> incParam);
+    //Integer addUserWithoutAutoInc(Map<String, String[]> incParam);
 
     boolean addUserByParam(Map<String, String[]> incParam);
 
     boolean isExist(String login);
+
+    Integer getRole(String login);
+
+    boolean checkAuth(String login, String password);
 }

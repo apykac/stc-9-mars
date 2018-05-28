@@ -16,42 +16,42 @@
                             <div class="col-sm-10"><input type="text" class="form-control" id="userId"
                                                           placeholder="User ID"
                                                           name="userId"
-                                                          value="${user.getId()}" readonly></div>
+                                                          value="${user.id}" readonly></div>
                         </div>
                         <div class="form-group">
-                            <label for="editUsername" class="col-sm-2 control-label">Логин</label>
-                            <div class="col-sm-10"><input type="text" class="form-control" id="editUsername"
-                                                          placeholder="Username" name="editUsername"
-                                                          value="${login.getUserName()}"></div>
+                            <label for="editLogin" class="col-sm-2 control-label">Логин</label>
+                            <div class="col-sm-10"><input type="text" class="form-control" id="editLogin"
+                                                          placeholder="Login" name="editLogin"
+                                                          value="${user.login}"></div>
                         </div>
                         <div class="form-group">
                             <label for="editFirstName" class="col-sm-2 control-label">Имя</label>
                             <div class="col-sm-10"><input type="text" class="form-control" id="editFirstName"
                                                           placeholder="First name"
-                                                          name="editFirstName" value="${user.getFirstName()}"></div>
+                                                          name="editFirstName" value="${user.firstName}"></div>
                         </div>
                         <div class="form-group">
                             <label for="editLastName" class="col-sm-2 control-label">Фамилия</label>
                             <div class="col-sm-10"><input type="text" class="form-control" id="editLastName"
                                                           placeholder="Last name"
-                                                          name="editLastName" value="${user.getSecondName()}"></div>
+                                                          name="editLastName" value="${user.secondName}"></div>
                         </div>
                         <div class="form-group">
                             <label for="editMiddleName" class="col-sm-2 control-label">Отчество</label>
                             <div class="col-sm-10"><input type="text" class="form-control" id="editMiddleName"
                                                           placeholder="Middle name"
-                                                          name="editMiddleName" value="${user.getMiddleName()}"></div>
+                                                          name="editMiddleName" value="${user.middleName}"></div>
                         </div>
                         <div class="form-group">
                             <label class="col-sm-2 control-label"></label>
                             <div class="col-sm-10">
                                 <select class="form-control" name="editRole">
                                     <option disabled>Необходимо выбрать роль пользователя</option>
-                                    <option ${login.getPermissionGroup() == 0 ? "selected" : ""} value="0">Admin
+                                    <option ${user.permissionGroup == 0 ? "selected" : ""} value="0">Admin
                                     </option>
-                                    <option ${login.getPermissionGroup() == 1 ? "selected" : ""} value="1">Teacher
+                                    <option ${user.permissionGroup == 1 ? "selected" : ""} value="1">Teacher
                                     </option>
-                                    <option ${login.getPermissionGroup() == 2 ? "selected" : ""} value="2">Student
+                                    <option ${user.permissionGroup == 2 ? "selected" : ""} value="2">Student
                                     </option>
                                 </select>
                             </div>
@@ -86,7 +86,7 @@
 
                     <div>${userUpdateMessage}</div>
                     <div>${loginUpdateMessage}</div>
-                        ${passwordUpdateMessage == null ? "" : "<div class='alert alert-danger'>"+passwordUpdateMessage+"</div>"}
+                    <c:if test="${passwordUpdateMessage != null}"><div class='alert alert-danger'>${passwordUpdateMessage}</div></c:if>
 
                 </form>
                 <br/><br/>

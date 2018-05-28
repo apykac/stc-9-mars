@@ -1,6 +1,7 @@
 package ru.innopolis.stc9.dao;
 
 import ru.innopolis.stc9.pojo.User;
+
 import java.util.List;
 
 /**
@@ -9,9 +10,13 @@ import java.util.List;
 public interface UserDao {
     boolean addUser(User user);
 
+    boolean updateUserByFIOL(User newUser);
+
+    boolean updateUserPassword(User newUser);
+
     Integer maxId();
 
-    Integer addUserWithoutAutoInc(User user);
+    User findUserByUserId(int id);
 
     List<User> getUsersList();
 

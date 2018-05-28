@@ -1,5 +1,7 @@
 package ru.innopolis.stc9.service;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 import ru.innopolis.stc9.dao.UserDao;
 import ru.innopolis.stc9.dao.UserDaoImpl;
 import ru.innopolis.stc9.pojo.User;
@@ -7,8 +9,9 @@ import ru.innopolis.stc9.pojo.User;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-
+@Component
 public class UserServiceImpl implements UserService {
+    @Autowired
     private UserDao userDao = new UserDaoImpl();
 
     @Override
@@ -32,7 +35,7 @@ public class UserServiceImpl implements UserService {
         return userDao.addUser(user);
     }
 
-    @Override
+    /*@Override
     public Integer addUserWithoutAutoInc(Map<String, String[]> incParam) {
         return userDao.addUserWithoutAutoInc(
                 new User(incParam.get("first_name")[0],
@@ -40,6 +43,21 @@ public class UserServiceImpl implements UserService {
                         incParam.get("middle_name")[0],
                         null)
         );
+    }*/
+
+    @Override
+    public Integer getRole(String login) {
+        if ((login == null) || login.isEmpty()) return -1;
+        User user = userDao.findLoginByName(login);
+        if (user == null) return -1;
+        return user.getPermissionGroup();
+    }
+
+    @Override
+    public boolean checkAuth(String login, String password) {
+        if ((login == null) || (password == null) || login.isEmpty() || password.isEmpty()) return false;
+        User user = userDao.findLoginByName(login);
+        return (user != null) && (CryptService.isMatched(password, user.getHashPassword()));
     }
 
     @Override
