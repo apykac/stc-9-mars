@@ -22,7 +22,6 @@ public class EditUserController extends HttpServlet{
         int id = Integer.parseInt(req.getParameter("user-id"));
         if (id>0) {
             req.setAttribute("user", adminService.getUser(id));
-            //req.setAttribute("login", adminService.getLogin(id));
             req.getSession().setAttribute("user-id", id);
         }
         if (adminService.getUserUpdateMessage(req) != null) {

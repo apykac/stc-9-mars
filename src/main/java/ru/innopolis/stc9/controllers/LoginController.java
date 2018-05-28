@@ -7,8 +7,6 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
-import ru.innopolis.stc9.service.LoginService;
-import ru.innopolis.stc9.service.LoginServiceImpl;
 import ru.innopolis.stc9.service.UserService;
 import ru.innopolis.stc9.service.UserServiceImpl;
 
@@ -20,12 +18,8 @@ import java.io.IOException;
 @Controller
 public class LoginController {
     private final Logger logger = Logger.getLogger(LoginController.class);
-    /*@Autowired
-    private final LoginService loginService = new LoginServiceImpl();*/
     @Autowired
     private final UserService userService = new UserServiceImpl();
-
-
 
     @RequestMapping(value = "/login", method = RequestMethod.GET)
     private String loginForm(@RequestParam(value = "action", required = false) String action,

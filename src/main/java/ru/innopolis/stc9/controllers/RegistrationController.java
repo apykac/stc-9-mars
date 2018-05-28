@@ -1,8 +1,6 @@
 package ru.innopolis.stc9.controllers;
 
 import org.apache.log4j.Logger;
-import ru.innopolis.stc9.service.LoginService;
-import ru.innopolis.stc9.service.LoginServiceImpl;
 import ru.innopolis.stc9.service.UserService;
 import ru.innopolis.stc9.service.UserServiceImpl;
 
