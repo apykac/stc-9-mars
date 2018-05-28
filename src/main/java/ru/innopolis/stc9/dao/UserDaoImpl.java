@@ -41,21 +41,6 @@ public class UserDaoImpl implements UserDao {
     }
 
     @Override
-    public Integer maxId() {
-        Integer result = null;
-        try (Connection connection = connectionManager.getConnection();
-             PreparedStatement statement = connection.prepareStatement("SELECT MAX(id) maxid FROM users")) {
-            statement.execute();
-            try (ResultSet resultSet = statement.executeQuery()) {
-                if (resultSet.next()) result = resultSet.getInt("maxid");
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        return result;
-    }
-
-    @Override
     public User findUserByUserId(int id) {
         User result = null;
         try (Connection connection = connectionManager.getConnection();

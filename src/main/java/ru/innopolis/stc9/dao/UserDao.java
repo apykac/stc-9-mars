@@ -14,8 +14,6 @@ public interface UserDao {
 
     boolean updateUserPassword(User newUser);
 
-    Integer maxId();
-
     User findUserByUserId(int id);
 
     List<User> getUsersList();
