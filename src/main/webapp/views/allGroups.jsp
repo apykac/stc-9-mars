@@ -28,7 +28,7 @@
                         <tr>
                             <td>${group.id}</td>
                             <td>${group.name}</td>
-                            <td><a href="${pageContext.request.contextPath}/views/group?id=${group.id}"
+                            <td><a href="${pageContext.request.contextPath}/views/group/${group.id}"
                                    name="${group.name}">Информация</a></td>
                         </tr>
                     </c:forEach>
@@ -45,7 +45,7 @@
                 <div class="panel-title ">Добавление группы</div>
             </div>
             <div class="content-box-large box-with-header">
-                <form class="form-horizontal" id="add" action="${pageContext.request.contextPath}/views/allgroup"
+                <form class="form-horizontal" id="add" action="${pageContext.request.contextPath}/views/addgroups"
                       method="post">
                     <div class="form-group">
                         <label for="nameGr" class="col-sm-2 control-label">Введите</label>

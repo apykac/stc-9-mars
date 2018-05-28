@@ -1,6 +1,7 @@
 package ru.innopolis.stc9.dao;
 
 import org.apache.log4j.Logger;
+import org.springframework.stereotype.Component;
 import ru.innopolis.stc9.db.connection.ConnectionManager;
 import ru.innopolis.stc9.db.connection.ConnectionManagerImpl;
 import ru.innopolis.stc9.pojo.User;
@@ -15,6 +16,7 @@ import java.util.List;
 /**
  * Created by Семушев on 24.05.2018.
  */
+@Component
 public class UserDaoImpl implements UserDao {
     private static ConnectionManager connectionManager = ConnectionManagerImpl.getInstance();
     private Logger logger = Logger.getLogger(UserDaoImpl.class);
