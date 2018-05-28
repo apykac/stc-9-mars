@@ -1,5 +1,7 @@
 package ru.innopolis.stc9.service;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 import ru.innopolis.stc9.dao.GroupDao;
 import ru.innopolis.stc9.dao.GroupDaoImpl;
 import ru.innopolis.stc9.pojo.Group;
@@ -10,8 +12,10 @@ import java.util.List;
  * Created by Сергей on 23.05.2018.
  * Реализация интерфейса GroupService
  */
+@Service
 public class GroupServiceImpl implements GroupService {
-    private GroupDao groupDao = new GroupDaoImpl();
+    @Autowired
+    private GroupDao groupDao;
 
     @Override
     public boolean addGroup(Group group) {

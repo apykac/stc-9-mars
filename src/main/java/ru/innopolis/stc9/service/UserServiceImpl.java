@@ -1,7 +1,7 @@
 package ru.innopolis.stc9.service;
 
+import org.springframework.stereotype.Service;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
 import ru.innopolis.stc9.dao.UserDao;
 import ru.innopolis.stc9.dao.UserDaoImpl;
 import ru.innopolis.stc9.pojo.User;
@@ -9,7 +9,7 @@ import ru.innopolis.stc9.pojo.User;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-@Component
+@Service
 public class UserServiceImpl implements UserService {
     @Autowired
     private UserDao userDao = new UserDaoImpl();
@@ -34,16 +34,6 @@ public class UserServiceImpl implements UserService {
         if (user == null) return false;
         return userDao.addUser(user);
     }
-
-    /*@Override
-    public Integer addUserWithoutAutoInc(Map<String, String[]> incParam) {
-        return userDao.addUserWithoutAutoInc(
-                new User(incParam.get("first_name")[0],
-                        incParam.get("second_name")[0],
-                        incParam.get("middle_name")[0],
-                        null)
-        );
-    }*/
 
     @Override
     public Integer getRole(String login) {
