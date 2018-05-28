@@ -1,5 +1,6 @@
 package ru.innopolis.stc9.service;
 
+import org.springframework.stereotype.Service;
 import ru.innopolis.stc9.dao.UserDao;
 import ru.innopolis.stc9.dao.UserDaoImpl;
 import ru.innopolis.stc9.pojo.User;
@@ -7,7 +8,7 @@ import ru.innopolis.stc9.pojo.User;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-
+@Service
 public class UserServiceImpl implements UserService {
     private UserDao userDao = new UserDaoImpl();
 

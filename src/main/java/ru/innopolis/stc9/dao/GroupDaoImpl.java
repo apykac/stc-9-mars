@@ -1,6 +1,7 @@
 package ru.innopolis.stc9.dao;
 
 import org.apache.log4j.Logger;
+import org.springframework.stereotype.Component;
 import ru.innopolis.stc9.db.connection.ConnectionManager;
 import ru.innopolis.stc9.db.connection.ConnectionManagerImpl;
 import ru.innopolis.stc9.pojo.Group;
@@ -16,6 +17,7 @@ import java.util.List;
  * Created by Сергей on 23.05.2018.
  * Класс реализует интерфейс GroupDao
  */
+@Component
 public class GroupDaoImpl implements GroupDao {
     private Logger logger = Logger.getLogger(GroupDaoImpl.class);
     private static ConnectionManager connectionManager = ConnectionManagerImpl.getInstance();

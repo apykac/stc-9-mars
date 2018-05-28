@@ -15,7 +15,7 @@
                 <div class="panel-title ">Обновление группы</div>
             </div>
             <div class="content-box-large box-with-header">
-                <form class="form-horizontal" id="add" action="${pageContext.request.contextPath}/views/group"
+                <form class="form-horizontal" id="add" action="${pageContext.request.contextPath}/views/updateGroup"
                       method="post">
                     <div class="form-group">
                         <label for="nameGr" class="col-sm-2 control-label">Введите</label>
