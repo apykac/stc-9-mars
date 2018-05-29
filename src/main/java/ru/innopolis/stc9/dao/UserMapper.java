@@ -15,6 +15,9 @@ public class UserMapper {
         if (resultSet == null) return null;
         User user = new User();
         user.setId(resultSet.getInt("id"));
+        user.setLogin(resultSet.getString("login"));
+        user.setHashPassword(resultSet.getString("hash_password"));
+        user.setPermissionGroup(resultSet.getInt("permission_group"));
         user.setFirstName(resultSet.getString("first_name"));
         user.setSecondName(resultSet.getString("second_name"));
         user.setMiddleName(resultSet.getString("middle_name"));
@@ -22,18 +25,35 @@ public class UserMapper {
         return user;
     }
 
-    public static void statementSetter(PreparedStatement statement, User user, int length) throws SQLException {
+    public static void statementSetter(PreparedStatement statement, User user, int begin, int length) throws SQLException {
         if ((statement == null) || (user == null) || (length < 1)) return;
-        statement.setString(1, user.getFirstName());
-        if ((--length) == 0) return;
-        statement.setString(2, user.getSecondName());
-        if ((--length) == 0) return;
-        if (!user.getMiddleName().equals("")) statement.setString(3, user.getMiddleName());
-        else statement.setNull(3, Types.VARCHAR);
-        if ((--length) == 0) return;
-        if (user.getGroupId() != null) statement.setInt(4, user.getGroupId());
-        else statement.setNull(4, Types.INTEGER);
-        if ((--length) == 0) return;
-        statement.setInt(5, user.getId());
+        int count = 1;
+        switch (begin) {
+            case 1:
+                statement.setString(count++, user.getLogin());
+            case 2:
+                if (count > length) return;
+                statement.setString(count++, user.getHashPassword());
+            case 3:
+                if (count > length) return;
+                statement.setString(count++, user.getFirstName());
+            case 4:
+                if (count > length) return;
+                statement.setString(count++, user.getSecondName());
+            case 5:
+                if (count > length) return;
+                statement.setString(count++, user.getMiddleName());
+            case 6:
+                if (count > length) return;
+                if (user.getGroupId() != null) statement.setInt(count++, user.getGroupId());
+                else statement.setNull(count++, Types.INTEGER);
+            case 7:
+                if (count > length) return;
+                statement.setInt(count++, user.getId());
+            case 8:
+                if (count > length) return;
+                statement.setInt(count++, user.getPermissionGroup());
+
+        }
     }
 }

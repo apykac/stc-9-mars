@@ -1,8 +1,6 @@
 package ru.innopolis.stc9.controllers;
 
 import org.apache.log4j.Logger;
-import ru.innopolis.stc9.service.LoginService;
-import ru.innopolis.stc9.service.LoginServiceImpl;
 import ru.innopolis.stc9.service.UserService;
 import ru.innopolis.stc9.service.UserServiceImpl;
 
@@ -12,13 +10,13 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
 public class RegistrationController extends HttpServlet {
     private static final String ENCODING = "UTF-8";
     private static Logger logger = Logger.getLogger(RegistrationController.class);
-    private LoginService loginService = new LoginServiceImpl();
     private UserService userService = new UserServiceImpl();
 
     @Override
@@ -47,27 +45,15 @@ public class RegistrationController extends HttpServlet {
             logger.error("UnsupportedEncodingException: " + e.getMessage());
         }
         Map<String, String[]> incParam = req.getParameterMap();
-        List<String> errorList = loginService.isCorrectData(incParam);
-        if (loginService.isExist(incParam.get("userName")[0])) errorList.add("Login is Exist");
+        List<String> errorList = new ArrayList<>();
+        if (userService.isExist(incParam.get("login")[0])) errorList.add("Login is Exist");
+        else errorList = userService.isCorrectData(incParam);
         if (!errorList.isEmpty()) {
             req.setAttribute("errorMsg", errorList);
             forwardErrors(req, resp);
             return;
         }
-        errorList = userService.isCorrectData(incParam);
-        req.setAttribute("errorMsg", errorList);
-        if (incParam.get("first_name")[0].equals("") &&
-                incParam.get("second_name")[0].equals("") &&
-                incParam.get("middle_name")[0].equals("")) {
-            loginService.addLogin(incParam, null);
-        } else {
-            if (!errorList.isEmpty()) {
-                req.setAttribute("errorMsg", errorList);
-                forwardErrors(req, resp);
-                return;
-            }
-            loginService.addLogin(incParam, userService.addUserWithoutAutoInc(incParam));
-        }
+        userService.addUserByParam(incParam);
         try {
             resp.sendRedirect(req.getContextPath() + "/login?registration=true");
         } catch (IOException e) {

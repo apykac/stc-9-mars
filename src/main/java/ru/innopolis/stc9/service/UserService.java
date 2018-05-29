@@ -6,9 +6,15 @@ import java.util.List;
 import java.util.Map;
 
 public interface UserService {
-    public List<String> isCorrectData(Map<String, String[]> incParam);
+    List<String> isCorrectData(Map<String, String[]> incParam);
 
     boolean addUser(User user);
 
-    Integer addUserWithoutAutoInc(Map<String, String[]> incParam);
+    boolean addUserByParam(Map<String, String[]> incParam);
+
+    boolean isExist(String login);
+
+    Integer getRole(String login);
+
+    boolean checkAuth(String login, String password);
 }

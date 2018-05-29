@@ -7,8 +7,8 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
-import ru.innopolis.stc9.service.LoginService;
-import ru.innopolis.stc9.service.LoginServiceImpl;
+import ru.innopolis.stc9.service.UserService;
+import ru.innopolis.stc9.service.UserServiceImpl;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -19,8 +19,7 @@ import java.io.IOException;
 public class LoginController {
     private final Logger logger = Logger.getLogger(LoginController.class);
     @Autowired
-    private final LoginService loginService = new LoginServiceImpl();
-
+    private final UserService userService = new UserServiceImpl();
 
     @RequestMapping(value = "/login", method = RequestMethod.GET)
     private String loginForm(@RequestParam(value = "action", required = false) String action,
@@ -40,8 +39,8 @@ public class LoginController {
         String login = req.getParameter("userName");
         String password = req.getParameter("userPassword");
         String redirectPath = req.getContextPath();
-        if (loginService.checkAuth(login, password)) {
-            Integer role = loginService.getRole(login);
+        if (userService.checkAuth(login, password)) {
+            Integer role = userService.getRole(login);
             logger.info("login: " + login + ", role: " + role);
             req.getSession().setAttribute("login", login);
             req.getSession().setAttribute("role", role);

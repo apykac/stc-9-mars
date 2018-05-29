@@ -10,9 +10,13 @@ import java.util.List;
 public interface UserDao {
     boolean addUser(User user);
 
-    Integer maxId();
+    boolean updateUserByFIOL(User newUser);
 
-    Integer addUserWithoutAutoInc(User user);
+    boolean updateUserPassword(User newUser);
+
+    User findUserByUserId(int id);
 
     List<User> getUsersList();
+
+    User findLoginByName(String login);
 }
