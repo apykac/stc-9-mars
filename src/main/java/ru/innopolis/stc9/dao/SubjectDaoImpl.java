@@ -19,6 +19,37 @@ public class SubjectDaoImpl implements SubjectDao {
     private Logger logger = Logger.getLogger(SubjectDaoImpl.class);
 
     @Override
+    public boolean addSubject(Subject subject) {
+        try (Connection connection = connectionManager.getConnection();
+             PreparedStatement statement = connection.prepareStatement("INSERT " +
+                     "INTO subjects(sname) " +
+                     "VALUES (?)")) {
+            statement.setString(1, subject.getName());
+            statement.execute();
+            return true;
+        } catch (SQLException e) {
+            logger.info(e.getMessage());
+            return false;
+        }
+    }
+
+    @Override
+    public boolean deleteSubject(int subjectId) {
+        if (subjectId < 0) return false;
+        try (Connection connection = connectionManager.getConnection();
+             PreparedStatement statement = connection.prepareStatement(
+                     "DELETE FROM subjects WHERE id = ?")) {
+            statement.setInt(1, subjectId);
+            statement.execute();
+            logger.info(" delete subject");
+            return true;
+        } catch (SQLException e) {
+            logger.error(e.getMessage());
+            return false;
+        }
+    }
+
+    @Override
     public List<Subject> findAllSubject() {
         logger.info("Subject list requested.");
         List<Subject> result = new ArrayList<>();
