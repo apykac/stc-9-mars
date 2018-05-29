@@ -48,7 +48,7 @@
                     <p>Хотите вернуться?</p>
                     <a href="${pageContext.request.contextPath}/">Назад</a>
                     <br/>
-                    <c:if test="${param.registration != null && param.registration == 'true'}"><div class="alert alert-success"><p>Регистация прошла успешно</p></div></c:if>
+                    <c:if test="${param.registration != null && param.registration == 'true'}"><div class="alert alert-success"><p>Регисртация прошла успешно</p></div></c:if>
                 </div>
             </div>
         </div>

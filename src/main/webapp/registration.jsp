@@ -48,6 +48,7 @@
                             <div class="action">
                                 <button class="btn btn-primary signup" type="submit">Регистрация</button>
                                 <br/>
+                                <br/>
                                 <a href="${pageContext.request.contextPath}/login">Обратно к логину</a>
                             </div>
                         </form>

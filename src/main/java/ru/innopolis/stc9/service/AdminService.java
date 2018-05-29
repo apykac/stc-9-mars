@@ -1,6 +1,8 @@
 package ru.innopolis.stc9.service;
 
 import org.apache.log4j.Logger;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 import ru.innopolis.stc9.controllers.GroupController;
 import ru.innopolis.stc9.dao.UserDaoImpl;
 import ru.innopolis.stc9.pojo.User;

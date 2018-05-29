@@ -1,6 +1,15 @@
 package ru.innopolis.stc9.controllers;
 
 import org.apache.log4j.Logger;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Configurable;
+import org.springframework.stereotype.Controller;
+import org.springframework.stereotype.Service;
+import org.springframework.ui.Model;
+import org.springframework.util.MultiValueMap;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import ru.innopolis.stc9.service.UserService;
 import ru.innopolis.stc9.service.UserServiceImpl;
 
@@ -14,60 +23,29 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-public class RegistrationController extends HttpServlet {
-    private static final String ENCODING = "UTF-8";
+@Controller
+@RequestMapping("/registration")
+public class RegistrationController {
     private static Logger logger = Logger.getLogger(RegistrationController.class);
-    private UserService userService = new UserServiceImpl();
+    private String regPath = "registration";
+    @Autowired
+    private UserService userService /*= new UserServiceImpl()*/;
 
-    @Override
-    protected void doGet(HttpServletRequest req, HttpServletResponse resp) {
-        if ((req == null) || (resp == null)) return;
-        try {
-            req.setCharacterEncoding(ENCODING);
-            resp.setCharacterEncoding(ENCODING);
-            req.getRequestDispatcher(req.getContextPath() + "/registration.jsp").forward(req, resp);
-        } catch (UnsupportedEncodingException e) {
-            logger.error("UnsupportedEncodingException: " + e.getMessage());
-        } catch (ServletException e) {
-            logger.error("ServletException: " + e.getMessage());
-        } catch (IOException e) {
-            logger.error("IOException: " + e.getMessage());
-        }
+    @RequestMapping(method = RequestMethod.GET)
+    public String infoHandlerOfGet() {
+        return regPath;
     }
 
-    @Override
-    protected void doPost(HttpServletRequest req, HttpServletResponse resp) {
-        if ((req == null) || (resp == null)) return;
-        try {
-            req.setCharacterEncoding(ENCODING);
-            resp.setCharacterEncoding(ENCODING);
-        } catch (UnsupportedEncodingException e) {
-            logger.error("UnsupportedEncodingException: " + e.getMessage());
-        }
-        Map<String, String[]> incParam = req.getParameterMap();
+    @RequestMapping(method = RequestMethod.POST)
+    public String registrationFormHandler(@RequestBody MultiValueMap<String, String> incParam, Model model) {
         List<String> errorList = new ArrayList<>();
-        if (userService.isExist(incParam.get("login")[0])) errorList.add("Login is Exist");
+        if (userService.isExist(incParam.get("login").get(0))) errorList.add("Login is Exist");
         else errorList = userService.isCorrectData(incParam);
         if (!errorList.isEmpty()) {
-            req.setAttribute("errorMsg", errorList);
-            forwardErrors(req, resp);
-            return;
+            model.addAttribute("errorMsg", errorList);
+            return regPath;
         }
         userService.addUserByParam(incParam);
-        try {
-            resp.sendRedirect(req.getContextPath() + "/login?registration=true");
-        } catch (IOException e) {
-            logger.error("IOException: " + e.getMessage());
-        }
-    }
-
-    private void forwardErrors(HttpServletRequest req, HttpServletResponse resp) {
-        try {
-            req.getRequestDispatcher("/registration.jsp?error=true").forward(req, resp);
-        } catch (ServletException e) {
-            logger.error("ServletException: " + e.getMessage());
-        } catch (IOException e) {
-            logger.error("IOException: " + e.getMessage());
-        }
+        return "redirect:/login?registration=true";
     }
 }

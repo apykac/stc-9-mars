@@ -22,7 +22,7 @@ public class LoginController {
     private final UserService userService = new UserServiceImpl();
 
     @RequestMapping(value = "/login", method = RequestMethod.GET)
-    private String loginForm(@RequestParam(value = "action", required = false) String action,
+    public String loginForm(@RequestParam(value = "action", required = false) String action,
                              HttpSession session,
                              Model model) {
         if ("logout".equals(action)) {
@@ -33,7 +33,7 @@ public class LoginController {
     }
 
     @RequestMapping(value = "/login", method = RequestMethod.POST)
-    private String postLoginForm(HttpServletRequest req,
+    public String postLoginForm(HttpServletRequest req,
                                  HttpServletResponse resp,
                                  Model model) {
         String login = req.getParameter("userName");
