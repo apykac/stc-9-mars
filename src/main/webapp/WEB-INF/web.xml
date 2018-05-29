@@ -12,9 +12,7 @@
     </servlet>
     <servlet-mapping>
         <servlet-name>MainController</servlet-name>
-        <url-pattern>/login</url-pattern>
         <url-pattern>/</url-pattern>
-        <url-pattern>/views/subject</url-pattern>
     </servlet-mapping>
 
 
@@ -41,6 +39,7 @@
         <url-pattern>*.jpg</url-pattern>
         <url-pattern>*.gif</url-pattern>
         <url-pattern>*.css</url-pattern>
+        <url-pattern>*.js</url-pattern>
     </servlet-mapping>
 
     <servlet>
