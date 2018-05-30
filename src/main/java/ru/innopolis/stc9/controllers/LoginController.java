@@ -44,7 +44,7 @@ public class LoginController {
             logger.info("login: " + login + ", role: " + role);
             req.getSession().setAttribute("login", login);
             req.getSession().setAttribute("role", role);
-            redirectPath += "/views/allgroup";
+            redirectPath += "/views/progress";
         } else {
             redirectPath += "/login?errorMsg=authError";
         }
