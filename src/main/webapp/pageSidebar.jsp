@@ -2,7 +2,7 @@
 <div class="sidebar content-box" style="display: block;">
     <ul class="nav">
         <!-- Main menu -->
-        <li class="current"><a href="${pageContext.request.contextPath}/views">Действия</a></li>
+        <li class="current"><a href="${pageContext.request.contextPath}/views/progress">Действия</a></li>
         <li><a href="${pageContext.request.contextPath}/views/progress">Прогресс</a></li>
         <li><a href="${pageContext.request.contextPath}/views/allgroup">Группы</a></li>
         <li><a href="${pageContext.request.contextPath}/views/users-list">Пользователи</a></li>
