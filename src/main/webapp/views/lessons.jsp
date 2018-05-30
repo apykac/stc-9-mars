@@ -86,6 +86,10 @@
                                     <div class="col-sm-10">
                                         <input type="text" class="form-control" id="l_name" value=""
                                                disabled>
+                                        <input type="hidden" class="form-control" id="l_subjid" value=""
+                                               disabled>
+                                        <input type="hidden" class="form-control" id="l_date" value=""
+                                               disabled>
                                         <input type="hidden" class="form-control" id="l_id" value=""
                                                name="idLesson" readonly>
                                     </div>

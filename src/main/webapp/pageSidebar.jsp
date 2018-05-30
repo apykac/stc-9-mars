@@ -3,6 +3,7 @@
     <ul class="nav">
         <!-- Main menu -->
         <li class="current"><a href="${pageContext.request.contextPath}/views">Действия</a></li>
+        <li><a href="${pageContext.request.contextPath}/views/progress">Прогресс</a></li>
         <li><a href="${pageContext.request.contextPath}/views/allgroup">Группы</a></li>
         <li><a href="${pageContext.request.contextPath}/views/users-list">Пользователи</a></li>
         <li><a href="${pageContext.request.contextPath}/views/subject">Предметы</a></li>

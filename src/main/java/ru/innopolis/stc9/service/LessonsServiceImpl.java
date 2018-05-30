@@ -12,6 +12,7 @@ public class LessonsServiceImpl implements LessonsService {
     @Autowired
     private LessonsDao lessonsDao;
 
+
     @Override
     public boolean addLesson(Lessons lesson) {
         if (lesson == null) return false;
@@ -19,9 +20,8 @@ public class LessonsServiceImpl implements LessonsService {
     }
 
     @Override
-    public boolean deleteLesson(int lessonId) {
-        if (lessonId < 0) return false;
-        return lessonsDao.deleteLesson(lessonId);
+    public void deleteLesson(int lessonId) {
+        lessonsDao.deleteLesson(lessonId);
     }
 
     @Override
