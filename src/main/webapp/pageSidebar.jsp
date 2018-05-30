@@ -6,5 +6,6 @@
         <li><a href="${pageContext.request.contextPath}/views/allgroup">Группы</a></li>
         <li><a href="${pageContext.request.contextPath}/views/users-list">Пользователи</a></li>
         <li><a href="${pageContext.request.contextPath}/views/subject">Предметы</a></li>
+        <li><a href="${pageContext.request.contextPath}/views/lessons">Уроки</a></li>
     </ul>
 </div>

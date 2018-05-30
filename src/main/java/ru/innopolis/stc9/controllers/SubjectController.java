@@ -27,15 +27,31 @@ public class SubjectController {
     @RequestMapping(method = RequestMethod.POST)
     public String addSubjectMethodPost(@RequestParam(value = "name", required = false) String name, Model model) {
         Subject subject = new Subject(name);
-        subjectService.addSubject(subject);
-        logger.info("subject (" + name + ") added");
+        if (checkSubjectName(name)) {
+            model.addAttribute("errorName", "Предмет (" + name + ") присутствует в списке предметов");
+        } else {
+            subjectService.addSubject(subject);
+            logger.info("subject (" + name + ") added");
+        }
         return doGet(model);
     }
 
-    @RequestMapping(value = "/views/subject/del")
-    private String delSubjectMethodPost(@RequestParam int id, Model model) {
-        subjectService.deleteSubject(id);
-        logger.info("subject " + id + " deleted");
+    private boolean checkSubjectName(String name) {
+        boolean result = false;
+        for (Subject subject : subjectService.findAllSubject()) {
+            if (name.equals(subject.getName())) {
+                result = true;
+            }
+        }
+        return result;
+    }
+
+    @RequestMapping(value = "/delete")
+    private String delSubjectMethodPost(@RequestParam("idSubj") int id, Model model) {
+        if (id > 0) {
+            subjectService.deleteSubject(id);
+            logger.info("subject " + id + " deleted");
+        }
         return doGet(model);
     }
 
