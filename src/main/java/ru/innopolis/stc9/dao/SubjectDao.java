@@ -6,7 +6,6 @@ import java.util.List;
 
 public interface SubjectDao {
     boolean addSubject(Subject subject);
-
     boolean deleteSubject(int subjectId);
     List<Subject> findAllSubject();
 }
