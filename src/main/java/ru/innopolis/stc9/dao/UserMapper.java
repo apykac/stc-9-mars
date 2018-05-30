@@ -45,8 +45,12 @@ public class UserMapper {
                 statement.setString(count++, user.getMiddleName());
             case 6:
                 if (count > length) return;
-                if (user.getGroupId() != null) statement.setInt(count++, user.getGroupId());
-                else statement.setNull(count++, Types.INTEGER);
+                if (user.getGroupId() != null && user.getGroupId() != 0) {
+                    statement.setInt(count++, user.getGroupId());
+                }
+                else {
+                    statement.setNull(count++, Types.INTEGER);
+                }
             case 7:
                 if (count > length) return;
                 statement.setInt(count++, user.getId());

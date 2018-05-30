@@ -4,7 +4,6 @@ import org.apache.log4j.Logger;
 import org.springframework.stereotype.Component;
 import ru.innopolis.stc9.db.connection.ConnectionManager;
 import ru.innopolis.stc9.db.connection.ConnectionManagerImpl;
-import ru.innopolis.stc9.pojo.Login;
 import ru.innopolis.stc9.pojo.User;
 
 import java.sql.Connection;
