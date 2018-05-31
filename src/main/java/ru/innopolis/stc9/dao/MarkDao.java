@@ -6,4 +6,8 @@ import java.util.List;
 
 public interface MarkDao {
     public List<Mark> getMarksByLessonId(int id);
+
+    public Mark getMarkById(int id);
+
+    public boolean updateMark(Mark mark);
 }

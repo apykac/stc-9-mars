@@ -5,12 +5,7 @@ public class Mark {
     private int lessonId;
     private int userId;
     private int value;
-
-    public Mark(int userId, int lessonId, int value) {
-        this.userId = userId;
-        this.lessonId = lessonId;
-        this.value = value;
-    }
+    private String comment;
 
     public Mark() {
     }
@@ -45,5 +40,13 @@ public class Mark {
 
     public void setValue(int value) {
         this.value = value;
+    }
+
+    public String getComment() {
+        return comment;
+    }
+
+    public void setComment(String comment) {
+        this.comment = comment;
     }
 }

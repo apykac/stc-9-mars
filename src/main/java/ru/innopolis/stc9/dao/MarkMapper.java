@@ -15,6 +15,7 @@ public class MarkMapper {
         mark.setUserId(resultSet.getInt("user_id"));
         mark.setLessonId(resultSet.getInt("lesson_id"));
         mark.setValue(resultSet.getInt("value"));
+        mark.setComment(resultSet.getString("comment"));
         return mark;
     }
 }

@@ -41,6 +41,7 @@ public class MarkDaoImpl implements MarkDao {
         return result;
     }
 
+    @Override
     public Mark getMarkById(int id) {
         logger.info("Mark with id " + id + " requested");
         Mark result = null;
@@ -61,6 +62,7 @@ public class MarkDaoImpl implements MarkDao {
         return result;
     }
 
+    @Override
     public boolean updateMark(Mark mark) {
         if (mark == null) {
             return false;
@@ -68,10 +70,11 @@ public class MarkDaoImpl implements MarkDao {
         logger.info("Started updating mark with id " + mark.getId());
         try (Connection connection = connectionManager.getConnection();
              PreparedStatement statement = connection.prepareStatement(
-                     "UPDATE marks SET value = ? WHERE id = ?"
+                     "UPDATE marks SET value = ?, comment = ? WHERE id = ?"
              )) {
             statement.setInt(1, mark.getValue());
-            statement.setInt(2, mark.getId());
+            statement.setString(2, mark.getComment());
+            statement.setInt(3, mark.getId());
             statement.execute();
             logger.info("Mark with id " + mark.getId() + " updated.");
             return true;

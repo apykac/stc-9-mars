@@ -17,4 +17,5 @@ public interface UserService {
     Integer getRole(String login);
 
     boolean checkAuth(String login, String password);
+
 }

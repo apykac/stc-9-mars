@@ -1,7 +1,7 @@
 package ru.innopolis.stc9.service;
 
-import org.springframework.stereotype.Service;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 import ru.innopolis.stc9.dao.UserDao;
 import ru.innopolis.stc9.dao.UserDaoImpl;
 import ru.innopolis.stc9.pojo.User;
@@ -67,4 +67,5 @@ public class UserServiceImpl implements UserService {
         if ((login == null) || login.equals("")) return false;
         return userDao.findLoginByName(login) != null;
     }
+
 }

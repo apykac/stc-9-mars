@@ -8,35 +8,9 @@
                 <div class="panel-title ">Оценки за урок ...</div>
             </div>
             <div class="content-box-large box-with-header">
-                <div class="row">
-                    <div class="col-md-9">
-                        ФИО Студента
-                    </div>
-                    <div class="col-md-1">
-                        Оценка
-                    </div>
-                </div>
-                <form id="editMarks" action="${pageContext.request.contextPath}/views/updateMarks" method="post">
-                    <c:forEach items="${requestScope.get('marks')}" var="pair">
-                        <div class="row">
-                            <div class="col-md-9">
-                                    ${pair.key}
-                            </div>
-                            <div class="col-md-3">
-                                <input type="number" name="{pair.value.id}" value="${pair.value.value}">
-                            </div>
-                        </div>
-                    </c:forEach>
-                    <div class="row">
-                        <input type="submit" value="Сохранить">
-                    </div>
-                </form>
-
-
                 <table class="table">
                     <thead>
                     <tr>
-                        <th>#</th>
                         <th>ФИО Студента</th>
                         <th>Оценка</th>
                     </tr>
@@ -46,6 +20,8 @@
                         <tr>
                             <td>${pair.key}</td>
                             <td>${pair.value.value}</td>
+                            <td><a href="${pageContext.request.contextPath}/views/editMark/${pair.value.id}">Редактировать
+                                оценку</a></td>
                         </tr>
                     </c:forEach>
                     </tbody>
