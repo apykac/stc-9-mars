@@ -85,11 +85,15 @@ public class UserServiceImpl implements UserService {
         return userDao.findUserByUserId(userId);
     }
 
+    @Override
+    public User findUserByLogin(String login) {
+        return userDao.findLoginByName(login);
+    }
+
     /**
      * возвращает список юзеров-студентов в конкретной группе
      *
      * @param groupId - id группы
-     * @return
      */
     @Override
     public List<User> getStudentsByGroupId(int groupId) {
@@ -106,7 +110,6 @@ public class UserServiceImpl implements UserService {
      * возвращает список юзеров-студентов, не состоящих в данной группе
      *
      * @param groupId - id группы
-     * @return
      */
     @Override
     public List<User> getStudentsWithoutGroup(int groupId) {
@@ -119,4 +122,5 @@ public class UserServiceImpl implements UserService {
         }
         return students;
     }
+
 }
