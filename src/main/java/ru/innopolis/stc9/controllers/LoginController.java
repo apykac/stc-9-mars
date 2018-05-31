@@ -20,4 +20,9 @@ public class LoginController {
         }
         return "login";
     }
+
+    @RequestMapping(value = "/start_page", method = RequestMethod.GET)
+    public String startPage() {
+        return "views/startPage";
+    }
 }
