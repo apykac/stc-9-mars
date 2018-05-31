@@ -26,11 +26,11 @@
             <div class="login-wrapper">
                 <div class="box">
                     <div class="content-wrap">
-                        <form action="${pageContext.request.contextPath}/login" class="login-form validate"
+                        <form action="<c:url value='/j_spring_security_check'></c:url>" class="login-form validate"
                               method="post">
                             <h6>Вход</h6>
-                            <input class="form-control" type="text" placeholder="Логин" name="userName">
-                            <input class="form-control" type="password" placeholder="Пароль" name="userPassword">
+                            <input class="form-control" type="text" placeholder="Логин" name="j_username">
+                            <input class="form-control" type="password" placeholder="Пароль" name="j_password">
                             <c:if test="${param.errorMsg != null}">
                                 <c:if test="${param.errorMsg == 'authError'}"><div class='alert alert-danger'>Неверное имя/пароль</div></c:if>
                                 <c:if test="${param.errorMsg == 'noAuth'}"><div class='alert alert-danger'>Ошибка авторизации</div></c:if>
