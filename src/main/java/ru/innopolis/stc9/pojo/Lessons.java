@@ -1,13 +1,19 @@
 package ru.innopolis.stc9.pojo;
 
-import java.util.Date;
+import java.sql.Date;
 
-public class Lesson {
+public class Lessons {
     private int id;
-    private int subjectId;
+    private int subject_id;
     private Date date;
     private String name;
-    private String description;
+
+    public Lessons(int id, int subject_id, Date date, String name) {
+        this.id = id;
+        this.subject_id = subject_id;
+        this.date = date;
+        this.name = name;
+    }
 
     public int getId() {
         return id;
@@ -17,12 +23,12 @@ public class Lesson {
         this.id = id;
     }
 
-    public int getSubjectId() {
-        return subjectId;
+    public int getSubject_id() {
+        return subject_id;
     }
 
-    public void setSubjectId(int subjectId) {
-        this.subjectId = subjectId;
+    public void setSubject_id(int subject_id) {
+        this.subject_id = subject_id;
     }
 
     public Date getDate() {
@@ -39,13 +45,5 @@ public class Lesson {
 
     public void setName(String name) {
         this.name = name;
-    }
-
-    public String getDescription() {
-        return description;
-    }
-
-    public void setDescription(String description) {
-        this.description = description;
     }
 }
