@@ -26,8 +26,7 @@
             <div class="login-wrapper">
                 <div class="box">
                     <div class="content-wrap">
-                        <form action='/j_spring_security_check' class="login-form validate"
-                              method="post">
+                        <form action="/j_spring_security_check" class="login-form validate" method="post">
                             <h6>Вход</h6>
                             <input class="form-control" type="text" placeholder="Логин" name="j_username">
                             <input class="form-control" type="password" placeholder="Пароль" name="j_password">

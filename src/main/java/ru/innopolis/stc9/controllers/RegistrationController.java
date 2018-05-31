@@ -29,7 +29,7 @@ public class RegistrationController {
     private static Logger logger = Logger.getLogger(RegistrationController.class);
     private String regPath = "registration";
     @Autowired
-    private UserService userService /*= new UserServiceImpl()*/;
+    private UserService userService;
 
     @RequestMapping(method = RequestMethod.GET)
     public String infoHandlerOfGet() {
