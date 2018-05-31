@@ -14,16 +14,24 @@ import ru.innopolis.stc9.service.SubjectServiceImpl;
 @Controller
 @RequestMapping(value = "/views/subject")
 public class SubjectController {
-    private final Logger logger = Logger.getLogger(GroupController.class);
+    private final Logger logger = Logger.getLogger(SubjectController.class);
     @Autowired
     private final SubjectService subjectService = new SubjectServiceImpl();
 
+    /**
+     * Выводим список предметов
+     */
     @RequestMapping(method = RequestMethod.GET)
     private String doGet(Model model) {
         model.addAttribute("subjects", subjectService.findAllSubject());
         return "views/subject";
     }
 
+    /**
+     * Добавляем название предмета, проверяем на совпадение
+     *
+     * @param name название предмета
+     */
     @RequestMapping(method = RequestMethod.POST)
     public String addSubjectMethodPost(@RequestParam(value = "name", required = false) String name, Model model) {
         Subject subject = new Subject(name);
@@ -36,6 +44,11 @@ public class SubjectController {
         return doGet(model);
     }
 
+    /**
+     * Проверка на совпадение
+     *
+     * @param name название предмета
+     */
     private boolean checkSubjectName(String name) {
         boolean result = false;
         for (Subject subject : subjectService.findAllSubject()) {
@@ -46,6 +59,11 @@ public class SubjectController {
         return result;
     }
 
+    /**
+     * Удаляем предмет по идентификатору
+     *
+     * @param id идентификатор предмета
+     */
     @RequestMapping(value = "/delete")
     private String delSubjectMethodPost(@RequestParam("idSubj") int id, Model model) {
         if (id > 0) {

@@ -14,13 +14,17 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Класс реализует интерфейс ProgressDao
+ */
 @Component
 public class ProgressDaoImpl implements ProgressDao {
     private static ConnectionManager connectionManager = ConnectionManagerImpl.getInstance();
     private Logger logger = Logger.getLogger(ProgressDaoImpl.class);
 
     /**
-     * Если не учитель  то добавляем условие, чтобы каждый студент мог видеть только свои данные
+     * Если пользователь - студент, то добавляем условие, чтобы каждый студент мог видеть только свои данные
+     * если не студент, то выводим весь список
      */
     private String getProgressQuery(int role) {
         String sql = "SELECT marks.id, value, u2.first_name firstName, u2.second_name secondName, " +
@@ -37,6 +41,11 @@ public class ProgressDaoImpl implements ProgressDao {
         return sql;
     }
 
+    /**
+     * Проверяем является ли пользователь студентом
+     *
+     * @param role роль пользователя
+     */
     private boolean isStudent(int role) {
         return role == 2;
     }
@@ -54,6 +63,13 @@ public class ProgressDaoImpl implements ProgressDao {
         return progress;
     }
 
+    /**
+     * Получаем список оценок
+     *
+     * @param greaterOrEqualMark больше или равно оценки
+     * @param lessOrEqualMark    меньше или равно оценки
+     * @param user               сам пользователь
+     */
     @Override
     public List<Progress> getProgress(int greaterOrEqualMark, int lessOrEqualMark, User user) {
         int role = user.getPermissionGroup();

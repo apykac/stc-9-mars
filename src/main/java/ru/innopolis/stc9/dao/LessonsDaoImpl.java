@@ -13,10 +13,13 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Класс реализует интерфейс LessonsDao
+ */
 @Component
 public class LessonsDaoImpl implements LessonsDao {
     private static ConnectionManager connectionManager = ConnectionManagerImpl.getInstance();
-    private Logger logger = Logger.getLogger(SubjectDaoImpl.class);
+    private Logger logger = Logger.getLogger(LessonsDaoImpl.class);
 
     @Override
     public boolean addLesson(Lessons lesson) {

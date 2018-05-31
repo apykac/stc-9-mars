@@ -13,6 +13,9 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Класс реализует интерфейс SubjectDao
+ */
 @Component
 public class SubjectDaoImpl implements SubjectDao {
     private static ConnectionManager connectionManager = ConnectionManagerImpl.getInstance();

@@ -9,6 +9,33 @@
                 <div class="panel-title ">Все оценки</div>
             </div>
             <div class="content-box-large box-with-header">
+                <div class="row">
+                    <div class="col-xs-12">
+                        <div id="example_length" class="dataTables_length">
+                            <form action="${pageContext.request.contextPath}/views/progress/selmarks" method="post">
+                                <div class="form-group">
+                                    <label class="form-label">Оценка</label>
+                                    <p><select name="marks">
+                                        <option value="0-5">Все оценки</option>
+                                        <option value="5-5">Отлично</option>
+                                        <option value="4-4">Хорошо</option>
+                                        <option value="3-3">Посредственно</option>
+                                        <option value="1-2">Плохо</option>
+                                        <option value="0-0">Без оценок</option>
+                                    </select></p>
+                                </div>
+                                <div class="form-actions">
+                                    <p>
+                                        <button type="submit" class="btn btn-primary btn-cons" name="form"
+                                                value="filterForm">
+                                            Фильтр
+                                        </button>
+                                    </p>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
                 <table class="table">
                     <thead>
                     <tr>

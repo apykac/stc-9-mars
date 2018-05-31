@@ -13,10 +13,13 @@ import ru.innopolis.stc9.service.LessonsServiceImpl;
 @Controller
 @RequestMapping(value = "/views/lessons")
 public class LessonsController {
-    private final Logger logger = Logger.getLogger(GroupController.class);
+    private final Logger logger = Logger.getLogger(LessonsController.class);
     @Autowired
     private final LessonsService lessonsService = new LessonsServiceImpl();
 
+    /**
+     * выводим список уроков
+     */
     @RequestMapping(method = RequestMethod.GET)
     private String doGet(Model model) {
         model.addAttribute("lessons", lessonsService.findAllLessons());
@@ -31,6 +34,11 @@ public class LessonsController {
         return doGet(model);
     }*/
 
+    /**
+     * Удаляем урок по идентификатору
+     *
+     * @param id идентификатор урока
+     */
     @RequestMapping(value = "/delete")
     private String delLessonsMethodPost(@RequestParam("idLesson") int id, Model model) {
         if (id > 0) {
