@@ -7,7 +7,9 @@
 	http://www.springframework.org/schema/security
 	http://www.springframework.org/schema/security/spring-security-4.2.xsd">
 
+    <http pattern="/index" security="none"/>
     <http pattern="/login" security="none"/>
+    <http pattern="/css/**" security="none"/>
 
     <http auto-config="true">
         <csrf disabled="true"/>
@@ -15,20 +17,14 @@
         <intercept-url pattern="/admin**" access="hasRole('ROLE_ADMIN')"/>
         <intercept-url pattern="/**" access="hasAnyRole('ROLE_USER', 'ROLE_ADMIN')"/>
 
-        <form-login login-page="/login"
+        <form-login login-processing-url="/j_spring_security_check"
                     username-parameter="j_username"
                     password-parameter="j_password"
-                    login-processing-url="/j_spring_security_check"
-                    authentication-failure-url="/login.html?error=true"/>
-
+                    login-page="/login"
+                    authentication-failure-url="/login?errorMsg=authError"
+                    default-target-url="/views/progress"
+                    always-use-default-target="true"/>
         <logout logout-url="/j_spring_security_logout" logout-success-url="/"/>
-        <!--        <form-login login-processing-url="/j_spring_security_check"
-                            username-parameter="j_username"
-                            password-parameter="j_password"
-
-                            login-page="/login"
-                            authentication-failure-url="/login?errorMsg=authError" />
-                <logout logout-url="/j_spring_security_logout" />-->
     </http>
 
     <authentication-manager>

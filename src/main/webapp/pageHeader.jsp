@@ -1,3 +1,4 @@
+<%@ page import="org.springframework.security.core.context.SecurityContextHolder" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
 <head>
@@ -19,8 +20,9 @@
                 <div class="navbar navbar-inverse" role="banner">
                     <nav class="collapse navbar-collapse bs-navbar-collapse navbar-right" role="navigation">
                         <ul class="nav navbar-nav">
-                            <li><a href="#"><%=(String) request.getSession().getAttribute("login")%>
-                            </a></li>
+                            <li>
+                                <a href="#"><%=(String) SecurityContextHolder.getContext().getAuthentication().getName()%>
+                                </a></li>
                             <li><a href="${pageContext.request.contextPath}/login?action=logout">Выйти</a></li>
                         </ul>
                     </nav>
