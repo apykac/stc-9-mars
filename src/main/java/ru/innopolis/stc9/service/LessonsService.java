@@ -10,4 +10,5 @@ public interface LessonsService {
     void deleteLesson(int lessonId);
 
     List<Lessons> findAllLessons();
+
 }

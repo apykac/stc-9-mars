@@ -76,4 +76,28 @@ public class LessonsDaoImpl implements LessonsDao {
         }
         return result;
     }
+
+    @Override
+    public Lessons getLessonById(int id) {
+        Lessons result = null;
+        logger.info("Started requesting lesson.");
+        try (Connection connection = connectionManager.getConnection();
+             PreparedStatement statement = connection.prepareStatement(
+                     "SELECT * FROM lessons WHERE id = ?")) {
+            statement.setInt(1, id);
+            try (ResultSet resultSet = statement.executeQuery()) {
+                while (resultSet.next()) {
+                    result = new Lessons(
+                            resultSet.getInt("id"),
+                            resultSet.getInt("subject_id"),
+                            resultSet.getDate("date"),
+                            resultSet.getString("name"));
+                }
+                logger.info("Lesson with id " + id + " returned successfully");
+            }
+        } catch (SQLException e) {
+            logger.info(e.getMessage());
+        }
+        return result;
+    }
 }

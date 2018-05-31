@@ -13,5 +13,7 @@ public interface MarkService {
 
     public String getFullStudentNameInOneString(int markId);
 
-    public String getLessonName(int markId);
+    public String getLessonNameByMarkId(int lessonId);
+
+    public String getLessonNameByLessonId(int markId);
 }

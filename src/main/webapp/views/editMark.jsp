@@ -15,7 +15,7 @@
                 </div>
                 <div class="row">
                     <div class="col-sm-12">
-                        Урок:
+                        Урок: ${requestScope.get("lessonName")}
                     </div>
                 </div>
                 <form class="form-horizontal" id="add" action="${pageContext.request.contextPath}/views/updateMark"

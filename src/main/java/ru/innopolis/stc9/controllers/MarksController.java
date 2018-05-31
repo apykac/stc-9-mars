@@ -11,26 +11,23 @@ import org.springframework.web.servlet.ModelAndView;
 import ru.innopolis.stc9.pojo.Mark;
 import ru.innopolis.stc9.service.MarkService;
 import ru.innopolis.stc9.service.MarkServiceImpl;
-import ru.innopolis.stc9.service.UserService;
-import ru.innopolis.stc9.service.UserServiceImpl;
 
 @Controller
 public class MarksController {
     @Autowired
     private final MarkService markService = new MarkServiceImpl();
-    private final UserService userService = new UserServiceImpl();
 
     @RequestMapping(value = "/views/marks", method = RequestMethod.GET)
     private String getMarks(@RequestParam int lessonId, Model model) {
         model.addAttribute("marks", markService.getMarksByLessonId(lessonId));
-        model.addAttribute("lessonName");
+        model.addAttribute("lessonName", markService.getLessonNameByLessonId(lessonId));
         return "views/marks";
     }
 
     @RequestMapping("/views/editMark/{id}")
     public String forMarkUpdate(@PathVariable("id") int id, Model model) {
         model.addAttribute("studentName", markService.getFullStudentNameInOneString(id));
-        //model.addAttribute("lessonName", markService.getLessonName(id));
+        model.addAttribute("lessonName", markService.getLessonNameByMarkId(id));
         model.addAttribute("value", markService.getMarkById(id).getValue());
         model.addAttribute("comment", markService.getMarkById(id).getComment());
         model.addAttribute("id", id);

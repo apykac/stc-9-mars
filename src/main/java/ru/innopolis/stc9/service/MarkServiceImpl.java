@@ -1,10 +1,8 @@
 package ru.innopolis.stc9.service;
 
 import org.springframework.stereotype.Service;
-import ru.innopolis.stc9.dao.MarkDao;
-import ru.innopolis.stc9.dao.MarkDaoImpl;
-import ru.innopolis.stc9.dao.UserDao;
-import ru.innopolis.stc9.dao.UserDaoImpl;
+import ru.innopolis.stc9.dao.*;
+import ru.innopolis.stc9.pojo.Lessons;
 import ru.innopolis.stc9.pojo.Mark;
 import ru.innopolis.stc9.pojo.User;
 
@@ -16,6 +14,7 @@ public class MarkServiceImpl implements MarkService {
 
     private MarkDao markDao = new MarkDaoImpl();
     private UserDao userDao = new UserDaoImpl();
+    private LessonsDao lessonsDao = new LessonsDaoImpl();
 
     /**
      * Возвращает Map с именами студентов и их оценками за работу на уроке,
@@ -62,9 +61,16 @@ public class MarkServiceImpl implements MarkService {
     }
 
     @Override
-    public String getLessonName(int markId) {
+    public String getLessonNameByMarkId(int markId) {
         Mark mark = getMarkById(markId);
-        return null;
+        Lessons lesson = lessonsDao.getLessonById(mark.getLessonId());
+        return lesson.getName();
+    }
+
+    @Override
+    public String getLessonNameByLessonId(int lessonId) {
+        Lessons lesson = lessonsDao.getLessonById(lessonId);
+        return lesson.getName();
     }
 
 }

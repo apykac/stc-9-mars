@@ -28,4 +28,5 @@ public class LessonsServiceImpl implements LessonsService {
     public List<Lessons> findAllLessons() {
         return lessonsDao.findAllLessons();
     }
+
 }
