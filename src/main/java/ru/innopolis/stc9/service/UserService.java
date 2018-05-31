@@ -27,4 +27,6 @@ public interface UserService {
     List<User> getStudentsWithoutGroup(int groupId);
 
     User findUserById(int userId);
+
+    User findUserByLogin(String login);
 }
