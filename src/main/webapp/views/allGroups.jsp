@@ -60,7 +60,9 @@
                         </div>
                     </div>
                 </form>
-                <br/><br/>
+                <br/>
+                    ${requestScope.get("errorName")}
+                <br/>
             </div>
         </div>
     </div>

@@ -5,5 +5,7 @@ import ru.innopolis.stc9.pojo.Subject;
 import java.util.List;
 
 public interface SubjectService {
+    boolean addSubject(Subject subject);
+    boolean deleteSubject(int subjectId);
     List<Subject> findAllSubject();
 }

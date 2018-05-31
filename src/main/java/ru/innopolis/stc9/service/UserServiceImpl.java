@@ -1,19 +1,21 @@
 package ru.innopolis.stc9.service;
 
-import org.springframework.stereotype.Service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.MultiValueMap;
+import org.springframework.stereotype.Service;
 import ru.innopolis.stc9.dao.UserDao;
-import ru.innopolis.stc9.dao.UserDaoImpl;
 import ru.innopolis.stc9.pojo.User;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+
 @Service
 public class UserServiceImpl implements UserService {
     @Autowired
-    private UserDao userDao = new UserDaoImpl();
+    private UserDao userDao;
+    @Autowired
+    private GroupService groupService;
 
     @Override
     public List<String> isCorrectData(MultiValueMap<String, String> incParam) {
@@ -77,4 +79,58 @@ public class UserServiceImpl implements UserService {
         if ((login == null) || login.equals("")) return false;
         return userDao.findLoginByName(login) != null;
     }
+
+    @Override
+    public List<User> getUserList() {
+        return userDao.getUsersList();
+    }
+
+    @Override
+    public boolean updateUser(User user) {
+        return userDao.updateUserByFIOL(user);
+    }
+
+    @Override
+    public User findUserById(int userId) {
+        return userDao.findUserByUserId(userId);
+    }
+
+    @Override
+    public User findUserByLogin(String login) {
+        return userDao.findLoginByName(login);
+    }
+
+    /**
+     * возвращает список юзеров-студентов в конкретной группе
+     *
+     * @param groupId - id группы
+     */
+    @Override
+    public List<User> getStudentsByGroupId(int groupId) {
+        List<User> students = new ArrayList<>();
+        for (User u : userDao.getUsersList()) {
+            if (u.getPermissionGroup() == 2 && u.getGroupId() == groupId) {
+                students.add(u);
+            }
+        }
+        return students;
+    }
+
+    /**
+     * возвращает список юзеров-студентов, не состоящих в данной группе
+     *
+     * @param groupId - id группы
+     */
+    @Override
+    public List<User> getStudentsWithoutGroup(int groupId) {
+        List<User> students = new ArrayList<>();
+        for (User u : userDao.getUsersList()) {
+            if (u.getPermissionGroup() == 2 && u.getGroupId() != groupId) {
+                u.setGroup(groupService.findGroupById(u.getGroupId()));
+                students.add(u);
+            }
+        }
+        return students;
+    }
+
 }

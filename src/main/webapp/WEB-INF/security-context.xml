@@ -13,9 +13,6 @@
 
     <http auto-config="true">
         <csrf disabled="true"/>
-        <intercept-url pattern="/user**" access="hasRole('ROLE_USER')"/>
-        <intercept-url pattern="/admin**" access="hasRole('ROLE_ADMIN')"/>
-        <intercept-url pattern="/**" access="hasAnyRole('ROLE_ADMIN', 'ROLE_USER')"/>
         <form-login login-processing-url="/j_spring_security_check"
                     username-parameter="j_username"
                     password-parameter="j_password"
@@ -33,6 +30,5 @@
             </user-service>
         </authentication-provider>
     </authentication-manager>
-
 
 </beans:beans>

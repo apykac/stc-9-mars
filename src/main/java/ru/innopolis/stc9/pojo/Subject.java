@@ -9,6 +9,10 @@ public class Subject {
         this.name = name;
     }
 
+    public Subject(String name) {
+        this.name = name;
+    }
+
     public int getId() {
         return id;
     }
