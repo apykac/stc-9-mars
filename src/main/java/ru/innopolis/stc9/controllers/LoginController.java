@@ -10,11 +10,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import ru.innopolis.stc9.service.UserService;
 import ru.innopolis.stc9.service.UserServiceImpl;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
-import java.io.IOException;
-
 @Controller
 public class LoginController {
     private final Logger logger = Logger.getLogger(LoginController.class);
@@ -22,6 +17,19 @@ public class LoginController {
     private final UserService userService = new UserServiceImpl();
 
     @RequestMapping(value = "/login", method = RequestMethod.GET)
+    public String login(@RequestParam(value = "error", required = false) String error,
+                        @RequestParam(value = "logout", required = false) String logout,
+                        Model model) {
+        if (error != null) {
+            model.addAttribute("error", "invalid username or password");
+        }
+        if (logout != null) {
+            model.addAttribute("msg", "logged out successfully");
+        }
+        return "login";
+    }
+
+/*    @RequestMapping(value = "/login", method = RequestMethod.GET)
     private String loginForm(@RequestParam(value = "action", required = false) String action,
                              HttpSession session,
                              Model model) {
@@ -54,5 +62,5 @@ public class LoginController {
             logger.error("IOException: " + e.getMessage());
         }
         return "login";
-    }
+    }*/
 }
