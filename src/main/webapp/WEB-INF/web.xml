@@ -24,16 +24,16 @@
         <url-pattern>/</url-pattern>
     </servlet-mapping>
 
-    <filter>
+    <!--<filter>
         <filter-name>springSecurityFilterChain</filter-name>
         <filter-class>org.springframework.web.filter.DelegatingFilterProxy</filter-class>
     </filter>
     <filter-mapping>
         <filter-name>springSecurityFilterChain</filter-name>
         <url-pattern>/*</url-pattern>
-    </filter-mapping>
+    </filter-mapping>-->
 <!--next need to delete***********************************************************************-->
-    <servlet>
+    <!--<servlet>
         <servlet-name>UsersListController</servlet-name>
         <servlet-class>ru.innopolis.stc9.controllers.UsersListController</servlet-class>
     </servlet>
@@ -65,6 +65,6 @@
     <filter-mapping>
         <filter-name>auth-filter</filter-name>
         <url-pattern>/views/*</url-pattern>
-    </filter-mapping>
+    </filter-mapping>-->
 
 </web-app>
