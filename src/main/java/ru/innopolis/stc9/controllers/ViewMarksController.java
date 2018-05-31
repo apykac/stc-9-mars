@@ -19,4 +19,15 @@ public class ViewMarksController {
         model.addAttribute("marks", marksService.getMarksByLessonId(lessonId));
         return "views/marks";
     }
+
+    /*@RequestMapping("/views/updateMarks")
+    public String updateMark(@RequestParam("id") int id, @RequestParam("value") int value, Model model) {
+        Mark mark = groupService.findGroupById(id);
+        group.setName(name);
+        groupService.updateGroup(group);
+        model.addAttribute("groups", groupService.findAllGroups());
+        logger.info("group " + id + " updated");
+        return "views/allGroups";
+    }*/
 }
+

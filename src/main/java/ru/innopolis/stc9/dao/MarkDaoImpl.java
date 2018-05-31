@@ -29,11 +29,7 @@ public class MarkDaoImpl implements MarkDao {
             statement.setInt(1, lessonId);
             try (ResultSet resultSet = statement.executeQuery()) {
                 while (resultSet.next()) {
-                    Mark mark = new Mark();
-                    mark.setId(resultSet.getInt("id"));
-                    mark.setUserId(resultSet.getInt("user_id"));
-                    mark.setLessonId(resultSet.getInt("lesson_id"));
-                    mark.setValue(resultSet.getInt("value"));
+                    Mark mark = MarkMapper.getMarkFromResultSet(resultSet);
                     result.add(mark);
                 }
                 logger.info("Marks list returned successfully");
@@ -44,4 +40,46 @@ public class MarkDaoImpl implements MarkDao {
         }
         return result;
     }
+
+    public Mark getMarkById(int id) {
+        logger.info("Mark with id " + id + " requested");
+        Mark result = null;
+        try (Connection connection = connectionManager.getConnection();
+             PreparedStatement statement = connection.prepareStatement(
+                     "SELECT * FROM marks WHERE id = ?"
+             )) {
+            statement.setInt(1, id);
+            try (ResultSet resultSet = statement.executeQuery()) {
+                if (resultSet.next()) {
+                    result = MarkMapper.getMarkFromResultSet(resultSet);
+                    logger.info("Mark with id " + id + " returned successfully");
+                }
+            }
+        } catch (SQLException e) {
+            logger.error(e.getMessage());
+        }
+        return result;
+    }
+
+    public boolean updateMark(Mark mark) {
+        if (mark == null) {
+            return false;
+        }
+        logger.info("Started updating mark with id " + mark.getId());
+        try (Connection connection = connectionManager.getConnection();
+             PreparedStatement statement = connection.prepareStatement(
+                     "UPDATE marks SET value = ? WHERE id = ?"
+             )) {
+            statement.setInt(1, mark.getValue());
+            statement.setInt(2, mark.getId());
+            statement.execute();
+            logger.info("Mark with id " + mark.getId() + " updated.");
+            return true;
+        } catch (SQLException e) {
+            logger.error(e.getMessage());
+            return false;
+        }
+    }
+
+
 }

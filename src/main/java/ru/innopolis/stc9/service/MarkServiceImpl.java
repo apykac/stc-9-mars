@@ -35,4 +35,5 @@ public class MarkServiceImpl implements MarkService {
         return result;
     }
 
+    //public Mark getMarkById
 }
