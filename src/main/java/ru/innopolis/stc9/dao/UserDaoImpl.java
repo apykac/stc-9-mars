@@ -116,7 +116,7 @@ public class UserDaoImpl implements UserDao {
     public User findLoginByName(String login) {
         if ((login == null) || login.isEmpty()) return null;
         User user = null;
-        logger.info("Start find login by name");
+        logger.info("Start find login by name (" + login + ")");
         try (Connection connection = connectionManager.getConnection();
              PreparedStatement statement = connection.prepareStatement(
                      "SELECT * FROM users WHERE login = ?")) {

@@ -4,7 +4,7 @@ import org.apache.log4j.Logger;
 import org.springframework.stereotype.Component;
 import ru.innopolis.stc9.db.connection.ConnectionManager;
 import ru.innopolis.stc9.db.connection.ConnectionManagerImpl;
-import ru.innopolis.stc9.pojo.Subject;
+import ru.innopolis.stc9.pojo.Lessons;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -14,20 +14,22 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Класс реализует интерфейс SubjectDao
+ * Класс реализует интерфейс LessonsDao
  */
 @Component
-public class SubjectDaoImpl implements SubjectDao {
+public class LessonsDaoImpl implements LessonsDao {
     private static ConnectionManager connectionManager = ConnectionManagerImpl.getInstance();
-    private Logger logger = Logger.getLogger(SubjectDaoImpl.class);
+    private Logger logger = Logger.getLogger(LessonsDaoImpl.class);
 
     @Override
-    public boolean addSubject(Subject subject) {
+    public boolean addLesson(Lessons lesson) {
         try (Connection connection = connectionManager.getConnection();
              PreparedStatement statement = connection.prepareStatement("INSERT " +
-                     "INTO subjects(sname) " +
-                     "VALUES (?)")) {
-            statement.setString(1, subject.getName());
+                     "INTO lessons(subject_id, date, name) " +
+                     "VALUES (?, ?, ?)")) {
+            statement.setInt(1, lesson.getSubject_id());
+            statement.setDate(2, lesson.getDate());
+            statement.setString(3, lesson.getName());
             statement.execute();
             return true;
         } catch (SQLException e) {
@@ -37,14 +39,14 @@ public class SubjectDaoImpl implements SubjectDao {
     }
 
     @Override
-    public boolean deleteSubject(int subjectId) {
-        if (subjectId < 0) return false;
+    public boolean deleteLesson(int lessonId) {
+        if (lessonId < 0) return false;
         try (Connection connection = connectionManager.getConnection();
              PreparedStatement statement = connection.prepareStatement(
-                     "DELETE FROM subjects WHERE id = ?")) {
-            statement.setInt(1, subjectId);
+                     "DELETE FROM lessons WHERE id = ?")) {
+            statement.setInt(1, lessonId);
             statement.execute();
-            logger.info(" delete subject");
+            logger.info(" delete lessons id=" + lessonId);
             return true;
         } catch (SQLException e) {
             logger.error(e.getMessage());
@@ -53,19 +55,21 @@ public class SubjectDaoImpl implements SubjectDao {
     }
 
     @Override
-    public List<Subject> findAllSubject() {
-        logger.info("Subject list requested.");
-        List<Subject> result = new ArrayList<>();
+    public List<Lessons> findAllLessons() {
+        logger.info("Lessons list requested.");
+        List<Lessons> result = new ArrayList<>();
         try (Connection connection = connectionManager.getConnection();
-             PreparedStatement statement = connection.prepareStatement("SELECT * FROM subjects")) {
+             PreparedStatement statement = connection.prepareStatement("SELECT * FROM lessons")) {
             try (ResultSet resultSet = statement.executeQuery()) {
                 while (resultSet.next()) {
-                    Subject subject = new Subject(
+                    Lessons lesson = new Lessons(
                             resultSet.getInt("id"),
-                            resultSet.getString("sname"));
-                    result.add(subject);
+                            resultSet.getInt("subject_id"),
+                            resultSet.getDate("date"),
+                            resultSet.getString("name"));
+                    result.add(lesson);
                 }
-                logger.info("Subject list returned successfully");
+                logger.info("Lessons list returned successfully");
             }
         } catch (SQLException e) {
             logger.info(e.getMessage());

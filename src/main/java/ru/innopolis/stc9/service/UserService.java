@@ -18,4 +18,15 @@ public interface UserService {
 
     boolean checkAuth(String login, String password);
 
+    List<User> getUserList();
+
+    boolean updateUser(User user);
+
+    List<User> getStudentsByGroupId(int groupId);
+
+    List<User> getStudentsWithoutGroup(int groupId);
+
+    User findUserById(int userId);
+
+    User findUserByLogin(String login);
 }
