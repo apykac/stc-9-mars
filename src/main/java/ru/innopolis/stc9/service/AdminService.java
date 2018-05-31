@@ -35,12 +35,14 @@ public class AdminService {
             result.setHashPassword(hashPassword);
         } else {
             String login = req.getParameter("editLogin");
-            int role = Integer.parseInt(req.getParameter("editRole"));
+            String role = req.getParameter("editRole");
+            int enabled = Integer.parseInt(req.getParameter("editEnabled"));
             String firstName = req.getParameter("editFirstName");
             String lastName = req.getParameter("editLastName");
             String middleName = req.getParameter("editMiddleName");
             result.setLogin(login);
             result.setPermissionGroup(role);
+            result.setEnabled(enabled);
             result.setFirstName(firstName);
             result.setSecondName(lastName);
             result.setMiddleName(middleName);
@@ -53,7 +55,7 @@ public class AdminService {
         String passwordUpdateMsg = "";
         User user = getUserFromHttpRequest(req, false);
         int userId = (Integer) getSessionAttribute(req, "user-id");
-        int role = Integer.parseInt(req.getParameter("editRole"));
+        String role = req.getParameter("editRole");
         user.setPermissionGroup(role);
         if (userDao.updateUserByFIOL(user)) {
             userUpdateMsg = "updated";

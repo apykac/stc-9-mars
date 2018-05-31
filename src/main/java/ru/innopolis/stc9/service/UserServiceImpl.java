@@ -48,10 +48,10 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public Integer getRole(String login) {
-        if ((login == null) || login.isEmpty()) return -1;
+    public String getRole(String login) {
+        if ((login == null) || login.isEmpty()) return null;
         User user = userDao.findLoginByName(login);
-        if (user == null) return -1;
+        if (user == null) return null;
         return user.getPermissionGroup();
     }
 
@@ -109,7 +109,7 @@ public class UserServiceImpl implements UserService {
     public List<User> getStudentsByGroupId(int groupId) {
         List<User> students = new ArrayList<>();
         for (User u : userDao.getUsersList()) {
-            if (u.getPermissionGroup() == 2 && u.getGroupId() == groupId) {
+            if (u.getPermissionGroup().equals("ROLE_STUDENT") && u.getGroupId() == groupId) {
                 students.add(u);
             }
         }
@@ -125,7 +125,7 @@ public class UserServiceImpl implements UserService {
     public List<User> getStudentsWithoutGroup(int groupId) {
         List<User> students = new ArrayList<>();
         for (User u : userDao.getUsersList()) {
-            if (u.getPermissionGroup() == 2 && u.getGroupId() != groupId) {
+            if (u.getPermissionGroup().equals("ROLE_STUDENT") && u.getGroupId() != groupId) {
                 u.setGroup(groupService.findGroupById(u.getGroupId()));
                 students.add(u);
             }

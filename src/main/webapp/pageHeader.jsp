@@ -23,7 +23,7 @@
                             <li>
                                 <a href="#"><%=(String) SecurityContextHolder.getContext().getAuthentication().getName()%>
                                 </a></li>
-                            <li><a href="${pageContext.request.contextPath}/login?action=logout">Выйти</a></li>
+                            <li><a href="/j_spring_security_logout">Выйти</a></li>
                         </ul>
                     </nav>
                 </div>

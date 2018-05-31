@@ -15,7 +15,7 @@ public interface UserService {
 
     boolean isExist(String login);
 
-    Integer getRole(String login);
+    String getRole(String login);
 
     boolean checkAuth(String login, String password);
 

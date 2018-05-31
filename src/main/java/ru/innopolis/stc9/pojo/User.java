@@ -7,14 +7,17 @@ public class User {
     private int id;
     private String login;
     private String hashPassword;
-    private int permissionGroup;
+    private String permissionGroup;
     private String firstName;
     private String secondName;
     private String middleName;
     private Integer groupId;
     private Group group;
+    private int enabled;
 
     public User() {
+        this.permissionGroup = "ROLE_STUDENT";
+        this.enabled = 1;
     }
 
     public User(String login, String hashPassword, String firstName, String secondName, String middleName) {
@@ -23,7 +26,8 @@ public class User {
         this.firstName = firstName;
         this.secondName = secondName;
         this.middleName = middleName;
-        this.permissionGroup = 2;
+        this.permissionGroup = "ROLE_STUDENT";
+        this.enabled = 1;
     }
 
     public User(String firstName, String secondName, String middleName, Integer groupId) {
@@ -57,11 +61,11 @@ public class User {
         this.hashPassword = hashPassword;
     }
 
-    public int getPermissionGroup() {
+    public String getPermissionGroup() {
         return permissionGroup;
     }
 
-    public void setPermissionGroup(int permissionGroup) {
+    public void setPermissionGroup(String permissionGroup) {
         this.permissionGroup = permissionGroup;
     }
 
@@ -103,5 +107,13 @@ public class User {
 
     public void setGroup(Group group) {
         this.group = group;
+    }
+
+    public int getEnabled() {
+        return enabled;
+    }
+
+    public void setEnabled(int enabled) {
+        this.enabled = enabled;
     }
 }

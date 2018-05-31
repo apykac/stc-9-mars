@@ -59,7 +59,7 @@ public class ProgressController {
         return Arrays.stream(marks.split("\\-")).mapToInt(Integer::parseInt).toArray();
     }
 
-    @RequestMapping(value = "/openpage")
+    /*@RequestMapping(value = "/openpage")
     private String getopenpage(Model model) {
         return "openpage";
     }
@@ -72,5 +72,5 @@ public class ProgressController {
     @RequestMapping(value = "/userpage")
     private String getuserpage(Model model) {
         return "userpage";
-    }
+    }*/
 }
