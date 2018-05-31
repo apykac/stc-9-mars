@@ -42,6 +42,7 @@ public class UserServiceImpl implements UserService {
         if ((login == null) || login.isEmpty()) return -1;
         User user = userDao.findLoginByName(login);
         if (user == null) return -1;
+
         return user.getPermissionGroup();
     }
 

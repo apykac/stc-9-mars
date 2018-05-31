@@ -1,6 +1,7 @@
 package ru.innopolis.stc9.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 import ru.innopolis.stc9.dao.HomeWorkDao;
 import ru.innopolis.stc9.pojo.HomeWork;
 
@@ -9,6 +10,7 @@ import java.util.List;
 /**
  * Created by Сергей on 31.05.2018.
  */
+@Service
 public class HomeWorkServiceImpl implements HomeWorkService {
     @Autowired
     private HomeWorkDao homeWorkDao;
