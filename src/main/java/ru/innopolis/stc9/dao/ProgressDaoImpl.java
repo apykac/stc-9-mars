@@ -72,6 +72,9 @@ public class ProgressDaoImpl implements ProgressDao {
      */
     @Override
     public List<Progress> getProgress(int greaterOrEqualMark, int lessOrEqualMark, User user) {
+        if (user == null) {
+            return null;
+        }
         String role = user.getPermissionGroup();
         String login = user.getLogin();
         logger.info("Progress list requested");
