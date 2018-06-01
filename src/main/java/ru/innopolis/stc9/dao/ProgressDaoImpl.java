@@ -26,7 +26,7 @@ public class ProgressDaoImpl implements ProgressDao {
      * Если пользователь - студент, то добавляем условие, чтобы каждый студент мог видеть только свои данные
      * если не студент, то выводим весь список
      */
-    private String getProgressQuery(int role) {
+    private String getProgressQuery(String role) {
         String sql = "SELECT marks.id, value, u2.first_name firstName, u2.second_name secondName, " +
                 "l3.name lessonsName, l3.date date, s4.sname subjectName, g5.gname groupName " +
                 "FROM marks " +
@@ -46,8 +46,8 @@ public class ProgressDaoImpl implements ProgressDao {
      *
      * @param role роль пользователя
      */
-    private boolean isStudent(int role) {
-        return role == 2;
+    private boolean isStudent(String role) {
+        return role.equals("ROLE_STUDENT");
     }
 
     private Progress getResultSet(ResultSet resultSet) throws SQLException {
@@ -72,7 +72,7 @@ public class ProgressDaoImpl implements ProgressDao {
      */
     @Override
     public List<Progress> getProgress(int greaterOrEqualMark, int lessOrEqualMark, User user) {
-        int role = user.getPermissionGroup();
+        String role = user.getPermissionGroup();
         String login = user.getLogin();
         logger.info("Progress list requested");
         List<Progress> result = new ArrayList<>();
