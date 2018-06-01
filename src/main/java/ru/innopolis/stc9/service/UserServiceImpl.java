@@ -1,19 +1,22 @@
 package ru.innopolis.stc9.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.util.MultiValueMap;
 import org.springframework.stereotype.Service;
+import org.springframework.util.MultiValueMap;
+import ru.innopolis.stc9.dao.GroupDao;
 import ru.innopolis.stc9.dao.UserDao;
+import ru.innopolis.stc9.dao.UserField;
 import ru.innopolis.stc9.pojo.User;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 @Service
 public class UserServiceImpl implements UserService {
     @Autowired
     private UserDao userDao;
+    @Autowired
+    private GroupDao groupDao;
     @Autowired
     private GroupService groupService;
 
@@ -21,22 +24,41 @@ public class UserServiceImpl implements UserService {
     public List<String> isCorrectData(MultiValueMap<String, String> incParam) {
         List<String> result = new ArrayList<>();
         if ((incParam == null) || incParam.isEmpty()) return result;
-        if ((incParam.get("login") != null) && incParam.get("login").get(0).equals("")) {
+        String pattern = "^\\D*$";
+        if ((incParam.get("login") != null) &&
+                incParam.get(UserField.LOGIN).get(0).equals("") &&
+                (userDao.findLoginByName(incParam.get(UserField.LOGIN).get(0)) != null)) {
             result.add("Invalid/Exist Login");
             return result;
         }
-        if ((incParam.get("hash_password") != null) && incParam.get("hash_password").get(0).equals("")) {
+        if ((incParam.get(UserField.HASH) != null) && incParam.get(UserField.HASH).get(0).equals("")) {
             result.add("Invalid password");
             return result;
         }
-        if ((incParam.get("first_name") != null) && !incParam.get("first_name").get(0).matches("^\\D*$")) {
+        if ((incParam.get(UserField.FNAME) != null) && !incParam.get(UserField.FNAME).get(0).matches(pattern)) {
             result.add("Invalid first name");
         }
-        if ((incParam.get("second_name") != null) && !incParam.get("second_name").get(0).matches("^\\D*$")) {
+        if ((incParam.get(UserField.SNAME) != null) && !incParam.get(UserField.SNAME).get(0).matches(pattern)) {
             result.add("Invalid second name");
         }
-        if ((incParam.get("middle_name") != null) && !incParam.get("middle_name").get(0).matches("^\\D*$")) {
+        if ((incParam.get(UserField.MNAME) != null) && !incParam.get(UserField.MNAME).get(0).matches(pattern)) {
             result.add("Invalid middle name");
+        }
+        if ((incParam.get(UserField.GROUPID) != null)) {
+            try {
+                int groupId = Integer.parseInt(incParam.get(UserField.GROUPID).get(0));
+                if (groupDao.findGroupById(groupId) == null) result.add("Group id is not Exist");
+            } catch (NumberFormatException e) {
+                result.add("Invalid group id");
+            }
+        }
+        if ((incParam.get(UserField.ENABLED) != null)) {
+            try {
+                int enabled = Integer.parseInt(incParam.get(UserField.ENABLED).get(0));
+                if ((enabled != 1) && (enabled != 0)) result.add("Enabled must be 0 or 1");
+            } catch (NumberFormatException e) {
+                result.add("Invalid enabled value");
+            }
         }
         return result;
     }
@@ -66,11 +88,11 @@ public class UserServiceImpl implements UserService {
     public boolean addUserByParam(MultiValueMap<String, String> incParam) {
         if ((incParam == null) || incParam.isEmpty()) return false;
         User user = new User(
-                incParam.get("login").get(0),
-                CryptService.crypting(incParam.get("hash_password").get(0)),
-                incParam.get("first_name").get(0),
-                incParam.get("second_name").get(0),
-                incParam.get("middle_name").get(0));
+                incParam.get(UserField.LOGIN).get(0),
+                CryptService.crypting(incParam.get(UserField.HASH).get(0)),
+                incParam.get(UserField.FNAME).get(0),
+                incParam.get(UserField.SNAME).get(0),
+                incParam.get(UserField.MNAME).get(0));
         return userDao.addUser(user);
     }
 
@@ -87,16 +109,19 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public boolean updateUser(User user) {
+        if (user == null) return false;
         return userDao.updateUserByFIOL(user);
     }
 
     @Override
     public User findUserById(int userId) {
+        if (userId < 0) return null;
         return userDao.findUserByUserId(userId);
     }
 
     @Override
     public User findUserByLogin(String login) {
+        if ((login == null) || login.equals("")) return null;
         return userDao.findLoginByName(login);
     }
 

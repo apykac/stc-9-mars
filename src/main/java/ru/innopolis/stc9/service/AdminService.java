@@ -1,8 +1,6 @@
 package ru.innopolis.stc9.service;
 
 import org.apache.log4j.Logger;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
 import ru.innopolis.stc9.controllers.GroupController;
 import ru.innopolis.stc9.dao.UserDaoImpl;
 import ru.innopolis.stc9.pojo.User;
@@ -51,29 +49,26 @@ public class AdminService {
     }
 
     public String editUser(HttpServletRequest req) {
-        String userUpdateMsg = "";
-        String passwordUpdateMsg = "";
+        String userUpdateMsg;
+        String incPass = "";
         User user = getUserFromHttpRequest(req, false);
         int userId = (Integer) getSessionAttribute(req, "user-id");
         String role = req.getParameter("editRole");
         user.setPermissionGroup(role);
-        if (userDao.updateUserByFIOL(user)) {
-            userUpdateMsg = "updated";
-        } else {
-            userUpdateMsg = "error";
-        }
+
+        if (userDao.updateUserByFIOL(user)) userUpdateMsg = "updated";
+        else userUpdateMsg = "error";
+
         if (req.getParameter("oldPassword") != null && !req.getParameter("oldPassword").isEmpty()) {
-            passwordUpdateMsg = checkPasswordUpdateIsPossible(req);
-            logger.info(passwordUpdateMsg);
+            incPass = checkPasswordUpdateIsPossible(req);
+            logger.info(incPass);
             if (passwordUpdateIsPossible) {
                 user = getUserFromHttpRequest(req, true);
-                if (userDao.updateUserPassword(user)) {
-                } else {
-                    passwordUpdateMsg = "error";
-                }
+                if (!userDao.updateUserPassword(user)) incPass = "error";
             }
         }
-        return "?user-id=" + userId + "&user-msg=" + userUpdateMsg + "&pass-msg=" + passwordUpdateMsg;
+
+        return "?user-id=" + userId + "&user-msg=" + userUpdateMsg + "&pass-msg=" + incPass;
     }
 
     private String checkPasswordUpdateIsPossible(HttpServletRequest req) {
@@ -83,30 +78,19 @@ public class AdminService {
         String oldPassword = req.getParameter("oldPassword");
         String newPassword = req.getParameter("newPassword");
         String repeatNewPassword = req.getParameter("repeatNewPassword");
-        if (oldPassword != null && !oldPassword.isEmpty()) {
+
+        if ((oldPassword != null) && !oldPassword.isEmpty())
             if (CryptService.isMatched(oldPassword, userDao.findUserByUserId(userId).getHashPassword())) {
                 if (checkNewPassword(newPassword, repeatNewPassword)) {
                     passwordUpdateIsPossible = true;
                     result = "updated";
-                } else {
-                    result = "passwords-not-match";
-                    //result = "Ошибка обновления пароля. Введенные пароли не совпадают.";
-                }
-            } else {
-                result = "wrong-old-password";
-                //result = "Ошибка обновления пароля. Старый пароль указан неверно.";
-
-            }
-        }
+                } else result = "passwords-not-match";
+            } else result = "wrong-old-password";
         return result;
     }
 
     private boolean checkNewPassword(String newPassword, String repeatNewPassword) {
-        boolean result = false;
-        if (newPassword != null && !newPassword.isEmpty())
-            if (newPassword.equals(repeatNewPassword))
-                result = true;
-        return result;
+        return (newPassword != null) && !newPassword.isEmpty() && newPassword.equals(repeatNewPassword);
     }
 
     private Object getSessionAttribute(HttpServletRequest req, String attribute) {
