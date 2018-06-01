@@ -39,7 +39,18 @@
         <url-pattern>*.gif</url-pattern>
         <url-pattern>*.css</url-pattern>
         <url-pattern>*.js</url-pattern>
+        <url-pattern>*.otf</url-pattern>
+        <url-pattern>*.eot</url-pattern>
+        <url-pattern>*.svg</url-pattern>
+        <url-pattern>*.ttf</url-pattern>
+        <url-pattern>*.woff</url-pattern>
+        <url-pattern>*.woff2</url-pattern>
     </servlet-mapping>
+
+    <error-page>
+        <error-code>404</error-code>
+        <location>/error404.jsp</location>
+    </error-page>
 
     <filter>
         <filter-name>encodingFilter</filter-name>
