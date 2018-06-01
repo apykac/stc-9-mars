@@ -36,34 +36,39 @@
                         </div>
                     </div>
                 </div>
-                <table class="table">
-                    <thead>
-                    <tr>
-                        <th>#</th>
-                        <th>Оценка</th>
-                        <th>Имя</th>
-                        <th>Фамилия</th>
-                        <th>Группа</th>
-                        <th>Урок</th>
-                        <th>Дата</th>
-                        <th>Предмет</th>
-                    </tr>
-                    </thead>
-                    <tbody>
-                    <c:forEach items="${requestScope.get('progress')}" var="progress">
-                        <tr>
-                            <td>${progress.id}</td>
-                            <td>${progress.value}</td>
-                            <td>${progress.firstName}</td>
-                            <td>${progress.secondName}</td>
-                            <td>${progress.groupName}</td>
-                            <td>${progress.lessonsName}</td>
-                            <td>${progress.date}</td>
-                            <td>${progress.subjectName}</td>
-                        </tr>
-                    </c:forEach>
-                    </tbody>
-                </table>
+                <c:choose>
+                    <c:when test="${requestScope.get('progress') == null}">
+                        <div class='alert alert-danger'>Ошибка: no data</div>
+                    </c:when>
+                    <c:otherwise>
+                        <table class="table">
+                            <thead>
+                            <tr>
+                                <th>Оценка</th>
+                                <th>Имя</th>
+                                <th>Фамилия</th>
+                                <th>Группа</th>
+                                <th>Урок</th>
+                                <th>Дата</th>
+                                <th>Предмет</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <c:forEach items="${requestScope.get('progress')}" var="progress">
+                                <tr>
+                                    <td>${progress.value}</td>
+                                    <td>${progress.firstName}</td>
+                                    <td>${progress.secondName}</td>
+                                    <td>${progress.groupName}</td>
+                                    <td>${progress.lessonsName}</td>
+                                    <td>${progress.date}</td>
+                                    <td>${progress.subjectName}</td>
+                                </tr>
+                            </c:forEach>
+                            </tbody>
+                        </table>
+                    </c:otherwise>
+                </c:choose>
                 <br/><br/>
             </div>
         </div>
