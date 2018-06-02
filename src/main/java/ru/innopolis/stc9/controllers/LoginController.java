@@ -21,7 +21,7 @@ public class LoginController {
         return "login";
     }
 
-    @RequestMapping(value = "/start_page", method = RequestMethod.GET)
+    @RequestMapping(value = "/start", method = RequestMethod.GET)
     public String startPage() {
         return "views/startPage";
     }

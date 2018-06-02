@@ -31,10 +31,6 @@ public class UserServiceImpl implements UserService {
             result.add("Invalid/Exist Login");
             return result;
         }
-        if ((incParam.get(UserField.HASH) != null) && incParam.get(UserField.HASH).get(0).equals("")) {
-            result.add("Invalid password");
-            return result;
-        }
         if ((incParam.get(UserField.FNAME) != null) && !incParam.get(UserField.FNAME).get(0).matches(pattern)) {
             result.add("Invalid first name");
         }

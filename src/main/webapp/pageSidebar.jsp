@@ -5,7 +5,7 @@
         <li class="current"><a href="${pageContext.request.contextPath}/views/progress">Действия</a></li>
         <li><a href="${pageContext.request.contextPath}/views/progress">Прогресс</a></li>
         <li><a href="${pageContext.request.contextPath}/views/allgroup">Группы</a></li>
-        <li><a href="${pageContext.request.contextPath}/views/users-list">Пользователи</a></li>
+        <li><a href="${pageContext.request.contextPath}/admin/users-list">Пользователи</a></li>
         <li><a href="${pageContext.request.contextPath}/views/subject">Предметы</a></li>
         <li><a href="${pageContext.request.contextPath}/views/lessons">Уроки</a></li>
     </ul>

@@ -1,9 +1,9 @@
 package ru.innopolis.stc9.controllers;
 
 import org.apache.log4j.Logger;
+import org.springframework.beans.factory.annotation.Autowired;
 import ru.innopolis.stc9.service.AdminService;
-import ru.innopolis.stc9.service.GroupService;
-import ru.innopolis.stc9.service.GroupServiceImpl;
+import ru.innopolis.stc9.service.AdminServiceImpl;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -13,11 +13,12 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
 
-@WebServlet("/views/users-list")
+//@WebServlet("/views/users-list")
 public class UsersListController extends HttpServlet {
     private final Logger logger = Logger.getLogger(GroupController.class);
     private static final String ENCODING = "UTF-8";
-    private final AdminService adminService = new AdminService();
+    //@Autowired
+    private final AdminService adminService = new AdminServiceImpl();
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {

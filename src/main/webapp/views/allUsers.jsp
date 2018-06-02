@@ -27,7 +27,7 @@
                             <td>${user.firstName}</td>
                             <td>${user.secondName}</td>
                             <td>${user.middleName}</td>
-                            <td><a href="${pageContext.request.contextPath}/views/edit-user?user-id=${user.id}"
+                            <td><a href="${pageContext.request.contextPath}/admin/edit-user?user-id=${user.id}"
                                    name="${user.firstName}">Информация</a>
                             </td>
                         </tr>

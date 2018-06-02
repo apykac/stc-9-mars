@@ -10,9 +10,9 @@
     <http auto-config="true">
         <csrf disabled="true"/>
 
-        <intercept-url pattern="/logout" access="permitAll()" />
-        <intercept-url pattern="/login" access="permitAll()"/>
-        <intercept-url pattern="/registration" access="permitAll()"/>
+        <intercept-url pattern="/logout" access="hasAnyRole('ROLE_ADMIN', 'ROLE_TEACHER', 'ROLE_STUDENT')" />
+        <intercept-url pattern="/login" access="isAnonymous()"/>
+        <intercept-url pattern="/registration" access="isAnonymous()"/>
         <intercept-url pattern="/css/**" access="permitAll()"/>
 
         <form-login login-processing-url="/j_spring_security_check"
@@ -20,18 +20,10 @@
                     password-parameter="j_password"
 
                     login-page="/login"
-                    authentication-failure-url="/login?errorMsg=authError"/>
+                    authentication-failure-url="/login?errorMsg=authError"
+                    default-target-url="/start" always-use-default-target="true"/>
         <logout logout-url="/j_spring_security_logout"/>
     </http>
-
-    <!--<authentication-manager>
-        <authentication-provider>
-            <user-service>
-                <user name="admin" password="1" authorities="ROLE_ADMIN"/>
-                <user name="user" password="1" authorities="ROLE_USER"/>
-            </user-service>
-        </authentication-provider>
-    </authentication-manager>-->
 
     <beans:bean id="dataSource"
                 class="org.springframework.jdbc.datasource.DriverManagerDataSource">
