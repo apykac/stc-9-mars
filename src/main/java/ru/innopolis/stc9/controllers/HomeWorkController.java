@@ -2,6 +2,8 @@ package ru.innopolis.stc9.controllers;
 
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -10,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import ru.innopolis.stc9.pojo.HomeWork;
 import ru.innopolis.stc9.pojo.User;
 import ru.innopolis.stc9.service.HomeWorkService;
+import ru.innopolis.stc9.service.UserService;
 
 /**
  * Created by Сергей on 01.06.2018.
@@ -18,6 +21,8 @@ import ru.innopolis.stc9.service.HomeWorkService;
 public class HomeWorkController {
     @Autowired
     private HomeWorkService homeWorkService;
+    @Autowired
+    private UserService userService;
     private Logger logger = Logger.getLogger(HomeWorkController.class);
     private String addHomeWork = "views/addHomeWork";
 
@@ -40,8 +45,9 @@ public class HomeWorkController {
             model.addAttribute("lessonId", lessonId);
             return addHomeWork;
         }
-        //todo сделать получение юзера из сессии
-        homeWorkService.addHomeWork(new HomeWork(url, 13, lessonId));
+        org.springframework.security.core.userdetails.User activeUser =
+                (org.springframework.security.core.userdetails.User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        homeWorkService.addHomeWork(new HomeWork(url, userService.findUserByLogin(activeUser.getUsername()).getId(), lessonId));
         model.addAttribute("lessonId", lessonId);
         logger.info("Homework added");
         return "redirect: /views/student/studentDashBoard" ;

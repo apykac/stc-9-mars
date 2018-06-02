@@ -2,10 +2,14 @@ package ru.innopolis.stc9.controllers;
 
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.*;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import ru.innopolis.stc9.pojo.*;
+import ru.innopolis.stc9.pojo.User;
 import ru.innopolis.stc9.service.*;
 
 import java.util.ArrayList;
@@ -29,10 +33,10 @@ public class StudentController {
     private String studentLessons = "views/studentLessons";
 
     @RequestMapping("/views/student/studentDashBoard")
-    public String studentView(@SessionAttribute("login")String login, Model model) {
-
-        //todo получить юзера из сесуриту
-        User student = userService.findUserByLogin("neadmin");
+    public String studentView(Model model) {
+        org.springframework.security.core.userdetails.User activeUser =
+                (org.springframework.security.core.userdetails.User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        User student = userService.findUserByLogin(activeUser.getUsername());
         student.setGroup(groupService.findGroupById(student.getGroupId()));
         model.addAttribute("student", student);
         model.addAttribute("groupName", groupService.findGroupById(student.getGroupId()).getName());

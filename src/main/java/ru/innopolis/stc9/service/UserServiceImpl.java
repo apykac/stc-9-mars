@@ -51,8 +51,6 @@ public class UserServiceImpl implements UserService {
     public String getRole(String login) {
         if ((login == null) || login.isEmpty()) return null;
         User user = userDao.findLoginByName(login);
-        if (user == null) return -1;
-
         if (user == null) return null;
         return user.getPermissionGroup();
     }
