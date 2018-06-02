@@ -11,6 +11,5 @@
 <script src="${pageContext.request.contextPath}/assets/js/jquery.min.js"></script>
 <script src="${pageContext.request.contextPath}/assets/js/bootstrap.min.js"></script>
 <script src="${pageContext.request.contextPath}/assets/js/adminlte.min.js"></script>
-<script src="${pageContext.request.contextPath}/assets/js/setid.js"></script>
-</body>
-</html>
+
+

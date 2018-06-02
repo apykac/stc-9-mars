@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <title>404</title>
+    <title>500</title>
     <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
     <link rel="stylesheet" href="${pageContext.request.contextPath}/assets/css/bootstrap.min.css">
     <link rel="stylesheet" href="${pageContext.request.contextPath}/assets/css/font-awesome.min.css">
@@ -19,7 +19,7 @@
     <link rel="stylesheet"
           href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600,700,300italic,400italic,600italic">
 </head>
-<body class="hold-transition skin-yellow sidebar-mini">
+<body class="hold-transition skin-red sidebar-mini">
 <div class="wrapper">
 
     <!-- Main Header -->
@@ -43,10 +43,10 @@
         <!-- Main content -->
         <section class="content" style="padding-top:166px;">
             <div class="error-page">
-                <h2 class="headline text-yellow"> 404</h2>
+                <h2 class="headline text-red">500</h2>
 
                 <div class="error-content">
-                    <h3><i class="fa fa-warning text-yellow"></i> Страница не найдена</h3>
+                    <h3><i class="fa fa-warning text-red"></i> Что-то пошло не так</h3>
 
                     <p>
                         Вы можете воспользоваться поиском.
@@ -57,7 +57,7 @@
                             <input type="text" name="search" class="form-control" placeholder="Поиск">
 
                             <div class="input-group-btn">
-                                <button type="submit" class="btn btn-warning btn-flat"><i
+                                <button type="submit" class="btn btn-danger btn-flat"><i
                                         class="fa fa-search"></i>
                                 </button>
                             </div>

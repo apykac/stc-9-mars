@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import ru.innopolis.stc9.pojo.Progress;
+import ru.innopolis.stc9.service.LessonsService;
 import ru.innopolis.stc9.service.ProgressService;
 
 import java.util.Arrays;
@@ -17,6 +18,9 @@ import java.util.List;
 public class ProgressController {
     @Autowired
     private ProgressService progressService;
+    @Autowired
+    private LessonsService lessonsService;
+
 
     private int greaterOrEqualMark = 0;
     private int lessOrEqualMark = 5;
@@ -28,6 +32,8 @@ public class ProgressController {
     private String doGet(Model model) {
         List<Progress> listProgress = progressService.getProgress(greaterOrEqualMark, lessOrEqualMark);
         model.addAttribute("progress", listProgress);
+        model.addAttribute("amountMarks", progressService.getAmountMarks());
+        model.addAttribute("lessons", lessonsService.findAllLessons());
         return "views/progress";
     }
 

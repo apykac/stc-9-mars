@@ -1,6 +1,5 @@
 <%@ page import="org.springframework.security.core.context.SecurityContextHolder" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
-<html>
 <head>
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -10,7 +9,8 @@
   <link rel="stylesheet" href="${pageContext.request.contextPath}/assets/css/font-awesome.min.css">
   <link rel="stylesheet" href="${pageContext.request.contextPath}/assets/css/ionicons.min.css">
   <link rel="stylesheet" href="${pageContext.request.contextPath}/assets/css/AdminLTE.min.css">
-  <link rel="stylesheet" href="${pageContext.request.contextPath}/assets/css/skins/skin-blue.min.css">
+  <link rel="stylesheet" href="${pageContext.request.contextPath}/assets/css/morris.css">
+  <link rel="stylesheet" href="${pageContext.request.contextPath}/assets/css/skins/_all-skins.min.css">
 
   <!--[if lt IE 9]>
   <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
@@ -164,8 +164,8 @@
               <!-- Menu Footer-->
               <li class="user-footer">
                 <div class="pull-left">
-                  <a href="${pageContext.request.contextPath}/views/progress"
-                     class="btn btn-default btn-flat">Отчеты</a>
+                  <a href="${pageContext.request.contextPath}/views/student/studentDashBoard"
+                     class="btn btn-default btn-flat">Профиль</a>
                 </div>
                 <div class="pull-right">
                   <a href="/j_spring_security_logout" class="btn btn-default btn-flat">Выход</a>

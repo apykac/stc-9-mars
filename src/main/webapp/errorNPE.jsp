@@ -1,9 +1,11 @@
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ page isErrorPage="true" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <title>404</title>
+    <title>NPE</title>
     <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
     <link rel="stylesheet" href="${pageContext.request.contextPath}/assets/css/bootstrap.min.css">
     <link rel="stylesheet" href="${pageContext.request.contextPath}/assets/css/font-awesome.min.css">
@@ -19,7 +21,7 @@
     <link rel="stylesheet"
           href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600,700,300italic,400italic,600italic">
 </head>
-<body class="hold-transition skin-yellow sidebar-mini">
+<body class="hold-transition skin-red sidebar-mini">
 <div class="wrapper">
 
     <!-- Main Header -->
@@ -41,12 +43,12 @@
     </header>
     <div class="content-wrapper" style="margin-left:0px;">
         <!-- Main content -->
-        <section class="content" style="padding-top:166px;">
+        <section class="content">
             <div class="error-page">
-                <h2 class="headline text-yellow"> 404</h2>
+                <h2 class="headline text-red"> NPE</h2>
 
                 <div class="error-content">
-                    <h3><i class="fa fa-warning text-yellow"></i> Страница не найдена</h3>
+                    <h3><i class="fa fa-warning text-red"></i> java.lang.NullPointerException</h3>
 
                     <p>
                         Вы можете воспользоваться поиском.
@@ -57,7 +59,7 @@
                             <input type="text" name="search" class="form-control" placeholder="Поиск">
 
                             <div class="input-group-btn">
-                                <button type="submit" class="btn btn-warning btn-flat"><i
+                                <button type="submit" class="btn btn-danger btn-flat"><i
                                         class="fa fa-search"></i>
                                 </button>
                             </div>
@@ -68,6 +70,44 @@
                 <!-- /.error-content -->
             </div>
             <!-- /.error-page -->
+
+            <div class="row">
+                <div class="col-xs-12">
+                    <div class="box">
+                        <div class="box-header">
+                            <h3 class="box-title">Exception</h3>
+                        </div>
+                        <!-- /.box-header -->
+                        <div class="box-body table-responsive no-padding">
+                            <table class="table">
+                                <tr>
+                                    <td width="10%"><b>Error:</b></td>
+                                    <td>${pageContext.exception}</td>
+                                </tr>
+                                <tr>
+                                    <td><b>URI:</b></td>
+                                    <td>${pageContext.errorData.requestURI}</td>
+                                </tr>
+                                <tr>
+                                    <td><b>Status code:</b></td>
+                                    <td>${pageContext.errorData.statusCode}</td>
+                                </tr>
+                                <tr>
+                                    <td><b>Stack trace:</b></td>
+                                    <td>
+                                        <c:forEach var="trace" items="${pageContext.exception.stackTrace}">
+                                            <p>${trace}</p>
+                                        </c:forEach>
+                                    </td>
+                                </tr>
+                            </table>
+                        </div>
+                        <!-- /.box-body -->
+                    </div>
+                    <!-- /.box -->
+                </div>
+            </div>
+
         </section>
         <!-- /.content -->
     </div>

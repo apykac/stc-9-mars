@@ -6,4 +6,6 @@ import java.util.List;
 
 public interface ProgressService {
     List<Progress> getProgress(int greaterOrEqualMark, int lessOrEqualMark);
+
+    List<Integer> getAmountMarks();
 }

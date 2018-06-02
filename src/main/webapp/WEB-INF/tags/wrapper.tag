@@ -1,5 +1,7 @@
 <%@ tag description="Wrapper Tag" pageEncoding="UTF-8" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@attribute name="footer" fragment="true" %>
+<html>
 <c:import url="/pageHeader.jsp"/>
 <c:import url="/pageSidebar.jsp"/>
 <div class="content-wrapper">
@@ -14,3 +16,6 @@
     </section>
 </div>
 <c:import url="/pageFooter.jsp"/>
+<jsp:invoke fragment="footer"/>
+</body>
+</html>
