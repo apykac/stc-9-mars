@@ -35,6 +35,8 @@
                                       data-toggle="modal"
                                       data-target="#myModal">Редактировать</span>
                             </td>
+                            <td><a href=${pageContext.request.contextPath}/views/attendance?lessonId=${lessons.id}>Посещаемость</a>
+                            </td>
                             <td><a href=${pageContext.request.contextPath}/views/marks?lessonId=${lessons.id}>Проверка
                                 ДЗ</a></td>
                         </tr>
