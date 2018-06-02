@@ -8,4 +8,5 @@ public interface SubjectDao {
     boolean addSubject(Subject subject);
     boolean deleteSubject(int subjectId);
     List<Subject> findAllSubject();
+    Subject findById(int id);
 }
