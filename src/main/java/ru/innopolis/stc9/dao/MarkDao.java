@@ -9,5 +9,7 @@ public interface MarkDao {
 
     public Mark getMarkById(int id);
 
+    public boolean addMark(Mark mark);
+
     public boolean updateMark(Mark mark);
 }
