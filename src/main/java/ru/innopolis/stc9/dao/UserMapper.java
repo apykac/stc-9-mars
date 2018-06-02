@@ -17,17 +17,18 @@ public class UserMapper {
         user.setId(resultSet.getInt("id"));
         user.setLogin(resultSet.getString("login"));
         user.setHashPassword(resultSet.getString("hash_password"));
-        user.setPermissionGroup(resultSet.getInt("permission_group"));
+        user.setPermissionGroup(resultSet.getString("permission_group"));
         user.setFirstName(resultSet.getString("first_name"));
         user.setSecondName(resultSet.getString("second_name"));
         user.setMiddleName(resultSet.getString("middle_name"));
         user.setGroupId(resultSet.getInt("group_id"));
+        user.setEnabled(resultSet.getInt("enabled"));
         return user;
     }
 
-    public static void statementSetter(PreparedStatement statement, User user, int begin, int length) throws SQLException {
+    public static void statementSetter(PreparedStatement statement, User user, int begin, int shift, int length) throws SQLException {
         if ((statement == null) || (user == null) || (length < 1)) return;
-        int count = 1;
+        int count = shift;
         switch (begin) {
             case 1:
                 statement.setString(count++, user.getLogin());
@@ -56,8 +57,10 @@ public class UserMapper {
                 statement.setInt(count++, user.getId());
             case 8:
                 if (count > length) return;
-                statement.setInt(count++, user.getPermissionGroup());
-
+                statement.setString(count++, user.getPermissionGroup());
+            case 9:
+                if (count > length) return;
+                statement.setInt(count++, user.getEnabled());
         }
     }
 }

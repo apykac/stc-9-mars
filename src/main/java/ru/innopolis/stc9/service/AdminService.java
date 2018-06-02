@@ -1,6 +1,8 @@
 package ru.innopolis.stc9.service;
 
 import org.apache.log4j.Logger;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 import ru.innopolis.stc9.controllers.GroupController;
 import ru.innopolis.stc9.dao.UserDaoImpl;
 import ru.innopolis.stc9.pojo.User;
@@ -33,12 +35,14 @@ public class AdminService {
             result.setHashPassword(hashPassword);
         } else {
             String login = req.getParameter("editLogin");
-            int role = Integer.parseInt(req.getParameter("editRole"));
+            String role = req.getParameter("editRole");
+            int enabled = Integer.parseInt(req.getParameter("editEnabled"));
             String firstName = req.getParameter("editFirstName");
             String lastName = req.getParameter("editLastName");
             String middleName = req.getParameter("editMiddleName");
             result.setLogin(login);
             result.setPermissionGroup(role);
+            result.setEnabled(enabled);
             result.setFirstName(firstName);
             result.setSecondName(lastName);
             result.setMiddleName(middleName);
@@ -51,7 +55,7 @@ public class AdminService {
         String passwordUpdateMsg = "";
         User user = getUserFromHttpRequest(req, false);
         int userId = (Integer) getSessionAttribute(req, "user-id");
-        int role = Integer.parseInt(req.getParameter("editRole"));
+        String role = req.getParameter("editRole");
         user.setPermissionGroup(role);
         if (userDao.updateUserByFIOL(user)) {
             userUpdateMsg = "updated";

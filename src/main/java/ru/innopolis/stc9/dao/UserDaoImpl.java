@@ -29,7 +29,7 @@ public class UserDaoImpl implements UserDao {
              PreparedStatement statement = connection.prepareStatement(
                      "INSERT INTO users (login, hash_password, permission_group, first_name, second_name, middle_name) " +
                              "VALUES (?, ?, DEFAULT , ?, ?, ?)")) {
-            UserMapper.statementSetter(statement, user, 1, 5);
+            UserMapper.statementSetter(statement, user, 1, 1, 5);
             statement.execute();
             logger.info("Adding user successfully");
         } catch (SQLException e) {
@@ -80,11 +80,12 @@ public class UserDaoImpl implements UserDao {
         logger.info("Started updating user.");
         try (Connection connection = connectionManager.getConnection();
              PreparedStatement statement = connection.prepareStatement(
-                     "UPDATE users SET first_name = ?, second_name = ?, middle_name = ?, group_id = ?, login = ? " +
+                     "UPDATE users SET first_name = ?, second_name = ?, middle_name = ?, group_id = ?, login = ?, enabled = ? " +
                              "WHERE id = ?")) {
-            UserMapper.statementSetter(statement, newUser, 3, 4);
+            UserMapper.statementSetter(statement, newUser, 3,1, 4);
             statement.setString(5, newUser.getLogin());
-            statement.setInt(6, newUser.getId());
+            statement.setInt(6, newUser.getEnabled());
+            statement.setInt(7, newUser.getId());
             statement.execute();
             logger.info("User updated successfully");
         } catch (SQLException e) {

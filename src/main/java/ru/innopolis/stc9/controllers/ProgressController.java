@@ -1,6 +1,7 @@
 package ru.innopolis.stc9.controllers;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -26,11 +27,10 @@ public class ProgressController {
     /**
      * Выводим весь прогресс, все оценки
      *
-     * @param session из сессии получаем логин
      */
     @RequestMapping(method = RequestMethod.GET)
-    private String doGet(HttpSession session, Model model) {
-        String login = (String) session.getAttribute("login");
+    private String doGet(Model model) {
+        String login = SecurityContextHolder.getContext().getAuthentication().getName();
         model.addAttribute("progress",
                 progressService.getProgress(greaterOrEqualMark, lessOrEqualMark, userService.findUserByLogin(login)));
         return "views/progress";
@@ -46,7 +46,7 @@ public class ProgressController {
     private String getProgressBySelectedMark(@RequestParam String marks, HttpSession session, Model model) {
         greaterOrEqualMark = getMarks(marks)[0];
         lessOrEqualMark = getMarks(marks)[1];
-        return doGet(session, model);
+        return doGet(model);
     }
 
     /**
@@ -58,4 +58,19 @@ public class ProgressController {
     private int[] getMarks(String marks) {
         return Arrays.stream(marks.split("\\-")).mapToInt(Integer::parseInt).toArray();
     }
+
+    /*@RequestMapping(value = "/openpage")
+    private String getopenpage(Model model) {
+        return "openpage";
+    }
+
+    @RequestMapping(value = "/adminpage")
+    private String getadminpage(Model model) {
+        return "adminpage";
+    }
+
+    @RequestMapping(value = "/userpage")
+    private String getuserpage(Model model) {
+        return "userpage";
+    }*/
 }

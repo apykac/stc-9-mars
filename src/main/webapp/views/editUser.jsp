@@ -43,15 +43,27 @@
                                                           name="editMiddleName" value="${user.middleName}"></div>
                         </div>
                         <div class="form-group">
-                            <label class="col-sm-2 control-label"></label>
+                            <label class="col-sm-2 control-label">Права доступа</label>
                             <div class="col-sm-10">
                                 <select class="form-control" name="editRole">
                                     <option disabled>Необходимо выбрать роль пользователя</option>
-                                    <option ${user.permissionGroup == 0 ? "selected" : ""} value="0">Admin
+                                    <option ${user.permissionGroup == 'ROLE_ADMIN' ? "selected" : ""} value="ROLE_ADMIN">Admin
                                     </option>
-                                    <option ${user.permissionGroup == 1 ? "selected" : ""} value="1">Teacher
+                                    <option ${user.permissionGroup == 'ROLE_TEACHER' ? "selected" : ""} value="ROLE_TEACHER">Teacher
                                     </option>
-                                    <option ${user.permissionGroup == 2 ? "selected" : ""} value="2">Student
+                                    <option ${user.permissionGroup == 'ROLE_STUDENT' ? "selected" : ""} value="ROLE_STUDENT">Student
+                                    </option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">Включение/Отключение аккаунта</label>
+                            <div class="col-sm-10">
+                                <select class="form-control" name="editEnabled">
+                                    <option disabled>Выбирите бедт ли активен аккаунт</option>
+                                    <option ${user.enabled == 1 ? "selected" : ""} value="1">Активен
+                                    </option>
+                                    <option ${user.enabled == 0 ? "selected" : ""} value="0">Неактивен
                                     </option>
                                 </select>
                             </div>

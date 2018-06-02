@@ -26,11 +26,10 @@
             <div class="login-wrapper">
                 <div class="box">
                     <div class="content-wrap">
-                        <form action="${pageContext.request.contextPath}/login" class="login-form validate"
-                              method="post">
+                        <form action="/j_spring_security_check" class="login-form validate" method="post">
                             <h6>Вход</h6>
-                            <input class="form-control" type="text" placeholder="Логин" name="userName">
-                            <input class="form-control" type="password" placeholder="Пароль" name="userPassword">
+                            <input class="form-control" type="text" placeholder="Логин" name="j_username">
+                            <input class="form-control" type="password" placeholder="Пароль" name="j_password">
                             <c:if test="${param.errorMsg != null}">
                                 <c:if test="${param.errorMsg == 'authError'}"><div class='alert alert-danger'>Неверное имя/пароль</div></c:if>
                                 <c:if test="${param.errorMsg == 'noAuth'}"><div class='alert alert-danger'>Ошибка авторизации</div></c:if>
@@ -48,7 +47,7 @@
                     <p>Хотите вернуться?</p>
                     <a href="${pageContext.request.contextPath}/">Назад</a>
                     <br/>
-                    <c:if test="${param.registration != null && param.registration == 'true'}"><div class="alert alert-success"><p>Регистация прошла успешно</p></div></c:if>
+                    <c:if test="${param.registration != null && param.registration == 'true'}"><div class="alert alert-success"><p>Регисртация прошла успешно</p></div></c:if>
                 </div>
             </div>
         </div>

@@ -1,6 +1,7 @@
 package ru.innopolis.stc9.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.util.MultiValueMap;
 import org.springframework.stereotype.Service;
 import ru.innopolis.stc9.dao.UserDao;
 import ru.innopolis.stc9.pojo.User;
@@ -17,16 +18,25 @@ public class UserServiceImpl implements UserService {
     private GroupService groupService;
 
     @Override
-    public List<String> isCorrectData(Map<String, String[]> incParam) {
+    public List<String> isCorrectData(MultiValueMap<String, String> incParam) {
         List<String> result = new ArrayList<>();
-        if (incParam == null || incParam.isEmpty()) return result;
-        if ((incParam.get("login") != null) && incParam.get("login")[0].equals("")) {
+        if ((incParam == null) || incParam.isEmpty()) return result;
+        if ((incParam.get("login") != null) && incParam.get("login").get(0).equals("")) {
             result.add("Invalid/Exist Login");
             return result;
         }
-        if (incParam.get("hash_password") != null && incParam.get("hash_password")[0].equals("")) {
+        if ((incParam.get("hash_password") != null) && incParam.get("hash_password").get(0).equals("")) {
             result.add("Invalid password");
             return result;
+        }
+        if ((incParam.get("first_name") != null) && !incParam.get("first_name").get(0).matches("^\\D*$")) {
+            result.add("Invalid first name");
+        }
+        if ((incParam.get("second_name") != null) && !incParam.get("second_name").get(0).matches("^\\D*$")) {
+            result.add("Invalid second name");
+        }
+        if ((incParam.get("middle_name") != null) && !incParam.get("middle_name").get(0).matches("^\\D*$")) {
+            result.add("Invalid middle name");
         }
         return result;
     }
@@ -38,11 +48,12 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public Integer getRole(String login) {
-        if ((login == null) || login.isEmpty()) return -1;
+    public String getRole(String login) {
+        if ((login == null) || login.isEmpty()) return null;
         User user = userDao.findLoginByName(login);
         if (user == null) return -1;
 
+        if (user == null) return null;
         return user.getPermissionGroup();
     }
 
@@ -54,14 +65,14 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public boolean addUserByParam(Map<String, String[]> incParam) {
+    public boolean addUserByParam(MultiValueMap<String, String> incParam) {
         if ((incParam == null) || incParam.isEmpty()) return false;
         User user = new User(
-                incParam.get("login")[0],
-                CryptService.crypting(incParam.get("hash_password")[0]),
-                incParam.get("first_name")[0],
-                incParam.get("second_name")[0],
-                incParam.get("middle_name")[0]);
+                incParam.get("login").get(0),
+                CryptService.crypting(incParam.get("hash_password").get(0)),
+                incParam.get("first_name").get(0),
+                incParam.get("second_name").get(0),
+                incParam.get("middle_name").get(0));
         return userDao.addUser(user);
     }
 
@@ -100,7 +111,7 @@ public class UserServiceImpl implements UserService {
     public List<User> getStudentsByGroupId(int groupId) {
         List<User> students = new ArrayList<>();
         for (User u : userDao.getUsersList()) {
-            if (u.getPermissionGroup() == 2 && u.getGroupId() == groupId) {
+            if (u.getPermissionGroup().equals("ROLE_STUDENT") && u.getGroupId() == groupId) {
                 students.add(u);
             }
         }
@@ -116,7 +127,7 @@ public class UserServiceImpl implements UserService {
     public List<User> getStudentsWithoutGroup(int groupId) {
         List<User> students = new ArrayList<>();
         for (User u : userDao.getUsersList()) {
-            if (u.getPermissionGroup() == 2 && u.getGroupId() != groupId) {
+            if (u.getPermissionGroup().equals("ROLE_STUDENT") && u.getGroupId() != groupId) {
                 u.setGroup(groupService.findGroupById(u.getGroupId()));
                 students.add(u);
             }
