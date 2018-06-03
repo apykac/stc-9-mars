@@ -11,12 +11,13 @@ public class Progress {
     private Date date;
     private String subjectName;
     private String groupName;
+    private String login;
 
     public Progress() {
     }
 
     public Progress(int id, int value, String firstName, String secondName, String lessonsName, Date date,
-                    String subjectName, String groupName) {
+                    String subjectName, String groupName, String login) {
         this.id = id;
         this.value = value;
         this.firstName = firstName;
@@ -25,6 +26,7 @@ public class Progress {
         this.date = date;
         this.subjectName = subjectName;
         this.groupName = groupName;
+        this.login = login;
     }
 
     public int getId() {
@@ -89,5 +91,13 @@ public class Progress {
 
     public void setGroupName(String groupName) {
         this.groupName = groupName;
+    }
+
+    public String getLogin() {
+        return login;
+    }
+
+    public void setLogin(String login) {
+        this.login = login;
     }
 }
