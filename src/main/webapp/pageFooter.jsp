@@ -1,6 +1,15 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
-<script src="https://code.jquery.com/jquery.js"></script>
-<script src="${pageContext.request.contextPath}/css/bootstrap.min.js"></script>
-<script src="${pageContext.request.contextPath}/css/setid.js"></script>
-</body>
-</html>
+<!-- Main Footer -->
+<footer class="main-footer">
+  <!-- Default to the left -->
+  <strong>Copyright &copy; 2018 <a href="#">Mars55</a>.</strong> All rights reserved.
+</footer>
+
+</div>
+<!-- ./wrapper -->
+
+<script src="${pageContext.request.contextPath}/assets/js/jquery.min.js"></script>
+<script src="${pageContext.request.contextPath}/assets/js/bootstrap.min.js"></script>
+<script src="${pageContext.request.contextPath}/assets/js/adminlte.min.js"></script>
+
+

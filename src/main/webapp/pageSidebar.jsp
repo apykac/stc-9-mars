@@ -1,25 +1,58 @@
+<%@ page import="org.springframework.security.core.context.SecurityContextHolder" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
-<%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags" %>
-<div class="sidebar content-box" style="display: block;">
-    <ul class="nav">
-        <!-- Main menu -->
-        <li class="current"><a href="${pageContext.request.contextPath}/views/progress">Действия</a></li>
-        <sec:authorize access="hasRole('ROLE_ADMIN')">
-            <li><a href="${pageContext.request.contextPath}/admin/profile">Редактировать свой профиль</a></li>
-            <li><a href="${pageContext.request.contextPath}/views/progress">Прогресс</a></li>
-            <li><a href="${pageContext.request.contextPath}/views/allgroup">Группы</a></li>
-            <li><a href="${pageContext.request.contextPath}/admin/users_list">Пользователи</a></li>
-            <li><a href="${pageContext.request.contextPath}/views/subject">Предметы</a></li>
-            <li><a href="${pageContext.request.contextPath}/views/lessons">Уроки</a></li>
-        </sec:authorize>
-        <sec:authorize access="hasRole('ROLE_TEACHER')">
-            <li><a href="${pageContext.request.contextPath}/university/teacher/profile">Редактировать свой профиль</a>
+<!-- Left side column. contains the logo and sidebar -->
+<aside class="main-sidebar">
+    <!-- sidebar: style can be found in sidebar.less -->
+    <section class="sidebar">
+        <!-- Sidebar user panel -->
+        <div class="user-panel">
+            <div class="pull-left image">
+                <img src="${pageContext.request.contextPath}/assets/img/user2-160x160.jpg" class="img-circle"
+                     alt="User Image">
+            </div>
+            <div class="pull-left info">
+                <p><%=(String) SecurityContextHolder.getContext().getAuthentication().getName()%>
+                </p>
+                <a href="#"><i class="fa fa-circle text-success"></i> Online</a>
+            </div>
+        </div>
+        <!-- sidebar menu: : style can be found in sidebar.less -->
+        <ul class="sidebar-menu" data-widget="tree">
+            <li class="header">MAIN NAVIGATION</li>
+            <li>
+                <a href="${pageContext.request.contextPath}/views/progress">
+                    <i class="fa fa-pie-chart"></i> <span>Прогресс</span>
+                    <span class="pull-right-container">
+              <small class="label pull-right bg-green">Отчет</small>
+            </span>
+                </a>
             </li>
-        </sec:authorize>
-        <sec:authorize access="hasRole('ROLE_STUDENT')">
-            <li><a href="${pageContext.request.contextPath}/university/student/profile">Редактировать свой профиль</a>
+            <li>
+                <a href="${pageContext.request.contextPath}/views/student/studentDashBoard">
+                    <i class="fa fa-users"></i> <span>Страница студента</span>
+                </a>
             </li>
-        </sec:authorize>
-
-    </ul>
-</div>
+            <li>
+                <a href="${pageContext.request.contextPath}/views/allgroup">
+                    <i class="fa fa-th"></i> <span>Группы</span>
+                </a>
+            </li>
+            <li>
+                <a href="${pageContext.request.contextPath}/views/users-list">
+                    <i class="fa fa-users"></i> <span>Пользователи</span>
+                </a>
+            </li>
+            <li>
+                <a href="${pageContext.request.contextPath}/views/subject">
+                    <i class="fa fa-list-ol"></i> <span>Предметы</span>
+                </a>
+            </li>
+            <li>
+                <a href="${pageContext.request.contextPath}/views/lessons">
+                    <i class="fa fa-book"></i> <span>Уроки</span>
+                </a>
+            </li>
+        </ul>
+    </section>
+    <!-- /.sidebar -->
+</aside>

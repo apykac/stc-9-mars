@@ -115,7 +115,7 @@ public class UserDaoImpl implements UserDao {
 
     @Override
     public User findLoginByName(String login) {
-        if ((login == null) || login.isEmpty()) return null;
+        if (login.equals("anonymousUser") || (login == null) || login.isEmpty()) return null;
         User user = null;
         logger.info("Start find login by name (" + login + ")");
         try (Connection connection = connectionManager.getConnection();

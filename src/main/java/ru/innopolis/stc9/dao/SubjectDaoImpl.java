@@ -72,4 +72,22 @@ public class SubjectDaoImpl implements SubjectDao {
         }
         return result;
     }
+
+    @Override
+    public Subject findById(int id) {
+        Subject subject = null;
+        if (id < 0) return subject;
+        try (Connection connection = connectionManager.getConnection();
+             PreparedStatement statement = connection.prepareStatement("SELECT * FROM subjects WHERE id = ?")) {
+            statement.setInt(1, id);
+            try (ResultSet set = statement.executeQuery()) {
+                while (set.next()) subject = new Subject(set.getInt("id"), set.getString("sname"));
+            }
+            logger.info("get subject by id");
+            return subject;
+        } catch (SQLException e) {
+            logger.error(e.getMessage());
+        }
+        return subject;
+    }
 }
