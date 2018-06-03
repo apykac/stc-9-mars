@@ -8,35 +8,60 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
-import ru.innopolis.stc9.service.AdminService;
+import ru.innopolis.stc9.pojo.User;
+import ru.innopolis.stc9.service.UserService;
 
+import javax.servlet.http.HttpSession;
 import java.util.List;
 
 @Controller
 public class UsersController {
     @Autowired
-    private AdminService adminService;
+    private UserService userService;
 
-    @RequestMapping(value = "/admin/edit-user", method = RequestMethod.GET)
-    public String editUserGet(@RequestParam(value = "user-id", required = false) int id,
-                              @RequestParam(value = "info", required = false) String info,
-                              Model model) {
-        if (id > 0) model.addAttribute("user", adminService.getUser(id));
-        model.addAttribute("info", info);
-        return "/views/editUser";
-    }
-
-    @RequestMapping(value = "/admin/edit-user", method = RequestMethod.POST)
-    public String editUserPost(@RequestBody MultiValueMap<String, String> incParam, Model model) {
-        List<String> errors = adminService.editUser(incParam);
-        if (errors.isEmpty()) errors = null;
-        model.addAttribute("errors", errors);
-        return "/views/editUser";
-    }
-
-    @RequestMapping(value = "/admin/users-list", method = RequestMethod.GET)
+    @RequestMapping(value = "/admin/users_list", method = RequestMethod.GET)
     public String getUserListGet(Model model) {
-        model.addAttribute("usersList", adminService.getUsersList());
+        model.addAttribute("usersList", userService.getUserList());
         return "/views/allUsers";
+    }
+
+    @RequestMapping(value = "/admin/edit_user", method = RequestMethod.GET)
+    public String editUserGet(@RequestParam(value = "selected_user_id", required = false) int id,
+                              HttpSession session,
+                              boolean isOwner,
+                              Model model) {
+        if (id > 0) {
+            User user = userService.findUserById(id);
+            if (!isOwner &&
+                    ((id == (Integer) session.getAttribute("entered_user_id"))
+                            || user.getPermissionGroup().equals("ROLE_ADMIN")))
+                return "redirect:/start";
+            model.addAttribute("user", user);
+            model.addAttribute("isOwner", isOwner);
+        }
+        return "/views/editUser";
+    }
+
+    @RequestMapping(value = "/temp/edit_user", method = RequestMethod.POST)
+    public String editUserPost(@RequestBody MultiValueMap<String, String> incParam, HttpSession session, Model model) {
+        Object[] info = userService.editUser(incParam);
+        if (((List) info[0]).isEmpty()) info[0] = null;
+        model.addAttribute("errors", info[0]);
+        if (((List) info[1]).isEmpty()) info[1] = null;
+        model.addAttribute("success_list", info[1]);
+        return editUserGet(Integer.parseInt(incParam.get("id").get(0)),
+                session,
+                Boolean.parseBoolean(incParam.get("isOwner").get(0)),
+                model);
+    }
+
+    @RequestMapping(
+            value = {"/university/student/profile", "/university/teacher/profile", "admin/profile"},
+            method = RequestMethod.GET)
+    public String editOwnerProfile(HttpSession session, Model model) {
+        return editUserGet((Integer) session.getAttribute("entered_user_id"),
+                session,
+                true,
+                model);
     }
 }

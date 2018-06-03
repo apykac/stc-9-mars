@@ -6,6 +6,7 @@ import org.springframework.util.MultiValueMap;
 import ru.innopolis.stc9.dao.GroupDao;
 import ru.innopolis.stc9.dao.UserDao;
 import ru.innopolis.stc9.dao.UserField;
+import ru.innopolis.stc9.dao.UserMapper;
 import ru.innopolis.stc9.pojo.User;
 
 import java.util.ArrayList;
@@ -25,12 +26,6 @@ public class UserServiceImpl implements UserService {
         List<String> result = new ArrayList<>();
         if ((incParam == null) || incParam.isEmpty()) return result;
         String pattern = "^\\D*$";
-        if ((incParam.get("login") != null) &&
-                incParam.get(UserField.LOGIN).get(0).equals("") &&
-                (userDao.findLoginByName(incParam.get(UserField.LOGIN).get(0)) != null)) {
-            result.add("Invalid/Exist Login");
-            return result;
-        }
         if ((incParam.get(UserField.FNAME) != null) && !incParam.get(UserField.FNAME).get(0).matches(pattern)) {
             result.add("Invalid first name");
         }
@@ -57,27 +52,6 @@ public class UserServiceImpl implements UserService {
             }
         }
         return result;
-    }
-
-    @Override
-    public boolean addUser(User user) {
-        if (user == null) return false;
-        return userDao.addUser(user);
-    }
-
-    @Override
-    public String getRole(String login) {
-        if ((login == null) || login.isEmpty()) return null;
-        User user = userDao.findLoginByName(login);
-        if (user == null) return null;
-        return user.getPermissionGroup();
-    }
-
-    @Override
-    public boolean checkAuth(String login, String password) {
-        if ((login == null) || (password == null) || login.isEmpty() || password.isEmpty()) return false;
-        User user = userDao.findLoginByName(login);
-        return (user != null) && (CryptService.isMatched(password, user.getHashPassword()));
     }
 
     @Override
@@ -152,6 +126,43 @@ public class UserServiceImpl implements UserService {
             }
         }
         return students;
+    }
+
+    @Override
+    public Object[] editUser(MultiValueMap<String, String> incParam) {
+        Object[] result = new Object[2];
+        List<String> success = new ArrayList<>();
+        List<String> errors = isCorrectData(incParam);
+        result[0] = errors;
+        result[1] = success;
+        if (!errors.isEmpty()) return result;
+        User user = UserMapper.getByParam(incParam);
+        if (!userDao.updateUserByFIOL(user)) errors.add("Invalid/Exist Login");
+        else success.add("Updating profile FIO success successfully");
+        if ((user.getHashPassword() != null) && !user.getHashPassword().isEmpty()) {
+            String incPass = checkPasswordUpdateIsPossible(incParam, user);
+            if (!incPass.isEmpty()) {
+                errors.add(incPass);
+                return result;
+            }
+            user.setHashPassword(CryptService.crypting(incParam.get("newPassword").get(0)));
+            if (!userDao.updateUserPassword(user)) errors.add("Updating profile password");
+            else success.add("Updating profile password successfully");
+        }
+        return result;
+    }
+
+    private String checkPasswordUpdateIsPossible(MultiValueMap<String, String> incParam, User user) {
+        String result = "";
+        if (CryptService.isMatched(user.getHashPassword(), userDao.findUserByUserId(user.getId()).getHashPassword())) {
+            if (!checkNewPassword(incParam.get("newPassword").get(0), incParam.get("repeatNewPassword").get(0)))
+                result = "Passwords not match";
+        } else result = "Wrong old password";
+        return result;
+    }
+
+    private boolean checkNewPassword(String newPassword, String repeatNewPassword) {
+        return (newPassword != null) && !newPassword.isEmpty() && newPassword.equals(repeatNewPassword);
     }
 
 }

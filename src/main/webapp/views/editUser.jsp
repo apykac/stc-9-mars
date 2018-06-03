@@ -8,15 +8,20 @@
                 <div class="panel-title ">Редактирование пользователя</div>
             </div>
             <div class="content-box-large box-with-header">
-                <form class="form-horizontal" action="${pageContext.request.contextPath}/admin/edit-user" method="post">
+                <form class="form-horizontal" action="${pageContext.request.contextPath}/temp/edit_user" method="post">
                     <fieldset>
                         <legend>Основные данные</legend>
-                        <div class="form-group">
-                            <label for="userId" class="col-sm-2 control-label">Id</label>
-                            <div class="col-sm-10"><input type="text" class="form-control" id="userId"
+                        <div class="form-group hidden">
+                            <div class="col-sm-10"><input type="text" class="form-control"
+                                                          placeholder="is Owner"
+                                                          name="isOwner"
+                                                          value="${isOwner}"></div>
+                        </div>
+                        <div class="form-group hidden">
+                            <div class="col-sm-10"><input type="number" class="form-control"
                                                           placeholder="User ID"
                                                           name="id"
-                                                          value="${user.id}" readonly></div>
+                                                          value="${user.id}"></div>
                         </div>
                         <div class="form-group">
                             <label for="editLogin" class="col-sm-2 control-label">Логин</label>
@@ -42,7 +47,14 @@
                                                           placeholder="Middle name"
                                                           name="middle_name" value="${user.middleName}"></div>
                         </div>
-                        <div class="form-group">
+                        <c:choose>
+                        <c:when test="${user.id == sessionScope.get('entered_user_id') || sessionScope.get('entered_role') != 'ROLE_ADMIN'}">
+                        <div class="form-group hidden">
+                            </c:when>
+                            <c:otherwise>
+                            <div class="form-group">
+                                </c:otherwise>
+                                </c:choose>
                             <label class="col-sm-2 control-label">Права доступа</label>
                             <div class="col-sm-10">
                                 <select class="form-control" name="permission_group">
@@ -56,7 +68,14 @@
                                 </select>
                             </div>
                         </div>
-                        <div class="form-group">
+                            <c:choose>
+                            <c:when test="${user.id == sessionScope.get('entered_user_id') || sessionScope.get('entered_role') != 'ROLE_ADMIN'}">
+                            <div class="form-group hidden">
+                                </c:when>
+                                <c:otherwise>
+                                <div class="form-group">
+                                    </c:otherwise>
+                                    </c:choose>
                             <label class="col-sm-2 control-label">Включение/Отключение аккаунта</label>
                             <div class="col-sm-10">
                                 <select class="form-control" name="enabled">
@@ -95,11 +114,14 @@
                             <button type="submit" class="btn btn-primary">Сохранить</button>
                         </div>
                     </div>
-
                     <c:if test="${errors != null}">
-                        <c:forEach items="${errors}" var="error"><div class="alert alert-success">${error}</div></c:forEach>
+                        <div class="alert alert-danger"><c:forEach items="${errors}" var="error">${error}
+                            <br/></c:forEach></div>
                     </c:if>
-
+                    <c:if test="${success_list != null}">
+                        <div class="alert alert-success"><c:forEach items="${success_list}" var="success">${success}
+                            <br/></c:forEach></div>
+                    </c:if>
                 </form>
                 <br/><br/>
             </div>

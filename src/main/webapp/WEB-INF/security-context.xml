@@ -11,8 +11,8 @@
         <csrf disabled="true"/>
 
         <intercept-url pattern="/logout" access="hasAnyRole('ROLE_ADMIN', 'ROLE_TEACHER', 'ROLE_STUDENT')" />
-        <intercept-url pattern="/login" access="isAnonymous()"/>
-        <intercept-url pattern="/registration" access="isAnonymous()"/>
+        <intercept-url pattern="/login" access="permitAll()"/>
+        <intercept-url pattern="/registration" access="permitAll()"/>
         <intercept-url pattern="/css/**" access="permitAll()"/>
 
         <form-login login-processing-url="/j_spring_security_check"
