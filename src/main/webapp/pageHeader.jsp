@@ -1,4 +1,3 @@
-<%@ page import="org.springframework.security.core.context.SecurityContextHolder" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
 <head>
@@ -149,16 +148,15 @@
               <img src="${pageContext.request.contextPath}/assets/img/user2-160x160.jpg" class="user-image"
                    alt="User Image">
               <!-- hidden-xs hides the username on small devices so only the image appears. -->
-              <span class="hidden-xs">[${sessionScope.get('entered_login')}] ${sessionScope.get('entered_name')}</span>
+              <span class="hidden-xs">[${sessionScope.get('entered_login')}]</span>
             </a>
             <ul class="dropdown-menu">
               <!-- The user image in the menu -->
               <li class="user-header">
                 <img src="${pageContext.request.contextPath}/assets/img/user2-160x160.jpg" class="img-circle"
                      alt="User Image">
-
                 <p>
-                    [${sessionScope.get('entered_login')}] ${sessionScope.get('entered_name')}
+                  ${sessionScope.get('entered_name')}
                   <small>Member since 2018</small>
                 </p>
               </li>
@@ -169,7 +167,7 @@
                      class="btn btn-default btn-flat">Профиль</a>
                 </div>
                 <div class="pull-right">
-                  <a href="/j_spring_security_logout" class="btn btn-default btn-flat">Выход</a>
+                  <a href="/logout" class="btn btn-default btn-flat">Выход</a>
                 </div>
               </li>
             </ul>

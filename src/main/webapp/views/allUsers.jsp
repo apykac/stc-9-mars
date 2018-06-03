@@ -21,7 +21,7 @@
                     </thead>
                     <tbody>
                     <c:forEach items="${requestScope.get('usersList')}" var="user">
-                        <c:if test="${(user.id != requestScope.get('entered_user_id')) && (user.permissionGroup != 'ROLE_ADMIN')}">
+                        <c:if test="${(user.id != sessionScope.get('entered_user_id')) && (user.permissionGroup != 'ROLE_ADMIN')}">
                             <tr>
                                 <td>${user.login}</td>
                                 <td>${user.firstName}</td>
@@ -34,7 +34,7 @@
                                     </c:choose>
                                 </td>
                                 <td>
-                                    <a href="${pageContext.request.contextPath}/admin/edit_user?selected_user_id=${user.id}"
+                                    <a href="${pageContext.request.contextPath}/admin/edit_user/${user.id}"
                                        name="${user.firstName}">Редактировать
                                     </a>
                                 </td>

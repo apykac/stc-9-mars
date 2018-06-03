@@ -4,10 +4,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.util.MultiValueMap;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
 import ru.innopolis.stc9.pojo.User;
 import ru.innopolis.stc9.service.UserService;
 
@@ -25,8 +25,8 @@ public class UsersController {
         return "/views/allUsers";
     }
 
-    @RequestMapping(value = "/admin/edit_user", method = RequestMethod.GET)
-    public String editUserGet(@RequestParam(value = "selected_user_id", required = false) int id,
+    @RequestMapping(value = "/admin/edit_user/{id}", method = RequestMethod.GET)
+    public String editUserGet(@PathVariable("id") int id,
                               HttpSession session,
                               boolean isOwner,
                               Model model) {
@@ -55,9 +55,7 @@ public class UsersController {
                 model);
     }
 
-    @RequestMapping(
-            value = {"/university/student/profile", "/university/teacher/profile", "admin/profile"},
-            method = RequestMethod.GET)
+    @RequestMapping(value = "/university/profile", method = RequestMethod.GET)
     public String editOwnerProfile(HttpSession session, Model model) {
         return editUserGet((Integer) session.getAttribute("entered_user_id"),
                 session,
