@@ -11,44 +11,53 @@
 
                 <form class="form-horizontal" action="${pageContext.request.contextPath}/views/attendanceSelectGroup"
                       method="post">
+                    <input type="hidden" value="${requestScope.get("lessonId")}" name="lessonId">
                     <div class="form-group">
-                        <label for="selectGroup" class="col-sm-3 control-label">Выбрать группу</label>
-                        <div class="col-sm-9">
-                            <select class="form-control" id="selectGroup" name="selectGroup">
+                        <label for="selectGroup" class="col-sm-2 control-label">Выбрать группу</label>
+                        <div class="col-sm-8">
 
-                                <c:set var="selectedGroup" value="${requestScope.get('groupSelected')}"/>
+                            <c:set var="selectedGroup" value="${requestScope.get('groupSelected')}"/>
 
-                                <c:if test="${selectedGroup!=null}">
-                                    <option value="${selectedGroup.name}" disabled>${selectedGroup.name}</option>
-                                </c:if>
+                            <c:if test="${selectedGroup!=null}">
+                                <input type="text" class="form-control" value="${selectedGroup.name}" disabled>
+                            </c:if>
+                            <c:if test="${selectedGroup==null}">
+                                <select class="form-control" id="selectGroup" name="selectGroup">
 
-                                <c:forEach items="${requestScope.get('groups')}" var="group">
-                                    <option value="${group.id}">${group.name}</option>
-                                </c:forEach>
+                                    <c:forEach items="${requestScope.get('groups')}" var="group">
+                                        <option value="${group.id}">${group.name}</option>
+                                    </c:forEach>
 
-                            </select>
+                                </select>
+                            </c:if>
                         </div>
-                        <div class="row">
-                            <div class="col-sm-12">
-                                <button type="submit" class="btn btn-primary">OK</button>
-                            </div>
+                        <div class="col-sm-2">
+                            <button type="submit" class="btn btn-primary">OK</button>
                         </div>
                     </div>
                 </form>
 
-                <form class="form-horisontal" action="${pageContext.request.contextPath}/views/sendStudentsList"
+                <form class="form-horisontal"
+                      action="${pageContext.request.contextPath}/views/attendanceSendStudentsList"
                       method="post">
+                    <div class="row text-center">
+                        <div class="col-sm-12">
+                            Отметить присутствовавших студентов
+                        </div>
+                    </div>
                     <c:forEach items="${requestScope.get('studentsInGroup')}" var="student">
                         <div class="form-group">
-                            <div class="col-sm-3"></div>
-                            <label for="${student.id}" class="col-sm-7 control-label">${student.firstName}</label>
-                            <div class="col-sm-2">
-                                <input class="form-check-input" type="checkbox" value="" id="${student.id}">
+                            <label for="${student.id}"
+                                   class="col-sm-8 control-label">${student.secondName} ${student.firstName} ${student.middleName}</label>
+                            <div class="col-sm-1">
+                                <input class="form-check-input" type="checkbox" name="list" value="${student.id}"
+                                       id="${student.id}">
                             </div>
                         </div>
                     </c:forEach>
-                    <div class="row">
-                        <div class="col-sm-12">
+                    <input type="hidden" value="${requestScope.get("lessonId")}" name="lessonId">
+                    <div class="row text-center">
+                        <div class="col-md-12">
                             <button type="submit" class="btn btn-primary">OK</button>
                         </div>
                     </div>
