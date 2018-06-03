@@ -3,6 +3,10 @@
 <%@ taglib prefix="t" tagdir="/WEB-INF/tags" %>
 <%@ taglib uri="http://www.springframework.org/tags/form" prefix="form" %>
 <t:wrapper>
+    <jsp:attribute name="footer">
+        <script src="${pageContext.request.contextPath}/assets/js/setid.js"></script>
+    </jsp:attribute>
+    <jsp:body>
     <div class="row">
         <div class="col-md-12 panel-warning">
             <div class="content-box-header">
@@ -114,4 +118,5 @@
             </div>
         </div>
     </div>
+    </jsp:body>
 </t:wrapper>

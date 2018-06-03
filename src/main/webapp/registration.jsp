@@ -2,62 +2,81 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
 <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <title>Admin dashboard | Registration Page</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link href="css/bootstrap.min.css" rel="stylesheet">
-    <link href="css/styles.css" rel="stylesheet">
+    <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
+    <link rel="stylesheet" href="assets/css/bootstrap.min.css">
+    <link rel="stylesheet" href="assets/css/font-awesome.min.css">
+    <link rel="stylesheet" href="assets/css/ionicons.min.css">
+    <link rel="stylesheet" href="assets/css/AdminLTE.min.css">
+    <!--[if lt IE 9]>
+    <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
+    <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+    <![endif]-->
+    <link rel="stylesheet"
+          href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600,700,300italic,400italic,600italic">
 </head>
-<body class="login-bg">
-<div class="header">
-    <div class="container">
-        <div class="row">
-            <div class="col-md-12">
-                <!-- Logo -->
-                <div class="logo">
-                    <h1><a href="${pageContext.request.contextPath}/">Admin dashboard | Registration Page</a></h1>
-                </div>
-            </div>
-        </div>
+<body class="hold-transition register-page">
+<div class="register-box">
+    <div class="register-logo">
+        <a href="${pageContext.request.contextPath}/"><b>MARS</b>55</a>
     </div>
-</div>
 
-<div class="page-content container">
-    <div class="row">
-        <div class="col-md-4 col-md-offset-4">
-            <div class="login-wrapper">
-                <div class="box">
-                    <div class="content-wrap">
-                        <form action="${pageContext.request.contextPath}/registration" class="login-form validate"
-                              method="post">
-                            <h6>Регистрация</h6>
-                            <input class="form-control" type="text" placeholder="Логин" name="login" required>
-                            <input class="form-control" type="password" placeholder="Пароль" name="hash_password"
-                                   required>
-                            <input class="form-control" type="text" placeholder="Имя" name="first_name">
-                            <input class="form-control" type="text" placeholder="Фамилия" name="second_name">
-                            <input class="form-control" type="text" placeholder="Отчество" name="middle_name">
-                            <div class="alert alert-info">
-                                Логин/пароль не должны быть пустыми, пароль - цифры<br/>
-                                По желанию введите свои ФИО
-                            </div>
-                            <c:forEach items="${requestScope.get(\"errorMsg\")}" var="msg">
-                                <div class="alert alert-danger">
-                                        ${msg}
-                                </div>
-                            </c:forEach>
-                            <div class="action">
-                                <button class="btn btn-primary signup" type="submit">Регистрация</button>
-                                <br/>
-                                <br/>
-                                <a href="${pageContext.request.contextPath}/login">Обратно к логину</a>
-                            </div>
-                        </form>
-                    </div>
-                </div>
+    <div class="register-box-body">
+        <p class="login-box-msg">Регистрация</p>
+
+        <form action="${pageContext.request.contextPath}/registration" method="post">
+            <div class="form-group has-feedback">
+                <input type="text" class="form-control" placeholder="Логин" name="login" required>
+                <span class="glyphicon fa fa-user form-control-feedback"></span>
             </div>
-        </div>
+            <div class="form-group has-feedback">
+                <input type="password" class="form-control" placeholder="Пароль" name="hash_password" required>
+                <span class="glyphicon fa fa-lock form-control-feedback"></span>
+            </div>
+            <br/>
+            <div class="form-group has-feedback">
+                <input type="text" class="form-control" placeholder="Имя" name="first_name">
+                <span class="glyphicon fa fa-user-plus form-control-feedback"></span>
+            </div>
+            <div class="form-group has-feedback">
+                <input type="text" class="form-control" placeholder="Фамилия" name="second_name">
+                <span class="glyphicon fa fa-user-plus form-control-feedback"></span>
+            </div>
+            <div class="form-group has-feedback">
+                <input type="text" class="form-control" placeholder="Отчество" name="middle_name">
+                <span class="glyphicon fa fa-user-plus form-control-feedback"></span>
+            </div>
+
+            <div class="alert alert-info">
+                Логин/пароль не должны быть пустыми, пароль - цифры<br/>
+                По желанию введите свои ФИО
+            </div>
+            <c:forEach items="${requestScope.get(\"errorMsg\")}" var="msg">
+                <div class="alert alert-danger">
+                        ${msg}
+                </div>
+            </c:forEach>
+
+            <div class="row">
+                <div class="col-xs-8">
+                </div>
+                <!-- /.col -->
+                <div class="col-xs-4">
+                    <button type="submit" class="btn btn-primary btn-block btn-flat">Регистрация</button>
+                </div>
+                <!-- /.col -->
+            </div>
+        </form>
+
+        <a href="${pageContext.request.contextPath}/login" class="text-center">Обратно к логину</a>
     </div>
+    <!-- /.form-box -->
 </div>
-<script src="css/bootstrap.min.js"></script>
+<!-- /.register-box -->
+
+<script src="assets/js/jquery.min.js"></script>
+<script src="assets/js/bootstrap.min.js"></script>
 </body>
 </html>
