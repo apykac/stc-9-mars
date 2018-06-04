@@ -8,120 +8,116 @@
         <script src="${pageContext.request.contextPath}/assets/js/setid.js"></script>
     </jsp:attribute>
     <jsp:body>
-    <div class="row">
-        <div class="col-md-12 panel-warning">
-            <div class="content-box-header">
-                <div class="panel-title ">Список уроков</div>
-            </div>
-            <div class="content-box-large box-with-header">
-                <table class="table">
-                    <thead>
-                    <tr>
-                        <th>#</th>
-                        <th>Предмет</th>
-                        <th>Дата</th>
-                        <th>Название</th>
-                        <th>Редактирование</th>
-                        <th>Действие</th>
-                    </tr>
-                    </thead>
-                    <tbody>
-                    <c:forEach items="${requestScope.get('lessons')}" var="lessons">
-                        <tr>
-                            <td>${lessons.id}</td>
-                            <td>${lessons.subject_id}</td>
-                            <td>${lessons.date}</td>
-                            <td>${lessons.name}</td>
-                            <td><span class="m_editLessons"
-                                      idless="${lessons.id}"
-                                      subjidless="${lessons.subject_id}"
-                                      dateless="${lessons.date}"
-                                      nameless="${lessons.name}"
-                                      data-toggle="modal"
-                                      data-target="#myModal">Редактировать</span>
-                            </td>
-                            <td>
-                                <a href=${pageContext.request.contextPath}/university/teacher/attendance?lessonId=${lessons.id}>Посещаемость</a>
-                            </td>
-                            <td>
-                                <a href=${pageContext.request.contextPath}/university/teacher/marks?lessonId=${lessons.id}>Проверка
-                                ДЗ</a></td>
-                        </tr>
-                    </c:forEach>
-                    </tbody>
-                </table>
-                <br/><br/>
-            </div>
-        </div>
-    </div>
-    <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-        <div class="modal-dialog" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                    <h4 class="modal-title" id="myModalLabel">Редактирование записи</h4>
-                </div>
-                <div class="modal-body">
-                        <%--                    <div class="panel panel-default">
-                                                <div class="panel-heading">Добавить запись</div>
-                                                <div class="panel-body">
-                                                    <form:form class="form-horizontal" id="add" commandName="lesson"
-                                                          action="${pageContext.request.contextPath}/views/lessons"
-                                                          method="post">
-                                                        <div class="form-group">
-                                                            <label for="nameLesson" class="col-sm-2 control-label">Введите</label>
-                                                            <div class="col-sm-10">
-                                                                <input type="text" class="form-control" id="nameLesson"
-                                                                       placeholder="Название урока"
-                                                                       name="name">
-                                                            </div>
-                                                        </div>
-                                                        <div class="form-group">
-                                                            <div class="col-sm-offset-2 col-sm-10">
-                                                                <button type="submit" class="btn btn-primary">OK</button>
-                                                            </div>
-                                                        </div>
-                                                    </form:form>
-                                                </div>
-                                            </div>
-                        --%>
-                    <sec:authorize access="hasRole('ROLE_ADMIN')">
-                        <div class="panel panel-default">
-                            <div class="panel-heading">Удалить запись</div>
-                            <div class="panel-body">
-                                <form class="form-horizontal" id="delmodal"
-                                      action="${pageContext.request.contextPath}/university/teacher/lessons/delete"
-                                      method="post">
-                                    <div class="form-group">
-                                        <label for="l_name" class="col-sm-2 control-label">Имя</label>
-                                        <div class="col-sm-10">
-                                            <input type="text" class="form-control" id="l_name" value=""
-                                                   disabled>
-                                            <input type="hidden" class="form-control" id="l_subjid" value=""
-                                                   disabled>
-                                            <input type="hidden" class="form-control" id="l_date" value=""
-                                                   disabled>
-                                            <input type="hidden" class="form-control" id="l_id" value=""
-                                                   name="idLesson" readonly>
-                                        </div>
-                                    </div>
-                                    <div class="form-group">
-                                        <div class="col-sm-offset-2 col-sm-10">
-                                            <button type="submit" class="btn btn-primary">OK</button>
-                                        </div>
-                                    </div>
-                                </form>
-                            </div>
+        <div class="row">
+            <div class="col-md-6">
+                <div class="box box-info">
+                    <div class="box-header with-border">
+                        <h3 class="box-title">Список уроков</h3>
+
+                        <div class="box-tools pull-right">
+                            <button type="button" class="btn btn-box-tool" data-widget="collapse"><i
+                                    class="fa fa-minus"></i>
+                            </button>
                         </div>
-                    </sec:authorize>
+                    </div>
+                    <div class="box-body">
+                        <div class="dataTables_wrapper form-inline dt-bootstrap">
+                            <div class="row">
+                                <div class="col-sm-12">
+                                    <table class="table">
+                                        <thead>
+                                        <tr>
+                                            <th>Предмет</th>
+                                            <th>Дата</th>
+                                            <th>Название</th>
+                                            <th>Действие</th>
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+                                        <c:forEach items="${requestScope.get('lessons')}" var="lessons">
+                                            <tr class="m_editLessons"
+                                                idless="${lessons.id}" subjidless="${lessons.subject_id}"
+                                                snameless="${lessons.sname}"
+                                                dateless="${lessons.date}" nameless="${lessons.name}"
+                                                style="cursor:pointer">
+                                                <td>${lessons.sname}</td>
+                                                <td>${lessons.date}</td>
+                                                <td>${lessons.name}</td>
+                                                </td>
+                                                <td>
+                                                    <a href=${pageContext.request.contextPath}/university/teacher/attendance?lessonId=${lessons.id}>Посещаемость</a>
+                                                </td>
+                                                <td>
+                                                    <a href=${pageContext.request.contextPath}/university/teacher/marks?lessonId=${lessons.id}>Проверка
+                                                        ДЗ</a></td>
+                                            </tr>
+                                        </c:forEach>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                            <!-- /.table-responsive -->
+                        </div>
+                    </div>
+                    <!-- /.box-body -->
                 </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Отмена</button>
+            </div>
+            <div class="col-md-4">
+                <div class="box box-primary" id="win_less" style="display:none;">
+                    <div class="box-header with-border">
+                        <h3 class="box-title">Настройки</h3>
+
+                        <div class="box-tools pull-right">
+                            <button type="button" class="btn btn-box-tool" data-widget="collapse"><i
+                                    class="fa fa-minus"></i>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="box-body">
+                        <h4>Добавить запись</h4>
+                        <form id="add" action="${pageContext.request.contextPath}/university/teacher/lessons"
+                              method="post">
+                            <div class="form-group">
+                                    <%--<label for="l_sname">Предмет</label>
+                                    <select id="l_sname" name="subject" class="form-control">
+                                        <c:forEach items="${requestScope.get('subjects')}" var="subj">
+                                            <option value="${subj.id}">${subj.sname}</option>
+                                        </c:forEach>
+                                    </select>--%>
+                                <label for="l_date">Дата урока</label>
+                                <input type="text" class="form-control" id="l_date" value="">
+                                <label for="l_name2">Название урока</label>
+                                <div class="input-group input-group-lg">
+                                    <input type="text" class="form-control" id="l_name2" name="name">
+                                    <span class="input-group-btn">
+                                        <button type="submit" class="btn btn-info btn-flat">OK</button>
+                                    </span>
+                                </div>
+                            </div>
+                        </form>
+                        <sec:authorize access="hasRole('ROLE_ADMIN')">
+                        <br/>
+                        <h4>Удалить запись</h4>
+                        <form id="delmodal"
+                              action="${pageContext.request.contextPath}/university/teacher/lessons/delete"
+                              method="post">
+                            <div class="form-group">
+                                <label for="l_name">Название урока</label>
+                                <div class="input-group input-group-lg">
+                                    <input type="text" class="form-control" id="l_name" value="" disabled>
+                                    <input type="hidden" class="form-control" id="l_id" value="" name="idSubj" readonly>
+                                    <span class="input-group-btn">
+                                        <button type="submit" class="btn btn-info btn-flat disabled">OK</button>
+                                    </span>
+                                </div>
+                            </div>
+                        </form>
+                        </sec:authorize>
+                        <!-- /.table-responsive -->
+                    </div>
+                    <!-- /.box-body -->
                 </div>
             </div>
         </div>
-    </div>
     </jsp:body>
 </t:wrapper>

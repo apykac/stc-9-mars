@@ -1,5 +1,6 @@
 package ru.innopolis.stc9.service;
 
+import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import ru.innopolis.stc9.dao.SubjectDao;
@@ -11,14 +12,16 @@ import java.util.List;
 
 @Service
 public class SubjectServiceImpl implements SubjectService {
+    private final Logger logger = Logger.getLogger(SubjectServiceImpl.class);
     @Autowired
     private SubjectDao subjectDao;
     @Autowired
     private EducationService educationService;
 
     @Override
-    public boolean addSubject(Subject subject) {
-        if (subject == null) return false;
+    public boolean addSubject(String name) {
+        if ("".equals(name)) return false;
+        Subject subject = new Subject(name);
         return subjectDao.addSubject(subject);
     }
 
@@ -47,5 +50,25 @@ public class SubjectServiceImpl implements SubjectService {
             }
         }
         return subjectList;
+    }
+
+    /**
+     * Проверка на совпадение
+     *
+     * @param name название предмета
+     */
+    public boolean checkSubjectName(String name) {
+        boolean existSubject = false;
+
+        for (Subject subject : findAllSubject()) {
+            if (name.equals(subject.getName())) {
+                existSubject = true;
+            }
+        }
+
+        if (!existSubject) {
+            addSubject(name);
+        }
+        return existSubject;
     }
 }

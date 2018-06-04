@@ -7,7 +7,6 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
-import ru.innopolis.stc9.pojo.Subject;
 import ru.innopolis.stc9.service.SubjectService;
 import ru.innopolis.stc9.service.SubjectServiceImpl;
 
@@ -34,29 +33,12 @@ public class SubjectController {
      */
     @RequestMapping(method = RequestMethod.POST)
     public String addSubjectMethodPost(@RequestParam(value = "name", required = false) String name, Model model) {
-        Subject subject = new Subject(name);
-        if (checkSubjectName(name)) {
+        if (subjectService.checkSubjectName(name)) {
             model.addAttribute("errorName", "Предмет (" + name + ") присутствует в списке предметов");
         } else {
-            subjectService.addSubject(subject);
             logger.info("subject (" + name + ") added");
         }
         return doGet(model);
-    }
-
-    /**
-     * Проверка на совпадение
-     *
-     * @param name название предмета
-     */
-    private boolean checkSubjectName(String name) {
-        boolean result = false;
-        for (Subject subject : subjectService.findAllSubject()) {
-            if (name.equals(subject.getName())) {
-                result = true;
-            }
-        }
-        return result;
     }
 
     /**
