@@ -9,13 +9,17 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import ru.innopolis.stc9.service.LessonsService;
 import ru.innopolis.stc9.service.LessonsServiceImpl;
+import ru.innopolis.stc9.service.SubjectService;
+import ru.innopolis.stc9.service.SubjectServiceImpl;
 
 @Controller
-@RequestMapping(value = "/views/lessons")
+@RequestMapping(value = "/university/teacher/lessons")
 public class LessonsController {
     private final Logger logger = Logger.getLogger(LessonsController.class);
     @Autowired
     private final LessonsService lessonsService = new LessonsServiceImpl();
+    @Autowired
+    private final SubjectService subjectService = new SubjectServiceImpl();
 
     /**
      * выводим список уроков
@@ -23,6 +27,7 @@ public class LessonsController {
     @RequestMapping(method = RequestMethod.GET)
     private String doGet(Model model) {
         model.addAttribute("lessons", lessonsService.findAllLessons());
+        model.addAttribute("subjects", subjectService.findAllSubject());
         return "views/lessons";
     }
 

@@ -24,7 +24,7 @@
                     </ul>
                 </div>
             </div>
-            <sec:authorize  access="hasAnyRole('ROLE_ADMIN', 'ROLE_STUDENT', 'ROLE_TEACHER')">
+            <sec:authorize access="hasAnyRole('ROLE_ADMIN', 'ROLE_STUDENT', 'ROLE_TEACHER')">
                 <div class="inner cover">
                     <h1 class="cover-heading">Luke, I am Your Father</h1>
                     <p class="lead">
@@ -35,20 +35,21 @@
                         Я сильный страх в тебе ощущаю.
                     </p>
                     <p class="lead">
-                        <a href="${pageContext.request.contextPath}/start_page" class="btn btn-lg btn-default">Ой что бы натворить =)</a>
+                        <a href="${pageContext.request.contextPath}/start" class="btn btn-lg btn-default">Ой что бы
+                            натворить =)</a>
                     </p>
                 </div>
             </sec:authorize>
             <sec:authorize access="isAnonymous()">
-            <div class="inner cover">
-                <h1 class="cover-heading">Учет посещаемости студентов</h1>
-                <p class="lead">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor
-                    incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation
-                    ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
-                <p class="lead">
-                    <a href="${pageContext.request.contextPath}/login" class="btn btn-lg btn-default">Войти</a>
-                </p>
-            </div>
+                <div class="inner cover">
+                    <h1 class="cover-heading">Учет посещаемости студентов</h1>
+                    <p class="lead">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor
+                        incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation
+                        ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
+                    <p class="lead">
+                        <a href="${pageContext.request.contextPath}/login" class="btn btn-lg btn-default">Войти</a>
+                    </p>
+                </div>
             </sec:authorize>
             <div class="mastfoot">
                 <div class="inner">

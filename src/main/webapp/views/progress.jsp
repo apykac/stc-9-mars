@@ -130,7 +130,7 @@
                             <div class="row">
                                 <div class="col-sm-12">
                                     <div id="example_length" class="dataTables_length">
-                                        <form action="${pageContext.request.contextPath}/views/progress/selmarks"
+                                        <form action="${pageContext.request.contextPath}/university/student/progress/selmarks"
                                               method="post">
                                             <div class="form-group">
                                             <span class="input-group margin">

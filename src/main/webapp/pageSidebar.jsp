@@ -20,7 +20,7 @@
         <ul class="sidebar-menu" data-widget="tree">
             <li class="header">MAIN NAVIGATION</li>
             <li>
-                <a href="${pageContext.request.contextPath}/views/progress">
+                <a href="${pageContext.request.contextPath}/university/student/progress">
                     <i class="fa fa-pie-chart"></i> <span>Прогресс</span>
                     <span class="pull-right-container">
               <small class="label pull-right bg-green">Отчет</small>
@@ -32,11 +32,6 @@
                     <i class="fa fa-users"></i> <span>Страница студента</span>
                 </a>
             </li>
-            <li>
-                <a href="${pageContext.request.contextPath}/views/allgroup">
-                    <i class="fa fa-th"></i> <span>Группы</span>
-                </a>
-            </li>
             <sec:authorize access="hasRole('ROLE_ADMIN')">
                 <li>
                     <a href="${pageContext.request.contextPath}/admin/users_list">
@@ -44,16 +39,23 @@
                     </a>
                 </li>
             </sec:authorize>
-            <li>
-                <a href="${pageContext.request.contextPath}/views/subject">
-                    <i class="fa fa-list-ol"></i> <span>Предметы</span>
-                </a>
-            </li>
-            <li>
-                <a href="${pageContext.request.contextPath}/views/lessons">
-                    <i class="fa fa-book"></i> <span>Уроки</span>
-                </a>
-            </li>
+            <sec:authorize access="hasAnyRole('ROLE_ADMIN','ROLE_TEACHER')">
+                <li>
+                    <a href="${pageContext.request.contextPath}/views/allgroup">
+                        <i class="fa fa-th"></i> <span>Группы</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="${pageContext.request.contextPath}/university/teacher/subject">
+                        <i class="fa fa-list-ol"></i> <span>Предметы</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="${pageContext.request.contextPath}/university/teacher/lessons">
+                        <i class="fa fa-book"></i> <span>Уроки</span>
+                    </a>
+                </li>
+            </sec:authorize>
         </ul>
     </section>
     <!-- /.sidebar -->

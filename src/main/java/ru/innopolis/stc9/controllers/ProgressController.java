@@ -14,7 +14,7 @@ import java.util.Arrays;
 import java.util.List;
 
 @Controller
-@RequestMapping(value = "/views/progress")
+@RequestMapping(value = "/university/student/progress")
 public class ProgressController {
     @Autowired
     private ProgressService progressService;
