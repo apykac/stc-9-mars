@@ -3,7 +3,6 @@ package ru.innopolis.stc9.service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import ru.innopolis.stc9.dao.GroupDao;
-import ru.innopolis.stc9.dao.GroupDaoImpl;
 import ru.innopolis.stc9.pojo.Group;
 
 import java.util.List;

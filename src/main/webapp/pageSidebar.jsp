@@ -1,4 +1,4 @@
-<%@ page import="org.springframework.security.core.context.SecurityContextHolder" %>
+<%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <!-- Left side column. contains the logo and sidebar -->
 <aside class="main-sidebar">
@@ -11,7 +11,7 @@
                      alt="User Image">
             </div>
             <div class="pull-left info">
-                <p><%=(String) SecurityContextHolder.getContext().getAuthentication().getName()%>
+                <p>${sessionScope.get('entered_name')}
                 </p>
                 <a href="#"><i class="fa fa-circle text-success"></i> Online</a>
             </div>
@@ -37,11 +37,13 @@
                     <i class="fa fa-th"></i> <span>Группы</span>
                 </a>
             </li>
-            <li>
-                <a href="${pageContext.request.contextPath}/views/users-list">
-                    <i class="fa fa-users"></i> <span>Пользователи</span>
-                </a>
-            </li>
+            <sec:authorize access="hasRole('ROLE_ADMIN')">
+                <li>
+                    <a href="${pageContext.request.contextPath}/admin/users_list">
+                        <i class="fa fa-users"></i> <span>Пользователи</span>
+                    </a>
+                </li>
+            </sec:authorize>
             <li>
                 <a href="${pageContext.request.contextPath}/views/subject">
                     <i class="fa fa-list-ol"></i> <span>Предметы</span>

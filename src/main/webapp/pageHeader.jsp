@@ -1,5 +1,5 @@
-<%@ page import="org.springframework.security.core.context.SecurityContextHolder" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<html>
 <head>
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -148,27 +148,26 @@
               <img src="${pageContext.request.contextPath}/assets/img/user2-160x160.jpg" class="user-image"
                    alt="User Image">
               <!-- hidden-xs hides the username on small devices so only the image appears. -->
-              <span class="hidden-xs"><%=(String) SecurityContextHolder.getContext().getAuthentication().getName()%></span>
+              <span class="hidden-xs">[${sessionScope.get('entered_login')}]</span>
             </a>
             <ul class="dropdown-menu">
               <!-- The user image in the menu -->
               <li class="user-header">
                 <img src="${pageContext.request.contextPath}/assets/img/user2-160x160.jpg" class="img-circle"
                      alt="User Image">
-
                 <p>
-                  <%=(String) SecurityContextHolder.getContext().getAuthentication().getName()%>
+                  ${sessionScope.get('entered_name')}
                   <small>Member since 2018</small>
                 </p>
               </li>
               <!-- Menu Footer-->
               <li class="user-footer">
                 <div class="pull-left">
-                  <a href="${pageContext.request.contextPath}/views/student/studentDashBoard"
+                  <a href="${pageContext.request.contextPath}/university/profile"
                      class="btn btn-default btn-flat">Профиль</a>
                 </div>
                 <div class="pull-right">
-                  <a href="/j_spring_security_logout" class="btn btn-default btn-flat">Выход</a>
+                  <a href="/logout" class="btn btn-default btn-flat">Выход</a>
                 </div>
               </li>
             </ul>

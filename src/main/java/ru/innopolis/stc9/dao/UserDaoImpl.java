@@ -33,7 +33,7 @@ public class UserDaoImpl implements UserDao {
             statement.execute();
             logger.info("Adding user successfully");
         } catch (SQLException e) {
-            logger.error(e.getMessage());
+            logger.error("SQLException: " + e.getMessage());
             return false;
         }
         return true;
@@ -50,7 +50,7 @@ public class UserDaoImpl implements UserDao {
                 if (resultSet.next()) result = UserMapper.getByResultSet(resultSet);
             }
         } catch (SQLException e) {
-            logger.info(e.getMessage());
+            logger.info("SQLException: " + e.getMessage());
         }
         return result;
     }
@@ -69,7 +69,7 @@ public class UserDaoImpl implements UserDao {
                 logger.info("Users list returned successfully");
             }
         } catch (SQLException e) {
-            logger.error(e.getMessage());
+            logger.info("SQLException: " + e.getMessage());
         }
         return result;
     }
@@ -82,14 +82,14 @@ public class UserDaoImpl implements UserDao {
              PreparedStatement statement = connection.prepareStatement(
                      "UPDATE users SET first_name = ?, second_name = ?, middle_name = ?, group_id = ?, login = ?, enabled = ? " +
                              "WHERE id = ?")) {
-            UserMapper.statementSetter(statement, newUser, 3,1, 4);
+            UserMapper.statementSetter(statement, newUser, 3, 1, 4);
             statement.setString(5, newUser.getLogin());
             statement.setInt(6, newUser.getEnabled());
             statement.setInt(7, newUser.getId());
             statement.execute();
             logger.info("User updated successfully");
         } catch (SQLException e) {
-            logger.error(e.getMessage());
+            logger.info("SQLException: " + e.getMessage());
             return false;
         }
         return true;
@@ -107,7 +107,7 @@ public class UserDaoImpl implements UserDao {
             statement.execute();
             logger.info("User updated successfully");
         } catch (SQLException e) {
-            logger.error(e.getMessage());
+            logger.info("SQLException: " + e.getMessage());
             return false;
         }
         return true;
@@ -126,7 +126,7 @@ public class UserDaoImpl implements UserDao {
                 if (resultSet.next()) user = UserMapper.getByResultSet(resultSet);
             }
         } catch (SQLException e) {
-            logger.error(e.getMessage());
+            logger.info("SQLException: " + e.getMessage());
             return null;
         }
         return user;

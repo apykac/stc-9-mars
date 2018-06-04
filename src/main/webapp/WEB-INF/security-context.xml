@@ -10,7 +10,7 @@
     <http auto-config="true">
         <csrf disabled="true"/>
 
-        <intercept-url pattern="/logout" access="permitAll()" />
+        <intercept-url pattern="/logout" access="hasAnyRole('ROLE_ADMIN', 'ROLE_TEACHER', 'ROLE_STUDENT')" />
         <intercept-url pattern="/login" access="permitAll()"/>
         <intercept-url pattern="/registration" access="permitAll()"/>
         <intercept-url pattern="/css/**" access="permitAll()"/>
@@ -21,8 +21,7 @@
 
                     login-page="/login"
                     authentication-failure-url="/login?errorMsg=authError"
-                    default-target-url="/views/progress"
-                    always-use-default-target="true"/>
+                    default-target-url="/start" always-use-default-target="true"/>
         <logout logout-url="/j_spring_security_logout"/>
     </http>
 
