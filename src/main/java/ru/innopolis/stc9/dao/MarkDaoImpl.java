@@ -63,6 +63,28 @@ public class MarkDaoImpl implements MarkDao {
     }
 
     @Override
+    public boolean addMark(Mark mark) {
+        if (mark == null) {
+            return false;
+        }
+        logger.info("Started adding mark for student id " + mark.getUserId() + " and lesson id " + mark.getLessonId());
+        try (Connection connection = connectionManager.getConnection();
+             PreparedStatement statement = connection.prepareStatement(
+                     "INSERT INTO marks (user_id, lesson_id) VALUES (?, ?)"
+             )) {
+            statement.setInt(1, mark.getUserId());
+            statement.setInt(2, mark.getLessonId());
+            statement.execute();
+            logger.info("Mark for student id " + mark.getUserId() + " and lesson id " + mark.getLessonId() + " added successfully.");
+            return true;
+        } catch (SQLException e) {
+            logger.error(e.getMessage());
+            return false;
+        }
+
+    }
+
+    @Override
     public boolean updateMark(Mark mark) {
         if (mark == null) {
             return false;

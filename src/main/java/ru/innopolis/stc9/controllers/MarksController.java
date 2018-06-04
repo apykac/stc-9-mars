@@ -9,13 +9,15 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 import ru.innopolis.stc9.pojo.Mark;
+import ru.innopolis.stc9.service.HomeWorkService;
 import ru.innopolis.stc9.service.MarkService;
-import ru.innopolis.stc9.service.MarkServiceImpl;
 
 @Controller
 public class MarksController {
     @Autowired
-    private final MarkService markService = new MarkServiceImpl();
+    private MarkService markService;
+    @Autowired
+    private HomeWorkService homeWorkService;
 
     @RequestMapping(value = "/views/marks", method = RequestMethod.GET)
     private String getMarks(@RequestParam int lessonId, Model model) {
@@ -28,6 +30,7 @@ public class MarksController {
     public String forMarkUpdate(@PathVariable("id") int id, Model model) {
         model.addAttribute("studentName", markService.getFullStudentNameInOneString(id));
         model.addAttribute("lessonName", markService.getLessonNameByMarkId(id));
+        model.addAttribute("homeworkContent", homeWorkService.findHomeWorkByMarkId(id));
         model.addAttribute("value", markService.getMarkById(id).getValue());
         model.addAttribute("comment", markService.getMarkById(id).getComment());
         model.addAttribute("id", id);

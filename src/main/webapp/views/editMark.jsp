@@ -18,8 +18,19 @@
                         Урок: ${requestScope.get("lessonName")}
                     </div>
                 </div>
+
                 <form class="form-horizontal" id="add" action="${pageContext.request.contextPath}/views/updateMark"
                       method="post">
+
+                    <div class="form-group">
+                        <label for="value" class="col-sm-3 control-label">Ссылка на ДЗ</label>
+                        <div class="col-sm-9"><input type="text" class="form-control" id="homeworkContent1"
+                                                     placeholder="Homework content"
+                                                     name="homeworkContent"
+                                                     value="${requestScope.get("homeworkContent")}"
+                                                     readonly></div>
+                    </div>
+
                     <div class="form-group">
                         <label for="value" class="col-sm-3 control-label">Оценка</label>
                         <div class="col-sm-9"><input type="text" class="form-control" id="value"

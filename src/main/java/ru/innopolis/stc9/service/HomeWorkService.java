@@ -15,6 +15,8 @@ public interface HomeWorkService {
     HomeWork findById(int id);
     HomeWork findByStudentId(int studentId);
     HomeWork findByLessonId(int lessonId);
+
+    String findHomeWorkByMarkId(int markId);
     List<HomeWork> findAllHomeWork();
     boolean deleteHomeWork(int id);
 }

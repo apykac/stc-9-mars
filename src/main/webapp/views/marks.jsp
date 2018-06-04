@@ -5,7 +5,8 @@
     <div class="row">
         <div class="col-md-12 panel-warning">
             <div class="content-box-header">
-                <div class="panel-title ">Оценки за урок ${requestScope.get("lessonName")}</div>
+                <div class="panel-title ">Список студентов, сдавших домашнее задание по
+                    уроку ${requestScope.get("lessonName")}</div>
             </div>
             <div class="content-box-large box-with-header">
                 <table class="table">
@@ -20,8 +21,8 @@
                         <tr>
                             <td>${pair.key}</td>
                             <td>${pair.value.value}</td>
-                            <td><a href="${pageContext.request.contextPath}/views/editMark/${pair.value.id}">Редактировать
-                                оценку</a></td>
+                            <td><a href="${pageContext.request.contextPath}/views/editMark/${pair.value.id}">Просмотр
+                                ДЗ/Редактирование оценки</a></td>
                         </tr>
                     </c:forEach>
                     </tbody>

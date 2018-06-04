@@ -3,7 +3,9 @@ package ru.innopolis.stc9.service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import ru.innopolis.stc9.dao.HomeWorkDao;
+import ru.innopolis.stc9.dao.MarkDao;
 import ru.innopolis.stc9.pojo.HomeWork;
+import ru.innopolis.stc9.pojo.Mark;
 
 import java.util.List;
 
@@ -14,9 +16,19 @@ import java.util.List;
 public class HomeWorkServiceImpl implements HomeWorkService {
     @Autowired
     private HomeWorkDao homeWorkDao;
+    @Autowired
+    private MarkDao markDao;
+
     @Override
     public boolean addHomeWork(HomeWork homeWork) {
-        return homeWorkDao.addHomeWork(homeWork);
+        boolean addHomeWorkSuccess = homeWorkDao.addHomeWork(homeWork);
+        if (addHomeWorkSuccess) {
+            Mark mark = new Mark();
+            mark.setUserId(homeWork.getStudentId());
+            mark.setLessonId(homeWork.getLessonId());
+            markDao.addMark(mark);
+        }
+        return addHomeWorkSuccess;
     }
 
     @Override
@@ -37,6 +49,15 @@ public class HomeWorkServiceImpl implements HomeWorkService {
     @Override
     public HomeWork findByLessonId(int lessonId) {
         return homeWorkDao.findByLessonId(lessonId);
+    }
+
+    @Override
+    public String findHomeWorkByMarkId(int markId) {
+        Mark mark = markDao.getMarkById(markId);
+        int studentId = mark.getUserId();
+        int lessonId = mark.getLessonId();
+        HomeWork homeWork = homeWorkDao.findHomeWorkByStudentIdAndLessonId(studentId, lessonId);
+        return homeWork.getHomeWorkURL();
     }
 
     @Override
