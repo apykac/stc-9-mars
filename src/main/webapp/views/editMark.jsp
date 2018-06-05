@@ -19,7 +19,8 @@
                     </div>
                 </div>
 
-                <form class="form-horizontal" id="add" action="${pageContext.request.contextPath}/views/updateMark"
+                <form class="form-horizontal" id="add"
+                      action="${pageContext.request.contextPath}/university/teacher/updateMark"
                       method="post">
 
                     <div class="form-group">

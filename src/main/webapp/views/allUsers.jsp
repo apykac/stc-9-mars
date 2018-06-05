@@ -21,7 +21,7 @@
                     </thead>
                     <tbody>
                     <c:forEach items="${requestScope.get('usersList')}" var="user">
-                        <c:if test="${(user.id != sessionScope.get('entered_user_id')) && (user.permissionGroup != 'ROLE_ADMIN')}">
+                        <c:if test="${((user.id != sessionScope.get('entered_user_id')) && (user.permissionGroup != 'ROLE_ADMIN')) || (user.enabled == 0)}">
                             <tr>
                                 <td>${user.login}</td>
                                 <td>${user.firstName}</td>

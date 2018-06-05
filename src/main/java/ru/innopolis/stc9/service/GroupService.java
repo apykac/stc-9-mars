@@ -10,9 +10,14 @@ import java.util.List;
  */
 public interface GroupService {
     boolean addGroup(Group group);
+
     boolean updateGroup(Group group);
+
     boolean deleteGroup(int groupId);
+
     Group findGroupById(int id);
+
     Group findGroupByName(String name);
+
     List<Group> findAllGroups();
 }

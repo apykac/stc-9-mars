@@ -7,13 +7,19 @@
 	http://www.springframework.org/schema/security
 	http://www.springframework.org/schema/security/spring-security-4.2.xsd">
 
+    <http pattern="assets/**" security="none"/>
+    <http pattern="css/**" security="none"/>
+
     <http auto-config="true">
         <csrf disabled="true"/>
 
         <intercept-url pattern="/logout" access="hasAnyRole('ROLE_ADMIN', 'ROLE_TEACHER', 'ROLE_STUDENT')" />
         <intercept-url pattern="/login" access="permitAll()"/>
+        <intercept-url pattern="/start" access="permitAll()"/>
         <intercept-url pattern="/registration" access="permitAll()"/>
-        <intercept-url pattern="/css/**" access="permitAll()"/>
+        <intercept-url pattern="/university/" access="hasAnyRole('ROLE_ADMIN', 'ROLE_TEACHER', 'ROLE_STUDENT')"/>
+        <intercept-url pattern="/university/teacher/" access="hasAnyRole('ROLE_ADMIN', 'ROLE_TEACHER')"/>
+        <intercept-url pattern="/university/admin/" access="hasRole('ROLE_ADMIN')"/>
 
         <form-login login-processing-url="/j_spring_security_check"
                     username-parameter="j_username"
@@ -32,6 +38,7 @@
         <beans:property name="username" value="sql7239469" />
         <beans:property name="password" value="vrKWZga2bt" />
     </beans:bean>
+
 
     <beans:bean id="encoder" class="org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder"/>
 

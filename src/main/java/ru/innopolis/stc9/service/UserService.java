@@ -10,6 +10,8 @@ public interface UserService {
 
     boolean addUserByParam(MultiValueMap<String, String> incParam);
 
+    boolean delUserById(int id);
+
     boolean isExist(String login);
 
     List<User> getUserList();
@@ -23,6 +25,10 @@ public interface UserService {
     User findUserById(int userId);
 
     User findUserByLogin(String login);
+
+    boolean deactivationCurrentAccount(int id);
+
+    boolean checkPasswordOfCurrentAccount(int id, String candidate);
 
     Object[] editUser(MultiValueMap<String, String> incParam);
 }

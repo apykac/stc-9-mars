@@ -14,10 +14,7 @@ import javax.servlet.http.HttpSession;
 @Controller
 public class LoginController {
     private static Logger logger = Logger.getLogger(LoginController.class);
-    private static String userId = "entered_user_id";
-    private static String login = "entered_login";
-    private static String name = "entered_name";
-    private static String role = "entered_role";
+
     @Autowired
     private UserService userService;
 
@@ -26,29 +23,31 @@ public class LoginController {
         return "login";
     }
 
-    @RequestMapping(value = "/start", method = RequestMethod.GET)
+    @RequestMapping(value = {"/start", "/university/start"}, method = RequestMethod.GET)
     public String startPage(HttpSession session) {
-        if (session.getAttribute(userId) == null) {
+        if (session.getAttribute(SessionDataInform.ID) == null) {
             User user = userService.findUserByLogin(SecurityContextHolder.getContext().getAuthentication().getName());
-            session.setAttribute(userId, user.getId());
-            session.setAttribute(login, user.getLogin());
-            session.setAttribute(name, user.getFirstName() + " " + user.getSecondName());
-            session.setAttribute(role, user.getPermissionGroup());
+            session.setAttribute(SessionDataInform.ID, user.getId());
+            session.setAttribute(SessionDataInform.LOGIN, user.getLogin());
+            session.setAttribute(SessionDataInform.NAME, user.getFirstName() + " " + user.getSecondName());
+            session.setAttribute(SessionDataInform.ROLE, user.getPermissionGroup());
             logger.info("User: [" + user.getId() + "] " + user.getLogin() + " is login");
         }
-
         return "views/startPage";
     }
 
     @RequestMapping(value = "/logout", method = RequestMethod.GET)
     public String logout(HttpSession session) {
-        if (session.getAttribute(userId) != null) {
-            logger.info("User: [" + session.getAttribute(userId) + "] " + session.getAttribute(login) + " is logout");
-            session.removeAttribute(userId);
-            session.removeAttribute(login);
-            session.removeAttribute(name);
-            session.removeAttribute(role);
+        if (session.getAttribute(SessionDataInform.ID) != null) {
+            logger.info("User: [" + session.getAttribute(SessionDataInform.ID) + "] "
+                    + session.getAttribute(SessionDataInform.LOGIN) + " is logout");
+            session.removeAttribute(SessionDataInform.ID);
+            session.removeAttribute(SessionDataInform.LOGIN);
+            session.removeAttribute(SessionDataInform.NAME);
+            session.removeAttribute(SessionDataInform.ROLE);
         }
         return "redirect:/j_spring_security_logout";
     }
+
+
 }

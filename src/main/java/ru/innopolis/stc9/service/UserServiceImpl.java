@@ -12,7 +12,7 @@ import ru.innopolis.stc9.pojo.User;
 import java.util.ArrayList;
 import java.util.List;
 
-@Service
+@Service("userServiceImpl")
 public class UserServiceImpl implements UserService {
     @Autowired
     private UserDao userDao;
@@ -64,6 +64,12 @@ public class UserServiceImpl implements UserService {
                 incParam.get(UserField.SNAME).get(0),
                 incParam.get(UserField.MNAME).get(0));
         return userDao.addUser(user);
+    }
+
+    @Override
+    public boolean delUserById(int id) {
+        if (id < 0) return false;
+        return userDao.delUserById(id);
     }
 
     @Override
@@ -129,16 +135,33 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    public boolean checkPasswordOfCurrentAccount(int id, String candidate) {
+        if (id < 0) return false;
+        User user = findUserById(id);
+        return CryptService.isMatched(candidate, user.getHashPassword());
+    }
+
+    @Override
+    public boolean deactivationCurrentAccount(int id) {
+        if (id < 0) return false;
+        return userDao.deactivateUser(id);
+    }
+
+    @Override
     public Object[] editUser(MultiValueMap<String, String> incParam) {
-        Object[] result = new Object[2];
+        Object[] result = new Object[3];
         List<String> success = new ArrayList<>();
         List<String> errors = isCorrectData(incParam);
         result[0] = errors;
         result[1] = success;
+        result[2] = false;
         if (!errors.isEmpty()) return result;
         User user = UserMapper.getByParam(incParam);
         if (!userDao.updateUserByFIOL(user)) errors.add("Invalid/Exist Login");
-        else success.add("Updating profile FIO success successfully");
+        else {
+            result[2] = true;
+            success.add("Updating profile FIO success successfully");
+        }
         if ((user.getHashPassword() != null) && !user.getHashPassword().isEmpty()) {
             String incPass = checkPasswordUpdateIsPossible(incParam, user);
             if (!incPass.isEmpty()) {

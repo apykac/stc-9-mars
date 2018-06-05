@@ -9,12 +9,18 @@ import java.util.List;
  */
 public interface HomeWorkDao {
     boolean addHomeWork(HomeWork homeWork);
+
     boolean updateHomeWork(HomeWork homeWork);
+
     HomeWork findById(int id);
+
     HomeWork findByStudentId(int studentId);
+
     HomeWork findByLessonId(int lessonId);
 
     HomeWork findHomeWorkByStudentIdAndLessonId(int studentId, int lessonId);
+
     List<HomeWork> findAllHomeWork();
+
     boolean deleteHomeWork(int id);
 }
