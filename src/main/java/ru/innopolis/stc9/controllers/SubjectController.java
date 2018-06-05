@@ -36,6 +36,7 @@ public class SubjectController {
         if (subjectService.checkSubjectName(name)) {
             model.addAttribute("errorName", "Предмет (" + name + ") присутствует в списке предметов");
         } else {
+            subjectService.addSubject(name);
             logger.info("subject (" + name + ") added");
         }
         return doGet(model);

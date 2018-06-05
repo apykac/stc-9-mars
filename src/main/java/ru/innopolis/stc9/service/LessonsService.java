@@ -2,13 +2,15 @@ package ru.innopolis.stc9.service;
 
 import ru.innopolis.stc9.pojo.Lessons;
 
+import java.sql.Date;
 import java.util.List;
 
 public interface LessonsService {
     boolean addLesson(Lessons lesson);
 
-    void deleteLesson(int lessonId);
+    boolean deleteLesson(int lessonId);
 
     List<Lessons> findAllLessons();
 
+    Date stringToDate(String strDate);
 }

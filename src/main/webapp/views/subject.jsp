@@ -49,8 +49,9 @@
                                                 idsubj="${subjects.id}"
                                                 namesubj="${subjects.name}"
                                                 style="cursor:pointer">
+
                                                 <td>${subjects.name}</td>
-                                                <td>Редактировать</td>
+                                                <td>Edit</td>
                                             </tr>
                                         </c:forEach>
                                         </tbody>
@@ -101,7 +102,7 @@
                                     <input type="text" class="form-control" id="m_name" value="" disabled>
                                     <input type="hidden" class="form-control" id="m_id" value="" name="idSubj" readonly>
                                     <span class="input-group-btn">
-                                        <button type="submit" class="btn btn-info btn-flat disabled">OK</button>
+                                        <button type="submit" class="btn btn-info btn-flat">OK</button>
                                     </span>
                                 </div>
                             </div>

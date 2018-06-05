@@ -7,6 +7,7 @@ import ru.innopolis.stc9.db.connection.ConnectionManagerImpl;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 
 @Component
@@ -37,4 +38,32 @@ public class AttendanceDaoImpl implements AttendanceDao {
         }
         return result;
     }
+
+    @Override
+    public int getNumberOfMissedLessons(int id) {
+        int result = 0;
+        if (id <= 0) {
+            return result;
+        }
+        try (Connection connection = connectionManager.getConnection();
+             PreparedStatement statement = connection.prepareStatement(
+                     "SELECT " +
+                             "COUNT(lessons.name)" +
+                             "-" +
+                             "(SELECT COUNT(attendance.user_id) FROM attendance WHERE attendance.user_id = ?) as number " +
+                             "FROM lessons")) {
+            statement.setInt(1, id);
+            try (ResultSet resultSet = statement.executeQuery()) {
+                while (resultSet.next()) {
+                    result = resultSet.getInt("number");
+                }
+                logger.info("number of missed lessons = " + id);
+            }
+        } catch (SQLException e) {
+            logger.info(e.getMessage());
+        }
+        return result;
+    }
+
+
 }
