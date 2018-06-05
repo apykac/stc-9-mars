@@ -35,7 +35,7 @@ public class GroupController {
     /**
      * выводи список всех групп
      */
-    @RequestMapping("/views/allgroup")
+    @RequestMapping("/university/teacher/allgroup")
     public String viewAllGroups(Model model) {
         model.addAttribute(attributeGroups, groupService.findAllGroups());
         logger.info("view all groups");
@@ -47,7 +47,7 @@ public class GroupController {
      *
      * @param name имя группы
      */
-    @RequestMapping("/views/addgroups")
+    @RequestMapping("/university/teacher/addgroups")
     public String addGroup(@RequestParam("name") String name, Model model) {
         Group tempGroup = new Group(name);
         for (Group g : groupService.findAllGroups()) {
@@ -70,7 +70,7 @@ public class GroupController {
      *
      * @param id - идентификатор группы
      */
-    @RequestMapping("/views/group/{id}")
+    @RequestMapping("/university/teacher/group/{id}")
     public String forUpdateGroup(@PathVariable("id") int id, Model model) {
 
         model.addAttribute(attributeGroupName, groupService.findGroupById(id).getName());
@@ -87,7 +87,7 @@ public class GroupController {
      * @param name - имя группы
      * @param id   - идентификатор
      */
-    @RequestMapping("/views/updateGroup")
+    @RequestMapping("/university/teacher/updateGroup")
     public String updateGroup(@RequestParam("name") String name, @RequestParam("id") int id, Model model) {
         Group tempGroup = groupService.findGroupById(id);
         tempGroup.setName(name);
@@ -115,7 +115,7 @@ public class GroupController {
      *
      * @param id - идентификатор удаляемой группы
      */
-    @RequestMapping("/views/deleteGroup")
+    @RequestMapping("/university/teacher/deleteGroup")
     public String deleteGroup(@RequestParam("id") int id, Model model) {
         groupService.deleteGroup(id);
         model.addAttribute(attributeGroups, groupService.findAllGroups());
@@ -129,7 +129,7 @@ public class GroupController {
      * @param id        - идентификатор группы
      * @param studentId - идентификатор студента
      */
-    @RequestMapping("/views/addStudent")
+    @RequestMapping("/university/teacher/addStudent")
     public String addStudentToGroup(@RequestParam("id") int id, @RequestParam("studentId") int studentId, Model model) {
         User user = userService.findUserById(studentId);
         user.setGroupId(id);
@@ -149,7 +149,7 @@ public class GroupController {
      * @param id        - идентификатор группы
      * @param studentId - идентификатор студента
      */
-    @RequestMapping("/views/group/deleteStudentFromGroup/{id}/{studentId}")
+    @RequestMapping("/university/teacher/group/deleteStudentFromGroup/{id}/{studentId}")
     public String deleteStudentFromGroup(@PathVariable("id") int id, @PathVariable("studentId") int studentId, Model model) {
         User user = userService.findUserById(studentId);
         user.setGroupId(0);

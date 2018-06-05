@@ -11,7 +11,7 @@ import ru.innopolis.stc9.service.LessonsService;
 import ru.innopolis.stc9.service.LessonsServiceImpl;
 
 @Controller
-@RequestMapping(value = "/views/lessons")
+@RequestMapping(value = "/university/teacher/lessons")
 public class LessonsController {
     private final Logger logger = Logger.getLogger(LessonsController.class);
     @Autowired

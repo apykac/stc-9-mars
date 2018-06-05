@@ -23,14 +23,14 @@ public class AttendanceController {
     @Autowired
     private AttendanceService attendanceService;
 
-    @RequestMapping(value = "/views/attendance", method = RequestMethod.GET)
+    @RequestMapping(value = "/university/teacher/attendance", method = RequestMethod.GET)
     private String getGroups(@RequestParam int lessonId, Model model) {
         model.addAttribute("lessonId", lessonId);
         model.addAttribute("groups", groupService.findAllGroups());
         return defaultPath;
     }
 
-    @RequestMapping(value = "/views/attendanceSelectGroup")
+    @RequestMapping(value = "/university/teacher/attendanceSelectGroup")
     private String editAttendance(@RequestParam("selectGroup") int groupId, @RequestParam("lessonId") int lessonId, Model model) {
         model.addAttribute("lessonId", lessonId);
         model.addAttribute("groupSelected", groupService.findGroupById(groupId));
@@ -38,7 +38,7 @@ public class AttendanceController {
         return defaultPath;
     }
 
-    @RequestMapping(value = "/views/attendanceSendStudentsList", method = RequestMethod.POST)
+    @RequestMapping(value = "/university/teacher/attendanceSendStudentsList", method = RequestMethod.POST)
     private String sendStudentsList(@RequestParam("list") int[] studentsList, @RequestParam("lessonId") int lessonId, Model model) {
         for (int i = 0; i < studentsList.length; i++) {
             logger.info("student id " + studentsList[i]);

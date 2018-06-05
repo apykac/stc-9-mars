@@ -36,7 +36,7 @@ public class StudentController {
     private String studentPage = "views/studentPage";
     private String studentLessons = "views/studentLessons";
 
-    @RequestMapping("/views/student/studentDashBoard")
+    @RequestMapping("/university/student/studentDashBoard")
     public String studentView(Model model) {
         org.springframework.security.core.userdetails.User activeUser =
                 (org.springframework.security.core.userdetails.User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
@@ -50,7 +50,7 @@ public class StudentController {
         return studentPage;
     }
 
-    @RequestMapping("/views/student/update")
+    @RequestMapping("/university/student/update")
     public String updateStudent(@RequestParam("userId") int userId, @RequestParam("editFirstName") String firstName,
                                 @RequestParam("editLastName") String lastName,
                                 @RequestParam("editMiddleName") String middleName) {
@@ -60,10 +60,10 @@ public class StudentController {
         student.setMiddleName(middleName);
         userService.updateUser(student);
         logger.info("student updated");
-        return "redirect:/views/student/studentDashBoard";
+        return "redirect:/university/student/studentDashBoard";
     }
 
-    @RequestMapping("/views/student/subject/{subjectId}")
+    @RequestMapping("/university/student/subject/{subjectId}")
     public String viewLessonForSubject(@PathVariable("subjectId") int subjectId, Model model) {
         ArrayList<Lessons> lessons = new ArrayList<>();
         for(Lessons l: lessonsService.findAllLessons()) {

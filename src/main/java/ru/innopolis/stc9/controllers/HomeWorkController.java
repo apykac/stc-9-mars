@@ -26,13 +26,13 @@ public class HomeWorkController {
     private String attributeLessonId = "lessonId";
 
 
-    @RequestMapping("views/homework/lessonId/{lessonId}")
+    @RequestMapping("/university/student/homework/lessonId/{lessonId}")
     public String viewHomeWorkForm(@PathVariable("lessonId") int lessonId, Model model) {
         model.addAttribute(attributeLessonId, lessonId);
         return addHomeWork;
     }
 
-    @RequestMapping("views/homework/add")
+    @RequestMapping("/university/student/homework/add")
     public String addHomeWork(@RequestParam("url") String url, @RequestParam("lessonId") int lessonId,  Model model) {
         if(url.length() > 200) {
             model.addAttribute("error", "Слишком длинная ссылка! Сократите");
@@ -49,7 +49,7 @@ public class HomeWorkController {
         homeWorkService.addHomeWork(new HomeWork(url, userService.findUserByLogin(activeUser.getUsername()).getId(), lessonId));
         model.addAttribute(attributeLessonId, lessonId);
         logger.info("Homework added");
-        return "redirect: /views/student/studentDashBoard" ;
+        return "redirect:/university/student/studentDashBoard";
     }
 
 

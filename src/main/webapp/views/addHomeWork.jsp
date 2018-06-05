@@ -16,7 +16,8 @@
                 <div class="panel-title ">Введите ссылку на домашнее задание:</div>
             </div>
             <div class="content-box-large box-with-header">
-                <form class="form-horizontal" id="add" action="${pageContext.request.contextPath}/views/homework/add"
+                <form class="form-horizontal" id="add"
+                      action="${pageContext.request.contextPath}/university/student/homework/add"
                       method="post">
                     <div class="form-group">
                         <label for="nameGr" class="col-sm-2 control-label">Введите</label>

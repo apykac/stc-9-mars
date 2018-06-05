@@ -10,9 +10,9 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
 
-@WebFilter("/university/teacher/*")
-public class TeacherFilter implements Filter {
-    private static Logger logger = Logger.getLogger(TeacherFilter.class);
+@WebFilter("/university/student/*")
+public class StudentFilter implements Filter {
+    private static Logger logger = Logger.getLogger(StartFilter.class);
 
     @Override
     public void init(FilterConfig filterConfig) {
@@ -25,8 +25,7 @@ public class TeacherFilter implements Filter {
         HttpServletResponse resp = (HttpServletResponse) response;
         HttpSession session = req.getSession();
         try {
-            if (!("ROLE_ADMIN".equals(session.getAttribute(SessionDataInform.ROLE)) ||
-                    "ROLE_TEACHER".equals(session.getAttribute(SessionDataInform.ROLE)))) {
+            if (!"ROLE_STUDENT".equals(session.getAttribute(SessionDataInform.ROLE))) {
                 if (session.getAttribute(SessionDataInform.ID) == null)
                     resp.sendRedirect(req.getContextPath() + "/login");
                 else resp.sendRedirect(req.getContextPath() + "/university/start");
