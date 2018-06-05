@@ -39,7 +39,7 @@ public class AttendanceController {
         return defaultPath;
     }
 
-    @RequestMapping(value = "/views/attendanceSendStudentsList", method = RequestMethod.POST)
+    @RequestMapping(value = "/university/teacher/attendanceSendStudentsList", method = RequestMethod.POST)
     private String sendStudentsList(@RequestParam("list") int[] studentsList, @RequestParam("lessonId") int lessonId, Model model) {
         for (int i = 0; i < studentsList.length; i++) {
             logger.info("student id " + studentsList[i]);
