@@ -21,6 +21,9 @@ import java.util.List;
 public class HomeWorkDaoImpl implements HomeWorkDao {
     private Logger logger = Logger.getLogger(GroupDaoImpl.class);
     private static ConnectionManager connectionManager = ConnectionManagerImpl.getInstance();
+    private String clmHwURL = "h_w_url";
+    private String clmStudentId = "student_id";
+    private String clmLessonId = "lesson_id";
 
     @Override
     public boolean addHomeWork(HomeWork homeWork) {
@@ -68,8 +71,8 @@ public class HomeWorkDaoImpl implements HomeWorkDao {
              PreparedStatement statement = connection.prepareStatement("SELECT * FROM home_work WHERE id = ?")) {
             statement.setInt(1, id);
             try (ResultSet set = statement.executeQuery()) {
-                while (set.next()) homeWork = new HomeWork(set.getInt("id"), set.getString("h_w_url"),
-                        set.getInt("student_id"), set.getInt("lesson_id"));
+                while (set.next()) homeWork = new HomeWork(set.getInt("id"), set.getString(clmHwURL),
+                        set.getInt(clmStudentId), set.getInt(clmLessonId));
             }
             logger.info("get homework by id");
             return homeWork;
@@ -87,8 +90,8 @@ public class HomeWorkDaoImpl implements HomeWorkDao {
              PreparedStatement statement = connection.prepareStatement("SELECT * FROM home_work WHERE student_id = ?")) {
             statement.setInt(1, studentId);
             try (ResultSet set = statement.executeQuery()) {
-                while (set.next()) homeWork = new HomeWork(set.getInt("id"), set.getString("h_w_url"),
-                        set.getInt("student_id"), set.getInt("lesson_id"));
+                while (set.next()) homeWork = new HomeWork(set.getInt("id"), set.getString(clmHwURL),
+                        set.getInt(clmStudentId), set.getInt(clmLessonId));
             }
             logger.info("get homework by student_id");
             return homeWork;
@@ -106,8 +109,8 @@ public class HomeWorkDaoImpl implements HomeWorkDao {
              PreparedStatement statement = connection.prepareStatement("SELECT * FROM home_work WHERE lesson_id = ?")) {
             statement.setInt(1, lessonId);
             try (ResultSet set = statement.executeQuery()) {
-                while (set.next()) homeWork = new HomeWork(set.getInt("id"), set.getString("h_w_url"),
-                        set.getInt("student_id"), set.getInt("lesson_id"));
+                while (set.next()) homeWork = new HomeWork(set.getInt("id"), set.getString(clmHwURL),
+                        set.getInt(clmStudentId), set.getInt(clmLessonId));
             }
             logger.info("get homework by lesson_id");
             return homeWork;
@@ -129,9 +132,9 @@ public class HomeWorkDaoImpl implements HomeWorkDao {
             try (ResultSet set = statement.executeQuery()) {
                 if (set.next()) {
                     homeWork = new HomeWork(set.getInt("id"),
-                            set.getString("h_w_url"),
-                            set.getInt("student_id"),
-                            set.getInt("lesson_id"));
+                            set.getString(clmHwURL),
+                            set.getInt(clmStudentId),
+                            set.getInt(clmLessonId));
                 }
             }
             logger.info("Homework by student id and lesson id successfully returned.");
@@ -149,8 +152,8 @@ public class HomeWorkDaoImpl implements HomeWorkDao {
              PreparedStatement statement = connection.prepareStatement("SELECT * FROM home_work");
              ResultSet set = statement.executeQuery()) {
             while (set.next()) {
-                HomeWork homeWork = new HomeWork(set.getInt("id"), set.getString("h_w_url"),
-                        set.getInt("student_id"), set.getInt("lesson_id"));
+                HomeWork homeWork = new HomeWork(set.getInt("id"), set.getString(clmHwURL),
+                        set.getInt(clmStudentId), set.getInt(clmLessonId));
                 list.add(homeWork);
             }
             logger.info("get all homeworks");

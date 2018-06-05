@@ -2,15 +2,19 @@ package ru.innopolis.stc9.controllers;
 
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.*;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.*;
-import ru.innopolis.stc9.pojo.*;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import ru.innopolis.stc9.pojo.Lessons;
+import ru.innopolis.stc9.pojo.Subject;
 import ru.innopolis.stc9.pojo.User;
-import ru.innopolis.stc9.service.*;
+import ru.innopolis.stc9.service.GroupService;
+import ru.innopolis.stc9.service.LessonsService;
+import ru.innopolis.stc9.service.SubjectService;
+import ru.innopolis.stc9.service.UserService;
 
 import java.util.ArrayList;
 import java.util.List;

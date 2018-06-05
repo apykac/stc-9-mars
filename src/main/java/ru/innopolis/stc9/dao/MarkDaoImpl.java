@@ -17,6 +17,7 @@ import java.util.List;
 public class MarkDaoImpl implements MarkDao {
     private static ConnectionManager connectionManager = ConnectionManagerImpl.getInstance();
     private Logger logger = Logger.getLogger(MarkDaoImpl.class);
+    private String loggerPrefix = "Mark with id ";
 
     @Override
     public List<Mark> getMarksByLessonId(int lessonId) {
@@ -43,7 +44,7 @@ public class MarkDaoImpl implements MarkDao {
 
     @Override
     public Mark getMarkById(int id) {
-        logger.info("Mark with id " + id + " requested");
+        logger.info(loggerPrefix + id + " requested");
         Mark result = null;
         try (Connection connection = connectionManager.getConnection();
              PreparedStatement statement = connection.prepareStatement(
@@ -75,7 +76,7 @@ public class MarkDaoImpl implements MarkDao {
             statement.setInt(1, mark.getUserId());
             statement.setInt(2, mark.getLessonId());
             statement.execute();
-            logger.info("Mark for student id " + mark.getUserId() + " and lesson id " + mark.getLessonId() + " added successfully.");
+            logger.info(loggerPrefix + mark.getUserId() + " and lesson id " + mark.getLessonId() + " added successfully.");
             return true;
         } catch (SQLException e) {
             logger.error(e.getMessage());
@@ -98,7 +99,7 @@ public class MarkDaoImpl implements MarkDao {
             statement.setString(2, mark.getComment());
             statement.setInt(3, mark.getId());
             statement.execute();
-            logger.info("Mark with id " + mark.getId() + " updated.");
+            logger.info(loggerPrefix + mark.getId() + " updated.");
             return true;
         } catch (SQLException e) {
             logger.error(e.getMessage());

@@ -26,14 +26,6 @@ public class LessonsController {
         return "views/lessons";
     }
 
-/*    @RequestMapping(method = RequestMethod.POST)
-    public String addLessonsMethodPost(@RequestParam(value = "name", required = false) String name, Model model) {
-        Lessons lessons = new Lessons(name);
-        lessonsService.addLesson(lessons);
-        logger.info("lesson (" + name + ") added");
-        return doGet(model);
-    }*/
-
     /**
      * Удаляем урок по идентификатору
      *

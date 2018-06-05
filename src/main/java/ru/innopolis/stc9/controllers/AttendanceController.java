@@ -1,5 +1,6 @@
 package ru.innopolis.stc9.controllers;
 
+import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -12,6 +13,8 @@ import ru.innopolis.stc9.service.UserService;
 
 @Controller
 public class AttendanceController {
+    private static Logger logger = Logger.getLogger(AttendanceController.class);
+    private String defaultPath = "views/attendance";
 
     @Autowired
     private GroupService groupService;
@@ -20,13 +23,11 @@ public class AttendanceController {
     @Autowired
     private AttendanceService attendanceService;
 
-    //private int lesson;
-
     @RequestMapping(value = "/views/attendance", method = RequestMethod.GET)
     private String getGroups(@RequestParam int lessonId, Model model) {
         model.addAttribute("lessonId", lessonId);
         model.addAttribute("groups", groupService.findAllGroups());
-        return "views/attendance";
+        return defaultPath;
     }
 
     @RequestMapping(value = "/views/attendanceSelectGroup")
@@ -34,18 +35,17 @@ public class AttendanceController {
         model.addAttribute("lessonId", lessonId);
         model.addAttribute("groupSelected", groupService.findGroupById(groupId));
         model.addAttribute("studentsInGroup", userService.getStudentsByGroupId(groupId));
-        return "views/attendance";
+        return defaultPath;
     }
 
     @RequestMapping(value = "/views/attendanceSendStudentsList", method = RequestMethod.POST)
     private String sendStudentsList(@RequestParam("list") int[] studentsList, @RequestParam("lessonId") int lessonId, Model model) {
-        //int[] students = new int[studentsList.length];
         for (int i = 0; i < studentsList.length; i++) {
-            System.out.println("student id " + studentsList[i]);
+            logger.info("student id " + studentsList[i]);
         }
-        System.out.println("lesson id " + lessonId);
+        logger.info("lesson id " + lessonId);
         attendanceService.addLessonAttendance(lessonId, studentsList);
-        return "views/attendance";
+        return defaultPath;
     }
 }
 

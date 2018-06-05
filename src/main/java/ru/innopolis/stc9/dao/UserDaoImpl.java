@@ -20,6 +20,7 @@ import java.util.List;
 public class UserDaoImpl implements UserDao {
     private static ConnectionManager connectionManager = ConnectionManagerImpl.getInstance();
     private Logger logger = Logger.getLogger(UserDaoImpl.class);
+    private String sqlPrefixMsg = "SQLException: ";
 
     @Override
     public boolean addUser(User user) {
@@ -33,7 +34,37 @@ public class UserDaoImpl implements UserDao {
             statement.execute();
             logger.info("Adding user successfully");
         } catch (SQLException e) {
-            logger.error("SQLException: " + e.getMessage());
+            logger.error(sqlPrefixMsg + e.getMessage());
+            return false;
+        }
+        return true;
+    }
+
+    @Override
+    public boolean delUserById(int id) {
+        if (id < 0) return false;
+        try (Connection connection = connectionManager.getConnection();
+             PreparedStatement statement = connection.prepareStatement(
+                     "DELETE FROM users WHERE id = ?")) {
+            statement.setInt(1, id);
+            statement.execute();
+        } catch (SQLException e) {
+            logger.error(sqlPrefixMsg + e.getMessage());
+            return false;
+        }
+        return true;
+    }
+
+    @Override
+    public boolean deactivateUser(int id) {
+        if (id < 0) return false;
+        try (Connection connection = connectionManager.getConnection();
+             PreparedStatement statement = connection.prepareStatement(
+                     "UPDATE users SET enabled = 0 WHERE id = ?")) {
+            statement.setInt(1, id);
+            statement.execute();
+        } catch (SQLException e) {
+            logger.error(sqlPrefixMsg + e.getMessage());
             return false;
         }
         return true;
@@ -41,6 +72,7 @@ public class UserDaoImpl implements UserDao {
 
     @Override
     public User findUserByUserId(int id) {
+        if (id < 0) return null;
         User result = null;
         try (Connection connection = connectionManager.getConnection();
              PreparedStatement statement = connection.prepareStatement(
@@ -50,7 +82,8 @@ public class UserDaoImpl implements UserDao {
                 if (resultSet.next()) result = UserMapper.getByResultSet(resultSet);
             }
         } catch (SQLException e) {
-            logger.info("SQLException: " + e.getMessage());
+            logger.error(sqlPrefixMsg + e.getMessage());
+            return result;
         }
         return result;
     }
@@ -69,7 +102,8 @@ public class UserDaoImpl implements UserDao {
                 logger.info("Users list returned successfully");
             }
         } catch (SQLException e) {
-            logger.info("SQLException: " + e.getMessage());
+            logger.error(sqlPrefixMsg + e.getMessage());
+            return result;
         }
         return result;
     }
@@ -89,7 +123,7 @@ public class UserDaoImpl implements UserDao {
             statement.execute();
             logger.info("User updated successfully");
         } catch (SQLException e) {
-            logger.info("SQLException: " + e.getMessage());
+            logger.error(sqlPrefixMsg + e.getMessage());
             return false;
         }
         return true;
@@ -107,7 +141,7 @@ public class UserDaoImpl implements UserDao {
             statement.execute();
             logger.info("User updated successfully");
         } catch (SQLException e) {
-            logger.info("SQLException: " + e.getMessage());
+            logger.error(sqlPrefixMsg + e.getMessage());
             return false;
         }
         return true;
@@ -115,7 +149,7 @@ public class UserDaoImpl implements UserDao {
 
     @Override
     public User findLoginByName(String login) {
-        if (login.equals("anonymousUser") || (login == null) || login.isEmpty()) return null;
+        if (login.equals("anonymousUser") || login.isEmpty()) return null;
         User user = null;
         logger.info("Start find login by name (" + login + ")");
         try (Connection connection = connectionManager.getConnection();
@@ -126,7 +160,7 @@ public class UserDaoImpl implements UserDao {
                 if (resultSet.next()) user = UserMapper.getByResultSet(resultSet);
             }
         } catch (SQLException e) {
-            logger.info("SQLException: " + e.getMessage());
+            logger.error(sqlPrefixMsg + e.getMessage());
             return null;
         }
         return user;

@@ -7,7 +7,7 @@
             <div class="content-box-header">
                 <div class="panel-title ">Редактирование пользователя</div>
             </div>
-            <div class="content-box-large box-with-header">
+            <a class="content-box-large box-with-header">
                 <form class="form-horizontal" action="${pageContext.request.contextPath}/temp/edit_user" method="post">
                     <fieldset>
                         <legend>Основные данные</legend>
@@ -68,10 +68,10 @@
                                 </select>
                             </div>
                         </div>
-                            <c:choose>
-                            <c:when test="${user.id == sessionScope.get('entered_user_id') || sessionScope.get('entered_role') != 'ROLE_ADMIN'}">
-                            <div class="form-group hidden">
-                                </c:when>
+                                <c:choose>
+                                <c:when test="${user.id == sessionScope.get('entered_user_id') || sessionScope.get('entered_role') != 'ROLE_ADMIN'}">
+                                <div class="form-group hidden">
+                                    </c:when>
                                 <c:otherwise>
                                 <div class="form-group">
                                     </c:otherwise>
@@ -124,6 +124,19 @@
                     </c:if>
                 </form>
                 <br/><br/>
+                <c:if test="${isOwner == true}"><a type="button" class="btn btn-danger"
+                                                   href="${pageContext.request.contextPath}/university/profile/delete">Удалить
+                аккаунт</a></c:if>
+                <c:if test="${user.enabled == 0}">
+                <form class="form-horizontal"
+                      action="${pageContext.request.contextPath}/admin/edit_user/${user.id}/delete" method="post">
+                    <div class="form-group">
+                        <div class="col-sm-offset-2 col-sm-10">
+                            <button type="submit" class="btn btn-primary">Удалить аккаунт ${user.login}</button>
+                        </div>
+                    </div>
+                </form>
+                </c:if>
             </div>
         </div>
     </div>

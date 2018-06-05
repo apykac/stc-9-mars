@@ -22,6 +22,11 @@ public class GroupController {
     private final Logger logger = Logger.getLogger(GroupController.class);
     private String allGroups = "views/allGroups";
     private String group = "views/group";
+    private String attributeGroups = "groups";
+    private String attributeGroupName = "groupName";
+    private String attributeStudents = "students";
+    private String attributeStudentsWOG = "studentsWOG";
+    private String loggerPrefix = "group ";
     @Autowired
     private GroupService groupService;
     @Autowired
@@ -32,7 +37,7 @@ public class GroupController {
      */
     @RequestMapping("/views/allgroup")
     public String viewAllGroups(Model model) {
-        model.addAttribute("groups", groupService.findAllGroups());
+        model.addAttribute(attributeGroups, groupService.findAllGroups());
         logger.info("view all groups");
         return allGroups;
     }
@@ -48,14 +53,14 @@ public class GroupController {
         for (Group g : groupService.findAllGroups()) {
             if (g.getName().equals(name)) {
                 model.addAttribute("errorName", "Такое имя группы уже используется. Введите другое");
-                model.addAttribute("groups", groupService.findAllGroups());
+                model.addAttribute(attributeGroups, groupService.findAllGroups());
                 logger.info("duplicate names to adding ");
                 return allGroups;
             }
         }
         groupService.addGroup(tempGroup);
         logger.info("group " + name + " added");
-        model.addAttribute("groups", groupService.findAllGroups());
+        model.addAttribute(attributeGroups, groupService.findAllGroups());
         return allGroups;
     }
 
@@ -68,10 +73,10 @@ public class GroupController {
     @RequestMapping("/views/group/{id}")
     public String forUpdateGroup(@PathVariable("id") int id, Model model) {
 
-        model.addAttribute("groupName", groupService.findGroupById(id).getName());
+        model.addAttribute(attributeGroupName, groupService.findGroupById(id).getName());
         model.addAttribute("id", id);
-        model.addAttribute("students", userService.getStudentsByGroupId(id));
-        model.addAttribute("studentsWOG", userService.getStudentsWithoutGroup(id));
+        model.addAttribute(attributeStudents, userService.getStudentsByGroupId(id));
+        model.addAttribute(attributeStudentsWOG, userService.getStudentsWithoutGroup(id));
         logger.info("group for update");
         return group;
     }
@@ -91,17 +96,17 @@ public class GroupController {
         for (Group g : groupService.findAllGroups()) {
             if (g.getName().equals(name) && g.getId() != id) {
                 model.addAttribute("errorName", "Такое имя группы уже используется. Введите другое");
-                model.addAttribute("groupName", groupService.findGroupById(id).getName());
+                model.addAttribute(attributeGroupName, groupService.findGroupById(id).getName());
                 model.addAttribute("id", id);
-                model.addAttribute("students", userService.getStudentsByGroupId(id));
-                model.addAttribute("studentsWOG", userService.getStudentsWithoutGroup(id));
+                model.addAttribute(attributeStudents, userService.getStudentsByGroupId(id));
+                model.addAttribute(attributeStudentsWOG, userService.getStudentsWithoutGroup(id));
                 logger.info("duplicate names");
                 return group;
             }
         }
         groupService.updateGroup(tempGroup);
-        model.addAttribute("groups", groupService.findAllGroups());
-        logger.info("group " + id + " updated");
+        model.addAttribute(attributeGroups, groupService.findAllGroups());
+        logger.info(loggerPrefix + id + " updated");
         return allGroups;
     }
 
@@ -113,8 +118,8 @@ public class GroupController {
     @RequestMapping("/views/deleteGroup")
     public String deleteGroup(@RequestParam("id") int id, Model model) {
         groupService.deleteGroup(id);
-        model.addAttribute("groups", groupService.findAllGroups());
-        logger.info("group " + id + " deleted");
+        model.addAttribute(attributeGroups, groupService.findAllGroups());
+        logger.info(loggerPrefix + id + " deleted");
         return allGroups;
     }
 
@@ -130,10 +135,10 @@ public class GroupController {
         user.setGroupId(id);
         user.setGroup(groupService.findGroupById(id));
         userService.updateUser(user);
-        model.addAttribute("groupName", groupService.findGroupById(id).getName());
+        model.addAttribute(attributeGroupName, groupService.findGroupById(id).getName());
         model.addAttribute("id", id);
-        model.addAttribute("students", userService.getStudentsByGroupId(id));
-        model.addAttribute("studentsWOG", userService.getStudentsWithoutGroup(id));
+        model.addAttribute(attributeStudents, userService.getStudentsByGroupId(id));
+        model.addAttribute(attributeStudentsWOG, userService.getStudentsWithoutGroup(id));
         logger.info("student added in group " + id);
         return group;
     }
@@ -149,10 +154,10 @@ public class GroupController {
         User user = userService.findUserById(studentId);
         user.setGroupId(0);
         userService.updateUser(user);
-        model.addAttribute("groupName", groupService.findGroupById(id).getName());
+        model.addAttribute(attributeGroupName, groupService.findGroupById(id).getName());
         model.addAttribute("id", id);
-        model.addAttribute("students", userService.getStudentsByGroupId(id));
-        model.addAttribute("studentsWOG", userService.getStudentsWithoutGroup(id));
+        model.addAttribute(attributeStudents, userService.getStudentsByGroupId(id));
+        model.addAttribute(attributeStudentsWOG, userService.getStudentsWithoutGroup(id));
         logger.info("student deleted from group " + id);
         return group;
     }
