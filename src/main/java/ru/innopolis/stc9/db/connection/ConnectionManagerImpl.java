@@ -9,7 +9,7 @@ import java.sql.SQLException;
 public class ConnectionManagerImpl implements ConnectionManager {
 
     private static ConnectionManager connectionManager;
-    static final Logger logger = Logger.getLogger("defaultLog");
+    private static final Logger logger = Logger.getLogger("defaultLog");
 
     public static ConnectionManager getInstance(){
         if (connectionManager == null){
@@ -22,17 +22,24 @@ public class ConnectionManagerImpl implements ConnectionManager {
 
     }
 
+    /**
+     * "jdbc:mysql://sql7.freesqldatabase.com:3306/sql7239469"
+     * "sql7239469"
+     */
     @Override
     public Connection getConnection() {
         Connection connection = null;
         try {
             Class.forName("com.mysql.cj.jdbc.Driver");
             connection = DriverManager.getConnection(
-                    "jdbc:mysql://sql7.freesqldatabase.com:3306/sql7239469",
-                    "sql7239469",
+                    "jdbc:mysql://server190.hosting.reg.ru:3306/u0425587_mars?" +
+                            "serverTimezone=UTC" +
+                            "&useUnicode=yes" +
+                            "&characterEncoding=UTF-8",
+                    "u0425587_mars",
                     "vrKWZga2bt");
         } catch (ClassNotFoundException | SQLException e) {
-           logger.error(e.getMessage());
+            logger.error(e.getMessage());
         }
         return connection;
     }
