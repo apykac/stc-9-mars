@@ -45,13 +45,16 @@
                             Отметить присутствовавших студентов
                         </div>
                     </div>
+                    <c:set var="savedAttendance" value="${requestScope.get('savedAttendance')}"/>
                     <c:forEach items="${requestScope.get('studentsInGroup')}" var="student">
                         <div class="form-group">
                             <label for="${student.id}"
                                    class="col-sm-8 control-label">${student.secondName} ${student.firstName} ${student.middleName}</label>
                             <div class="col-sm-1">
                                 <input class="form-check-input" type="checkbox" name="list" value="${student.id}"
-                                       id="${student.id}">
+                                       id="${student.id}"
+                                    ${savedAttendance.contains(student.id) ? "checked" : ""}
+                                >
                             </div>
                         </div>
                     </c:forEach>

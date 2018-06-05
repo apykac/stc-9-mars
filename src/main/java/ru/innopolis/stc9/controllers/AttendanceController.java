@@ -34,6 +34,7 @@ public class AttendanceController {
         model.addAttribute("lessonId", lessonId);
         model.addAttribute("groupSelected", groupService.findGroupById(groupId));
         model.addAttribute("studentsInGroup", userService.getStudentsByGroupId(groupId));
+        model.addAttribute("savedAttendance", attendanceService.getLessonAttendance(lessonId, groupId));
         return "views/attendance";
     }
 
