@@ -6,6 +6,9 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 
 public class MarkMapper {
+    private MarkMapper() {
+    }
+
     public static Mark getMarkFromResultSet(ResultSet resultSet) throws SQLException {
         if (resultSet == null) {
             return null;

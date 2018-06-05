@@ -12,7 +12,7 @@ import ru.innopolis.stc9.service.SubjectService;
 import ru.innopolis.stc9.service.SubjectServiceImpl;
 
 @Controller
-@RequestMapping(value = "/views/subject")
+@RequestMapping(value = "/university/teacher/subject")
 public class SubjectController {
     private final Logger logger = Logger.getLogger(SubjectController.class);
     @Autowired

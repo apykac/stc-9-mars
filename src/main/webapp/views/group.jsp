@@ -8,6 +8,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="t" tagdir="/WEB-INF/tags" %>
+<%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags" %>
 <t:wrapper>
     <div class="row">
         <div class="col-md-5">
@@ -15,7 +16,8 @@
                 <div class="panel-title ">Обновление группы</div>
             </div>
             <div class="content-box-large box-with-header">
-                <form class="form-horizontal" id="upd" action="${pageContext.request.contextPath}/views/updateGroup"
+                <form class="form-horizontal" id="upd"
+                      action="${pageContext.request.contextPath}/university/teacher/updateGroup"
                       method="post">
                     <div class="form-group">
                         <label for="nameGr" class="col-sm-2 control-label">Введите</label>
@@ -38,7 +40,9 @@
                 <br/>
                 ${requestScope.get("errorName")}
                 <br/>
-                <form class="form-horizontal" id="delete" action="${pageContext.request.contextPath}/views/deleteGroup"
+                <sec:authorize access="hasRole('ROLE_ADMIN')">
+                    <form class="form-horizontal" id="delete"
+                          action="${pageContext.request.contextPath}/university/teacher/deleteGroup"
                       method="post">
                     <div class="form-group">
                         <div class="col-sm-10">
@@ -52,6 +56,7 @@
                         </div>
                     </div>
                 </form>
+                </sec:authorize>
             </div>
         </div>
 
@@ -73,7 +78,8 @@
                 <c:forEach var="student" items="${requestScope.get('students')}">
                     <tr>
                         <td><h5>${student.firstName} ${student.secondName}</h5></td>
-                        <td><a href="${pageContext.request.contextPath}/views/group/deleteStudentFromGroup/${requestScope.get("id")}/${student.id}"
+                        <td>
+                            <a href="${pageContext.request.contextPath}/university/teacher/group/deleteStudentFromGroup/${requestScope.get("id")}/${student.id}"
                                name="${student.id}">Удалить из группы</a></td>
                     </tr>
 
@@ -82,7 +88,8 @@
                 </table>
                 <br/>
                 <br/>
-                <form class="form-horizontal" id="add" action="${pageContext.request.contextPath}/views/addStudent"
+                <form class="form-horizontal" id="add"
+                      action="${pageContext.request.contextPath}/university/teacher/addStudent"
                       method="post">
                     <div class="form-group">
                         <h4> Добавить студента в группу</h4>

@@ -31,13 +31,16 @@
                             <td>${requestScope.get('subject')}</td>
                             <td>${lessons.date}</td>
                             <td>${lessons.name}</td>
-                            <td><a href=${pageContext.request.contextPath}/views/homework/lessonId/${lessons.id}>Добавить ДЗ</a></td>
+                            <td>
+                                <a href=${pageContext.request.contextPath}/university/student/homework/lessonId/${lessons.id}>Добавить
+                                    ДЗ</a></td>
                         </tr>
                     </c:forEach>
                     </tbody>
                 </table>
                 <div class="col-sm-offset-2 col-sm-10">
-                    <form class="form-horizontal" id="dashBoard" action="${pageContext.request.contextPath}/views/student/studentDashBoard">
+                    <form class="form-horizontal" id="dashBoard"
+                          action="${pageContext.request.contextPath}/university/profile">
                         <button type="submit" class="btn btn-primary" >На главную</button>
                     </form>
                 </div>

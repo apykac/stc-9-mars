@@ -10,9 +10,9 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
 
-@WebFilter("/admin/*")
-public class AdminFilter implements Filter {
-    private static Logger logger = Logger.getLogger(AdminFilter.class);
+@WebFilter({"/login", "/registration"})
+public class OutsideFilter implements Filter {
+    private static Logger logger = Logger.getLogger(OutsideFilter.class);
 
     @Override
     public void init(FilterConfig filterConfig) {
@@ -25,10 +25,8 @@ public class AdminFilter implements Filter {
         HttpServletResponse resp = (HttpServletResponse) response;
         HttpSession session = req.getSession();
         try {
-            if (!"ROLE_ADMIN".equals(session.getAttribute(SessionDataInform.ROLE))) {
-                if (session.getAttribute(SessionDataInform.ID) == null)
-                    resp.sendRedirect(req.getContextPath() + "/login");
-                else resp.sendRedirect(req.getContextPath() + "/university/start");
+            if (session.getAttribute(SessionDataInform.ID) != null) {
+                resp.sendRedirect(req.getContextPath() + "/start");
             } else chain.doFilter(request, response);
         } catch (IOException e) {
             logger.error("IOException: " + e.getMessage());

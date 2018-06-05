@@ -21,7 +21,8 @@
                         <tr>
                             <td>${pair.key}</td>
                             <td>${pair.value.value}</td>
-                            <td><a href="${pageContext.request.contextPath}/views/editMark/${pair.value.id}">Просмотр
+                            <td>
+                                <a href="${pageContext.request.contextPath}/university/teacher/editMark/${pair.value.id}">Просмотр
                                 ДЗ/Редактирование оценки</a></td>
                         </tr>
                     </c:forEach>

@@ -11,12 +11,18 @@ import java.util.List;
 @Service
 public interface HomeWorkService {
     boolean addHomeWork(HomeWork homeWork);
+
     boolean updateHomeWork(HomeWork homeWork);
+
     HomeWork findById(int id);
+
     HomeWork findByStudentId(int studentId);
+
     HomeWork findByLessonId(int lessonId);
 
     String findHomeWorkByMarkId(int markId);
+
     List<HomeWork> findAllHomeWork();
+
     boolean deleteHomeWork(int id);
 }

@@ -10,6 +10,10 @@ import java.util.List;
 public interface UserDao {
     boolean addUser(User user);
 
+    boolean delUserById(int id);
+
+    boolean deactivateUser(int id);
+
     boolean updateUserByFIOL(User newUser);
 
     boolean updateUserPassword(User newUser);

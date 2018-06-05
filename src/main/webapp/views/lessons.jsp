@@ -2,6 +2,7 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="t" tagdir="/WEB-INF/tags" %>
 <%@ taglib uri="http://www.springframework.org/tags/form" prefix="form" %>
+<%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags" %>
 <t:wrapper>
     <jsp:attribute name="footer">
         <script src="${pageContext.request.contextPath}/assets/js/setid.js"></script>
@@ -20,7 +21,7 @@
                         <th>Предмет</th>
                         <th>Дата</th>
                         <th>Название</th>
-                        <th>Действие</th>
+                        <th>Редактирование</th>
                         <th>Действие</th>
                     </tr>
                     </thead>
@@ -39,9 +40,11 @@
                                       data-toggle="modal"
                                       data-target="#myModal">Редактировать</span>
                             </td>
-                            <td><a href=${pageContext.request.contextPath}/views/attendance?lessonId=${lessons.id}>Посещаемость</a>
+                            <td>
+                                <a href=${pageContext.request.contextPath}/university/teacher/attendance?lessonId=${lessons.id}>Посещаемость</a>
                             </td>
-                            <td><a href=${pageContext.request.contextPath}/views/marks?lessonId=${lessons.id}>Проверка
+                            <td>
+                                <a href=${pageContext.request.contextPath}/university/teacher/marks?lessonId=${lessons.id}>Проверка
                                 ДЗ</a></td>
                         </tr>
                     </c:forEach>
@@ -84,33 +87,35 @@
                                                 </div>
                                             </div>
                         --%>
-                    <div class="panel panel-default">
-                        <div class="panel-heading">Удалить запись</div>
-                        <div class="panel-body">
-                            <form class="form-horizontal" id="delmodal"
-                                  action="${pageContext.request.contextPath}/views/lessons/delete"
-                                  method="post">
-                                <div class="form-group">
-                                    <label for="l_name" class="col-sm-2 control-label">Имя</label>
-                                    <div class="col-sm-10">
-                                        <input type="text" class="form-control" id="l_name" value=""
-                                               disabled>
-                                        <input type="hidden" class="form-control" id="l_subjid" value=""
-                                               disabled>
-                                        <input type="hidden" class="form-control" id="l_date" value=""
-                                               disabled>
-                                        <input type="hidden" class="form-control" id="l_id" value=""
-                                               name="idLesson" readonly>
+                    <sec:authorize access="hasRole('ROLE_ADMIN')">
+                        <div class="panel panel-default">
+                            <div class="panel-heading">Удалить запись</div>
+                            <div class="panel-body">
+                                <form class="form-horizontal" id="delmodal"
+                                      action="${pageContext.request.contextPath}/university/teacher/lessons/delete"
+                                      method="post">
+                                    <div class="form-group">
+                                        <label for="l_name" class="col-sm-2 control-label">Имя</label>
+                                        <div class="col-sm-10">
+                                            <input type="text" class="form-control" id="l_name" value=""
+                                                   disabled>
+                                            <input type="hidden" class="form-control" id="l_subjid" value=""
+                                                   disabled>
+                                            <input type="hidden" class="form-control" id="l_date" value=""
+                                                   disabled>
+                                            <input type="hidden" class="form-control" id="l_id" value=""
+                                                   name="idLesson" readonly>
+                                        </div>
                                     </div>
-                                </div>
-                                <div class="form-group">
-                                    <div class="col-sm-offset-2 col-sm-10">
-                                        <button type="submit" class="btn btn-primary">OK</button>
+                                    <div class="form-group">
+                                        <div class="col-sm-offset-2 col-sm-10">
+                                            <button type="submit" class="btn btn-primary">OK</button>
+                                        </div>
                                     </div>
-                                </div>
-                            </form>
+                                </form>
+                            </div>
                         </div>
-                    </div>
+                    </sec:authorize>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Отмена</button>

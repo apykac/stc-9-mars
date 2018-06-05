@@ -19,14 +19,14 @@ public class MarksController {
     @Autowired
     private HomeWorkService homeWorkService;
 
-    @RequestMapping(value = "/views/marks", method = RequestMethod.GET)
+    @RequestMapping(value = "/university/teacher/marks", method = RequestMethod.GET)
     private String getMarks(@RequestParam int lessonId, Model model) {
         model.addAttribute("marks", markService.getMarksByLessonId(lessonId));
         model.addAttribute("lessonName", markService.getLessonNameByLessonId(lessonId));
         return "views/marks";
     }
 
-    @RequestMapping("/views/editMark/{id}")
+    @RequestMapping("/university/teacher/editMark/{id}")
     public String forMarkUpdate(@PathVariable("id") int id, Model model) {
         model.addAttribute("studentName", markService.getFullStudentNameInOneString(id));
         model.addAttribute("lessonName", markService.getLessonNameByMarkId(id));
@@ -37,14 +37,14 @@ public class MarksController {
         return "views/editMark";
     }
 
-    @RequestMapping("/views/updateMark")
+    @RequestMapping("/university/teacher/updateMark")
     public ModelAndView updateMark(@RequestParam("id") int id, @RequestParam("value") int value, @RequestParam("comment") String comment, Model model) {
         Mark mark = markService.getMarkById(id);
         mark.setValue(value);
         mark.setComment(comment);
         markService.updateMark(mark);
 
-        return new ModelAndView("redirect:/views/marks?lessonId=" + mark.getLessonId());
+        return new ModelAndView("redirect:/university/teacher/marks?lessonId=" + mark.getLessonId());
     }
 }
 

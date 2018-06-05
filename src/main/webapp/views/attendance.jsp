@@ -9,7 +9,8 @@
             </div>
             <div class="content-box-large box-with-header">
 
-                <form class="form-horizontal" action="${pageContext.request.contextPath}/views/attendanceSelectGroup"
+                <form class="form-horizontal"
+                      action="${pageContext.request.contextPath}/university/teacher/attendanceSelectGroup"
                       method="post">
                     <input type="hidden" value="${requestScope.get("lessonId")}" name="lessonId">
                     <div class="form-group">
@@ -38,7 +39,7 @@
                 </form>
 
                 <form class="form-horisontal"
-                      action="${pageContext.request.contextPath}/views/attendanceSendStudentsList"
+                      action="${pageContext.request.contextPath}/university/teacher/attendanceSendStudentsList"
                       method="post">
                     <div class="row text-center">
                         <div class="col-sm-12">

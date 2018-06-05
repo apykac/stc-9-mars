@@ -7,7 +7,7 @@
             <div class="content-box-header">
                 <div class="panel-title ">Редактирование пользователя</div>
             </div>
-            <div class="content-box-large box-with-header">
+            <a class="content-box-large box-with-header">
                 <form class="form-horizontal" action="${pageContext.request.contextPath}/temp/edit_user" method="post">
                     <fieldset>
                         <legend>Основные данные</legend>
@@ -23,6 +23,14 @@
                                                           name="id"
                                                           value="${user.id}"></div>
                         </div>
+                        <c:if test="${(sessionScope.get('entered_role') == 'ROLE_STUDENT') && (user.group != null)}">
+                            <div class="form-group">
+                                <label for="group" class="col-sm-2 control-label">Группа</label>
+                                <div class="col-sm-10"><input type="text" class="form-control" id="group"
+                                                              placeholder="Group" name="group"
+                                                              value="${user.group.name}" readonly></div>
+                            </div>
+                        </c:if>
                         <div class="form-group">
                             <label for="editLogin" class="col-sm-2 control-label">Логин</label>
                             <div class="col-sm-10"><input type="text" class="form-control" id="editLogin"
@@ -68,10 +76,10 @@
                                 </select>
                             </div>
                         </div>
-                            <c:choose>
-                            <c:when test="${user.id == sessionScope.get('entered_user_id') || sessionScope.get('entered_role') != 'ROLE_ADMIN'}">
-                            <div class="form-group hidden">
-                                </c:when>
+                                <c:choose>
+                                <c:when test="${user.id == sessionScope.get('entered_user_id') || sessionScope.get('entered_role') != 'ROLE_ADMIN'}">
+                                <div class="form-group hidden">
+                                    </c:when>
                                 <c:otherwise>
                                 <div class="form-group">
                                     </c:otherwise>
@@ -124,6 +132,50 @@
                     </c:if>
                 </form>
                 <br/><br/>
+                <c:if test="${isOwner == true}"><a type="button" class="btn btn-danger form-horizontal"
+                                                   href="${pageContext.request.contextPath}/university/profile/delete">Удалить
+                аккаунт</a></c:if>
+                <c:if test="${user.enabled == 0}">
+                <form class="form-horizontal"
+                      action="${pageContext.request.contextPath}/admin/edit_user/${user.id}/delete" method="post">
+                    <div class="form-group">
+                        <div class="col-sm-offset-2 col-sm-10">
+                            <button type="submit" class="btn btn-primary">Удалить аккаунт ${user.login}</button>
+                        </div>
+                    </div>
+                </form>
+                </c:if>
+                <br/><br/>
+                <c:if test="${(sessionScope.get('entered_role') == 'ROLE_STUDENT') && (requestScope.get('subjects') != null)}">
+                <div class="col-md-5">
+                    <div class="content-box-header">
+                        <div class="panel-title ">Предметы</div>
+                    </div>
+                    <div class="content-box-large box-with-header">
+                        <table class="table">
+                            <thead>
+                            <tr>
+
+                                <th>Предмет</th>
+                                <th>Уроки</th>
+                            </tr>
+                            </thead>
+
+                            <tbody>
+                            <c:forEach items="${requestScope.get('subjects')}" var="subject">
+                                <tr>
+                                    <td>${subject.name}</td>
+                                    <td>
+                                        <a href="${pageContext.request.contextPath}/university/student/subject/${subject.id}"
+                                           name="${subject.name}">Информация</a></td>
+                                </tr>
+                            </c:forEach>
+                            </tbody>
+
+                        </table>
+                    </div>
+                </div>
+                </c:if>
             </div>
         </div>
     </div>

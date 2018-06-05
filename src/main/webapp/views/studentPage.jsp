@@ -15,7 +15,8 @@
                 <div class="panel-title ">Редактирование пользователя</div>
             </div>
             <div class="content-box-large box-with-header">
-                <form class="form-horizontal" action="${pageContext.request.contextPath}/views/student/update" method="post">
+                <form class="form-horizontal" action="${pageContext.request.contextPath}/university/student/update"
+                      method="post">
                     <fieldset>
                         <legend>Основные данные</legend>
                         <div class="form-group">
@@ -87,7 +88,8 @@
                         <c:forEach items="${requestScope.get('subject')}" var="subject">
                             <tr>
                                 <td>${subject.name}</td>
-                                <td><a href="${pageContext.request.contextPath}/views/student/subject/${subject.id}"
+                                <td>
+                                    <a href="${pageContext.request.contextPath}/university/student/subject/${subject.id}"
                                        name="${subject.name}">Информация</a></td>
                             </tr>
                         </c:forEach>

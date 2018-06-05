@@ -11,7 +11,7 @@ import ru.innopolis.stc9.service.LessonsService;
 import ru.innopolis.stc9.service.LessonsServiceImpl;
 
 @Controller
-@RequestMapping(value = "/views/lessons")
+@RequestMapping(value = "/university/teacher/lessons")
 public class LessonsController {
     private final Logger logger = Logger.getLogger(LessonsController.class);
     @Autowired
@@ -25,14 +25,6 @@ public class LessonsController {
         model.addAttribute("lessons", lessonsService.findAllLessons());
         return "views/lessons";
     }
-
-/*    @RequestMapping(method = RequestMethod.POST)
-    public String addLessonsMethodPost(@RequestParam(value = "name", required = false) String name, Model model) {
-        Lessons lessons = new Lessons(name);
-        lessonsService.addLesson(lessons);
-        logger.info("lesson (" + name + ") added");
-        return doGet(model);
-    }*/
 
     /**
      * Удаляем урок по идентификатору
