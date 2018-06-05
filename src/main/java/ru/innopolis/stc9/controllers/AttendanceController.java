@@ -40,12 +40,12 @@ public class AttendanceController {
     }
 
     @RequestMapping(value = "/university/teacher/attendanceSendStudentsList", method = RequestMethod.POST)
-    private String sendStudentsList(@RequestParam("list") int[] studentsList, @RequestParam("lessonId") int lessonId, Model model) {
-        for (int i = 0; i < studentsList.length; i++) {
-            logger.info("student id " + studentsList[i]);
+    private String sendStudentsList(@RequestParam(value = "list", required = false) int[] studentsList, @RequestParam("lessonId") int lessonId, @RequestParam("groupSelected") int groupSelected, Model model) {
+        if (studentsList == null) {
+            attendanceService.clearLessonAttendance(lessonId, groupSelected);
+            return defaultPath;
         }
-        logger.info("lesson id " + lessonId);
-        attendanceService.addLessonAttendance(lessonId, studentsList);
+        attendanceService.addLessonAttendance(groupSelected, lessonId, studentsList);
         return defaultPath;
     }
 }
