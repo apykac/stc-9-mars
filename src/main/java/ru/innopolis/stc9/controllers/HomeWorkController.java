@@ -49,7 +49,7 @@ public class HomeWorkController {
         homeWorkService.addHomeWork(new HomeWork(url, userService.findUserByLogin(activeUser.getUsername()).getId(), lessonId));
         model.addAttribute(attributeLessonId, lessonId);
         logger.info("Homework added");
-        return "redirect:/university/student/studentDashBoard";
+        return "redirect:/university/profile";
     }
 
 

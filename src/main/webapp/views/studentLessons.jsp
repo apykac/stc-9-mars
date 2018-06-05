@@ -40,7 +40,7 @@
                 </table>
                 <div class="col-sm-offset-2 col-sm-10">
                     <form class="form-horizontal" id="dashBoard"
-                          action="${pageContext.request.contextPath}/university/student/studentDashBoard">
+                          action="${pageContext.request.contextPath}/university/profile">
                         <button type="submit" class="btn btn-primary" >На главную</button>
                     </form>
                 </div>

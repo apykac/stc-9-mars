@@ -20,7 +20,7 @@
 <body class="hold-transition register-page">
 <div class="register-box">
     <div class="register-box-body">
-        <p class="login-box-msg">Адуление аккаунта</p>
+        <p class="login-box-msg">Удаление аккаунта</p>
         <form action="${pageContext.request.contextPath}/university/profile/delete" method="post">
             <div class="form-group has-feedback">
                 <input type="password" class="form-control" placeholder="Пароль" name="password" required>

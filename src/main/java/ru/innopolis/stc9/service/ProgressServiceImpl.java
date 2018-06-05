@@ -1,12 +1,13 @@
 package ru.innopolis.stc9.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
+import ru.innopolis.stc9.controllers.SessionDataInform;
 import ru.innopolis.stc9.dao.ProgressDao;
 import ru.innopolis.stc9.pojo.Progress;
 import ru.innopolis.stc9.pojo.User;
 
+import javax.servlet.http.HttpSession;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -21,8 +22,8 @@ public class ProgressServiceImpl implements ProgressService {
      * Получаем количество оценок
      */
     @Override
-    public List<Integer> getAmountMarks() {
-        List<Progress> progressList = getResultList(progressDao.getProgress());
+    public List<Integer> getAmountMarks(HttpSession session) {
+        List<Progress> progressList = getResultList(progressDao.getProgress(), session);
         List<Integer> marks = new ArrayList<>();
         marks.add(0, selectMarksInProgressList(0, 5, progressList).size());
         for (int i = 1; i < 6; i++) {
@@ -38,17 +39,17 @@ public class ProgressServiceImpl implements ProgressService {
      * @param lessOrEqualMark    Оценка меньше или равно
      */
     @Override
-    public List<Progress> getProgress(int greaterOrEqualMark, int lessOrEqualMark) {
+    public List<Progress> getProgress(int greaterOrEqualMark, int lessOrEqualMark, HttpSession session) {
         List<Progress> progressList =
                 selectMarksInProgressList(greaterOrEqualMark, lessOrEqualMark, progressDao.getProgress());
-        return getResultList(progressList);
+        return getResultList(progressList, session);
     }
 
     /**
      * Из контекста получаем User, вытаскиваем роль и логин и отбираем список по этим параметрам
      */
-    private List<Progress> getResultList(List<Progress> progressList) {
-        User user = userService.findUserByLogin(SecurityContextHolder.getContext().getAuthentication().getName());
+    private List<Progress> getResultList(List<Progress> progressList, HttpSession session) {
+        User user = userService.findUserByLogin((String) session.getAttribute(SessionDataInform.LOGIN));
         String login = user.getLogin();
         String role = user.getPermissionGroup();
         if (isStudent(role)) {

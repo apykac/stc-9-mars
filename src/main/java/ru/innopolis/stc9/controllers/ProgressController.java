@@ -10,6 +10,7 @@ import ru.innopolis.stc9.pojo.Progress;
 import ru.innopolis.stc9.service.LessonsService;
 import ru.innopolis.stc9.service.ProgressService;
 
+import javax.servlet.http.HttpSession;
 import java.util.Arrays;
 import java.util.List;
 
@@ -29,10 +30,10 @@ public class ProgressController {
      * Выводим весь прогресс, все оценки
      */
     @RequestMapping(method = RequestMethod.GET)
-    private String doGet(Model model) {
-        List<Progress> listProgress = progressService.getProgress(greaterOrEqualMark, lessOrEqualMark);
+    private String doGet(HttpSession session, Model model) {
+        List<Progress> listProgress = progressService.getProgress(greaterOrEqualMark, lessOrEqualMark, session);
         model.addAttribute("progress", listProgress);
-        model.addAttribute("amountMarks", progressService.getAmountMarks());
+        model.addAttribute("amountMarks", progressService.getAmountMarks(session));
         model.addAttribute("lessons", lessonsService.findAllLessons());
         return "views/progress";
     }
@@ -43,10 +44,10 @@ public class ProgressController {
      * @param marks   строка с оценками больше меньше, разделенные "-"
      */
     @RequestMapping(value = "/selmarks")
-    private String getProgressBySelectedMark(@RequestParam String marks, Model model) {
+    private String getProgressBySelectedMark(@RequestParam String marks, HttpSession session, Model model) {
         greaterOrEqualMark = getMarks(marks)[0];
         lessOrEqualMark = getMarks(marks)[1];
-        return doGet(model);
+        return doGet(session, model);
     }
 
     /**

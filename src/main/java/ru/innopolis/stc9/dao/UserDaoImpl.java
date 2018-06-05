@@ -114,12 +114,12 @@ public class UserDaoImpl implements UserDao {
         logger.info("Started updating user.");
         try (Connection connection = connectionManager.getConnection();
              PreparedStatement statement = connection.prepareStatement(
-                     "UPDATE users SET first_name = ?, second_name = ?, middle_name = ?, group_id = ?, login = ?, enabled = ? " +
+                     "UPDATE users SET first_name = ?, second_name = ?, middle_name = ?, login = ?, enabled = ? " +
                              "WHERE id = ?")) {
-            UserMapper.statementSetter(statement, newUser, 3, 1, 4);
-            statement.setString(5, newUser.getLogin());
-            statement.setInt(6, newUser.getEnabled());
-            statement.setInt(7, newUser.getId());
+            UserMapper.statementSetter(statement, newUser, 3, 1, 3);
+            statement.setString(4, newUser.getLogin());
+            statement.setInt(5, newUser.getEnabled());
+            statement.setInt(6, newUser.getId());
             statement.execute();
             logger.info("User updated successfully");
         } catch (SQLException e) {

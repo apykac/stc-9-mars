@@ -1,25 +1,12 @@
 package ru.innopolis.stc9.controllers.filters;
 
 import org.apache.log4j.Logger;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.ApplicationContext;
-import org.springframework.context.support.ClassPathXmlApplicationContext;
-import org.springframework.security.core.context.SecurityContextHolder;
-import ru.innopolis.stc9.controllers.SessionDataInform;
-import ru.innopolis.stc9.pojo.User;
-import ru.innopolis.stc9.service.UserService;
-
-import javax.servlet.*;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
-import java.io.IOException;
 
 
-public class StartFilter implements Filter {
+public class StartFilter {
     private static Logger logger = Logger.getLogger(StartFilter.class);
 
-    @Autowired
+    /*@Autowired
     private UserService userService;
 
     @Override
@@ -54,5 +41,5 @@ public class StartFilter implements Filter {
     @Override
     public void destroy() {
         //some comment
-    }
+    }*/
 }
