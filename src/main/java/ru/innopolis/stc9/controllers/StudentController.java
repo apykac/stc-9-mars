@@ -43,7 +43,6 @@ public class StudentController {
         User student = userService.findUserByLogin(activeUser.getUsername());
         student.setGroup(groupService.findGroupById(student.getGroupId()));
         model.addAttribute("student", student);
-        model.addAttribute("groupName", groupService.findGroupById(student.getGroupId()).getName());
        List<Subject> subjectList = subjectService.findByGroupId(student.getGroupId());
         model.addAttribute("subject", subjectList);
         logger.info("student's dashboard done!");
