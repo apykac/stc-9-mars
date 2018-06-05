@@ -30,7 +30,15 @@
                             <div class="col-sm-10"><input type="text" class="form-control" id="groupName"
                                                           placeholder="Group"
                                                           name="group"
-                                                          value="${requestScope.get('student').group.name}" readonly>
+                                                          value="<c:choose>
+                                    <c:when test="${requestScope.get('student').group.name==null}">
+                                        Без группы
+                                </c:when>
+                                <c:otherwise>
+                                    ${requestScope.get('student').group.name}
+                                </c:otherwise>
+                                </c:choose>" readonly>
+
                             </div>
                         </div>
                         <div class="form-group">
