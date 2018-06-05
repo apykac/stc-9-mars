@@ -1,7 +1,6 @@
 package ru.innopolis.stc9.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import ru.innopolis.stc9.controllers.SessionDataInform;
 import ru.innopolis.stc9.dao.ProgressDao;
@@ -15,14 +14,18 @@ import java.util.List;
 
 @Service
 public class ProgressServiceImpl implements ProgressService {
+    private final ProgressDao progressDao;
+    private final UserService userService;
+    private final LessonsService lessonsService;
+    private final AttendanceService attendanceService;
+
     @Autowired
-    private ProgressDao progressDao;
-    @Autowired
-    private UserService userService;
-    @Autowired
-    private LessonsService lessonsService;
-    @Autowired
-    private AttendanceService attendanceService;
+    public ProgressServiceImpl(ProgressDao progressDao, UserService userService, LessonsService lessonsService, AttendanceService attendanceService) {
+        this.progressDao = progressDao;
+        this.userService = userService;
+        this.lessonsService = lessonsService;
+        this.attendanceService = attendanceService;
+    }
 
     /**
      * Получаем количество оценок
@@ -57,8 +60,8 @@ public class ProgressServiceImpl implements ProgressService {
     }
 
     @Override
-    public int getNumberOfMissedLessons() {
-        return attendanceService.getNumberOfMissedLessons(getUser().getId());
+    public int getNumberOfMissedLessons(HttpSession session) {
+        return attendanceService.getNumberOfMissedLessons(getUser(session).getId());
     }
 
     /**

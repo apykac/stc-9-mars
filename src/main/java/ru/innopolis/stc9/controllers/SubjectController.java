@@ -8,14 +8,17 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import ru.innopolis.stc9.service.SubjectService;
-import ru.innopolis.stc9.service.SubjectServiceImpl;
 
 @Controller
 @RequestMapping(value = "/university/teacher/subject")
 public class SubjectController {
     private final Logger logger = Logger.getLogger(SubjectController.class);
+    private final SubjectService subjectService;
+
     @Autowired
-    private final SubjectService subjectService = new SubjectServiceImpl();
+    public SubjectController(SubjectService subjectService) {
+        this.subjectService = subjectService;
+    }
 
     /**
      * Выводим список предметов

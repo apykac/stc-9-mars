@@ -13,5 +13,5 @@ public interface ProgressService {
 
     List<Lessons> getLessons();
 
-    int getNumberOfMissedLessons();
+    int getNumberOfMissedLessons(HttpSession session);
 }

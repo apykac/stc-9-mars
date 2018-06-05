@@ -14,13 +14,17 @@ import java.util.Arrays;
 import java.util.List;
 
 @Controller
-@RequestMapping(value = "/university/student/progress")
+@RequestMapping(value = "/university/progress")
 public class ProgressController {
-    @Autowired
-    private ProgressService progressService;
+    private final ProgressService progressService;
 
     private int greaterOrEqualMark = 0;
     private int lessOrEqualMark = 5;
+
+    @Autowired
+    public ProgressController(ProgressService progressService) {
+        this.progressService = progressService;
+    }
 
     /**
      * Выводим весь прогресс, все оценки
@@ -31,7 +35,7 @@ public class ProgressController {
         model.addAttribute("progress", listProgress);
         model.addAttribute("amountMarks", progressService.getAmountMarks(session));
         model.addAttribute("lessons", progressService.getLessons());
-        model.addAttribute("missedLessons", progressService.getNumberOfMissedLessons());
+        model.addAttribute("missedLessons", progressService.getNumberOfMissedLessons(session));
         return "views/progress";
     }
 

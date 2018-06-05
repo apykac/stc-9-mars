@@ -1,6 +1,5 @@
 package ru.innopolis.stc9.service;
 
-import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import ru.innopolis.stc9.dao.SubjectDao;
@@ -12,11 +11,14 @@ import java.util.List;
 
 @Service
 public class SubjectServiceImpl implements SubjectService {
-    private final Logger logger = Logger.getLogger(SubjectServiceImpl.class);
+    private final SubjectDao subjectDao;
+    private final EducationService educationService;
+
     @Autowired
-    private SubjectDao subjectDao;
-    @Autowired
-    private EducationService educationService;
+    public SubjectServiceImpl(SubjectDao subjectDao, EducationService educationService) {
+        this.subjectDao = subjectDao;
+        this.educationService = educationService;
+    }
 
     @Override
     public boolean addSubject(String name) {
