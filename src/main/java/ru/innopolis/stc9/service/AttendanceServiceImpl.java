@@ -22,4 +22,5 @@ public class AttendanceServiceImpl implements AttendanceService {
     public List<Integer> getLessonAttendance(int lessonId, int groupId) {
         return attendanceDao.getLessonAttendance(lessonId, groupId);
     }
+
 }
