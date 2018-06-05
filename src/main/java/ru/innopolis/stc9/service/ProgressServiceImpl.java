@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import ru.innopolis.stc9.dao.ProgressDao;
+import ru.innopolis.stc9.pojo.Lessons;
 import ru.innopolis.stc9.pojo.Progress;
 import ru.innopolis.stc9.pojo.User;
 
@@ -16,6 +17,10 @@ public class ProgressServiceImpl implements ProgressService {
     private ProgressDao progressDao;
     @Autowired
     private UserService userService;
+    @Autowired
+    private LessonsService lessonsService;
+    @Autowired
+    private AttendanceService attendanceService;
 
     /**
      * Получаем количество оценок
@@ -44,17 +49,30 @@ public class ProgressServiceImpl implements ProgressService {
         return getResultList(progressList);
     }
 
+    @Override
+    public List<Lessons> getLessons() {
+        return lessonsService.findAllLessons();
+    }
+
+    @Override
+    public int getNumberOfMissedLessons() {
+        return attendanceService.getNumberOfMissedLessons(getUser().getId());
+    }
+
     /**
      * Из контекста получаем User, вытаскиваем роль и логин и отбираем список по этим параметрам
      */
     private List<Progress> getResultList(List<Progress> progressList) {
-        User user = userService.findUserByLogin(SecurityContextHolder.getContext().getAuthentication().getName());
-        String login = user.getLogin();
-        String role = user.getPermissionGroup();
+        String login = getUser().getLogin();
+        String role = getUser().getPermissionGroup();
         if (isStudent(role)) {
             return progressByLogin(login, progressList);
         }
         return progressList;
+    }
+
+    private User getUser() {
+        return userService.findUserByLogin(SecurityContextHolder.getContext().getAuthentication().getName());
     }
 
     /**

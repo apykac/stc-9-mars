@@ -3,12 +3,17 @@
 <%@ taglib prefix="t" tagdir="/WEB-INF/tags" %>
 <%@ taglib uri="http://www.springframework.org/tags/form" prefix="form" %>
 <t:wrapper>
+    <jsp:attribute name="contentHeader">
+        <h1>Уроки
+            <small>для редактирования урока выберите его в списке</small>
+        </h1>
+    </jsp:attribute>
     <jsp:attribute name="footer">
         <script src="${pageContext.request.contextPath}/assets/js/setid.js"></script>
     </jsp:attribute>
     <jsp:body>
         <div class="row">
-            <div class="col-md-6">
+            <div class="col-md-8">
                 <div class="box box-info">
                     <div class="box-header with-border">
                         <h3 class="box-title">Список уроков</h3>
@@ -42,13 +47,16 @@
                                                 <td>${lessons.sname}</td>
                                                 <td>${lessons.date}</td>
                                                 <td>${lessons.name}</td>
+                                                <td>
+                                                    <a href=${pageContext.request.contextPath}/views/attendance?lessonId=${lessons.id}>
+                                                        Посещаемость
+                                                    </a>
                                                 </td>
                                                 <td>
-                                                    <a href=${pageContext.request.contextPath}/views/attendance?lessonId=${lessons.id}>Посещаемость</a>
+                                                    <a href=${pageContext.request.contextPath}/views/marks?lessonId=${lessons.id}>
+                                                        Проверка ДЗ
+                                                    </a>
                                                 </td>
-                                                <td>
-                                                    <a href=${pageContext.request.contextPath}/views/marks?lessonId=${lessons.id}>Проверка
-                                                        ДЗ</a></td>
                                             </tr>
                                         </c:forEach>
                                         </tbody>
@@ -77,17 +85,23 @@
                         <form id="add" action="${pageContext.request.contextPath}/university/teacher/lessons"
                               method="post">
                             <div class="form-group">
-                                    <%--<label for="l_sname">Предмет</label>
-                                    <select id="l_sname" name="subject" class="form-control">
-                                        <c:forEach items="${requestScope.get('subjects')}" var="subj">
-                                            <option value="${subj.id}">${subj.sname}</option>
-                                        </c:forEach>
-                                    </select>--%>
-                                <label for="l_date">Дата урока</label>
-                                <input type="text" class="form-control" id="l_date" value="">
-                                <label for="l_name2">Название урока</label>
+                                <label for="add_sname">Предмет</label>
+                                <select id="add_sname" class="form-control" name="add_subject_id">
+                                    <c:forEach items="${subjects}" var="subj">
+                                        <option value="${subj.id}">${subj.name}</option>
+                                    </c:forEach>
+                                </select>
+                                <label for="add_date">Дата урока</label>
+                                <div class="input-group">
+                                    <div class="input-group-addon">
+                                        <i class="fa fa-calendar"></i>
+                                    </div>
+                                    <input type="date" class="form-control" id="add_date"
+                                           data-inputmask="'alias': 'dd/mm/yyyy'" data-mask="" name="add_date">
+                                </div>
+                                <label for="add_name">Название урока</label>
                                 <div class="input-group input-group-lg">
-                                    <input type="text" class="form-control" id="l_name2" name="name">
+                                    <input type="text" class="form-control" id="add_name" name="add_name">
                                     <span class="input-group-btn">
                                         <button type="submit" class="btn btn-info btn-flat">OK</button>
                                     </span>
@@ -102,10 +116,11 @@
                             <div class="form-group">
                                 <label for="l_name">Название урока</label>
                                 <div class="input-group input-group-lg">
+                                    <input type="hidden" class="form-control" id="l_id" value="" name="idLesson"
+                                           readonly>
                                     <input type="text" class="form-control" id="l_name" value="" disabled>
-                                    <input type="hidden" class="form-control" id="l_id" value="" name="idSubj" readonly>
                                     <span class="input-group-btn">
-                                        <button type="submit" class="btn btn-info btn-flat disabled">OK</button>
+                                        <button type="submit" class="btn btn-info btn-flat">OK</button>
                                     </span>
                                 </div>
                             </div>

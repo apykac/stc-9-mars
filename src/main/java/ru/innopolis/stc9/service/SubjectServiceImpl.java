@@ -59,15 +59,10 @@ public class SubjectServiceImpl implements SubjectService {
      */
     public boolean checkSubjectName(String name) {
         boolean existSubject = false;
-
         for (Subject subject : findAllSubject()) {
             if (name.equals(subject.getName())) {
                 existSubject = true;
             }
-        }
-
-        if (!existSubject) {
-            addSubject(name);
         }
         return existSubject;
     }

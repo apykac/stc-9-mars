@@ -24,6 +24,12 @@ public class Lessons {
         this.name = name;
     }
 
+    public Lessons(int subject_id, Date date, String name) {
+        this.subject_id = subject_id;
+        this.date = date;
+        this.name = name;
+    }
+
     public int getId() {
         return id;
     }

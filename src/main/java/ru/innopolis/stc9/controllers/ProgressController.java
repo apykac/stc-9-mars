@@ -7,9 +7,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import ru.innopolis.stc9.pojo.Progress;
-import ru.innopolis.stc9.service.LessonsService;
 import ru.innopolis.stc9.service.ProgressService;
 
+import javax.servlet.http.HttpSession;
 import java.util.Arrays;
 import java.util.List;
 
@@ -18,9 +18,6 @@ import java.util.List;
 public class ProgressController {
     @Autowired
     private ProgressService progressService;
-    @Autowired
-    private LessonsService lessonsService;
-
 
     private int greaterOrEqualMark = 0;
     private int lessOrEqualMark = 5;
@@ -33,7 +30,8 @@ public class ProgressController {
         List<Progress> listProgress = progressService.getProgress(greaterOrEqualMark, lessOrEqualMark);
         model.addAttribute("progress", listProgress);
         model.addAttribute("amountMarks", progressService.getAmountMarks());
-        model.addAttribute("lessons", lessonsService.findAllLessons());
+        model.addAttribute("lessons", progressService.getLessons());
+        model.addAttribute("missedLessons", progressService.getNumberOfMissedLessons());
         return "views/progress";
     }
 
@@ -43,7 +41,7 @@ public class ProgressController {
      * @param marks   строка с оценками больше меньше, разделенные "-"
      */
     @RequestMapping(value = "/selmarks")
-    private String getProgressBySelectedMark(@RequestParam String marks, Model model) {
+    private String getProgressBySelectedMark(@RequestParam String marks, HttpSession session, Model model) {
         greaterOrEqualMark = getMarks(marks)[0];
         lessOrEqualMark = getMarks(marks)[1];
         return doGet(model);

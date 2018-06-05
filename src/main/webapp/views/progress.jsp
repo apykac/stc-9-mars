@@ -81,7 +81,7 @@
                 <!-- small box -->
                 <div class="small-box bg-yellow">
                     <div class="inner">
-                        <h3>4</h3>
+                        <h3><c:out value="${requestScope.get('missedLessons')}"/></h3>
 
                         <p>Пропуски</p>
                     </div>
