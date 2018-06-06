@@ -66,9 +66,7 @@ public class AttendanceDaoImpl implements AttendanceDao {
         }
         return result;
     }
-
-
-
+  
     /**
      * Возвращает список студентов из определенной группы, отмеченных ранее присутствующими на определенном уроке.
      *

@@ -26,5 +26,5 @@ public class AttendanceServiceImpl implements AttendanceService {
     @Override
     public int getNumberOfMissedLessons(int id) {
         return attendanceDao.getNumberOfMissedLessons(id);
-    }
+
 }
