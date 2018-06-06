@@ -11,6 +11,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -108,26 +109,27 @@ public class UserDaoImpl implements UserDao {
         return result;
     }
 
-    @Override
-    public boolean updateUserByFIOL(User newUser) {
-        if (newUser == null) return false;
-        logger.info("Started updating user.");
+    public boolean update(User user, String prefix, List<String> mainParam, String postfix, List<String> secondaryParam) {
+        if (user == null) return false;
         try (Connection connection = connectionManager.getConnection();
              PreparedStatement statement = connection.prepareStatement(
-                     "UPDATE users SET first_name = ?, second_name = ?, middle_name = ?, login = ?, enabled = ?, permission_group = ? " +
-                             "WHERE id = ?")) {
-            UserMapper.statementSetter(statement, newUser, 3, 1, 3);
-            statement.setString(4, newUser.getLogin());
-            statement.setInt(5, newUser.getEnabled());
-            statement.setString(6, newUser.getPermissionGroup());
-            statement.setInt(7, newUser.getId());
+                     UserMapper.getSqlRequestByParam(prefix, mainParam, postfix, secondaryParam, true))) {
+            UserMapper.statementSetterUniversal(statement, user, mainParam, secondaryParam, false);
             statement.execute();
-            logger.info("User updated successfully");
         } catch (SQLException e) {
             logger.error(sqlPrefixMsg + e.getMessage());
             return false;
         }
         return true;
+    }
+
+    @Override
+    public boolean updateUserByFIOL(User newUser) {
+        if (newUser == null) return false;
+        List<String> mainParam = new ArrayList<>(Arrays.asList(UserMapper.FNAME, UserMapper.SNAME, UserMapper.MNAME,
+                UserMapper.LOGIN, UserMapper.ENABLED, UserMapper.PERMGROUP));
+        List<String> secondaryParam = new ArrayList<>(Arrays.asList(UserMapper.ID));
+        return update(newUser, "UPDATE users SET ", mainParam, " WHERE ", secondaryParam);
     }
 
     @Override
@@ -147,6 +149,14 @@ public class UserDaoImpl implements UserDao {
         }
         return true;
     }
+
+    /*@Override
+    public boolean updateUserPassword(User newUser) {
+        if (newUser == null) return false;
+        List<String> mainParam = new ArrayList<>(Arrays.asList(UserMapper.HASH));
+        List<String>  secondaryParam = new ArrayList<>(Arrays.asList(UserMapper.ID));
+        return update(newUser,"UPDATE users SET ",mainParam," WHERE ", secondaryParam);
+    }*/
 
     @Override
     public User findLoginByName(String login) {
