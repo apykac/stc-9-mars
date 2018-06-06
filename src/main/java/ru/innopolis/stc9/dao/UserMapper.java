@@ -7,6 +7,7 @@ import ru.innopolis.stc9.pojo.User;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.sql.*;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -59,7 +60,8 @@ public class UserMapper {
     }
 
     public static void statementSetterUniversal(PreparedStatement statement, Object object, List<String> mainParam, List<String> secondaryParam, boolean isPattern) {
-        if ((statement == null) || (object == null) || (mainParam == null)) return;
+        if ((statement == null) || (object == null)) return;
+        mainParam = (mainParam == null) ? new ArrayList<>() : mainParam;
         if (secondaryParam != null) mainParam.addAll(secondaryParam);
         int count = 1;
         try {

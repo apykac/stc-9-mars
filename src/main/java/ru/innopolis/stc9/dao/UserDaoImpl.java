@@ -23,6 +23,49 @@ public class UserDaoImpl implements UserDao {
     private Logger logger = Logger.getLogger(UserDaoImpl.class);
     private String sqlPrefixMsg = "SQLException: ";
 
+    public boolean update(User user, String prefix, List<String> mainParam, String postfix, List<String> secondaryParam) {
+        if (user == null) return false;
+        try (Connection connection = connectionManager.getConnection();
+             PreparedStatement statement = connection.prepareStatement(
+                     UserMapper.getSqlRequestByParam(prefix, mainParam, postfix, secondaryParam, true))) {
+            UserMapper.statementSetterUniversal(statement, user, mainParam, secondaryParam, false);
+            statement.execute();
+        } catch (SQLException e) {
+            logger.error(sqlPrefixMsg + e.getMessage());
+            return false;
+        }
+        return true;
+    }
+
+    @Override
+    public List<User> getUsersList() {
+        return get(new User(), "SELECT * FROM users ", null, null, null);
+    }
+
+    @Override
+    public User findUserByUserId(int id) {
+        if (id < 0) return null;
+        User user = new User();
+        user.setId(id);
+        List<String> secondaryParam = new ArrayList<>(Arrays.asList(UserMapper.ID));
+        return get(user, "SELECT * FROM users ", null, " WHERE ", secondaryParam).get(0);
+    }
+
+    public List<User> get(User user, String prefix, List<String> mainParam, String postfix, List<String> secondaryParam) {
+        List<User> result = new ArrayList<>();
+        try (Connection connection = connectionManager.getConnection();
+             PreparedStatement statement = connection.prepareStatement(
+                     UserMapper.getSqlRequestByParam(prefix, mainParam, postfix, secondaryParam, true))) {
+            UserMapper.statementSetterUniversal(statement, user, mainParam, secondaryParam, false);
+            try (ResultSet resultSet = statement.executeQuery()) {
+                while (resultSet.next()) result.add(UserMapper.getByResultSet(resultSet));
+            }
+        } catch (SQLException e) {
+            logger.error(sqlPrefixMsg + e.getMessage());
+        }
+        return result;
+    }
+
     @Override
     public boolean addUser(User user) {
         if (user == null) return false;
@@ -59,68 +102,12 @@ public class UserDaoImpl implements UserDao {
     @Override
     public boolean deactivateUser(int id) {
         if (id < 0) return false;
-        try (Connection connection = connectionManager.getConnection();
-             PreparedStatement statement = connection.prepareStatement(
-                     "UPDATE users SET enabled = 0 WHERE id = ?")) {
-            statement.setInt(1, id);
-            statement.execute();
-        } catch (SQLException e) {
-            logger.error(sqlPrefixMsg + e.getMessage());
-            return false;
-        }
-        return true;
-    }
-
-    @Override
-    public User findUserByUserId(int id) {
-        if (id < 0) return null;
-        User result = null;
-        try (Connection connection = connectionManager.getConnection();
-             PreparedStatement statement = connection.prepareStatement(
-                     "SELECT * FROM users where id=?")) {
-            statement.setInt(1, id);
-            try (ResultSet resultSet = statement.executeQuery()) {
-                if (resultSet.next()) result = UserMapper.getByResultSet(resultSet);
-            }
-        } catch (SQLException e) {
-            logger.error(sqlPrefixMsg + e.getMessage());
-            return result;
-        }
-        return result;
-    }
-
-    @Override
-    public List<User> getUsersList() {
-        logger.info("Users list requested.");
-        List<User> result = new ArrayList<>();
-        try (Connection connection = connectionManager.getConnection();
-             PreparedStatement statement = connection.prepareStatement("SELECT * FROM users")) {
-            try (ResultSet resultSet = statement.executeQuery()) {
-                while (resultSet.next()) {
-                    User user = UserMapper.getByResultSet(resultSet);
-                    result.add(user);
-                }
-                logger.info("Users list returned successfully");
-            }
-        } catch (SQLException e) {
-            logger.error(sqlPrefixMsg + e.getMessage());
-            return result;
-        }
-        return result;
-    }
-
-    public boolean update(User user, String prefix, List<String> mainParam, String postfix, List<String> secondaryParam) {
-        if (user == null) return false;
-        try (Connection connection = connectionManager.getConnection();
-             PreparedStatement statement = connection.prepareStatement(
-                     UserMapper.getSqlRequestByParam(prefix, mainParam, postfix, secondaryParam, true))) {
-            UserMapper.statementSetterUniversal(statement, user, mainParam, secondaryParam, false);
-            statement.execute();
-        } catch (SQLException e) {
-            logger.error(sqlPrefixMsg + e.getMessage());
-            return false;
-        }
-        return true;
+        User user = new User();
+        user.setId(id);
+        user.setEnabled(0);
+        List<String> mainParam = new ArrayList<>(Arrays.asList(UserMapper.ENABLED));
+        List<String> secondaryParam = new ArrayList<>(Arrays.asList(UserMapper.ID));
+        return update(user, "UPDATE users SET ", mainParam, " WHERE ", secondaryParam);
     }
 
     @Override
@@ -135,28 +122,10 @@ public class UserDaoImpl implements UserDao {
     @Override
     public boolean updateUserPassword(User newUser) {
         if (newUser == null) return false;
-        logger.info("Started updating user.");
-        try (Connection connection = connectionManager.getConnection();
-             PreparedStatement statement = connection.prepareStatement(
-                     "UPDATE users SET hash_password = ? WHERE id = ?")) {
-            statement.setString(1, newUser.getHashPassword());
-            statement.setInt(2, newUser.getId());
-            statement.execute();
-            logger.info("User updated successfully");
-        } catch (SQLException e) {
-            logger.error(sqlPrefixMsg + e.getMessage());
-            return false;
-        }
-        return true;
-    }
-
-    /*@Override
-    public boolean updateUserPassword(User newUser) {
-        if (newUser == null) return false;
         List<String> mainParam = new ArrayList<>(Arrays.asList(UserMapper.HASH));
-        List<String>  secondaryParam = new ArrayList<>(Arrays.asList(UserMapper.ID));
-        return update(newUser,"UPDATE users SET ",mainParam," WHERE ", secondaryParam);
-    }*/
+        List<String> secondaryParam = new ArrayList<>(Arrays.asList(UserMapper.ID));
+        return update(newUser, "UPDATE users SET ", mainParam, " WHERE ", secondaryParam);
+    }
 
     @Override
     public User findLoginByName(String login) {
