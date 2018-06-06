@@ -22,15 +22,21 @@ public class SubjectServiceImpl implements SubjectService {
 
     @Override
     public boolean addSubject(String name) {
-        if ("".equals(name)) return false;
-        Subject subject = new Subject(name);
-        return subjectDao.addSubject(subject);
+        if ("".equals(name)) {
+            return false;
+        } else {
+            Subject subject = new Subject(name);
+            return subjectDao.addSubject(subject);
+        }
     }
 
     @Override
     public boolean deleteSubject(int subjectId) {
-        if (subjectId < 0) return false;
-        return subjectDao.deleteSubject(subjectId);
+        if (subjectId < 0) {
+            return false;
+        } else {
+            return subjectDao.deleteSubject(subjectId);
+        }
     }
 
     @Override
@@ -46,12 +52,16 @@ public class SubjectServiceImpl implements SubjectService {
     @Override
     public List<Subject> findByGroupId(int id) {
         ArrayList<Subject> subjectList = new ArrayList<>();
-        for(Education e: educationService.findAllEducations()){
-            if (e.getGroupId() == id){
+        findIdInAllEducations(id, subjectList);
+        return subjectList;
+    }
+
+    private void findIdInAllEducations(int id, ArrayList<Subject> subjectList) {
+        for (Education e : educationService.findAllEducations()) {
+            if (e.getGroupId() == id) {
                 subjectList.add(findById(e.getSubjectId()));
             }
         }
-        return subjectList;
     }
 
     /**
@@ -59,6 +69,7 @@ public class SubjectServiceImpl implements SubjectService {
      *
      * @param name название предмета
      */
+    @Override
     public boolean checkSubjectName(String name) {
         boolean existSubject = false;
         for (Subject subject : findAllSubject()) {

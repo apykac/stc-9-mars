@@ -7,23 +7,34 @@ import ru.innopolis.stc9.dao.LessonsDaoImpl;
 import ru.innopolis.stc9.pojo.Lessons;
 
 import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.List;
 
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.*;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 public class LessonsServiceImplTest {
     private LessonsServiceImpl lessonsService;
+    private java.sql.Date dateSql;
     private Lessons lesson;
 
     @Before
     public void setUp() throws ParseException {
-        lesson = new Lessons(1, null, "some");
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+        java.util.Date date = sdf.parse("2018-01-01");
+        dateSql = new java.sql.Date(date.getTime());
+
+        lesson = new Lessons(1, dateSql, "some");
+        List<Lessons> list = new ArrayList<>();
+        list.add(lesson);
 
         LessonsDao mockLessonDao = mock(LessonsDaoImpl.class);
         when(mockLessonDao.addLesson(lesson)).thenReturn(true);
         when(mockLessonDao.deleteLesson(1)).thenReturn(true);
+        when(mockLessonDao.deleteLesson(2)).thenReturn(false);
+        when(mockLessonDao.findAllLessons()).thenReturn(list);
         lessonsService = new LessonsServiceImpl(mockLessonDao);
     }
 
@@ -57,5 +68,25 @@ public class LessonsServiceImplTest {
     public void deleteLessonTestIfFalse() {
         boolean result = lessonsService.deleteLesson(2);
         assertFalse(result);
+    }
+
+    @Test
+    public void findAllLessonsTest() {
+        List<Lessons> result = lessonsService.findAllLessons();
+        assertEquals(result.get(0).getName(), "some");
+        assertEquals(result.get(0).getDate(), dateSql);
+        assertEquals(result.get(0).getSubject_id(), 1);
+    }
+
+    @Test
+    public void stringToDateTest() {
+        java.sql.Date result = lessonsService.stringToDate("2018-01-01");
+        assertEquals(result, dateSql);
+    }
+
+    @Test(expected = ParseException.class)
+    public void stringToDateTest2() {
+        java.sql.Date result = lessonsService.stringToDate("01/01/2018");
+        assertNotEquals(result, dateSql);
     }
 }
