@@ -59,12 +59,16 @@ public class LessonsDaoImpl implements LessonsDao {
         logger.info("Lessons list requested.");
         List<Lessons> result = new ArrayList<>();
         try (Connection connection = connectionManager.getConnection();
-             PreparedStatement statement = connection.prepareStatement("SELECT * FROM lessons")) {
+             PreparedStatement statement = connection.prepareStatement(
+                     "SELECT lessons.id, lessons.subject_id, subjects.sname, lessons.date, lessons.name " +
+                             "FROM lessons " +
+                             "INNER JOIN subjects ON lessons.subject_id = subjects.id")) {
             try (ResultSet resultSet = statement.executeQuery()) {
                 while (resultSet.next()) {
                     Lessons lesson = new Lessons(
                             resultSet.getInt("id"),
                             resultSet.getInt("subject_id"),
+                            resultSet.getString("sname"),
                             resultSet.getDate("date"),
                             resultSet.getString("name"));
                     result.add(lesson);

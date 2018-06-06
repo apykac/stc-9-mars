@@ -1,4 +1,4 @@
-<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@ page contentType="text/html;charset=UTF-8" pageEncoding="UTF-8" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="t" tagdir="/WEB-INF/tags" %>
 <%@ taglib uri="http://www.springframework.org/tags/form" prefix="form" %>
@@ -81,7 +81,7 @@
                 <!-- small box -->
                 <div class="small-box bg-yellow">
                     <div class="inner">
-                        <h3>4</h3>
+                        <h3><c:out value="${requestScope.get('missedLessons')}"/></h3>
 
                         <p>Пропуски</p>
                     </div>
@@ -130,7 +130,7 @@
                             <div class="row">
                                 <div class="col-sm-12">
                                     <div id="example_length" class="dataTables_length">
-                                        <form action="${pageContext.request.contextPath}/university/student/progress/selmarks"
+                                        <form action="${pageContext.request.contextPath}/university/progress/selmarks"
                                               method="post">
                                             <div class="form-group">
                                             <span class="input-group margin">

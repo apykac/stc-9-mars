@@ -27,5 +27,4 @@ dependencies {
     compile group: 'org.springframework.security', name: 'spring-security-taglibs', version: '4.2.6.RELEASE'
     compile group: 'org.springframework.security', name: 'spring-security-config', version: '4.2.6.RELEASE'
     compile group: 'commons-lang', name: 'commons-lang', version: '2.6'
-    compile group: 'mysql', name: 'mysql-connector-java', version: '5.1.46'
 }

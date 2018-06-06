@@ -23,4 +23,8 @@ public class AttendanceServiceImpl implements AttendanceService {
         return attendanceDao.getLessonAttendance(lessonId, groupId);
     }
 
+    @Override
+    public int getNumberOfMissedLessons(int id) {
+        return attendanceDao.getNumberOfMissedLessons(id);
+
 }

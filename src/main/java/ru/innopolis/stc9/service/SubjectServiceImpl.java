@@ -11,14 +11,19 @@ import java.util.List;
 
 @Service
 public class SubjectServiceImpl implements SubjectService {
+    private final SubjectDao subjectDao;
+    private final EducationService educationService;
+
     @Autowired
-    private SubjectDao subjectDao;
-    @Autowired
-    private EducationService educationService;
+    public SubjectServiceImpl(SubjectDao subjectDao, EducationService educationService) {
+        this.subjectDao = subjectDao;
+        this.educationService = educationService;
+    }
 
     @Override
-    public boolean addSubject(Subject subject) {
-        if (subject == null) return false;
+    public boolean addSubject(String name) {
+        if ("".equals(name)) return false;
+        Subject subject = new Subject(name);
         return subjectDao.addSubject(subject);
     }
 
@@ -47,5 +52,20 @@ public class SubjectServiceImpl implements SubjectService {
             }
         }
         return subjectList;
+    }
+
+    /**
+     * Проверка на совпадение
+     *
+     * @param name название предмета
+     */
+    public boolean checkSubjectName(String name) {
+        boolean existSubject = false;
+        for (Subject subject : findAllSubject()) {
+            if (name.equals(subject.getName())) {
+                existSubject = true;
+            }
+        }
+        return existSubject;
     }
 }

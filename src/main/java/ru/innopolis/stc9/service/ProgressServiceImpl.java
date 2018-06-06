@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import ru.innopolis.stc9.controllers.SessionDataInform;
 import ru.innopolis.stc9.dao.ProgressDao;
+import ru.innopolis.stc9.pojo.Lessons;
 import ru.innopolis.stc9.pojo.Progress;
 import ru.innopolis.stc9.pojo.User;
 
@@ -13,10 +14,18 @@ import java.util.List;
 
 @Service
 public class ProgressServiceImpl implements ProgressService {
+    private final ProgressDao progressDao;
+    private final UserService userService;
+    private final LessonsService lessonsService;
+    private final AttendanceService attendanceService;
+
     @Autowired
-    private ProgressDao progressDao;
-    @Autowired
-    private UserService userService;
+    public ProgressServiceImpl(ProgressDao progressDao, UserService userService, LessonsService lessonsService, AttendanceService attendanceService) {
+        this.progressDao = progressDao;
+        this.userService = userService;
+        this.lessonsService = lessonsService;
+        this.attendanceService = attendanceService;
+    }
 
     /**
      * Получаем количество оценок
@@ -45,17 +54,30 @@ public class ProgressServiceImpl implements ProgressService {
         return getResultList(progressList, session);
     }
 
+    @Override
+    public List<Lessons> getLessons() {
+        return lessonsService.findAllLessons();
+    }
+
+    @Override
+    public int getNumberOfMissedLessons(HttpSession session) {
+        return attendanceService.getNumberOfMissedLessons(getUser(session).getId());
+    }
+
     /**
      * Из контекста получаем User, вытаскиваем роль и логин и отбираем список по этим параметрам
      */
     private List<Progress> getResultList(List<Progress> progressList, HttpSession session) {
-        User user = userService.findUserByLogin((String) session.getAttribute(SessionDataInform.LOGIN));
-        String login = user.getLogin();
-        String role = user.getPermissionGroup();
+        String login = getUser(session).getLogin();
+        String role = getUser(session).getPermissionGroup();
         if (isStudent(role)) {
             return progressByLogin(login, progressList);
         }
         return progressList;
+    }
+
+    private User getUser(HttpSession session) {
+        return userService.findUserByLogin((String) session.getAttribute(SessionDataInform.LOGIN));
     }
 
     /**

@@ -3,7 +3,9 @@ package ru.innopolis.stc9.dao;
 import java.util.List;
 
 public interface AttendanceDao {
-    public boolean addLessonAttendance(int lessonId, int[] students);
+    List<Integer> getLessonAttendance(int lessonId, int groupId);
 
-    public List<Integer> getLessonAttendance(int lessonId, int groupId);
+    boolean addLessonAttendance(int lessonId, int[] students);
+
+    int getNumberOfMissedLessons(int id);
 }
