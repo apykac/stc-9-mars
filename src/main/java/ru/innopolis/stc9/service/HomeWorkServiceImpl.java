@@ -1,5 +1,6 @@
 package ru.innopolis.stc9.service;
 
+import org.apache.commons.validator.UrlValidator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import ru.innopolis.stc9.dao.HomeWorkDao;
@@ -18,6 +19,8 @@ public class HomeWorkServiceImpl implements HomeWorkService {
     private HomeWorkDao homeWorkDao;
     @Autowired
     private MarkDao markDao;
+
+    private static UrlValidator urlValidator = new UrlValidator();
 
     @Override
     public boolean addHomeWork(HomeWork homeWork) {
@@ -42,6 +45,11 @@ public class HomeWorkServiceImpl implements HomeWorkService {
     }
 
     @Override
+    public List<HomeWork> getHomeWorkListByLessonId(int lessonId) {
+        return homeWorkDao.getHomeWorkListByLessonId(lessonId);
+    }
+
+    @Override
     public HomeWork findByStudentId(int studentId) {
         return homeWorkDao.findByStudentId(studentId);
     }
@@ -58,6 +66,11 @@ public class HomeWorkServiceImpl implements HomeWorkService {
         int lessonId = mark.getLessonId();
         HomeWork homeWork = homeWorkDao.findHomeWorkByStudentIdAndLessonId(studentId, lessonId);
         return homeWork.getHomeWorkURL();
+    }
+
+    @Override
+    public boolean homeWorkIsURL(String homeWork) {
+        return urlValidator.isValid(homeWork);
     }
 
     @Override

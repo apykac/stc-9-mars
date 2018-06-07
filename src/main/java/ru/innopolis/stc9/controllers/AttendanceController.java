@@ -13,6 +13,7 @@ import ru.innopolis.stc9.service.UserService;
 
 @Controller
 public class AttendanceController {
+
     private static Logger logger = Logger.getLogger(AttendanceController.class);
     private String defaultPath = "views/attendance";
 
@@ -34,18 +35,23 @@ public class AttendanceController {
     private String editAttendance(@RequestParam("selectGroup") int groupId, @RequestParam("lessonId") int lessonId, Model model) {
         model.addAttribute("lessonId", lessonId);
         model.addAttribute("groupSelected", groupService.findGroupById(groupId));
+        model.addAttribute("groups", groupService.findAllGroups());
         model.addAttribute("studentsInGroup", userService.getStudentsByGroupId(groupId));
         model.addAttribute("savedAttendance", attendanceService.getLessonAttendance(lessonId, groupId));
         return defaultPath;
     }
 
     @RequestMapping(value = "/university/teacher/attendanceSendStudentsList", method = RequestMethod.POST)
-    private String sendStudentsList(@RequestParam("list") int[] studentsList, @RequestParam("lessonId") int lessonId, Model model) {
-        for (int i = 0; i < studentsList.length; i++) {
-            logger.info("student id " + studentsList[i]);
+    private String sendStudentsList(@RequestParam(value = "list", required = false) int[] studentsList, @RequestParam("lessonId") int lessonId, @RequestParam("groupSelected") int groupSelected, Model model) {
+        if (studentsList == null) {
+            attendanceService.clearLessonAttendance(lessonId, groupSelected);
+        } else {
+            attendanceService.addLessonAttendance(groupSelected, lessonId, studentsList);
         }
-        logger.info("lesson id " + lessonId);
-        attendanceService.addLessonAttendance(lessonId, studentsList);
+        model.addAttribute("lessonId", lessonId);
+        model.addAttribute("groups", groupService.findAllGroups());
+        String groupName = groupService.findGroupById(groupSelected).getName();
+        model.addAttribute("message", "Список присутствовавших студентов по группе " + groupName + " обновлен.");
         return defaultPath;
     }
 }

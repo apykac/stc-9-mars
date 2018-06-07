@@ -4,6 +4,7 @@ import org.apache.log4j.Logger;
 import org.springframework.stereotype.Component;
 import ru.innopolis.stc9.db.connection.ConnectionManager;
 import ru.innopolis.stc9.db.connection.ConnectionManagerImpl;
+import ru.innopolis.stc9.pojo.Attendance;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -27,8 +28,8 @@ public class AttendanceDaoImpl implements AttendanceDao {
         for (int studentId : students) {
             try (Connection connection = connectionManager.getConnection();
                  PreparedStatement statement = connection.prepareStatement(
-                         "INSERT INTO attendance (lesson_id, user_id)" +
-                                 "VALUES (?,?)"
+                         "INSERT INTO attendance (lesson_id, user_id, attended)" +
+                                 "VALUES (?,?, TRUE)"
                  )) {
                 statement.setInt(1, lessonId);
                 statement.setInt(2, studentId);
@@ -39,6 +40,28 @@ public class AttendanceDaoImpl implements AttendanceDao {
             }
         }
         return result;
+    }
+
+    public boolean updateAttendance(Attendance attendance) {
+        if (attendance == null) {
+            return false;
+        }
+        logger.info("Started updating attendance");
+        try (Connection connection = connectionManager.getConnection();
+             PreparedStatement statement = connection.prepareStatement(
+                     "UPDATE attendance SET attended = ? WHERE " +
+                             "user_id = ? AND lesson_id=?"
+             )) {
+            statement.setBoolean(1, attendance.isAttended());
+            statement.setInt(2, attendance.getUserId());
+            statement.setInt(3, attendance.getLessonId());
+            statement.execute();
+            logger.info("Attendance successfully updated");
+            return true;
+        } catch (SQLException e) {
+            logger.error(e.getMessage());
+            return false;
+        }
     }
 
     @Override
@@ -66,7 +89,7 @@ public class AttendanceDaoImpl implements AttendanceDao {
         }
         return result;
     }
-  
+
     /**
      * Возвращает список студентов из определенной группы, отмеченных ранее присутствующими на определенном уроке.
      *
@@ -74,15 +97,15 @@ public class AttendanceDaoImpl implements AttendanceDao {
      * @param lessonId id урока
      * @return объект List<User>
      */
-    public List<Integer> getLessonAttendance(int lessonId, int groupId) {
-        List<Integer> result = new ArrayList<>();
+    public List<Attendance> getLessonAttendance(int lessonId, int groupId) {
+        List<Attendance> result = new ArrayList<>();
         if (groupId < 1 && lessonId < 1) {
             return result;
         }
         logger.info("Started requesting attendance by group id " + groupId + " and lesson id " + lessonId);
         try (Connection connection = connectionManager.getConnection();
              PreparedStatement statement = connection.prepareStatement(
-                     "SELECT attendance.user_id FROM attendance " +
+                     "SELECT attendance.user_id, attendance.attended FROM attendance " +
                              "INNER JOIN users ON attendance.user_id = users.id " +
                              "WHERE attendance.lesson_id = ? AND users.group_id = ?"
              )) {
@@ -90,7 +113,11 @@ public class AttendanceDaoImpl implements AttendanceDao {
             statement.setInt(2, groupId);
             try (ResultSet resultSet = statement.executeQuery()) {
                 while (resultSet.next()) {
-                    result.add(resultSet.getInt("user_id"));
+                    Attendance attendance = new Attendance();
+                    attendance.setUserId(resultSet.getInt("user_id"));
+                    attendance.setLessonId(lessonId);
+                    attendance.setAttended(resultSet.getBoolean("attended"));
+                    result.add(attendance);
                 }
                 return result;
             }

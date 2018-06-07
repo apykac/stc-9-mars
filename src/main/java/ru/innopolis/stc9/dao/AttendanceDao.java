@@ -1,11 +1,15 @@
 package ru.innopolis.stc9.dao;
 
+import ru.innopolis.stc9.pojo.Attendance;
+
 import java.util.List;
 
 public interface AttendanceDao {
-    List<Integer> getLessonAttendance(int lessonId, int groupId);
-
     boolean addLessonAttendance(int lessonId, int[] students);
 
     int getNumberOfMissedLessons(int id);
+
+    boolean updateAttendance(Attendance attendance);
+
+    List<Attendance> getLessonAttendance(int lessonId, int groupId);
 }

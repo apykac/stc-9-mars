@@ -19,18 +19,40 @@
                     </div>
                 </div>
 
+                <form class="form-horizontal" id="homeWorkContent">
+
+                    <c:set var="homeWorkIsUrl" value="${requestScope.get('homeWorkIsUrl')}"/>
+
+                    <div class="form-group">
+                        <label for="comment" class="col-sm-3 control-label">Ссылка на ДЗ</label>
+                        <div class="col-sm-9">
+
+                            <c:if test="${homeWorkIsUrl==true}">
+                                <a href="${requestScope.get("homeworkContent")}">${requestScope.get("homeworkContent")}</a>
+                            </c:if>
+
+                            <c:if test="${homeWorkIsUrl==false}">
+                            <textarea class="form-control" id="homeWork" name="homeWork"
+                                      rows="1">${requestScope.get("homeworkContent")}</textarea>
+                            </c:if>
+
+                        </div>
+                    </div>
+
+                </form>
+
                 <form class="form-horizontal" id="add"
                       action="${pageContext.request.contextPath}/university/teacher/updateMark"
                       method="post">
 
-                    <div class="form-group">
-                        <label for="value" class="col-sm-3 control-label">Ссылка на ДЗ</label>
-                        <div class="col-sm-9"><input type="text" class="form-control" id="homeworkContent1"
-                                                     placeholder="Homework content"
-                                                     name="homeworkContent"
-                                                     value="${requestScope.get("homeworkContent")}"
-                                                     readonly></div>
-                    </div>
+                        <%--<div class="form-group">
+                            <label for="value" class="col-sm-3 control-label">Ссылка на ДЗ</label>
+                            <div class="col-sm-9"><input type="text" class="form-control" id="homeworkContent1"
+                                                         placeholder="Homework content"
+                                                         name="homeworkContent"
+                                                         value="${requestScope.get("homeworkContent")}"
+                                                         readonly></div>
+                        </div>--%>
 
                     <div class="form-group">
                         <label for="value" class="col-sm-3 control-label">Оценка</label>

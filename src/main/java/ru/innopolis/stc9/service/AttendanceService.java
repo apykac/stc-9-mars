@@ -1,11 +1,13 @@
 package ru.innopolis.stc9.service;
 
-import java.util.List;
+import java.util.Map;
 
 public interface AttendanceService {
-    List<Integer> getLessonAttendance(int lessonId, int groupId);
+    void addLessonAttendance(int groupId, int lessonId, int[] studentsList);
 
-    boolean addLessonAttendance(int lessonId, int[] studentsList);
+    void clearLessonAttendance(int lessonId, int groupId);
+
+    Map<Integer, Boolean> getLessonAttendance(int lessonId, int groupId);
 
     int getNumberOfMissedLessons(int id);
 }
