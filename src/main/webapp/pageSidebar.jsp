@@ -1,5 +1,5 @@
 <%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags" %>
-<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@ page contentType="text/html;charset=UTF-8" pageEncoding="UTF-8" %>
 <!-- Left side column. contains the logo and sidebar -->
 <aside class="main-sidebar">
     <!-- sidebar: style can be found in sidebar.less -->
@@ -19,15 +19,17 @@
         <!-- sidebar menu: : style can be found in sidebar.less -->
         <ul class="sidebar-menu" data-widget="tree">
             <li class="header">MAIN NAVIGATION</li>
-            <sec:authorize access="hasRole('ROLE_STUDENT')">
+            <sec:authorize access="hasAnyRole('ROLE_ADMIN', 'ROLE_STUDENT', 'ROLE_TEACHER')">
                 <li>
-                    <a href="${pageContext.request.contextPath}/university/student/progress">
+                    <a href="${pageContext.request.contextPath}/university/progress">
                         <i class="fa fa-pie-chart"></i> <span>Прогресс</span>
                         <span class="pull-right-container">
                             <small class="label pull-right bg-green">Отчет</small>
                         </span>
                     </a>
                 </li>
+            </sec:authorize>
+            <sec:authorize access="hasRole('ROLE_STUDENT')">
                 <li>
                     <a href="${pageContext.request.contextPath}/university/student/studentDashBoard">
                         <i class="fa fa-users"></i> <span>Страница студента</span>

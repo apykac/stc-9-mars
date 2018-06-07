@@ -7,6 +7,8 @@ import java.util.List;
 public interface AttendanceDao {
     boolean addLessonAttendance(int lessonId, int[] students);
 
+    int getNumberOfMissedLessons(int id);
+
     boolean updateAttendance(Attendance attendance);
 
     List<Attendance> getLessonAttendance(int lessonId, int groupId);

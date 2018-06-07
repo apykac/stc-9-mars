@@ -1,116 +1,116 @@
-<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@ page contentType="text/html;charset=UTF-8" pageEncoding="UTF-8" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="t" tagdir="/WEB-INF/tags" %>
 <%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags" %>
 <t:wrapper>
+    <jsp:attribute name="contentHeader">
+        <h1>Предметы
+            <small>для редактирования предмета выберите его в списке</small>
+        </h1>
+    </jsp:attribute>
     <jsp:attribute name="footer">
         <script src="${pageContext.request.contextPath}/assets/js/setid.js"></script>
     </jsp:attribute>
     <jsp:body>
         <div class="row">
-            <div class="col-md-12 panel-warning">
-                <div class="content-box-header">
-                    <div class="panel-title ">Список предметов</div>
-                </div>
-                <div class="content-box-large box-with-header">
-                    <c:if test="${requestScope.get('errorName') != null}">
-                        <div class="row">
-                            <div class="col-xs-12">
-                                <div id="example_length" class="dataTables_length">
-                                    <div class='alert alert-danger'>${requestScope.get("errorName")}</div>
+            <div class="col-md-3">
+                <div class="box box-info">
+                    <div class="box-header with-border">
+                        <h3 class="box-title">Список предметов</h3>
+
+                        <div class="box-tools pull-right">
+                            <button type="button" class="btn btn-box-tool" data-widget="collapse"><i
+                                    class="fa fa-minus"></i>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="box-body">
+                        <div class="dataTables_wrapper form-inline dt-bootstrap">
+                            <div class="row">
+                                <div class="col-sm-12">
+                                    <c:if test="${requestScope.get('errorName') != null}">
+                                        <div class="row">
+                                            <div class="col-xs-12">
+                                                <div id="example_length" class="dataTables_length">
+                                                    <div class='alert alert-danger'>${requestScope.get("errorName")}</div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </c:if>
+                                    <table class="table">
+                                        <thead>
+                                        <tr>
+                                            <th>Предмет</th>
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+                                        <c:forEach items="${requestScope.get('subjects')}" var="subjects">
+                                            <tr class="m_editSubject"
+                                                idsubj="${subjects.id}"
+                                                namesubj="${subjects.name}"
+                                                style="cursor:pointer">
+
+                                                <td>${subjects.name}</td>
+                                                <td>Edit</td>
+                                            </tr>
+                                        </c:forEach>
+                                        </tbody>
+                                    </table>
                                 </div>
                             </div>
+                            <!-- /.table-responsive -->
                         </div>
-                    </c:if>
-                    <table class="table">
-                        <thead>
-                        <tr>
-                            <th>#</th>
-                            <th>Предмет</th>
-                            <th>Действие</th>
-                        </tr>
-                        </thead>
-                        <tbody>
-                        <c:forEach items="${requestScope.get('subjects')}" var="subjects">
-                            <tr>
-                                <td>${subjects.id}</td>
-                                <td>${subjects.name}</td>
-                                <td><span class="m_editSubject"
-                                          idsubj="${subjects.id}"
-                                          namesubj="${subjects.name}"
-                                          data-toggle="modal"
-                                          data-target="#myModal">Редактировать</span>
-                                </td>
-                            </tr>
-                        </c:forEach>
-                        </tbody>
-                    </table>
-                    <br/><br/>
+                    </div>
+                    <!-- /.box-body -->
                 </div>
             </div>
-        </div>
-        <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
-             aria-hidden="true">
-            <div class="modal-dialog" role="document">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                            <span aria-hidden="true">&times;</span>
-                        </button>
-                        <h4 class="modal-title" id="myModalLabel">Редактирование записи</h4>
-                    </div>
-                    <div class="modal-body">
-                        <div class="panel panel-default">
-                            <div class="panel-heading">Добавить запись</div>
-                            <div class="panel-body">
-                                <form class="form-horizontal" id="add"
-                                      action="${pageContext.request.contextPath}/university/teacher/subject"
-                                      method="post">
-                                    <div class="form-group">
-                                        <label for="nameSubj" class="col-sm-2 control-label">Введите</label>
-                                        <div class="col-sm-10">
-                                            <input type="text" class="form-control" id="nameSubj"
-                                                   placeholder="Название предмета"
-                                                   name="name">
-                                        </div>
-                                    </div>
-                                    <div class="form-group">
-                                        <div class="col-sm-offset-2 col-sm-10">
-                                            <button type="submit" class="btn btn-primary">OK</button>
-                                        </div>
-                                    </div>
-                                </form>
-                            </div>
+            <div class="col-md-4">
+                <div class="box box-primary" id="win_subj" style="display:none;">
+                    <div class="box-header with-border">
+                        <h3 class="box-title">Настройки</h3>
+
+                        <div class="box-tools pull-right">
+                            <button type="button" class="btn btn-box-tool" data-widget="collapse"><i
+                                    class="fa fa-minus"></i>
+                            </button>
                         </div>
-                        <sec:authorize access="hasRole('ROLE_ADMIN')">
-                            <div class="panel panel-default">
-                                <div class="panel-heading">Удалить запись</div>
-                                <div class="panel-body">
-                                    <form class="form-horizontal" id="delmodal"
-                                          action="${pageContext.request.contextPath}/university/teacher/subject/delete"
-                                          method="post">
-                                        <div class="form-group">
-                                            <label for="m_name" class="col-sm-2 control-label">Имя</label>
-                                            <div class="col-sm-10">
-                                                <input type="text" class="form-control" id="m_name" value=""
-                                                       disabled>
-                                                <input type="hidden" class="form-control" id="m_id" value=""
-                                                       name="idSubj" readonly>
-                                            </div>
-                                        </div>
-                                        <div class="form-group">
-                                            <div class="col-sm-offset-2 col-sm-10">
-                                                <button type="submit" class="btn btn-primary">OK</button>
-                                            </div>
-                                        </div>
-                                    </form>
+                    </div>
+                    <div class="box-body">
+                        <h4>Добавить запись</h4>
+                        <form id="add" action="${pageContext.request.contextPath}/university/teacher/subject"
+                              method="post">
+                            <div class="form-group">
+                                <label for="nameSubj">Введите название</label>
+                                <div class="input-group input-group-lg">
+                                    <input type="text" class="form-control" id="nameSubj"
+                                           placeholder="Название предмета" name="name">
+                                    <span class="input-group-btn">
+                                        <button type="submit" class="btn btn-info btn-flat">OK</button>
+                                    </span>
                                 </div>
                             </div>
+                        </form>
+                        <sec:authorize access="hasRole('ROLE_ADMIN')">
+                        <br/>
+                        <h4>Удалить запись</h4>
+                        <form id="delmodal"
+                              action="${pageContext.request.contextPath}/university/teacher/subject/delete"
+                              method="post">
+                            <div class="form-group">
+                                <label for="m_name">Название предмета</label>
+                                <div class="input-group input-group-lg">
+                                    <input type="text" class="form-control" id="m_name" value="" disabled>
+                                    <input type="hidden" class="form-control" id="m_id" value="" name="idSubj" readonly>
+                                    <span class="input-group-btn">
+                                        <button type="submit" class="btn btn-info btn-flat">OK</button>
+                                    </span>
+                                </div>
+                            </div>
+                        </form>
                         </sec:authorize>
+                        <!-- /.table-responsive -->
                     </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Отмена</button>
-                    </div>
+                    <!-- /.box-body -->
                 </div>
             </div>
         </div>

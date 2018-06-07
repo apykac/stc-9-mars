@@ -61,4 +61,8 @@ public class AttendanceServiceImpl implements AttendanceService {
         return result;
     }
 
+    @Override
+    public int getNumberOfMissedLessons(int id) {
+        return attendanceDao.getNumberOfMissedLessons(id);
+    }
 }

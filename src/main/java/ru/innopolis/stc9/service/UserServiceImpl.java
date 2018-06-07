@@ -14,12 +14,16 @@ import java.util.List;
 
 @Service("userServiceImpl")
 public class UserServiceImpl implements UserService {
-    @Autowired
-    private UserDao userDao;
+    private final UserDao userDao;
     @Autowired
     private GroupDao groupDao;
     @Autowired
     private GroupService groupService;
+
+    @Autowired
+    public UserServiceImpl(UserDao userDao) {
+        this.userDao = userDao;
+    }
 
     @Override
     public List<String> isCorrectData(MultiValueMap<String, String> incParam) {

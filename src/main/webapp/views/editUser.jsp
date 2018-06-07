@@ -178,5 +178,4 @@
                 </c:if>
             </div>
         </div>
-    </div>
 </t:wrapper>
