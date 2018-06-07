@@ -121,6 +121,33 @@ public class HomeWorkDaoImpl implements HomeWorkDao {
     }
 
     @Override
+    public List<HomeWork> getHomeWorkListByLessonId(int lessonId) {
+        List<HomeWork> result = new ArrayList<>();
+        if (lessonId < 0) return result;
+        logger.info("Started requesting homework list byLessonId");
+        try (Connection connection = connectionManager.getConnection();
+             PreparedStatement statement = connection.prepareStatement(
+                     "SELECT * FROM home_work WHERE lesson_id = ?"
+             )) {
+            statement.setInt(1, lessonId);
+            try (ResultSet resultSet = statement.executeQuery()) {
+                while (resultSet.next()) {
+                    HomeWork homeWork = new HomeWork();
+                    homeWork.setId(resultSet.getInt("id"));
+                    homeWork.setHomeWorkURL(resultSet.getString("h_w_url"));
+                    homeWork.setLessonId(resultSet.getInt("lesson_id"));
+                    homeWork.setStudentId(resultSet.getInt("student_id"));
+                    result.add(homeWork);
+                }
+                return result;
+            }
+        } catch (SQLException e) {
+            logger.error(e.getMessage());
+            return result;
+        }
+    }
+
+    @Override
     public HomeWork findHomeWorkByStudentIdAndLessonId(int studentId, int lessonId) {
         HomeWork homeWork = null;
         if (lessonId < 0) return homeWork;

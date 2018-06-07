@@ -31,6 +31,7 @@ public class MarksController {
         model.addAttribute("studentName", markService.getFullStudentNameInOneString(id));
         model.addAttribute("lessonName", markService.getLessonNameByMarkId(id));
         model.addAttribute("homeworkContent", homeWorkService.findHomeWorkByMarkId(id));
+        model.addAttribute("homeWorkIsUrl", homeWorkService.homeWorkIsURL(homeWorkService.findHomeWorkByMarkId(id)));
         model.addAttribute("value", markService.getMarkById(id).getValue());
         model.addAttribute("comment", markService.getMarkById(id).getComment());
         model.addAttribute("id", id);
