@@ -49,6 +49,7 @@ public class LessonsServiceImpl implements LessonsService {
         return lessonsDao.findAllLessons();
     }
 
+    @Override
     public java.sql.Date stringToDate(String strDate) {
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
         java.sql.Date result = null;

@@ -23,6 +23,11 @@ public class UserServiceImpl implements UserService {
     @Autowired
     private GroupService groupService;
 
+    @Autowired
+    public UserServiceImpl(UserDao userDao) {
+        this.userDao = userDao;
+    }
+
     @Override
     public List<String> isCorrectData(MultiValueMap<String, String> incParam) {
         List<String> result = new ArrayList<>();

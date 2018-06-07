@@ -2,13 +2,11 @@ package ru.innopolis.stc9.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import ru.innopolis.stc9.controllers.SessionDataInform;
 import ru.innopolis.stc9.dao.ProgressDao;
 import ru.innopolis.stc9.pojo.Lessons;
 import ru.innopolis.stc9.pojo.Progress;
 import ru.innopolis.stc9.pojo.User;
 
-import javax.servlet.http.HttpSession;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -31,12 +29,13 @@ public class ProgressServiceImpl implements ProgressService {
      * Получаем количество оценок
      */
     @Override
-    public List<Integer> getAmountMarks(HttpSession session) {
-        List<Progress> progressList = getResultList(progressDao.getProgress(), session);
+    public List<Integer> getAmountMarks(String login) {
+        List<Progress> progressList = getResultList(progressDao.getProgress(), login);
         List<Integer> marks = new ArrayList<>();
         marks.add(0, selectMarksInProgressList(0, 5, progressList).size());
         for (int i = 1; i < 6; i++) {
-            marks.add(i, selectMarksInProgressList(i, i, progressList).size());
+            int amountMarks = selectMarksInProgressList(i, i, progressList).size();
+            marks.add(i, amountMarks);
         }
         return marks;
     }
@@ -48,10 +47,10 @@ public class ProgressServiceImpl implements ProgressService {
      * @param lessOrEqualMark    Оценка меньше или равно
      */
     @Override
-    public List<Progress> getProgress(int greaterOrEqualMark, int lessOrEqualMark, HttpSession session) {
+    public List<Progress> getProgress(int greaterOrEqualMark, int lessOrEqualMark, String login) {
         List<Progress> progressList =
                 selectMarksInProgressList(greaterOrEqualMark, lessOrEqualMark, progressDao.getProgress());
-        return getResultList(progressList, session);
+        return getResultList(progressList, login);
     }
 
     @Override
@@ -60,24 +59,24 @@ public class ProgressServiceImpl implements ProgressService {
     }
 
     @Override
-    public int getNumberOfMissedLessons(HttpSession session) {
-        return attendanceService.getNumberOfMissedLessons(getUser(session).getId());
+    public int getNumberOfMissedLessons(String login) {
+        int id = getUser(login).getId();
+        return attendanceService.getNumberOfMissedLessons(id);
     }
 
     /**
-     * Из контекста получаем User, вытаскиваем роль и логин и отбираем список по этим параметрам
+     * Из session вытаскиваем роль и логин и отбираем список по этим параметрам
      */
-    private List<Progress> getResultList(List<Progress> progressList, HttpSession session) {
-        String login = getUser(session).getLogin();
-        String role = getUser(session).getPermissionGroup();
+    private List<Progress> getResultList(List<Progress> progressList, String login) {
+        String role = getUser(login).getPermissionGroup();
         if (isStudent(role)) {
             return progressByLogin(login, progressList);
         }
         return progressList;
     }
 
-    private User getUser(HttpSession session) {
-        return userService.findUserByLogin((String) session.getAttribute(SessionDataInform.LOGIN));
+    private User getUser(String login) {
+        return userService.findUserByLogin(login);
     }
 
     /**
