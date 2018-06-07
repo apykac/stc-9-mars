@@ -34,6 +34,7 @@ public class AttendanceController {
     private String editAttendance(@RequestParam("selectGroup") int groupId, @RequestParam("lessonId") int lessonId, Model model) {
         model.addAttribute("lessonId", lessonId);
         model.addAttribute("groupSelected", groupService.findGroupById(groupId));
+        model.addAttribute("groups", groupService.findAllGroups());
         model.addAttribute("studentsInGroup", userService.getStudentsByGroupId(groupId));
         model.addAttribute("savedAttendance", attendanceService.getLessonAttendance(lessonId, groupId));
         return defaultPath;
@@ -46,6 +47,10 @@ public class AttendanceController {
             return defaultPath;
         }
         attendanceService.addLessonAttendance(groupSelected, lessonId, studentsList);
+        model.addAttribute("lessonId", lessonId);
+        model.addAttribute("groups", groupService.findAllGroups());
+        String groupName = groupService.findGroupById(groupSelected).getName();
+        model.addAttribute("message", "Список присутствовавших студентов по группе " + groupName + " обновлен.");
         return defaultPath;
     }
 }

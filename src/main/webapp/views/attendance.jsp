@@ -21,7 +21,17 @@
                             <c:set var="selectedGroup" value="${requestScope.get('groupSelected')}"/>
 
                             <c:if test="${selectedGroup!=null}">
-                                <input type="text" class="form-control" value="${selectedGroup.name}" disabled>
+
+                                <select class="form-control" id="selectGroup" name="selectGroup">
+
+                                    <c:forEach items="${requestScope.get('groups')}" var="group">
+                                        <option ${selectedGroup.name == group.name ? "selected" : ""}
+                                                value="${group.id}">${group.name}</option>
+                                    </c:forEach>
+
+                                </select>
+
+                                <%--<input type="text" class="form-control" value="${selectedGroup.name}" disabled>--%>
                             </c:if>
                             <c:if test="${selectedGroup==null}">
                                 <select class="form-control" id="selectGroup" name="selectGroup">
@@ -94,13 +104,27 @@
                                     </div>
                                 </form>
 
+
                             </div>
                         </div>
 
                     </c:if>
 
                 </c:if>
-                <br/><br/>
+
+                <c:set var="message" value="${requestScope.get('message')}"/>
+                <c:if test="${message!=null}">
+                    <div class="row">
+                        <div class="col-md-12">
+                                ${message}
+                        </div>
+                    </div>
+                </c:if>
+
+
+            </div>
+
+            <br/><br/>
             </div>
         </div>
     </div>
