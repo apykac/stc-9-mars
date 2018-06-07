@@ -31,11 +31,12 @@ public class ProgressController {
      */
     @RequestMapping(method = RequestMethod.GET)
     private String doGet(HttpSession session, Model model) {
-        List<Progress> listProgress = progressService.getProgress(greaterOrEqualMark, lessOrEqualMark, session);
+        String login = (String) session.getAttribute(SessionDataInform.LOGIN);
+        List<Progress> listProgress = progressService.getProgress(greaterOrEqualMark, lessOrEqualMark, login);
         model.addAttribute("progress", listProgress);
-        model.addAttribute("amountMarks", progressService.getAmountMarks(session));
+        model.addAttribute("amountMarks", progressService.getAmountMarks(login));
         model.addAttribute("lessons", progressService.getLessons());
-        model.addAttribute("missedLessons", progressService.getNumberOfMissedLessons(session));
+        model.addAttribute("missedLessons", progressService.getNumberOfMissedLessons(login));
         return "views/progress";
     }
 
