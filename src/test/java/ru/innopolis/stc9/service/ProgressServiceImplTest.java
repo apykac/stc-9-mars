@@ -2,11 +2,18 @@ package ru.innopolis.stc9.service;
 
 import org.junit.Before;
 import org.junit.Test;
-import ru.innopolis.stc9.dao.ProgressDao;
-import ru.innopolis.stc9.dao.ProgressDaoImpl;
+import ru.innopolis.stc9.dao.implementation.ProgressDaoImpl;
+import ru.innopolis.stc9.dao.interfaces.ProgressDao;
 import ru.innopolis.stc9.pojo.Lessons;
 import ru.innopolis.stc9.pojo.Progress;
 import ru.innopolis.stc9.pojo.User;
+import ru.innopolis.stc9.service.implementation.AttendanceServiceImpl;
+import ru.innopolis.stc9.service.implementation.LessonsServiceImpl;
+import ru.innopolis.stc9.service.implementation.ProgressServiceImpl;
+import ru.innopolis.stc9.service.implementation.UserServiceImpl;
+import ru.innopolis.stc9.service.interfaces.AttendanceService;
+import ru.innopolis.stc9.service.interfaces.LessonsService;
+import ru.innopolis.stc9.service.interfaces.UserService;
 
 import java.util.ArrayList;
 import java.util.List;

@@ -11,10 +11,10 @@ import org.springframework.web.bind.annotation.RequestParam;
 import ru.innopolis.stc9.pojo.Lessons;
 import ru.innopolis.stc9.pojo.Subject;
 import ru.innopolis.stc9.pojo.User;
-import ru.innopolis.stc9.service.GroupService;
-import ru.innopolis.stc9.service.LessonsService;
-import ru.innopolis.stc9.service.SubjectService;
-import ru.innopolis.stc9.service.UserService;
+import ru.innopolis.stc9.service.interfaces.GroupService;
+import ru.innopolis.stc9.service.interfaces.LessonsService;
+import ru.innopolis.stc9.service.interfaces.SubjectService;
+import ru.innopolis.stc9.service.interfaces.UserService;
 
 import java.util.ArrayList;
 import java.util.List;

@@ -6,16 +6,18 @@ import org.junit.runner.RunWith;
 import org.powermock.api.mockito.PowerMockito;
 import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.PowerMockRunner;
-import org.springframework.beans.factory.annotation.Autowired;
-import ru.innopolis.stc9.dao.HomeWorkDao;
-import ru.innopolis.stc9.dao.HomeWorkDaoImpl;
+import ru.innopolis.stc9.dao.implementation.HomeWorkDaoImpl;
+import ru.innopolis.stc9.dao.interfaces.HomeWorkDao;
 import ru.innopolis.stc9.pojo.HomeWork;
+import ru.innopolis.stc9.service.implementation.HomeWorkServiceImpl;
+import ru.innopolis.stc9.service.interfaces.HomeWorkService;
 
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.List;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 /**
  * Created by Сергей on 31.05.2018.

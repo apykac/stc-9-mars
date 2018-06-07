@@ -2,10 +2,13 @@ package ru.innopolis.stc9.service;
 
 import org.junit.Before;
 import org.junit.Test;
-import ru.innopolis.stc9.dao.SubjectDao;
-import ru.innopolis.stc9.dao.SubjectDaoImpl;
+import ru.innopolis.stc9.dao.implementation.SubjectDaoImpl;
+import ru.innopolis.stc9.dao.interfaces.SubjectDao;
 import ru.innopolis.stc9.pojo.Education;
 import ru.innopolis.stc9.pojo.Subject;
+import ru.innopolis.stc9.service.implementation.EducationServiceImpl;
+import ru.innopolis.stc9.service.implementation.SubjectServiceImpl;
+import ru.innopolis.stc9.service.interfaces.EducationService;
 
 import java.util.ArrayList;
 import java.util.List;

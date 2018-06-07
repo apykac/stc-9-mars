@@ -9,8 +9,8 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import ru.innopolis.stc9.pojo.HomeWork;
-import ru.innopolis.stc9.service.HomeWorkService;
-import ru.innopolis.stc9.service.UserService;
+import ru.innopolis.stc9.service.interfaces.HomeWorkService;
+import ru.innopolis.stc9.service.interfaces.UserService;
 
 /**
  * Created by Сергей on 01.06.2018.

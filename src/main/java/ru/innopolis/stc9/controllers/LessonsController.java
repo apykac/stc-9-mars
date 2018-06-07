@@ -7,8 +7,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import ru.innopolis.stc9.pojo.Lessons;
-import ru.innopolis.stc9.service.LessonsService;
-import ru.innopolis.stc9.service.SubjectService;
+import ru.innopolis.stc9.service.interfaces.LessonsService;
+import ru.innopolis.stc9.service.interfaces.SubjectService;
 
 @Controller
 @RequestMapping(value = "/university/teacher/lessons")

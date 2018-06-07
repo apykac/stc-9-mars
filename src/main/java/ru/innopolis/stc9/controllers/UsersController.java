@@ -7,9 +7,9 @@ import org.springframework.util.MultiValueMap;
 import org.springframework.web.bind.annotation.*;
 import ru.innopolis.stc9.pojo.Subject;
 import ru.innopolis.stc9.pojo.User;
-import ru.innopolis.stc9.service.GroupService;
-import ru.innopolis.stc9.service.SubjectService;
-import ru.innopolis.stc9.service.UserService;
+import ru.innopolis.stc9.service.interfaces.GroupService;
+import ru.innopolis.stc9.service.interfaces.SubjectService;
+import ru.innopolis.stc9.service.interfaces.UserService;
 
 import javax.servlet.http.HttpSession;
 import java.util.List;
