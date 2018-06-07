@@ -16,11 +16,15 @@ public interface HomeWorkService {
 
     HomeWork findById(int id);
 
+    List<HomeWork> getHomeWorkListByLessonId(int lessonId);
+
     HomeWork findByStudentId(int studentId);
 
     HomeWork findByLessonId(int lessonId);
 
     String findHomeWorkByMarkId(int markId);
+
+    boolean homeWorkIsURL(String homeWork);
 
     List<HomeWork> findAllHomeWork();
 
