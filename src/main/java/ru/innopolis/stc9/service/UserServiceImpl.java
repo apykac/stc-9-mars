@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.MultiValueMap;
 import ru.innopolis.stc9.dao.GroupDao;
+import ru.innopolis.stc9.dao.Mapper;
 import ru.innopolis.stc9.dao.UserDao;
 import ru.innopolis.stc9.dao.UserMapper;
 import ru.innopolis.stc9.pojo.User;
@@ -13,6 +14,8 @@ import java.util.List;
 
 @Service("userServiceImpl")
 public class UserServiceImpl implements UserService {
+    private Mapper mapper = new UserMapper();
+
     @Autowired
     private UserDao userDao;
     @Autowired
@@ -155,7 +158,7 @@ public class UserServiceImpl implements UserService {
         result[1] = success;
         result[2] = false;
         if (!errors.isEmpty()) return result;
-        User user = UserMapper.getByParam(incParam);
+        User user = (User) mapper.getByParam(incParam);
         if (!userDao.updateUserByFIOL(user)) errors.add("Invalid/Exist Login");
         else {
             result[2] = true;

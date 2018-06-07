@@ -1,15 +1,9 @@
 package ru.innopolis.stc9.dao;
 
-import org.apache.log4j.Logger;
 import org.springframework.stereotype.Component;
-import ru.innopolis.stc9.db.connection.ConnectionManager;
-import ru.innopolis.stc9.db.connection.ConnectionManagerImpl;
+import ru.innopolis.stc9.pojo.DBObject;
 import ru.innopolis.stc9.pojo.User;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -19,41 +13,14 @@ import java.util.List;
  * Created by Семушев on 24.05.2018.
  */
 @Component
-public class UserDaoImpl implements UserDao {
-    private static ConnectionManager connectionManager = ConnectionManagerImpl.getInstance();
-    private Logger logger = Logger.getLogger(UserDaoImpl.class);
-    private String sqlPrefixMsg = "SQLException: ";
+public class UserDaoImpl extends DBObjectDao implements UserDao {
     private String selectPrefix = "SELECT * FROM users ";
     private String updatePrefix = "UPDATE users SET ";
     private String wherePostfix = " WHERE ";
 
-    public boolean executor(User user, String prefix, List<String> mainParam, String postfix, List<String> secondaryParam, boolean isEqually) {
-        if (user == null) return false;
-        try (Connection connection = connectionManager.getConnection();
-             PreparedStatement statement = connection.prepareStatement(
-                     UserMapper.getSqlRequestByParam(prefix, mainParam, postfix, secondaryParam, isEqually))) {
-            UserMapper.statementSetterUniversal(statement, user, mainParam, secondaryParam, false);
-            statement.execute();
-        } catch (SQLException e) {
-            logger.error(sqlPrefixMsg + e.getMessage());
-            return false;
-        }
-        return true;
-    }
-
-    public List<User> getter(User user, String prefix, List<String> mainParam, String postfix, List<String> secondaryParam, boolean isEqually) {
-        List<User> result = new ArrayList<>();
-        try (Connection connection = connectionManager.getConnection();
-             PreparedStatement statement = connection.prepareStatement(
-                     UserMapper.getSqlRequestByParam(prefix, mainParam, postfix, secondaryParam, isEqually))) {
-            UserMapper.statementSetterUniversal(statement, user, mainParam, secondaryParam, false);
-            try (ResultSet resultSet = statement.executeQuery()) {
-                while (resultSet.next()) result.add(UserMapper.getByResultSet(resultSet));
-            }
-        } catch (SQLException e) {
-            logger.error(sqlPrefixMsg + e.getMessage());
-        }
-        return result;
+    @Override
+    public Mapper getMapper() {
+        return new UserMapper();
     }
 
     @Override
@@ -75,7 +42,10 @@ public class UserDaoImpl implements UserDao {
 
     @Override
     public List<User> getUsersList() {
-        return getter(new User(), selectPrefix, null, null, null, true);
+        List<DBObject> getList = getter(new User(), selectPrefix, null, null, null, true);
+        List<User> result = new ArrayList<>();
+        for (int i = 0; i < getList.size(); i++) result.add((User) getList.get(i));
+        return result;
     }
 
     @Override
@@ -84,8 +54,8 @@ public class UserDaoImpl implements UserDao {
         User user = new User();
         user.setId(id);
         List<String> secondaryParam = new ArrayList<>(Collections.singletonList(UserMapper.ID));
-        List<User> result = getter(user, selectPrefix, null, wherePostfix, secondaryParam, true);
-        return result.isEmpty() ? null : result.get(0);
+        List<DBObject> result = getter(user, selectPrefix, null, wherePostfix, secondaryParam, true);
+        return result.isEmpty() ? null : (User) result.get(0);
     }
 
 
@@ -95,8 +65,8 @@ public class UserDaoImpl implements UserDao {
         User user = new User();
         user.setLogin(login);
         List<String> secondaryParam = new ArrayList<>(Collections.singletonList(UserMapper.LOGIN));
-        List<User> result = getter(user, selectPrefix, null, wherePostfix, secondaryParam, true);
-        return result.isEmpty() ? null : result.get(0);
+        List<DBObject> result = getter(user, selectPrefix, null, wherePostfix, secondaryParam, true);
+        return result.isEmpty() ? null : (User) result.get(0);
     }
 
     @Override
@@ -114,7 +84,7 @@ public class UserDaoImpl implements UserDao {
     public boolean updateUserByFIOL(User newUser) {
         if (newUser == null) return false;
         List<String> mainParam = new ArrayList<>(Arrays.asList(UserMapper.FNAME, UserMapper.SNAME, UserMapper.MNAME,
-                UserMapper.LOGIN, UserMapper.ENABLED, UserMapper.PERMGROUP));
+                UserMapper.LOGIN, UserMapper.ENABLED, UserMapper.PERMGORUP));
         List<String> secondaryParam = new ArrayList<>(Collections.singletonList(UserMapper.ID));
         return executor(newUser, updatePrefix, mainParam, wherePostfix, secondaryParam, true);
     }

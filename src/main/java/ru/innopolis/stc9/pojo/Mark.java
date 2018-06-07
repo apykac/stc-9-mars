@@ -1,10 +1,10 @@
 package ru.innopolis.stc9.pojo;
 
-public class Mark {
+public class Mark implements DBObject {
     private int id;
-    private int lessonId;
-    private int userId;
     private int value;
+    private int userId;
+    private int lessonId;
     private String comment;
 
     public Mark() {

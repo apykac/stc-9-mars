@@ -3,7 +3,7 @@ package ru.innopolis.stc9.pojo;
 /**
  * Created by Семушев on 24.05.2018.
  */
-public class User {
+public class User implements DBObject {
     private int id;
     private String login;
     private String hashPassword;

@@ -3,7 +3,7 @@ package ru.innopolis.stc9.pojo;
 /**
  * Created by Сергей on 01.06.2018.
  */
-public class Education {
+public class Education implements DBObject {
     private int id;
     private int groupId;
     private int subjectId;
