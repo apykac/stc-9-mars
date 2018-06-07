@@ -9,8 +9,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import ru.innopolis.stc9.pojo.Group;
 import ru.innopolis.stc9.pojo.User;
-import ru.innopolis.stc9.service.GroupService;
-import ru.innopolis.stc9.service.UserService;
+import ru.innopolis.stc9.service.interfaces.GroupService;
+import ru.innopolis.stc9.service.interfaces.UserService;
 
 
 /**

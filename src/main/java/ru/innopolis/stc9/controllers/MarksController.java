@@ -9,8 +9,8 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 import ru.innopolis.stc9.pojo.Mark;
-import ru.innopolis.stc9.service.HomeWorkService;
-import ru.innopolis.stc9.service.MarkService;
+import ru.innopolis.stc9.service.interfaces.HomeWorkService;
+import ru.innopolis.stc9.service.interfaces.MarkService;
 
 @Controller
 public class MarksController {

@@ -1,20 +1,17 @@
 package ru.innopolis.stc9.controllers;
 
-import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
-import ru.innopolis.stc9.service.AttendanceService;
-import ru.innopolis.stc9.service.GroupService;
-import ru.innopolis.stc9.service.UserService;
+import ru.innopolis.stc9.service.interfaces.AttendanceService;
+import ru.innopolis.stc9.service.interfaces.GroupService;
+import ru.innopolis.stc9.service.interfaces.UserService;
 
 @Controller
 public class AttendanceController {
-
-    private static Logger logger = Logger.getLogger(AttendanceController.class);
     private String defaultPath = "views/attendance";
 
     @Autowired

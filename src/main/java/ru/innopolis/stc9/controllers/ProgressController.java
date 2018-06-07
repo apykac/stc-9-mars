@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import ru.innopolis.stc9.pojo.Progress;
-import ru.innopolis.stc9.service.ProgressService;
+import ru.innopolis.stc9.service.interfaces.ProgressService;
 
 import javax.servlet.http.HttpSession;
 import java.util.Arrays;

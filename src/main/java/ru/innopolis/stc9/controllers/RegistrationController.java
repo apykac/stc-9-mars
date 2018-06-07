@@ -7,7 +7,7 @@ import org.springframework.util.MultiValueMap;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import ru.innopolis.stc9.service.UserService;
+import ru.innopolis.stc9.service.interfaces.UserService;
 
 import java.util.ArrayList;
 import java.util.List;

@@ -2,7 +2,7 @@ package ru.innopolis.stc9.pojo;
 
 import java.sql.Date;
 
-public class Progress {
+public class Progress implements DBObject {
     private int id;
     private int value;
     private String firstName;

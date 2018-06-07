@@ -2,7 +2,7 @@ package ru.innopolis.stc9.pojo;
 
 import java.sql.Date;
 
-public class Lessons {
+public class Lessons implements DBObject {
     private int id;
     private int subject_id;
     private String sname;

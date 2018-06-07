@@ -2,9 +2,10 @@ package ru.innopolis.stc9.service;
 
 import org.junit.Before;
 import org.junit.Test;
-import ru.innopolis.stc9.dao.LessonsDao;
-import ru.innopolis.stc9.dao.LessonsDaoImpl;
+import ru.innopolis.stc9.dao.implementation.LessonsDaoImpl;
+import ru.innopolis.stc9.dao.interfaces.LessonsDao;
 import ru.innopolis.stc9.pojo.Lessons;
+import ru.innopolis.stc9.service.implementation.LessonsServiceImpl;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;

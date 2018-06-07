@@ -6,7 +6,7 @@ import org.apache.commons.lang.builder.HashCodeBuilder;
 /**
  * Created by Сергей on 31.05.2018.
  */
-public class HomeWork {
+public class HomeWork implements DBObject {
     private int id;
     private String homeWorkURL;
     private int studentId;

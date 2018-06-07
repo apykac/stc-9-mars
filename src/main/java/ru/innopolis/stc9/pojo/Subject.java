@@ -1,6 +1,6 @@
 package ru.innopolis.stc9.pojo;
 
-public class Subject {
+public class Subject implements DBObject {
     private int id;
     private String name;
 
