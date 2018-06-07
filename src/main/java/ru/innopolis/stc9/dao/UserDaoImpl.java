@@ -23,7 +23,7 @@ public class UserDaoImpl implements UserDao {
     private Logger logger = Logger.getLogger(UserDaoImpl.class);
     private String sqlPrefixMsg = "SQLException: ";
 
-    public boolean update(User user, String prefix, List<String> mainParam, String postfix, List<String> secondaryParam) {
+    public boolean executor(User user, String prefix, List<String> mainParam, String postfix, List<String> secondaryParam) {
         if (user == null) return false;
         try (Connection connection = connectionManager.getConnection();
              PreparedStatement statement = connection.prepareStatement(
@@ -39,7 +39,7 @@ public class UserDaoImpl implements UserDao {
 
     @Override
     public List<User> getUsersList() {
-        return get(new User(), "SELECT * FROM users ", null, null, null);
+        return getter(new User(), "SELECT * FROM users ", null, null, null);
     }
 
     @Override
@@ -48,10 +48,10 @@ public class UserDaoImpl implements UserDao {
         User user = new User();
         user.setId(id);
         List<String> secondaryParam = new ArrayList<>(Arrays.asList(UserMapper.ID));
-        return get(user, "SELECT * FROM users ", null, " WHERE ", secondaryParam).get(0);
+        return getter(user, "SELECT * FROM users ", null, " WHERE ", secondaryParam).get(0);
     }
 
-    public List<User> get(User user, String prefix, List<String> mainParam, String postfix, List<String> secondaryParam) {
+    public List<User> getter(User user, String prefix, List<String> mainParam, String postfix, List<String> secondaryParam) {
         List<User> result = new ArrayList<>();
         try (Connection connection = connectionManager.getConnection();
              PreparedStatement statement = connection.prepareStatement(
@@ -107,7 +107,7 @@ public class UserDaoImpl implements UserDao {
         user.setEnabled(0);
         List<String> mainParam = new ArrayList<>(Arrays.asList(UserMapper.ENABLED));
         List<String> secondaryParam = new ArrayList<>(Arrays.asList(UserMapper.ID));
-        return update(user, "UPDATE users SET ", mainParam, " WHERE ", secondaryParam);
+        return executor(user, "UPDATE users SET ", mainParam, " WHERE ", secondaryParam);
     }
 
     @Override
@@ -116,7 +116,7 @@ public class UserDaoImpl implements UserDao {
         List<String> mainParam = new ArrayList<>(Arrays.asList(UserMapper.FNAME, UserMapper.SNAME, UserMapper.MNAME,
                 UserMapper.LOGIN, UserMapper.ENABLED, UserMapper.PERMGROUP));
         List<String> secondaryParam = new ArrayList<>(Arrays.asList(UserMapper.ID));
-        return update(newUser, "UPDATE users SET ", mainParam, " WHERE ", secondaryParam);
+        return executor(newUser, "UPDATE users SET ", mainParam, " WHERE ", secondaryParam);
     }
 
     @Override
@@ -124,7 +124,7 @@ public class UserDaoImpl implements UserDao {
         if (newUser == null) return false;
         List<String> mainParam = new ArrayList<>(Arrays.asList(UserMapper.HASH));
         List<String> secondaryParam = new ArrayList<>(Arrays.asList(UserMapper.ID));
-        return update(newUser, "UPDATE users SET ", mainParam, " WHERE ", secondaryParam);
+        return executor(newUser, "UPDATE users SET ", mainParam, " WHERE ", secondaryParam);
     }
 
     @Override
