@@ -27,16 +27,7 @@ public class UserServiceImpl implements UserService {
     public List<String> isCorrectData(MultiValueMap<String, String> incParam) {
         List<String> result = new ArrayList<>();
         if ((incParam == null) || incParam.isEmpty()) return result;
-        String pattern = "^\\D*$";
-        if ((incParam.get(UserMapper.FNAME) != null) && !incParam.get(UserMapper.FNAME).get(0).matches(pattern)) {
-            result.add("Invalid first name");
-        }
-        if ((incParam.get(UserMapper.SNAME) != null) && !incParam.get(UserMapper.SNAME).get(0).matches(pattern)) {
-            result.add("Invalid second name");
-        }
-        if ((incParam.get(UserMapper.MNAME) != null) && !incParam.get(UserMapper.MNAME).get(0).matches(pattern)) {
-            result.add("Invalid middle name");
-        }
+        nameCheck(result, incParam);
         if ((incParam.get(UserMapper.GROUPID) != null)) {
             try {
                 int groupId = Integer.parseInt(incParam.get(UserMapper.GROUPID).get(0));
@@ -54,6 +45,17 @@ public class UserServiceImpl implements UserService {
             }
         }
         return result;
+    }
+
+    private void nameCheck(List<String> result, MultiValueMap<String, String> incParam) {
+        String pattern = "^\\D*$";
+        if (!nameCheckSingle(incParam, UserMapper.FNAME, pattern)) result.add("Invalid first name");
+        if (!nameCheckSingle(incParam, UserMapper.SNAME, pattern)) result.add("Invalid second name");
+        if (!nameCheckSingle(incParam, UserMapper.MNAME, pattern)) result.add("Invalid middle name");
+    }
+
+    private boolean nameCheckSingle(MultiValueMap<String, String> incParam, String name, String pattern) {
+        return !((incParam.get(name) != null) && !incParam.get(name).get(0).matches(pattern));
     }
 
     @Override
