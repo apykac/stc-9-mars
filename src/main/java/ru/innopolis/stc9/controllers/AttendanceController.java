@@ -13,6 +13,7 @@ import ru.innopolis.stc9.service.UserService;
 
 @Controller
 public class AttendanceController {
+
     private static Logger logger = Logger.getLogger(AttendanceController.class);
     private String defaultPath = "views/attendance";
 
