@@ -44,9 +44,9 @@ public class AttendanceController {
     private String sendStudentsList(@RequestParam(value = "list", required = false) int[] studentsList, @RequestParam("lessonId") int lessonId, @RequestParam("groupSelected") int groupSelected, Model model) {
         if (studentsList == null) {
             attendanceService.clearLessonAttendance(lessonId, groupSelected);
-            return defaultPath;
+        } else {
+            attendanceService.addLessonAttendance(groupSelected, lessonId, studentsList);
         }
-        attendanceService.addLessonAttendance(groupSelected, lessonId, studentsList);
         model.addAttribute("lessonId", lessonId);
         model.addAttribute("groups", groupService.findAllGroups());
         String groupName = groupService.findGroupById(groupSelected).getName();
