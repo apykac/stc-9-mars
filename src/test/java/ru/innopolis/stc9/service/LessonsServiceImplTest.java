@@ -79,13 +79,14 @@ public class LessonsServiceImplTest {
     }
 
     @Test
-    public void stringToDateTest() throws ParseException {
+    public void stringToDateTest() {
         java.sql.Date result = lessonsService.stringToDate("2018-01-01");
         assertEquals(result, dateSql);
     }
 
-    @Test(expected = ParseException.class)
-    public void stringToDateTest2() throws ParseException {
+    @Test
+    public void stringToDateTest2() {
         java.sql.Date result = lessonsService.stringToDate("01/01/2018");
+        assertNotEquals(result, dateSql);
     }
 }
