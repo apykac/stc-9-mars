@@ -29,13 +29,6 @@
                     </a>
                 </li>
             </sec:authorize>
-            <sec:authorize access="hasRole('ROLE_STUDENT')">
-                <li>
-                    <a href="${pageContext.request.contextPath}/university/student/studentDashBoard">
-                        <i class="fa fa-users"></i> <span>Страница студента</span>
-                    </a>
-                </li>
-            </sec:authorize>
             <sec:authorize access="hasAnyRole('ROLE_ADMIN', 'ROLE_TEACHER')">
                 <li>
                     <a href="${pageContext.request.contextPath}/university/teacher/allgroup">

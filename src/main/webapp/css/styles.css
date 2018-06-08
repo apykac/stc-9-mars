@@ -630,7 +630,9 @@ body {
 }
 
 /* Desktop */
-
+.right-attach {
+    right: 10px;
+}
 @media (max-width: 991px) {
     .header {
         height: auto;
