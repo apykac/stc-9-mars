@@ -35,6 +35,16 @@ public class UserDaoImpl extends DBObjectDao implements UserDao {
         return executor(user, "DELETE FROM users ", null, wherePostfix, secondaryParam, true);
     }
 
+    public boolean updateGroupId(int userId, Integer groupId) {
+        if (userId < 0) return false;
+        User user = new User();
+        user.setGroupId(groupId);
+        user.setId(userId);
+        List<String> mainParam = new ArrayList<>(Collections.singletonList(UserMapper.GROUPID));
+        List<String> secondaryParam = new ArrayList<>(Collections.singletonList(UserMapper.ID));
+        return executor(user, updatePrefix, mainParam, wherePostfix, secondaryParam, true);
+    }
+
     @Override
     public boolean addUser(User user) {
         if (user == null) return false;

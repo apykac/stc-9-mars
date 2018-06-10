@@ -13,6 +13,8 @@ public class MessageMapper extends Mapper {
     public static final String USERID = "user_id";
     public static final String TEXT = "text";
     public static final String TOUSERGROUP = "to_user_group";
+    public static final String UNAME = "uname";
+    public static final String THEME = "theme";
     private static final Map<String, Object[]> sourceMap = new HashMap<>();
 
     public MessageMapper() {
@@ -20,6 +22,8 @@ public class MessageMapper extends Mapper {
         sourceMap.put(USERID, new Object[]{"getUserId", TypeOfMethod.INT});
         sourceMap.put(TEXT, new Object[]{"getText", TypeOfMethod.STRING});
         sourceMap.put(TOUSERGROUP, new Object[]{"getToUserGroup", TypeOfMethod.STRING});
+        sourceMap.put(UNAME, new Object[]{"getUname", TypeOfMethod.STRING});
+        sourceMap.put(THEME, new Object[]{"getTheme", TypeOfMethod.STRING});
     }
 
     @Override
@@ -35,6 +39,8 @@ public class MessageMapper extends Mapper {
         message.setUserId(resultSet.getInt(USERID));
         message.setText(resultSet.getString(TEXT));
         message.setToUserGroup(resultSet.getString(TOUSERGROUP));
+        message.setUname(resultSet.getString(UNAME));
+        message.setUname(resultSet.getString(THEME));
         return message;
     }
 
@@ -46,6 +52,8 @@ public class MessageMapper extends Mapper {
         if (incParam.get(USERID) != null) message.setUserId(Integer.parseInt(incParam.get(USERID).get(0)));
         if (incParam.get(TEXT) != null) message.setText(incParam.get(TEXT).get(0));
         if (incParam.get(TOUSERGROUP) != null) message.setToUserGroup(incParam.get(TOUSERGROUP).get(0));
+        if (incParam.get(UNAME) != null) message.setUname(incParam.get(UNAME).get(0));
+        if (incParam.get(THEME) != null) message.setTheme(incParam.get(THEME).get(0));
         return message;
     }
 }

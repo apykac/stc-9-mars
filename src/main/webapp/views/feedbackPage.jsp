@@ -29,6 +29,11 @@
                                 </select>
                             </div>
                         </div>
+                            <div class="form-group">
+                                <label for="theme" class="col-sm-2 control-label">Тема сообщения</label>
+                                <div class="col-sm-10"><input type="text" class="form-control" id="theme" name="theme">
+                                </div>
+                            </div>
                         <div class="form-group">
                             <label for="message" class="col-sm-2 control-label">Текст сообщения</label>
                             <div class="col-sm-10">

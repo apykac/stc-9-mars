@@ -5,10 +5,14 @@ public class Message implements DBObject {
     private int userId;
     private String text;
     private String toUserGroup;
+    private String uname;
+    private String theme;
 
     public Message() {
         this.text = "";
         this.toUserGroup = "ROLE_ADMIN";
+        this.uname = "";
+        this.theme = "";
     }
 
     public int getId() {
@@ -41,5 +45,21 @@ public class Message implements DBObject {
 
     public void setToUserGroup(String toUserGroup) {
         this.toUserGroup = toUserGroup;
+    }
+
+    public String getUname() {
+        return uname;
+    }
+
+    public void setUname(String uname) {
+        this.uname = uname;
+    }
+
+    public String getTheme() {
+        return theme;
+    }
+
+    public void setTheme(String theme) {
+        this.theme = theme;
     }
 }
