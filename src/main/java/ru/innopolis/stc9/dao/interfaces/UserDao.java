@@ -23,4 +23,6 @@ public interface UserDao {
     List<User> getUsersList();
 
     User findLoginByName(String login);
+
+    boolean updateGroupId(int userId, Integer groupId);
 }
