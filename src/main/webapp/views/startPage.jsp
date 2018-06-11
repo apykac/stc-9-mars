@@ -14,6 +14,11 @@
                         <div id="example_length" class="dataTables_length">
                             <h1>Мой йуный падаван выбирай действие</h1>
                         </div>
+                        <c:if test="${message == 'deleted'}">
+                            <div class="alert alert-success">Сообщение успешно удалено</div>
+                            <a href="${pageContext.request.contextPath}/university/messages" class="btn-link">продолжить
+                                работу с сообщениями</a>
+                        </c:if>
                     </div>
                 </div>
                 <br/><br/>

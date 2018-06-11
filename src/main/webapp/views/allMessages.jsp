@@ -28,16 +28,14 @@
                                     <table class="table">
                                         <thead>
                                         <tr>
-                                            <th class="hidden">#</th>
                                             <th>От кого</th>
                                             <th>Тема</th>
-                                            <th></th>
+                                            <th>Дествие</th>
                                         </tr>
                                         </thead>
                                         <tbody>
                                         <c:forEach items="${requestScope.get('commonList')}" var="message">
                                             <tr>
-                                                <td>${message.id}</td>
                                                 <td>${message.uname}</td>
                                                 <td>${message.theme}</td>
                                                 <td>

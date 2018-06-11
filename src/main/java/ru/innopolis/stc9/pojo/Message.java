@@ -7,6 +7,7 @@ public class Message implements DBObject {
     private String toUserGroup;
     private String uname;
     private String theme;
+    private Integer toUserId;
 
     public Message() {
         this.text = "";
@@ -61,5 +62,13 @@ public class Message implements DBObject {
 
     public void setTheme(String theme) {
         this.theme = theme;
+    }
+
+    public Integer getToUserId() {
+        return toUserId;
+    }
+
+    public void setToUserId(Integer toUserId) {
+        this.toUserId = toUserId;
     }
 }

@@ -26,6 +26,7 @@ public class StartFilter implements Filter {
 
     @Override
     public void init(FilterConfig filterConfig) {
+        //some comment
     }
 
     @Override
@@ -37,11 +38,7 @@ public class StartFilter implements Filter {
             if (session.getAttribute(SessionDataInform.ID) == null) {
                 User user = userDao.findLoginByName(SecurityContextHolder.getContext().getAuthentication().getName());
                 List<Message> countOfMessage = messageDao.getAllMessagesByRole(user.getPermissionGroup());
-                session.setAttribute(SessionDataInform.ID, user.getId());
-                session.setAttribute(SessionDataInform.LOGIN, user.getLogin());
-                session.setAttribute(SessionDataInform.NAME, user.getFirstName() + " " + user.getSecondName());
-                session.setAttribute(SessionDataInform.ROLE, user.getPermissionGroup());
-                session.setAttribute(SessionDataInform.MSG, countOfMessage.size());
+                addStartAttributeToSession(session, user, countOfMessage.size());
                 logger.info("User: [" + user.getId() + "] " + user.getLogin() + " is login");
                 resp.sendRedirect(req.getContextPath() + "/university/start");
             }
@@ -51,6 +48,14 @@ public class StartFilter implements Filter {
         } catch (ServletException e) {
             logger.error("ServletException: " + e.getMessage());
         }
+    }
+
+    private void addStartAttributeToSession(HttpSession session, User user, int count) {
+        session.setAttribute(SessionDataInform.ID, user.getId());
+        session.setAttribute(SessionDataInform.LOGIN, user.getLogin());
+        session.setAttribute(SessionDataInform.NAME, user.getFirstName() + " " + user.getSecondName());
+        session.setAttribute(SessionDataInform.ROLE, user.getPermissionGroup());
+        session.setAttribute(SessionDataInform.MSG, count);
     }
 
     @Override

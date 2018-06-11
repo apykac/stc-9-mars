@@ -2,8 +2,10 @@ package ru.innopolis.stc9.controllers;
 
 import org.apache.log4j.Logger;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import javax.servlet.http.HttpSession;
 
@@ -17,7 +19,8 @@ public class LoginController {
     }
 
     @RequestMapping(value = "/university/start", method = RequestMethod.GET)
-    public String startPage(HttpSession session) {
+    public String startPage(@RequestParam(value = "message", required = false) String isDeleted, Model model) {
+        model.addAttribute("message", isDeleted);
         return "views/startPage";
     }
 

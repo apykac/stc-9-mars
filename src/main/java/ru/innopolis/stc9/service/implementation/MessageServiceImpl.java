@@ -14,7 +14,7 @@ import java.util.List;
 
 @Service
 public class MessageServiceImpl implements MessageService {
-    Mapper mapper = new MessageMapper();
+    private Mapper mapper = new MessageMapper();
     @Autowired
     MessageDao messageDao;
 
@@ -32,19 +32,35 @@ public class MessageServiceImpl implements MessageService {
     }
 
     @Override
-    public List<Message>[] getAllMessages(int userId, String role) {
-        if ((userId < 0) || (role == null) || role.isEmpty()) return new List[2];
-        return splitList(messageDao.getAllMessagesByRole(role), userId);
+    public List<Message>[] getAllMessages(int toUserId, String role) {
+        if ((toUserId < 0) || (role == null) || role.isEmpty()) return new List[2];
+        List<Message> commonList = messageDao.getAllMessagesByRole(role);
+        List<Message> privateList = messageDao.getAllMessagesByToUserId(toUserId);
+        return splitList(commonList, privateList);
     }
 
-    private List<Message>[] splitList(List<Message> list, int id) {
+    @Override
+    public Message getMessageById(int id) {
+        if (id < 0) return null;
+        return messageDao.getMessageById(id);
+    }
+
+    @Override
+    public boolean deleteMessageById(int id) {
+        if (id < 0) return false;
+        return messageDao.deleteMessageById(id);
+    }
+
+    private List<Message>[] splitList(List<Message> commonList, List<Message> privateList) {
         List<Message>[] result = new List[2];
-        result[0] = new ArrayList<>();
-        result[1] = new ArrayList<>();
-        for (Message message : list) {
-            if (message.getUserId() == id) result[1].add(message);
-            else result[0].add(message);
-        }
+        for (Message message : privateList)
+            for (int j = 0; j < commonList.size(); j++)
+                if (message.getId() == commonList.get(j).getId()) {
+                    commonList.remove(j);
+                    break;
+                }
+        result[0] = commonList;
+        result[1] = privateList;
         return result;
     }
 }

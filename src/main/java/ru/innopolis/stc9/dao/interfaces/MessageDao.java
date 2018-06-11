@@ -8,4 +8,10 @@ public interface MessageDao {
     boolean addMessage(Message message);
 
     List<Message> getAllMessagesByRole(String role);
+
+    List<Message> getAllMessagesByToUserId(int toUserId);
+
+    boolean deleteMessageById(int id);
+
+    Message getMessageById(int id);
 }
