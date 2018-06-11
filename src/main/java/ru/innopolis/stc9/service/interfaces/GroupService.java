@@ -15,7 +15,7 @@ public interface GroupService {
 
     boolean deleteGroup(int groupId);
 
-    Group findGroupById(int id);
+    Group findGroupById(Integer id);
 
     Group findGroupByName(String name);
 

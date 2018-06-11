@@ -51,13 +51,7 @@ public class GroupController {
     public String addGroup(@RequestParam("name") String name, Model model) {
         Group tempGroup = new Group(name);
         allGroupsList = groupService.findAllGroups();
-        for (Group g : allGroupsList) {
-            if (g.getName().equals(name)) {
-                model.addAttribute("errorName", "Такое имя группы уже используется. Введите другое");
-                logger.info("duplicate names to adding ");
-                return viewAllGroups(model, allGroupsList);
-            }
-        }
+        if (studentService.isDuplicate(allGroupsList, model, name)) return viewAllGroups(model, allGroupsList);
         groupService.addGroup(tempGroup);
         logger.info(loggerPrefix + name + " added");
         return viewAllGroups(model, null);
@@ -88,14 +82,7 @@ public class GroupController {
     public String updateGroup(@RequestParam("name") String name, @RequestParam("id") int id, Model model) {
         Group tempGroup = groupService.findGroupById(id);
         tempGroup.setName(name);
-        //проверка имени группы на повтор:
-        for (Group g : groupService.findAllGroups()) {
-            if (g.getName().equals(name) && g.getId() != id) {
-                model.addAttribute("errorName", "Такое имя группы уже используется. Введите другое");
-                logger.info("duplicate names");
-                return forUpdateGroup(id, null, model);
-            }
-        }
+        if (studentService.isDuplicate(allGroupsList, model, name)) return forUpdateGroup(id, null, model);
         groupService.updateGroup(tempGroup);
         logger.info(loggerPrefix + id + " updated");
         return viewAllGroups(model, null);

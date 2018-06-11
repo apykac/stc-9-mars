@@ -1,5 +1,6 @@
 package ru.innopolis.stc9.service.implementation;
 
+import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.ui.Model;
@@ -14,11 +15,25 @@ import java.util.List;
 
 @Component
 public class StudentServiceImpl implements StudentService {
+    private static Logger logger = Logger.getLogger(StudentServiceImpl.class);
     @Autowired
     GroupService groupService;
     @Autowired
     UserService userService;
 
+    @Override
+    public boolean isDuplicate(List<Group> groupsList, Model model, String name) {
+        for (Group g : groupsList) {
+            if (g.getName().equals(name)) {
+                model.addAttribute("errorName", "Такое имя группы уже используется. Введите другое");
+                logger.info("duplicate names to adding ");
+                return true;
+            }
+        }
+        return false;
+    }
+
+    @Override
     public void addingMainAttributeToModel(Model model, int id, Integer filterId) {
         List<Group> allGroupsList = groupService.findAllGroups();
         List<User> allStudentsList = userService.getAllStudents();

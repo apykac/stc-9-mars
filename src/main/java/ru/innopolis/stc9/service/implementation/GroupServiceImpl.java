@@ -36,8 +36,8 @@ public class GroupServiceImpl implements GroupService {
     }
 
     @Override
-    public Group findGroupById(int id) {
-        if (id < 0) return null;
+    public Group findGroupById(Integer id) {
+        if ((id == null) || (id < 0)) return null;
         return groupDao.findGroupById(id);
     }
 

@@ -52,8 +52,9 @@ public class SubjectServiceImpl implements SubjectService {
     }
 
     @Override
-    public List<Subject> findByGroupId(int id) {
+    public List<Subject> findByGroupId(Integer id) {
         ArrayList<Subject> subjectList = new ArrayList<>();
+        if (id == null) return subjectList;
         findIdInAllEducations(id, subjectList);
         return subjectList;
     }
