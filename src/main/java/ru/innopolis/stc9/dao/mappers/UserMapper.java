@@ -60,7 +60,7 @@ public class UserMapper extends Mapper {
      */
     public User getByParam(MultiValueMap<String, String> incParam) {
         User user = new User();
-        if ((incParam == null) && incParam.isEmpty()) return user;
+        if ((incParam == null) || incParam.isEmpty()) return user;
         if (incParam.get(ID) != null) user.setId(Integer.parseInt(incParam.get(ID).get(0)));
         if (incParam.get(LOGIN) != null) user.setLogin(incParam.get(LOGIN).get(0));
         if (incParam.get(HASH) != null) user.setHashPassword(incParam.get(HASH).get(0));
