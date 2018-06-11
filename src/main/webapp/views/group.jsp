@@ -96,11 +96,39 @@
                     </table>
                     <br/>
                     <br/>
+                        <%--add filter--%>
+
+                    <div class="col-sm-15">
+                        <div id="example_length" class="dataTables_length">
+                            <form action="${pageContext.request.contextPath}/university/teacher/group/${requestScope.get("id")}"
+                                  method="post">
+                                <div class="form-group">
+                                            <span class="input-group margin">
+                                            <select name="groupStatus" class="form-control">
+                                                <option value="0">Без группы</option>
+                                                <c:forEach var="group" items="${requestScope.get('groups')}">
+                                                    <option value="${group.id}">${group.name}</option>
+                                                </c:forEach>
+                                            </select>
+                                            <span class="input-group-btn">
+                                                <button type="submit"
+                                                        class="btn btn-info btn-flat"
+                                                        name="form"
+                                                        value="filterForm">Фильтр</button></span>
+                                            </span>
+                                </div>
+                            </form>
+                        </div>
+                    <%--тут див--%>
+
+                        <%--end filter--%>
                     <form class="form-horizontal" id="add"
                           action="${pageContext.request.contextPath}/university/teacher/addStudent"
                           method="post">
                         <div class="form-group">
                             <h4> Добавить студента в группу</h4>
+
+
                             <label for="nameSt"></label>
                             <div class="col-md-5">
                                 <select class="form-control" name="studentId" id="nameSt">
@@ -122,7 +150,7 @@
                             </div>
                         </div>
                         <div class="form-group">
-                            <div class="col-sm-10">
+                            <div class="col-sm-12">
                                 <input type="hidden" value="${requestScope.get("id")}" name="id">
                             </div>
                         </div>
@@ -132,6 +160,7 @@
                             </div>
                         </div>
                     </form>
+                    </div>
                     <br/>
                     <br/>
                 </div>

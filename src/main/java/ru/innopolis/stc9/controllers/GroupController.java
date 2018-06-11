@@ -12,6 +12,9 @@ import ru.innopolis.stc9.pojo.User;
 import ru.innopolis.stc9.service.interfaces.GroupService;
 import ru.innopolis.stc9.service.interfaces.UserService;
 
+import java.util.ArrayList;
+import java.util.List;
+
 
 /**
  * Created by Сергей on 23.05.2018.
@@ -44,7 +47,6 @@ public class GroupController {
 
     /**
      * добавляет новую группу
-     *
      * @param name имя группы
      */
     @RequestMapping("/university/teacher/addgroups")
@@ -67,23 +69,23 @@ public class GroupController {
     /**
      * открывает страницу управления группой: переименование или удаление группы,
      * добавление и удаление студентов в группе
-     *
      * @param id - идентификатор группы
      */
     @RequestMapping("/university/teacher/group/{id}")
-    public String forUpdateGroup(@PathVariable("id") int id, Model model) {
-
+    public String forUpdateGroup(@PathVariable("id") int id,
+                                 @RequestParam(value = "groupStatus", defaultValue = "0")int filterId,
+                                 Model model) {
+        model.addAttribute(attributeGroups, groupService.findAllGroups());
         model.addAttribute(attributeGroupName, groupService.findGroupById(id).getName());
         model.addAttribute("id", id);
         model.addAttribute(attributeStudents, userService.getStudentsByGroupId(id));
-        model.addAttribute(attributeStudentsWOG, userService.getStudentsWithoutGroup(id));
+        model.addAttribute(attributeStudentsWOG, studentFilter(filterId, id));
         logger.info("group for update");
         return group;
     }
 
     /**
      * обновление имени группы
-     *
      * @param name - имя группы
      * @param id   - идентификатор
      */
@@ -95,11 +97,12 @@ public class GroupController {
         //проверка имени группы на повтор:
         for (Group g : groupService.findAllGroups()) {
             if (g.getName().equals(name) && g.getId() != id) {
+                model.addAttribute(attributeGroups, groupService.findAllGroups());
                 model.addAttribute("errorName", "Такое имя группы уже используется. Введите другое");
                 model.addAttribute(attributeGroupName, groupService.findGroupById(id).getName());
                 model.addAttribute("id", id);
                 model.addAttribute(attributeStudents, userService.getStudentsByGroupId(id));
-                model.addAttribute(attributeStudentsWOG, userService.getStudentsWithoutGroup(id));
+                model.addAttribute(attributeStudentsWOG, studentFilter(0, id));
                 logger.info("duplicate names");
                 return group;
             }
@@ -112,7 +115,6 @@ public class GroupController {
 
     /**
      * удаляет группу
-     *
      * @param id - идентификатор удаляемой группы
      */
     @RequestMapping("/university/teacher/deleteGroup")
@@ -125,40 +127,55 @@ public class GroupController {
 
     /**
      * добавляет студента в группу
-     *
      * @param id        - идентификатор группы
      * @param studentId - идентификатор студента
      */
     @RequestMapping("/university/teacher/addStudent")
     public String addStudentToGroup(@RequestParam("id") int id, @RequestParam("studentId") int studentId, Model model) {
-        User user = userService.findUserById(studentId);
-        user.setGroupId(id);
-        user.setGroup(groupService.findGroupById(id));
-        userService.updateUser(user);
+        userService.updateGroupId(studentId, id);
+        model.addAttribute(attributeGroups, groupService.findAllGroups());
         model.addAttribute(attributeGroupName, groupService.findGroupById(id).getName());
         model.addAttribute("id", id);
         model.addAttribute(attributeStudents, userService.getStudentsByGroupId(id));
-        model.addAttribute(attributeStudentsWOG, userService.getStudentsWithoutGroup(id));
+        model.addAttribute(attributeStudentsWOG, studentFilter(0, id));
         logger.info("student added in group " + id);
         return group;
     }
 
     /**
      * удаляет студента из группы
-     *
      * @param id        - идентификатор группы
      * @param studentId - идентификатор студента
      */
     @RequestMapping("/university/teacher/group/deleteStudentFromGroup/{id}/{studentId}")
     public String deleteStudentFromGroup(@PathVariable("id") int id, @PathVariable("studentId") int studentId, Model model) {
-        User user = userService.findUserById(studentId);
-        user.setGroupId(0);
-        userService.updateUser(user);
+        userService.updateGroupId(studentId, 0);
+        model.addAttribute(attributeGroups, groupService.findAllGroups());
         model.addAttribute(attributeGroupName, groupService.findGroupById(id).getName());
         model.addAttribute("id", id);
         model.addAttribute(attributeStudents, userService.getStudentsByGroupId(id));
-        model.addAttribute(attributeStudentsWOG, userService.getStudentsWithoutGroup(id));
+        model.addAttribute(attributeStudentsWOG, studentFilter(0, id));
         logger.info("student deleted from group " + id);
         return group;
+    }
+
+    /**
+     * Метод для фильтрации студентов по группе для добавления в группу
+     * @param filterId - id группы, студентов из которой надо показать
+     * @param currentGroupId - id текущей группы
+     * @return
+     */
+    private List<User> studentFilter(int filterId, int currentGroupId) {
+        List<User> list = new ArrayList<>();
+        if(filterId == 0) {
+           for(User u: userService.getStudentsWithoutGroup(currentGroupId)) {
+               if(u.getGroupId() == 0) list.add(u);
+           }
+        } else {
+            for(User u: userService.getStudentsWithoutGroup(currentGroupId)) {
+                if(u.getGroupId() == filterId) list.add(u);
+            }
+        }
+        return list;
     }
 }
