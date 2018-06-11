@@ -119,10 +119,10 @@ public class UserServiceImpl implements UserService {
      * @param groupId - id группы
      */
     @Override
-    public List<User> getStudentsByGroupId(int groupId) {
+    public List<User> getStudentsByGroupId(Integer groupId) {
         List<User> students = new ArrayList<>();
         for (User u : userDao.getUsersList()) {
-            if (u.getPermissionGroup().equals("ROLE_STUDENT") && u.getGroupId() == groupId) {
+            if (u.getPermissionGroup().equals("ROLE_STUDENT") && groupId.equals(u.getGroupId())) {
                 students.add(u);
             }
         }
@@ -135,11 +135,11 @@ public class UserServiceImpl implements UserService {
      * @param groupId - id группы
      */
     @Override
-    public List<User> getStudentsWithoutGroup(int groupId) {
+    public List<User> getStudentsWithoutGroup(Integer groupId) {
         List<User> students = new ArrayList<>();
         for (User u : userDao.getUsersList()) {
-            if (u.getPermissionGroup().equals("ROLE_STUDENT") && u.getGroupId() != groupId) {
-                u.setGroup(groupService.findGroupById(u.getGroupId()));
+            if (u.getPermissionGroup().equals("ROLE_STUDENT") && !groupId.equals(u.getGroupId())) {
+                u.setGroup(u.getGroupId() == null ? null : groupService.findGroupById(u.getGroupId()));
                 students.add(u);
             }
         }

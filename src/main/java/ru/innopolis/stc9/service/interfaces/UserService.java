@@ -18,9 +18,9 @@ public interface UserService {
 
     boolean updateUser(User user);
 
-    List<User> getStudentsByGroupId(int groupId);
+    List<User> getStudentsByGroupId(Integer groupId);
 
-    List<User> getStudentsWithoutGroup(int groupId);
+    List<User> getStudentsWithoutGroup(Integer groupId);
 
     User findUserById(int userId);
 

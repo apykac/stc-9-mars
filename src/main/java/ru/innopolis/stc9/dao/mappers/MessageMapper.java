@@ -43,7 +43,7 @@ public class MessageMapper extends Mapper {
         message.setToUserGroup(resultSet.getString(TOUSERGROUP));
         message.setUname(resultSet.getString(UNAME));
         message.setTheme(resultSet.getString(THEME));
-        message.setToUserId(resultSet.getInt(TOUSERID));
+        message.setToUserId(resultSet.getInt(TOUSERID) == 0 ? null : resultSet.getInt(TOUSERID));
         return message;
     }
 

@@ -45,7 +45,7 @@
                         </div>
                     </form>
                     <br/>
-                        ${requestScope.get("errorName")}
+                    <div class="alert-error">${requestScope.get("errorName")}</div>
                     <br/>
                     <sec:authorize access="hasRole('ROLE_ADMIN')">
                         <form class="form-horizontal" id="delete"
@@ -105,9 +105,11 @@
                                 <div class="form-group">
                                             <span class="input-group margin">
                                             <select name="groupStatus" class="form-control">
-                                                <option value="0">Без группы</option>
+                                                <option value="">Без группы</option>
                                                 <c:forEach var="group" items="${requestScope.get('groups')}">
-                                                    <option value="${group.id}">${group.name}</option>
+                                                    <c:if test="${group.id != requestScope.get('id')}">
+                                                        <option value="${group.id}">${group.name}</option>
+                                                    </c:if>
                                                 </c:forEach>
                                             </select>
                                             <span class="input-group-btn">
