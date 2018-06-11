@@ -119,7 +119,7 @@ public class GroupDaoImpl implements GroupDao {
              PreparedStatement statement = connection.prepareStatement("SELECT * FROM stgroup");
              ResultSet set = statement.executeQuery()) {
             while (set.next()) {
-                Group group = findGroupById(set.getInt("id"));
+                Group group = new Group(set.getInt("id"), set.getString("gname"));
                 list.add(group);
             }
             logger.info("get all groups");

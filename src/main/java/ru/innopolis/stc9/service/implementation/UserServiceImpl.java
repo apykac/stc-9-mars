@@ -96,12 +96,6 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public boolean updateUser(User user) {
-        if (user == null) return false;
-        return userDao.updateUserByFIOL(user);
-    }
-
-    @Override
     public User findUserById(int userId) {
         if (userId < 0) return null;
         return userDao.findUserByUserId(userId);
@@ -121,29 +115,15 @@ public class UserServiceImpl implements UserService {
     @Override
     public List<User> getStudentsByGroupId(Integer groupId) {
         List<User> students = new ArrayList<>();
-        for (User u : userDao.getUsersList()) {
-            if (u.getPermissionGroup().equals("ROLE_STUDENT") && groupId.equals(u.getGroupId())) {
+        for (User u : userDao.getAllStudents())
+            if (groupId.equals(u.getGroupId()))
                 students.add(u);
-            }
-        }
         return students;
     }
 
-    /**
-     * возвращает список юзеров-студентов, не состоящих в данной группе
-     *
-     * @param groupId - id группы
-     */
     @Override
-    public List<User> getStudentsWithoutGroup(Integer groupId) {
-        List<User> students = new ArrayList<>();
-        for (User u : userDao.getUsersList()) {
-            if (u.getPermissionGroup().equals("ROLE_STUDENT") && !groupId.equals(u.getGroupId())) {
-                u.setGroup(u.getGroupId() == null ? null : groupService.findGroupById(u.getGroupId()));
-                students.add(u);
-            }
-        }
-        return students;
+    public List<User> getAllStudents() {
+        return userDao.getAllStudents();
     }
 
     @Override
