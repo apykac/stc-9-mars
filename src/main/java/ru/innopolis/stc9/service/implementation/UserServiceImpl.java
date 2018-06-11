@@ -200,4 +200,9 @@ public class UserServiceImpl implements UserService {
         return (newPassword != null) && !newPassword.isEmpty() && newPassword.equals(repeatNewPassword);
     }
 
+    @Override
+    public boolean updateGroupId(int userId, Integer groupId) {
+        return userDao.updateGroupId(userId, groupId);
+    }
+
 }

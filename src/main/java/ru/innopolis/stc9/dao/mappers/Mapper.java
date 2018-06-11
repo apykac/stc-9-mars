@@ -6,10 +6,7 @@ import ru.innopolis.stc9.pojo.DBObject;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
-import java.sql.Date;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -69,17 +66,18 @@ public abstract class Mapper {
     }
 
     private void setValue(PreparedStatement statement, int count, TypeOfMethod type, Object o, boolean isPattern) {
-        if ((statement == null) || (count < 0) || (o == null)) return;
+        if ((statement == null) || (count < 0)) return;
         try {
             switch (type) {
                 case DATE:
-                    statement.setDate(count, (Date) o);
+                    if (o != null) statement.setDate(count, (Date) o);
                     return;
                 case STRING:
-                    statement.setString(count, isPattern ? "%" + o + "%" : (String) o);
+                    if (o != null) statement.setString(count, isPattern ? "%" + o + "%" : (String) o);
                     return;
                 case INT:
-                    statement.setInt(count, (Integer) o);
+                    if ((int)o == 0) statement.setNull(count, Types.BIGINT);
+                    else statement.setInt(count, (Integer) o);
                     return;
                 default:
             }

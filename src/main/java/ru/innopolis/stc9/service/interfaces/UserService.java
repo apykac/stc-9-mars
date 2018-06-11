@@ -31,4 +31,6 @@ public interface UserService {
     boolean checkPasswordOfCurrentAccount(int id, String candidate);
 
     Object[] editUser(MultiValueMap<String, String> incParam);
+
+    boolean updateGroupId(int userId, Integer groupId);
 }
