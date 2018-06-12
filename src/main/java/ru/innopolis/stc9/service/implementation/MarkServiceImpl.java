@@ -1,9 +1,7 @@
 package ru.innopolis.stc9.service.implementation;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import ru.innopolis.stc9.dao.implementation.LessonsDaoImpl;
-import ru.innopolis.stc9.dao.implementation.MarkDaoImpl;
-import ru.innopolis.stc9.dao.implementation.UserDaoImpl;
 import ru.innopolis.stc9.dao.interfaces.LessonsDao;
 import ru.innopolis.stc9.dao.interfaces.MarkDao;
 import ru.innopolis.stc9.dao.interfaces.UserDao;
@@ -18,9 +16,12 @@ import java.util.Map;
 @Service
 public class MarkServiceImpl implements MarkService {
 
-    private MarkDao markDao = new MarkDaoImpl();
-    private UserDao userDao = new UserDaoImpl();
-    private LessonsDao lessonsDao = new LessonsDaoImpl();
+    @Autowired
+    private MarkDao markDao;
+    @Autowired
+    private UserDao userDao;
+    @Autowired
+    private LessonsDao lessonsDao;
 
     public MarkServiceImpl(MarkDao markDao, UserDao userDao, LessonsDao lessonsDao) {
         this.markDao = markDao;

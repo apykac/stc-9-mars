@@ -24,12 +24,11 @@ import static org.junit.Assert.assertTrue;
 import static org.powermock.api.mockito.PowerMockito.mock;
 
 public class MarkServiceImplTest {
-    String fullName;
     private MarkServiceImpl markService;
-    private MarkServiceImpl markServiceMock;
     private MarkDao markDao;
     private UserDao userDao;
     private LessonsDao lessonDao;
+    private String fullName;
     private Mark mark;
     private User user;
     private Lessons lesson;
@@ -37,7 +36,7 @@ public class MarkServiceImplTest {
     private Map<String, Mark> getMarksByLessonIdResult;
 
     @Before
-    public void setUp() throws IllegalAccessException {
+    public void setUp() {
         mark = new Mark(1, 5, 1, 1, "Acceptable");
         user = new User("admin", "123", "Admin", "Adminov", "Adminovich");
         lesson = new Lessons(1, 1, "Subject", null, "Lesson");
@@ -50,7 +49,6 @@ public class MarkServiceImplTest {
         marksList = new ArrayList<>();
         marksList.add(mark);
         markService = new MarkServiceImpl(markDao, userDao, lessonDao);
-
 
         PowerMockito.when(markDao.getMarkById(1)).thenReturn(mark);
         PowerMockito.when(lessonDao.getLessonById(1)).thenReturn(lesson);

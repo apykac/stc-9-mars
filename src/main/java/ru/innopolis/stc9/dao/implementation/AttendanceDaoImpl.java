@@ -43,6 +43,7 @@ public class AttendanceDaoImpl implements AttendanceDao {
         return result;
     }
 
+    @Override
     public boolean updateAttendance(Attendance attendance) {
         if (attendance == null) {
             return false;
