@@ -23,6 +23,7 @@ public class GroupDaoImpl implements GroupDao {
     private Logger logger = Logger.getLogger(GroupDaoImpl.class);
     private static ConnectionManager connectionManager = ConnectionManagerImpl.getInstance();
     private String errMessage = "SQLException. ";
+    private String gname = "gname";
 
     @Override
     public boolean addGroup(Group group) {
@@ -75,14 +76,14 @@ public class GroupDaoImpl implements GroupDao {
     }
 
     @Override
-    public Group findGroupById(int id) {
-        if (id < 0) return null;
+    public Group findGroupById(Integer id) {
+        if ((id == null) || (id < 0)) return null;
         Group group = null;
         try (Connection connection = connectionManager.getConnection();
              PreparedStatement statement = connection.prepareStatement("SELECT * FROM stgroup WHERE id = ?")) {
             statement.setInt(1, id);
             try (ResultSet set = statement.executeQuery()) {
-                while (set.next()) group = new Group(set.getInt("id"), set.getString("gname"));
+                while (set.next()) group = new Group(set.getInt("id"), set.getString(gname));
             }
             logger.info("get group by id");
             return group;
@@ -101,7 +102,7 @@ public class GroupDaoImpl implements GroupDao {
             statement.setString(1, name);
             try (ResultSet set = statement.executeQuery()) {
                 while (set.next()) {
-                    group = new Group(set.getString("gname"));
+                    group = new Group(set.getString(gname));
                     logger.info("get group by name");
                 }
             }
@@ -119,7 +120,7 @@ public class GroupDaoImpl implements GroupDao {
              PreparedStatement statement = connection.prepareStatement("SELECT * FROM stgroup");
              ResultSet set = statement.executeQuery()) {
             while (set.next()) {
-                Group group = findGroupById(set.getInt("id"));
+                Group group = new Group(set.getInt("id"), set.getString(gname));
                 list.add(group);
             }
             logger.info("get all groups");

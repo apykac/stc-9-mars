@@ -50,7 +50,7 @@ public class UserMapper extends Mapper {
         user.setFirstName(resultSet.getString(FNAME));
         user.setSecondName(resultSet.getString(SNAME));
         user.setMiddleName(resultSet.getString(MNAME));
-        user.setGroupId(resultSet.getInt(GROUPID));
+        user.setGroupId(resultSet.getInt(GROUPID) == 0 ? null : resultSet.getInt(GROUPID));
         user.setEnabled(resultSet.getInt(ENABLED));
         return user;
     }

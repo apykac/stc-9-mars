@@ -21,18 +21,21 @@ public class AttendanceController {
     @Autowired
     private AttendanceService attendanceService;
 
-    @RequestMapping(value = "/university/teacher/attendance", method = RequestMethod.GET)
-    private String getGroups(@RequestParam int lessonId, Model model) {
+    private void addHeadAttributesToModel(Model model, int lessonId) {
         model.addAttribute("lessonId", lessonId);
         model.addAttribute("groups", groupService.findAllGroups());
+    }
+
+    @RequestMapping(value = "/university/teacher/attendance", method = RequestMethod.GET)
+    private String getGroups(@RequestParam int lessonId, Model model) {
+        addHeadAttributesToModel(model, lessonId);
         return defaultPath;
     }
 
     @RequestMapping(value = "/university/teacher/attendanceSelectGroup")
     private String editAttendance(@RequestParam("selectGroup") int groupId, @RequestParam("lessonId") int lessonId, Model model) {
-        model.addAttribute("lessonId", lessonId);
+        addHeadAttributesToModel(model, lessonId);
         model.addAttribute("groupSelected", groupService.findGroupById(groupId));
-        model.addAttribute("groups", groupService.findAllGroups());
         model.addAttribute("studentsInGroup", userService.getStudentsByGroupId(groupId));
         model.addAttribute("savedAttendance", attendanceService.getLessonAttendance(lessonId, groupId));
         return defaultPath;
@@ -40,13 +43,12 @@ public class AttendanceController {
 
     @RequestMapping(value = "/university/teacher/attendanceSendStudentsList", method = RequestMethod.POST)
     private String sendStudentsList(@RequestParam(value = "list", required = false) int[] studentsList, @RequestParam("lessonId") int lessonId, @RequestParam("groupSelected") int groupSelected, Model model) {
+        addHeadAttributesToModel(model, lessonId);
         if (studentsList == null) {
             attendanceService.clearLessonAttendance(lessonId, groupSelected);
         } else {
             attendanceService.addLessonAttendance(groupSelected, lessonId, studentsList);
         }
-        model.addAttribute("lessonId", lessonId);
-        model.addAttribute("groups", groupService.findAllGroups());
         String groupName = groupService.findGroupById(groupSelected).getName();
         model.addAttribute("message", "Список присутствовавших студентов по группе " + groupName + " обновлен.");
         return defaultPath;

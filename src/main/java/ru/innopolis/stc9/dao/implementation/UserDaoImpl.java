@@ -108,6 +108,17 @@ public class UserDaoImpl extends DBObjectDao implements UserDao {
         user.setId(userId);
         List<String> mainParam = new ArrayList<>(Collections.singletonList(UserMapper.GROUPID));
         List<String> secondaryParam = new ArrayList<>(Collections.singletonList(UserMapper.ID));
-        return executor(user,"UPDATE users SET ",mainParam," WHERE ", secondaryParam, true);
+        return executor(user, "UPDATE users SET ", mainParam, wherePostfix, secondaryParam, true);
+    }
+
+    @Override
+    public List<User> getAllStudents() {
+        User user = new User();
+        user.setPermissionGroup("ROLE_STUDENT");
+        List<String> secondaryParam = new ArrayList<>(Collections.singletonList(UserMapper.PERMGORUP));
+        List<DBObject> getList = getter(user, selectPrefix, null, wherePostfix, secondaryParam, true);
+        List<User> result = new ArrayList<>();
+        for (DBObject object : getList) result.add((User) object);
+        return result;
     }
 }

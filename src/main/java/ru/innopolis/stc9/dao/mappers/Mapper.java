@@ -23,16 +23,17 @@ public abstract class Mapper {
     public String getSqlRequestByParam(String prefix, List<String> mainParam, String postfix, List<String> secondaryParam, boolean isEqually) {
         if (prefix == null) return null;
         StringBuilder result = new StringBuilder(prefix);
-        if ((mainParam != null) && !mainParam.isEmpty()) result.append(listToString(mainParam, isEqually));
+        if ((mainParam != null) && !mainParam.isEmpty()) result.append(listToString(mainParam, isEqually, false));
         if ((postfix != null) && !postfix.isEmpty()) result.append(postfix);
         if ((secondaryParam != null) && !secondaryParam.isEmpty())
-            result.append(listToString(secondaryParam, isEqually));
+            result.append(listToString(secondaryParam, isEqually, true));
         return result.toString();
     }
 
-    private String listToString(List<String> list, boolean isEqually) {
+    private String listToString(List<String> list, boolean isEqually, boolean isPrefix) {
         StringBuilder result = new StringBuilder();
         String eq = isEqually ? " = ?" : "";
+        String and = isPrefix ? " AND " : "";
         for (int i = 0; i < list.size(); i++)
             if (i == list.size() - 1) {
                 result.append(list.get(i));
@@ -40,6 +41,7 @@ public abstract class Mapper {
             } else {
                 result.append(list.get(i));
                 result.append(eq);
+                result.append(and);
                 result.append(", ");
             }
         return result.toString();
@@ -76,7 +78,7 @@ public abstract class Mapper {
                     if (o != null) statement.setString(count, isPattern ? "%" + o + "%" : (String) o);
                     return;
                 case INT:
-                    if ((int)o == 0) statement.setNull(count, Types.BIGINT);
+                    if (o == null) statement.setNull(count, Types.BIGINT);
                     else statement.setInt(count, (Integer) o);
                     return;
                 default:

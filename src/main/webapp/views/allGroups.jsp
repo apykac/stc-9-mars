@@ -85,7 +85,7 @@
                             </div>
                         </form>
                         <br/>
-                            ${requestScope.get("errorName")}
+                        <div class="alert-error">${requestScope.get("errorName")}</div>
                         <br/>
                     </div>
                 </div>

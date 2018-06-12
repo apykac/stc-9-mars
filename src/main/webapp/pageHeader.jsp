@@ -47,11 +47,11 @@
             <!-- Menu toggle button -->
             <a href="#" class="dropdown-toggle" data-toggle="dropdown">
               <i class="fa fa-envelope-o"></i>
-              <span class="label label-success">4</span>
+              <span class="label label-success">${sessionScope.get('count_of_messages')}</span>
             </a>
             <ul class="dropdown-menu">
-              <li class="header">You have 4 messages</li>
-              <li>
+              <li class="header">You have ${sessionScope.get('count_of_messages')} messages</li>
+              <%--<li>
                 <!-- inner menu: contains the messages -->
                 <ul class="menu">
                   <li><!-- start message -->
@@ -73,8 +73,9 @@
                   <!-- end message -->
                 </ul>
                 <!-- /.menu -->
+              </li>--%>
+              <li class="footer"><a href="${pageContext.request.contextPath}/university/messages">See All Messages</a>
               </li>
-              <li class="footer"><a href="#">See All Messages</a></li>
             </ul>
           </li>
           <!-- /.messages-menu -->
