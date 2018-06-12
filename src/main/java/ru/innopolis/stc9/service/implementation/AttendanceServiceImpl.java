@@ -17,15 +17,20 @@ public class AttendanceServiceImpl implements AttendanceService {
     @Autowired
     private AttendanceDao attendanceDao;
 
-    //TODO поменять местами groupId и lessonId в аргументах
+    public AttendanceServiceImpl() {
+    }
+
+    public AttendanceServiceImpl(AttendanceDao attendanceDao) {
+        this.attendanceDao = attendanceDao;
+    }
+
     @Override
     public void addLessonAttendance(int groupId, int lessonId, int[] studentsList) {
         attendanceDao.addLessonAttendance(lessonId, studentsList);
         Map<Integer, Boolean> savedAttendance = getLessonAttendance(lessonId, groupId);
         for (Map.Entry<Integer, Boolean> entry : savedAttendance.entrySet()) {
             Integer key = entry.getKey();
-            Boolean value = entry.getValue();
-            value = false;
+            Boolean value = false;
             for (int i : studentsList) {
                 if (key == i) {
                     value = true;
@@ -41,6 +46,9 @@ public class AttendanceServiceImpl implements AttendanceService {
 
     @Override
     public void clearLessonAttendance(int lessonId, int groupId) {
+        if (lessonId < 1 || groupId < 1) {
+            return;
+        }
         Map<Integer, Boolean> savedAttendance = getLessonAttendance(lessonId, groupId);
         for (Map.Entry<Integer, Boolean> entry : savedAttendance.entrySet()) {
             Integer key = entry.getKey();
@@ -55,6 +63,9 @@ public class AttendanceServiceImpl implements AttendanceService {
     @Override
     public Map<Integer, Boolean> getLessonAttendance(int lessonId, int groupId) {
         Map<Integer, Boolean> result = new HashMap<>();
+        if (lessonId < 1 || groupId < 1) {
+            return result;
+        }
         List<Attendance> attendances = attendanceDao.getLessonAttendance(lessonId, groupId);
         for (Attendance attendance : attendances) {
             result.put(attendance.getUserId(), attendance.isAttended());

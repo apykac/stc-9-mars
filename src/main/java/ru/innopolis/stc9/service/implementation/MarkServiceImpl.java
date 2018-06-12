@@ -1,9 +1,7 @@
 package ru.innopolis.stc9.service.implementation;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import ru.innopolis.stc9.dao.implementation.LessonsDaoImpl;
-import ru.innopolis.stc9.dao.implementation.MarkDaoImpl;
-import ru.innopolis.stc9.dao.implementation.UserDaoImpl;
 import ru.innopolis.stc9.dao.interfaces.LessonsDao;
 import ru.innopolis.stc9.dao.interfaces.MarkDao;
 import ru.innopolis.stc9.dao.interfaces.UserDao;
@@ -18,12 +16,24 @@ import java.util.Map;
 @Service
 public class MarkServiceImpl implements MarkService {
 
-    private MarkDao markDao = new MarkDaoImpl();
-    private UserDao userDao = new UserDaoImpl();
-    private LessonsDao lessonsDao = new LessonsDaoImpl();
+    @Autowired
+    private MarkDao markDao;
+    @Autowired
+    private UserDao userDao;
+    @Autowired
+    private LessonsDao lessonsDao;
+
+    public MarkServiceImpl(MarkDao markDao, UserDao userDao, LessonsDao lessonsDao) {
+        this.markDao = markDao;
+        this.userDao = userDao;
+        this.lessonsDao = lessonsDao;
+    }
+
+    public MarkServiceImpl() {
+    }
 
     /**
-     * Возвращает Map с именами студентов и их оценками за работу на уроке,
+     * Возвращает Map с именами студентов и оценкой ДЗ, связанного с уроком,
      * id которого передается параметром метода.
      *
      * @param lessonId
@@ -32,14 +42,12 @@ public class MarkServiceImpl implements MarkService {
     @Override
     public Map<String, Mark> getMarksByLessonId(int lessonId) {
         Map<String, Mark> result = new HashMap<>();
+        if (lessonId < 1) {
+            return result;
+        }
         for (Mark mark : markDao.getMarksByLessonId(lessonId)) {
-            User user = userDao.findUserByUserId(mark.getUserId());
-            String name = (new StringBuilder(user.getSecondName())
-                    .append(" ")
-                    .append(user.getFirstName())
-                    .append(" ")
-                    .append(user.getMiddleName())
-            ).toString();
+            User student = userDao.findUserByUserId(mark.getUserId());
+            String name = getFullStudentName(student);
             result.put(name, mark);
         }
         return result;
@@ -77,6 +85,18 @@ public class MarkServiceImpl implements MarkService {
     public String getLessonNameByLessonId(int lessonId) {
         Lessons lesson = lessonsDao.getLessonById(lessonId);
         return lesson.getName();
+    }
+
+    @Override
+    public String getFullStudentName(User student) {
+        if (student == null) {
+            return "";
+        }
+        return student.getSecondName() +
+                " " +
+                student.getFirstName() +
+                " " +
+                student.getMiddleName();
     }
 
 }

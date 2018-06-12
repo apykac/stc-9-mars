@@ -10,6 +10,14 @@ public class Mark implements DBObject {
     public Mark() {
     }
 
+    public Mark(int id, int value, int userId, int lessonId, String comment) {
+        this.id = id;
+        this.value = value;
+        this.userId = userId;
+        this.lessonId = lessonId;
+        this.comment = comment;
+    }
+
     public int getId() {
         return id;
     }
