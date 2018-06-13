@@ -9,15 +9,13 @@
 
 
     <bean id="viewResolver" class="org.springframework.web.servlet.view.InternalResourceViewResolver">
-        <property name="prefix">
-            <value>/</value>
-        </property>
-        <property name="suffix">
-            <value>.jsp</value>
-        </property>
+        <property name="prefix" value="/"/>
+        <property name="suffix" value=".jsp"/>
     </bean>
 
     <bean class="org.springframework.web.servlet.mvc.annotation.DefaultAnnotationHandlerMapping">
         <property name="defaultHandler" ref="defaultController"/>
     </bean>
+
+    <bean id="progressPdf" class="ru.innopolis.stc9.controllers.pdf.ProgressPdf"/>
 </beans>

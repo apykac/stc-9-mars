@@ -6,6 +6,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.servlet.ModelAndView;
 import ru.innopolis.stc9.pojo.Progress;
 import ru.innopolis.stc9.service.interfaces.ProgressService;
 
@@ -32,8 +33,8 @@ public class ProgressController {
     @RequestMapping(method = RequestMethod.GET)
     private String doGet(HttpSession session, Model model) {
         String login = (String) session.getAttribute(SessionDataInform.LOGIN);
-        List<Progress> listProgress = progressService.getProgress(greaterOrEqualMark, lessOrEqualMark, login);
-        model.addAttribute("progress", listProgress);
+        List<Progress> progressList = progressService.getProgress(greaterOrEqualMark, lessOrEqualMark, login);
+        model.addAttribute("progress", progressList);
         model.addAttribute("amountMarks", progressService.getAmountMarks(login));
         model.addAttribute("lessons", progressService.getLessons());
         model.addAttribute("missedLessons", progressService.getNumberOfMissedLessons(login));
@@ -50,6 +51,14 @@ public class ProgressController {
         greaterOrEqualMark = getMarks(marks)[0];
         lessOrEqualMark = getMarks(marks)[1];
         return doGet(session, model);
+    }
+
+    @RequestMapping(value = "/pdf", method = RequestMethod.GET)
+    private ModelAndView getPdf(HttpSession session) {
+        String login = (String) session.getAttribute(SessionDataInform.LOGIN);
+        List<Progress> progressList = progressService.getProgress(greaterOrEqualMark, lessOrEqualMark, login);
+
+        return new ModelAndView("progressPdf", "getpdf", progressList);
     }
 
     /**

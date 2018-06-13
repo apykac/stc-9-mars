@@ -160,6 +160,7 @@
                                             <div class='alert alert-danger'>Ошибка: no data</div>
                                         </c:when>
                                         <c:otherwise>
+                                            <a href="${pageContext.request.contextPath}/university/progress/pdf">pdf</a>
                                             <table class="table table-bordered table-striped dataTable"
                                                    id="tableProgress">
                                                 <thead>
