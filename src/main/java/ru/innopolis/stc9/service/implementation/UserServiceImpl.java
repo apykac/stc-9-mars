@@ -23,8 +23,6 @@ public class UserServiceImpl implements UserService {
     private UserDao userDao;
     @Autowired
     private GroupDao groupDao;
-    @Autowired
-    private GroupService groupService;
 
     @Autowired
     public UserServiceImpl(UserDao userDao) {
@@ -167,7 +165,7 @@ public class UserServiceImpl implements UserService {
         return result;
     }
 
-    private String checkPasswordUpdateIsPossible(MultiValueMap<String, String> incParam, User user) {
+    public String checkPasswordUpdateIsPossible(MultiValueMap<String, String> incParam, User user) {
         String result = "";
         if (CryptService.isMatched(user.getHashPassword(), userDao.findUserByUserId(user.getId()).getHashPassword())) {
             if (!checkNewPassword(incParam.get("newPassword").get(0), incParam.get("repeatNewPassword").get(0)))
@@ -176,7 +174,7 @@ public class UserServiceImpl implements UserService {
         return result;
     }
 
-    private boolean checkNewPassword(String newPassword, String repeatNewPassword) {
+    public boolean checkNewPassword(String newPassword, String repeatNewPassword) {
         return (newPassword != null) && !newPassword.isEmpty() && newPassword.equals(repeatNewPassword);
     }
 
