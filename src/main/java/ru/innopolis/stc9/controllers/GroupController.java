@@ -24,12 +24,16 @@ public class GroupController {
     private final Logger logger = Logger.getLogger(GroupController.class);
     private String loggerPrefix = "group ";
     private List<Group> allGroupsList;
+    private final GroupService groupService;
+    private final UserService userService;
+    private final StudentService studentService;
+
     @Autowired
-    private GroupService groupService;
-    @Autowired
-    private UserService userService;
-    @Autowired
-    private StudentService studentService;
+    public GroupController(GroupService groupService, UserService userService, StudentService studentService) {
+        this.groupService = groupService;
+        this.userService = userService;
+        this.studentService = studentService;
+    }
 
     /**
      * выводи список всех групп
@@ -82,6 +86,7 @@ public class GroupController {
     public String updateGroup(@RequestParam("name") String name, @RequestParam("id") int id, Model model) {
         Group tempGroup = groupService.findGroupById(id);
         tempGroup.setName(name);
+        allGroupsList = groupService.findAllGroups();
         if (studentService.isDuplicate(allGroupsList, model, name)) return forUpdateGroup(id, null, model);
         groupService.updateGroup(tempGroup);
         logger.info(loggerPrefix + id + " updated");
