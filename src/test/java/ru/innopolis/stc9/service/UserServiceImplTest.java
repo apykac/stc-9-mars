@@ -116,16 +116,16 @@ public class UserServiceImplTest {
         Assert.assertEquals(0,result3.size());
     }
 
-    /*@Test
+    @Test
     public void addUserByParamCorrectDataTest() throws Exception {
         legalUser = createLegalUser(1, "ROLE_ADMIN", 1, 1);
         PowerMockito.mockStatic(CryptService.class);
         PowerMockito.when(CryptService.crypting("password1")).thenReturn("password1");
         PowerMockito.whenNew(User.class).withArguments(Mockito.anyString(), Mockito.anyString(), Mockito.anyString(),
                 Mockito.anyString(), Mockito.anyString()).thenReturn(legalUser);
-        PowerMockito.when(userDao.addUser(legalUser)).thenReturn(true);
+        PowerMockito.when(userDao.addUser(Mockito.any(User.class))).thenReturn(true);
         Assert.assertTrue(userService.addUserByParam(createLegalMap(false)));
-    }*/
+    }
 
     @Test
     public void addUserByParamIncorrectDataTest(){
