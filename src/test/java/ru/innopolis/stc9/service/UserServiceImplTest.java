@@ -69,35 +69,35 @@ public class UserServiceImplTest {
     }
 
     private MultiValueMap<String, String> createLegalMap(boolean someNulls) {
-        MultiValueMap<String, String> incParam = new HttpHeaders();
-        incParam.put("login", new ArrayList<>(Collections.singletonList("user1")));
-        incParam.put("hash_password", new ArrayList<>(Collections.singletonList("password1")));
+        MultiValueMap<String, String> map = new HttpHeaders();
+        map.put("login", new ArrayList<>(Collections.singletonList("user1")));
+        map.put("hash_password", new ArrayList<>(Collections.singletonList("password1")));
         if (!someNulls) {
-            incParam.put("first_name", new ArrayList<>(Collections.singletonList("FirstName")));
-            incParam.put("second_name", new ArrayList<>(Collections.singletonList("SecondName")));
+            map.put("first_name", new ArrayList<>(Collections.singletonList("FirstName")));
+            map.put("second_name", new ArrayList<>(Collections.singletonList("SecondName")));
         }
-        incParam.put("middle_name", new ArrayList<>(Collections.singletonList("MiddleName")));
-        incParam.put("group_id", new ArrayList<>(Collections.singletonList("1")));
-        incParam.put("enabled", new ArrayList<>(Collections.singletonList("1")));
-        return incParam;
+        map.put("middle_name", new ArrayList<>(Collections.singletonList("MiddleName")));
+        map.put("group_id", new ArrayList<>(Collections.singletonList("1")));
+        map.put("enabled", new ArrayList<>(Collections.singletonList("1")));
+        return map;
     }
 
     private MultiValueMap<String, String> createIllegalMap(boolean someNulls) {
-        MultiValueMap<String, String> incParam = new HttpHeaders();
-        incParam.put("login", new ArrayList<>(Collections.singletonList("user1")));
-        incParam.put("hash_password", new ArrayList<>(Collections.singletonList("password1")));
+        MultiValueMap<String, String> map = new HttpHeaders();
+        map.put("login", new ArrayList<>(Collections.singletonList("user1")));
+        map.put("hash_password", new ArrayList<>(Collections.singletonList("password1")));
         if (!someNulls) {
-            incParam.put("first_name", new ArrayList<>(Collections.singletonList("1")));
-            incParam.put("second_name", new ArrayList<>(Collections.singletonList("2")));
+            map.put("first_name", new ArrayList<>(Collections.singletonList("1")));
+            map.put("second_name", new ArrayList<>(Collections.singletonList("2")));
         }
-        incParam.put("middle_name", new ArrayList<>(Collections.singletonList("3")));
-        incParam.put("group_id", new ArrayList<>(Collections.singletonList("-1")));
-        incParam.put("enabled", new ArrayList<>(Collections.singletonList("3")));
-        return incParam;
+        map.put("middle_name", new ArrayList<>(Collections.singletonList("3")));
+        map.put("group_id", new ArrayList<>(Collections.singletonList("-1")));
+        map.put("enabled", new ArrayList<>(Collections.singletonList("3")));
+        return map;
     }
 
     @Test
-    public void isCorrectDataWithCorrectDataTest() throws Exception {
+    public void isCorrectDataWithCorrectDataTest() {
         PowerMockito.when(groupDao.findGroupById(1)).thenReturn(group);
         List<String> result1 = userService.isCorrectData(createLegalMap(false));
         List<String> result2 = userService.isCorrectData(createLegalMap(true));
