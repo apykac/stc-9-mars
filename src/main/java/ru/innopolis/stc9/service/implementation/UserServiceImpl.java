@@ -126,8 +126,9 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public boolean checkPasswordOfCurrentAccount(int id, String candidate) {
-        if (id < 0) return false;
+        if ((id < 0) || (candidate == null) || candidate.equals("")) return false;
         User user = findUserById(id);
+        if (user == null) return false;
         return CryptService.isMatched(candidate, user.getHashPassword());
     }
 
@@ -140,6 +141,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public Object[] editUser(MultiValueMap<String, String> incParam) {
         Object[] result = new Object[3];
+        if ((incParam == null) || incParam.isEmpty()) return result;
         List<String> success = new ArrayList<>();
         List<String> errors = isCorrectData(incParam);
         result[0] = errors;
@@ -159,27 +161,32 @@ public class UserServiceImpl implements UserService {
                 return result;
             }
             user.setHashPassword(CryptService.crypting(incParam.get("newPassword").get(0)));
-            if (!userDao.updateUserPassword(user)) errors.add("Updating profile password");
+            if (!userDao.updateUserPassword(user)) errors.add("Updating profile password error");
             else success.add("Updating profile password successfully");
         }
         return result;
     }
 
+    @Override
     public String checkPasswordUpdateIsPossible(MultiValueMap<String, String> incParam, User user) {
+        if ((incParam == null) || incParam.isEmpty() || (user == null)) return "Wrong old password";
         String result = "";
         if (CryptService.isMatched(user.getHashPassword(), userDao.findUserByUserId(user.getId()).getHashPassword())) {
-            if (!checkNewPassword(incParam.get("newPassword").get(0), incParam.get("repeatNewPassword").get(0)))
+            if ((incParam.get("newPassword") == null) ||
+                    (incParam.get("repeatNewPassword") == null) ||
+                    !checkNewPassword(incParam.get("newPassword").get(0), incParam.get("repeatNewPassword").get(0)))
                 result = "Passwords not match";
         } else result = "Wrong old password";
         return result;
     }
 
-    public boolean checkNewPassword(String newPassword, String repeatNewPassword) {
+    private boolean checkNewPassword(String newPassword, String repeatNewPassword) {
         return (newPassword != null) && !newPassword.isEmpty() && newPassword.equals(repeatNewPassword);
     }
 
     @Override
     public boolean updateGroupId(int userId, Integer groupId) {
+        if ((userId < 0) || ((groupId != null) && (groupId < 0))) return false;
         return userDao.updateGroupId(userId, groupId);
     }
 

@@ -6,6 +6,9 @@ import ru.innopolis.stc9.pojo.User;
 import java.util.List;
 
 public interface UserService {
+
+    String checkPasswordUpdateIsPossible(MultiValueMap<String, String> incParam, User user);
+
     List<String> isCorrectData(MultiValueMap<String, String> incParam);
 
     boolean addUserByParam(MultiValueMap<String, String> incParam);
