@@ -96,14 +96,16 @@
                 <!-- small box -->
                 <div class="small-box bg-red">
                     <div class="inner">
-                        <h3>1234</h3>
+                        <h3>PDF</h3>
 
-                        <p>Группа</p>
+                        <p>Отчет</p>
                     </div>
                     <div class="icon">
                         <i class="ion ion-pie-graph"></i>
                     </div>
-                    <a href="#" class="small-box-footer">More info <i class="fa fa-arrow-circle-right"></i></a>
+                    <a href="${pageContext.request.contextPath}/university/progress/pdf"
+                       class="small-box-footer" target="_blank">Сформировать <i
+                            class="fa fa-arrow-circle-right"></i></a>
                 </div>
             </div>
             <!-- ./col -->
@@ -160,7 +162,6 @@
                                             <div class='alert alert-danger'>Ошибка: no data</div>
                                         </c:when>
                                         <c:otherwise>
-                                            <a href="${pageContext.request.contextPath}/university/progress/pdf">pdf</a>
                                             <table class="table table-bordered table-striped dataTable"
                                                    id="tableProgress">
                                                 <thead>

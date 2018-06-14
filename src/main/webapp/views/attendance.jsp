@@ -88,7 +88,7 @@
                             <c:if test="${fn:length(studentsInGroup) gt 0}">
                                 <div class="row text-center panel-title">
                                     <div class="col-sm-12">
-                                        Отметить присутствовавших студентов
+                                        <h4>Отметить присутствовавших студентов</h4>
                                     </div>
                                 </div>
 
@@ -101,28 +101,22 @@
                                             <c:set var="savedAttendance"
                                                    value="${requestScope.get('savedAttendance')}"/>
                                             <c:forEach items="${requestScope.get('studentsInGroup')}" var="student">
-                                                <div class="row text-center">
-                                                    <div class="col-sm-6 col-sm-offset-3">
-                                                        <div class="form-group">
-                                                            <label for="${student.id}"
-                                                                   class="col-md-10 control-label text-left">${student.secondName} ${student.firstName} ${student.middleName}</label>
-                                                            <div class="col-md-2 text-right">
-                                                                <input class="form-check-input" type="checkbox"
-                                                                       name="list"
-                                                                       value="${student.id}"
-                                                                       id="${student.id}"
+                                                <label for="${student.id}"
+                                                       class="col-md-10 control-label text-left">${student.secondName} ${student.firstName} ${student.middleName}</label>
+                                                <div class="col-md-2 text-right">
+                                                    <input type="checkbox"
+                                                           name="list"
+                                                           value="${student.id}"
+                                                           id="${student.id}"
 
-                                                                    ${savedAttendance.get(student.id)==true ? "checked" : ""}
-                                                                >
-                                                            </div>
-                                                        </div>
-                                                    </div>
+                                                        ${savedAttendance.get(student.id)==true ? "checked" : ""}
+                                                    >
                                                 </div>
-
                                             </c:forEach>
                                             <input type="hidden" value="${requestScope.get("lessonId")}"
                                                    name="lessonId">
                                             <input type="hidden" value="${selectedGroup.id}" name="groupSelected">
+                                            <br/>
                                             <div class="row text-center">
                                                 <div class="col-md-12">
                                                     <button type="submit" class="btn btn-primary">OK</button>
