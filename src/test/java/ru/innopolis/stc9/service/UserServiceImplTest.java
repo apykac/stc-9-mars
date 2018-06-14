@@ -412,7 +412,11 @@ public class UserServiceImplTest {
         Object[] result1 = userService.editUser(null);
         Object[] result2 = userService.editUser(new HttpHeaders());
         Object[] emtpyObj = new Object[3];
-        Assert.assertEquals(emtpyObj, result1);
-        Assert.assertEquals(emtpyObj, result2);
+        Assert.assertEquals(emtpyObj[0], result1[0]);
+        Assert.assertEquals(emtpyObj[1], result1[1]);
+        Assert.assertEquals(emtpyObj[2], result1[2]);
+        Assert.assertEquals(emtpyObj[0], result2[0]);
+        Assert.assertEquals(emtpyObj[1], result2[1]);
+        Assert.assertEquals(emtpyObj[2], result2[2]);
     }
 }
