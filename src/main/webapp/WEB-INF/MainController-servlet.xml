@@ -17,5 +17,8 @@
         <property name="defaultHandler" ref="defaultController"/>
     </bean>
 
-    <bean id="progressPdf" class="ru.innopolis.stc9.controllers.pdf.ProgressPdf"/>
+    <bean class="org.springframework.web.servlet.view.XmlViewResolver">
+        <property name="order" value="0"/>
+        <property name="location" value="/WEB-INF/beans.xml"/>
+    </bean>
 </beans>

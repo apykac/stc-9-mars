@@ -1,8 +1,6 @@
 package ru.innopolis.stc9.controllers.pdf;
 
 import com.lowagie.text.Document;
-import com.lowagie.text.Phrase;
-import com.lowagie.text.pdf.PdfPCell;
 import com.lowagie.text.pdf.PdfPTable;
 import com.lowagie.text.pdf.PdfWriter;
 import org.springframework.web.servlet.view.document.AbstractPdfView;
@@ -21,19 +19,12 @@ public class ProgressPdf extends AbstractPdfView {
                                     HttpServletRequest request,
                                     HttpServletResponse response) throws Exception {
         PdfPTable table = new PdfPTable(6);
-        PdfPCell header1 = new PdfPCell(new Phrase("Оценка"));
-        PdfPCell header2 = new PdfPCell(new Phrase("Имя"));
-        PdfPCell header3 = new PdfPCell(new Phrase("Группа"));
-        PdfPCell header4 = new PdfPCell(new Phrase("Урок"));
-        PdfPCell header5 = new PdfPCell(new Phrase("Дата"));
-        PdfPCell header6 = new PdfPCell(new Phrase("Предмет"));
-        table.addCell(header1);
-        table.addCell(header2);
-        table.addCell(header3);
-        table.addCell(header4);
-        table.addCell(header5);
-        table.addCell(header6);
-
+        table.addCell("Value");
+        table.addCell("Name");
+        table.addCell("Group");
+        table.addCell("Lesson");
+        table.addCell("Date");
+        table.addCell("Subject");
         List<Progress> progressList = (List<Progress>) model.get("getpdf");
         for (Progress progress : progressList) {
             table.addCell(String.valueOf(progress.getValue()));
@@ -43,6 +34,7 @@ public class ProgressPdf extends AbstractPdfView {
             table.addCell(String.valueOf(progress.getDate()));
             table.addCell(progress.getSubjectName());
         }
+        document.add(table);
 
     }
 }
