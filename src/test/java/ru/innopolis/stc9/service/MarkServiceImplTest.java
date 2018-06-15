@@ -13,6 +13,7 @@ import ru.innopolis.stc9.pojo.Lessons;
 import ru.innopolis.stc9.pojo.Mark;
 import ru.innopolis.stc9.pojo.User;
 import ru.innopolis.stc9.service.implementation.MarkServiceImpl;
+import ru.innopolis.stc9.service.interfaces.MarkService;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -41,7 +42,7 @@ public class MarkServiceImplTest {
         user = new User("admin", "123", "Admin", "Adminov", "Adminovich");
         lesson = new Lessons(1, 1, "Subject", null, "Lesson");
         fullName = "Adminov Admin Adminovich";
-        getMarksByLessonIdResult = new HashMap<String, Mark>();
+        getMarksByLessonIdResult = new HashMap<>();
         getMarksByLessonIdResult.put(fullName, mark);
         markDao = mock(MarkDaoImpl.class);
         userDao = mock(UserDaoImpl.class);
@@ -57,13 +58,18 @@ public class MarkServiceImplTest {
     }
 
     @Test
-    public void GetMarksByLessonIdLessThanOneTest() {
-        Map<String, Mark> result = markService.getMarksByLessonId(0);
-        assertTrue(result.size() == 0);
+    public void callConstructor() {
+        MarkService markService = new MarkServiceImpl();
     }
 
     @Test
-    public void getMarksByLessonId() throws Exception {
+    public void getMarksByLessonIdLessThanOneTest() {
+        Map<String, Mark> result = markService.getMarksByLessonId(0);
+        assertEquals(0, result.size());
+    }
+
+    @Test
+    public void getMarksByLessonId() {
         Map<String, Mark> result = markService.getMarksByLessonId(1);
         assertEquals(result, getMarksByLessonIdResult);
     }
