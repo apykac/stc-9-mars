@@ -2,6 +2,7 @@ package ru.innopolis.stc9.service;
 
 import org.junit.Before;
 import org.junit.Test;
+import org.mockito.Mockito;
 import org.mockito.invocation.InvocationOnMock;
 import org.mockito.stubbing.Answer;
 import org.powermock.api.mockito.PowerMockito;
@@ -9,14 +10,14 @@ import ru.innopolis.stc9.dao.implementation.AttendanceDaoImpl;
 import ru.innopolis.stc9.dao.interfaces.AttendanceDao;
 import ru.innopolis.stc9.pojo.Attendance;
 import ru.innopolis.stc9.service.implementation.AttendanceServiceImpl;
+import ru.innopolis.stc9.service.interfaces.AttendanceService;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 import static org.junit.Assert.*;
 import static org.mockito.Matchers.anyObject;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.when;
 
 
@@ -46,6 +47,11 @@ public class AttendanceServiceImplTest {
     }
 
     @Test
+    public void testCallConstructor() {
+        AttendanceService attendanceService = new AttendanceServiceImpl();
+    }
+
+    @Test
     public void testAddLessonAttendance() {
         final Attendance[] result = new Attendance[1];
         Attendance testAttendance = attendance;
@@ -61,7 +67,6 @@ public class AttendanceServiceImplTest {
         assertTrue(result[0].isAttended());
     }
 
-
     @Test
     public void testClearLessonAttendance() {
         final Attendance[] result = new Attendance[1];
@@ -74,6 +79,13 @@ public class AttendanceServiceImplTest {
         });
         attendanceService.clearLessonAttendance(1, 1);
         assertFalse(result[0].isAttended());
+    }
+
+    @Test
+    public void testClearLessonAttendanceWithReturn() {
+        attendanceService.clearLessonAttendance(1, -1);
+        attendanceService.clearLessonAttendance(-1, 1);
+        Mockito.verify(attendanceDao, never()).updateAttendance(Mockito.anyObject());
     }
 
     @Test
