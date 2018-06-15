@@ -53,7 +53,7 @@ public class UserServiceImplTest {
         fieldGroupDao.set(userService, groupDao);
     }
 
-    private User createLegalUser(int id, String role, Integer groupId, int enabled) {
+    User createLegalUser(int id, String role, Integer groupId, int enabled) {
         User user = new User();
         user.setId(id);
         user.setLogin("user" + id);
@@ -64,13 +64,6 @@ public class UserServiceImplTest {
         user.setMiddleName("MiddleName");
         user.setGroupId(groupId);
         user.setEnabled(enabled);
-        return user;
-    }
-
-    private User createIllegalUser() {
-        User user = new User();
-        user.setPermissionGroup(null);
-        user.setEnabled(-1);
         return user;
     }
 
