@@ -37,6 +37,8 @@ public class StudentServiceImpl implements StudentService {
 
     @Override
     public void addingMainAttributeToModel(Model model, int id, Integer filterId) {
+        if ((model == null) || (id < 0) || ((filterId != null) && (filterId < 0)))
+            return;
         List<Group> allGroupsList = groupService.findAllGroups();
         List<User> allStudentsList = userService.getAllStudents();
         distributionStudentsByGroup(allGroupsList, allStudentsList);
@@ -51,6 +53,8 @@ public class StudentServiceImpl implements StudentService {
     public List<User> studentFilter(List<User> studentsList, Integer filterId, int currentGroupId) {
         List<User> list = new ArrayList<>();
         if ((studentsList == null) || studentsList.isEmpty())
+            return list;
+        if (((filterId != null) && (filterId < 0)) || (currentGroupId < 0))
             return list;
         for (User u : getAllStudentExceptId(studentsList, currentGroupId))
             if (filterId == null) {
