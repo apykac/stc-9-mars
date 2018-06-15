@@ -1,60 +1,26 @@
 package ru.innopolis.stc9.pojo;
 
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+
+@NoArgsConstructor
+@AllArgsConstructor
 public class Mark implements DBObject {
+    @Getter
+    @Setter
     private int id;
+    @Getter
+    @Setter
     private int value;
+    @Getter
+    @Setter
     private int userId;
+    @Getter
+    @Setter
     private int lessonId;
+    @Getter
+    @Setter
     private String comment;
-
-    public Mark() {
-    }
-
-    public Mark(int id, int value, int userId, int lessonId, String comment) {
-        this.id = id;
-        this.value = value;
-        this.userId = userId;
-        this.lessonId = lessonId;
-        this.comment = comment;
-    }
-
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
-    }
-
-    public int getLessonId() {
-        return lessonId;
-    }
-
-    public void setLessonId(int lessonId) {
-        this.lessonId = lessonId;
-    }
-
-    public int getUserId() {
-        return userId;
-    }
-
-    public void setUserId(int userId) {
-        this.userId = userId;
-    }
-
-    public int getValue() {
-        return value;
-    }
-
-    public void setValue(int value) {
-        this.value = value;
-    }
-
-    public String getComment() {
-        return comment;
-    }
-
-    public void setComment(String comment) {
-        this.comment = comment;
-    }
 }

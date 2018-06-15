@@ -1,7 +1,16 @@
 package ru.innopolis.stc9.pojo;
 
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+
+@NoArgsConstructor
 public class Subject implements DBObject {
+    @Getter
+    @Setter
     private int id;
+    @Getter
+    @Setter
     private String name;
 
     public Subject(int id, String name) {
@@ -10,22 +19,6 @@ public class Subject implements DBObject {
     }
 
     public Subject(String name) {
-        this.name = name;
-    }
-
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
         this.name = name;
     }
 }
