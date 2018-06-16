@@ -1,63 +1,31 @@
 package ru.innopolis.stc9.pojo;
 
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang.builder.HashCodeBuilder;
 
-/**
- * Created by Сергей on 31.05.2018.
- */
+@NoArgsConstructor
+@AllArgsConstructor
 public class HomeWork implements DBObject {
+    @Getter
+    @Setter
     private int id;
+    @Getter
+    @Setter
     private String homeWorkURL;
+    @Getter
+    @Setter
     private int studentId;
+    @Getter
+    @Setter
     private int lessonId;
-
-    public HomeWork(int id, String homeWorkURL, int studentId, int lessonId) {
-        this.id = id;
-        this.homeWorkURL = homeWorkURL;
-        this.studentId = studentId;
-        this.lessonId = lessonId;
-    }
 
     public HomeWork(String homeWorkURL, int studentId, int lessonId) {
         this.homeWorkURL = homeWorkURL;
         this.studentId = studentId;
-        this.lessonId = lessonId;
-    }
-
-    public HomeWork() {
-    }
-
-    public int getId() {
-
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
-    }
-
-    public String getHomeWorkURL() {
-        return homeWorkURL;
-    }
-
-    public void setHomeWorkURL(String homeWorkURL) {
-        this.homeWorkURL = homeWorkURL;
-    }
-
-    public int getStudentId() {
-        return studentId;
-    }
-
-    public void setStudentId(int studentId) {
-        this.studentId = studentId;
-    }
-
-    public int getLessonId() {
-        return lessonId;
-    }
-
-    public void setLessonId(int lessonId) {
         this.lessonId = lessonId;
     }
 

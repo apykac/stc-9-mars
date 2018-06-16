@@ -1,35 +1,19 @@
 package ru.innopolis.stc9.pojo;
 
 
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+
+@NoArgsConstructor
 public class Attendance {
+    @Getter
+    @Setter
     private int lessonId;
+    @Getter
+    @Setter
     private int userId;
+    @Getter
+    @Setter
     private boolean attended;
-
-    public Attendance() {
-    }
-
-    public int getLessonId() {
-        return lessonId;
-    }
-
-    public void setLessonId(int lessonId) {
-        this.lessonId = lessonId;
-    }
-
-    public int getUserId() {
-        return userId;
-    }
-
-    public void setUserId(int userId) {
-        this.userId = userId;
-    }
-
-    public boolean isAttended() {
-        return attended;
-    }
-
-    public void setAttended(boolean attended) {
-        this.attended = attended;
-    }
 }

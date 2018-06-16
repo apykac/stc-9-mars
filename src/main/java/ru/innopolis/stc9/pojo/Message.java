@@ -1,12 +1,29 @@
 package ru.innopolis.stc9.pojo;
 
+import lombok.Getter;
+import lombok.Setter;
+
 public class Message implements DBObject {
+    @Getter
+    @Setter
     private int id;
+    @Getter
+    @Setter
     private int userId;
+    @Getter
+    @Setter
     private String text;
+    @Getter
+    @Setter
     private String toUserGroup;
+    @Getter
+    @Setter
     private String uname;
+    @Getter
+    @Setter
     private String theme;
+    @Getter
+    @Setter
     private Integer toUserId;
 
     public Message() {
@@ -14,61 +31,5 @@ public class Message implements DBObject {
         this.toUserGroup = "ROLE_ADMIN";
         this.uname = "";
         this.theme = "";
-    }
-
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
-    }
-
-    public int getUserId() {
-        return userId;
-    }
-
-    public void setUserId(int userId) {
-        this.userId = userId;
-    }
-
-    public String getText() {
-        return text;
-    }
-
-    public void setText(String text) {
-        this.text = text;
-    }
-
-    public String getToUserGroup() {
-        return toUserGroup;
-    }
-
-    public void setToUserGroup(String toUserGroup) {
-        this.toUserGroup = toUserGroup;
-    }
-
-    public String getUname() {
-        return uname;
-    }
-
-    public void setUname(String uname) {
-        this.uname = uname;
-    }
-
-    public String getTheme() {
-        return theme;
-    }
-
-    public void setTheme(String theme) {
-        this.theme = theme;
-    }
-
-    public Integer getToUserId() {
-        return toUserId;
-    }
-
-    public void setToUserId(Integer toUserId) {
-        this.toUserId = toUserId;
     }
 }
