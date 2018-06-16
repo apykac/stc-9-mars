@@ -1,103 +1,40 @@
 package ru.innopolis.stc9.pojo;
 
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+
 import java.sql.Date;
 
+@NoArgsConstructor
+@AllArgsConstructor
 public class Progress implements DBObject {
+    @Getter
+    @Setter
     private int id;
+    @Getter
+    @Setter
     private int value;
+    @Getter
+    @Setter
     private String firstName;
+    @Getter
+    @Setter
     private String secondName;
+    @Getter
+    @Setter
     private String lessonsName;
+    @Getter
+    @Setter
     private Date date;
+    @Getter
+    @Setter
     private String subjectName;
+    @Getter
+    @Setter
     private String groupName;
+    @Getter
+    @Setter
     private String login;
-
-    public Progress() {
-    }
-
-    public Progress(int id, int value, String firstName, String secondName, String lessonsName, Date date,
-                    String subjectName, String groupName, String login) {
-        this.id = id;
-        this.value = value;
-        this.firstName = firstName;
-        this.secondName = secondName;
-        this.lessonsName = lessonsName;
-        this.date = date;
-        this.subjectName = subjectName;
-        this.groupName = groupName;
-        this.login = login;
-    }
-
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
-    }
-
-    public int getValue() {
-        return value;
-    }
-
-    public void setValue(int value) {
-        this.value = value;
-    }
-
-    public String getFirstName() {
-        return firstName;
-    }
-
-    public void setFirstName(String firstName) {
-        this.firstName = firstName;
-    }
-
-    public String getSecondName() {
-        return secondName;
-    }
-
-    public void setSecondName(String secondName) {
-        this.secondName = secondName;
-    }
-
-    public String getLessonsName() {
-        return lessonsName;
-    }
-
-    public void setLessonsName(String lessonsName) {
-        this.lessonsName = lessonsName;
-    }
-
-    public Date getDate() {
-        return date;
-    }
-
-    public void setDate(Date date) {
-        this.date = date;
-    }
-
-    public String getSubjectName() {
-        return subjectName;
-    }
-
-    public void setSubjectName(String subjectName) {
-        this.subjectName = subjectName;
-    }
-
-    public String getGroupName() {
-        return groupName;
-    }
-
-    public void setGroupName(String groupName) {
-        this.groupName = groupName;
-    }
-
-    public String getLogin() {
-        return login;
-    }
-
-    public void setLogin(String login) {
-        this.login = login;
-    }
 }
