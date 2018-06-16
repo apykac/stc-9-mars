@@ -21,6 +21,8 @@ public class MessageServiceImpl implements MessageService {
     @Override
     public List<String> isCorrectData(MultiValueMap<String, String> incParam) {
         List<String> result = new ArrayList<>();
+        if((incParam == null) || incParam.isEmpty())
+            return result;
         if ((incParam.get(MessageMapper.TEXT) != null) && incParam.get(MessageMapper.TEXT).get(0).isEmpty())
             result.add("Не пытайтесь отправить пустое сообщение!");
         return result;
@@ -28,7 +30,11 @@ public class MessageServiceImpl implements MessageService {
 
     @Override
     public boolean addMessage(MultiValueMap<String, String> incParam) {
-        return messageDao.addMessage((Message) mapper.getByParam(incParam));
+        if((incParam == null) || incParam.isEmpty())
+            return false;
+        return messageDao.addMessage(
+                (Message) mapper.getByParam(
+                        incParam));
     }
 
     @Override
@@ -37,18 +43,6 @@ public class MessageServiceImpl implements MessageService {
         List<Message> commonList = messageDao.getAllMessagesByRole(role);
         List<Message> privateList = messageDao.getAllMessagesByToUserId(toUserId);
         return splitList(commonList, privateList);
-    }
-
-    @Override
-    public Message getMessageById(int id) {
-        if (id < 0) return null;
-        return messageDao.getMessageById(id);
-    }
-
-    @Override
-    public boolean deleteMessageById(int id) {
-        if (id < 0) return false;
-        return messageDao.deleteMessageById(id);
     }
 
     private List<Message>[] splitList(List<Message> commonList, List<Message> privateList) {
@@ -62,5 +56,17 @@ public class MessageServiceImpl implements MessageService {
         result[0] = commonList;
         result[1] = privateList;
         return result;
+    }
+
+    @Override
+    public Message getMessageById(int id) {
+        if (id < 0) return null;
+        return messageDao.getMessageById(id);
+    }
+
+    @Override
+    public boolean deleteMessageById(int id) {
+        if (id < 0) return false;
+        return messageDao.deleteMessageById(id);
     }
 }
