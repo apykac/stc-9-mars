@@ -3,16 +3,15 @@ package ru.innopolis.stc9.controllers;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.util.MultiValueMap;
-import org.springframework.web.bind.annotation.*;
-import ru.innopolis.stc9.pojo.Subject;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import ru.innopolis.stc9.pojo.User;
 import ru.innopolis.stc9.service.interfaces.GroupService;
 import ru.innopolis.stc9.service.interfaces.SubjectService;
 import ru.innopolis.stc9.service.interfaces.UserService;
 
 import javax.servlet.http.HttpSession;
-import java.util.List;
 
 @Controller
 public class UsersController {
@@ -23,11 +22,11 @@ public class UsersController {
     @Autowired
     private SubjectService subjectService;
 
-    @RequestMapping(value = "/admin/edit_user/{id}/delete", method = RequestMethod.POST)
+    /*@RequestMapping(value = "/admin/edit_user/{id}/delete", method = RequestMethod.POST)
     public String delUserPost(@PathVariable("id") int id, HttpSession session, Model model) {
         if (userService.delUserById(id)) return getUserListGet(model);
         else return editUserGet(id, session, false, model);
-    }
+    }*/
 
     @RequestMapping(value = "/admin/users_list", method = RequestMethod.GET)
     public String getUserListGet(Model model) {
@@ -35,7 +34,7 @@ public class UsersController {
         return "/views/allUsers";
     }
 
-    @RequestMapping(value = "/admin/edit_user/{id}", method = RequestMethod.GET)
+    /*@RequestMapping(value = "/admin/edit_user/{id}", method = RequestMethod.GET)
     public String editUserGet(@PathVariable("id") int id,
                               HttpSession session,
                               boolean isOwner,
@@ -53,14 +52,14 @@ public class UsersController {
             model.addAttribute("isOwner", isOwner);
         }
         return "/views/editUser";
-    }
+    }*/
 
     @RequestMapping(value = "/temp/edit_user", method = RequestMethod.GET)
     public String editUserGet() {
         return "redirect:/start";
     }
 
-    @RequestMapping(value = "/temp/edit_user", method = RequestMethod.POST)
+    /*@RequestMapping(value = "/temp/edit_user", method = RequestMethod.POST)
     public String editUserPost(@RequestBody MultiValueMap<String, String> incParam, HttpSession session, Model model) {
         Object[] info = userService.editUser(incParam);
         if (((List) info[0]).isEmpty()) info[0] = null;
@@ -80,7 +79,7 @@ public class UsersController {
                 session,
                 true,
                 model);
-    }
+    }*/
 
     @RequestMapping(value = "/university/profile/delete", method = RequestMethod.GET)
     public String deleteAccountGet() {

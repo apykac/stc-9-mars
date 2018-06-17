@@ -12,7 +12,7 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
-@Component
+@Component("messageDaoImpl")
 public class MessageDaoImpl extends DBObjectDao implements MessageDao {
     private String selectPrefix = "SELECT * FROM messages ";
     private String wherePostfix = " WHERE ";
