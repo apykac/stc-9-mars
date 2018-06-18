@@ -22,7 +22,7 @@
                             </c:choose>
                             <label class="col-sm-2 control-label">Группа получателей</label>
                             <div class="col-sm-10">
-                                <select class="form-control" name="to_user_group">
+                                <select class="form-control" name="toUserGroup">
                                     <option disabled>Кому написать?</option>
                                     <option value="ROLE_ADMIN" selected>Администрации сайта</option>
                                     <option value="ROLE_TEACHER">Преподавательскому составу</option>

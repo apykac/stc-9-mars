@@ -77,7 +77,7 @@
                                 <label for="to_user_id" class="col-sm-2 control-label">Тема</label>
                                 <div class="col-sm-10"><input type="text" class="form-control" id="to_user_id"
                                                               placeholder="to_user_id"
-                                                              name="to_user_id" value="${message.userId}"></div>
+                                                              name="toUserId" value="${message.userId}"></div>
                             </div>
                             <div class="form-group">
                                 <label for="editTheme" class="col-sm-2 control-label">Тема</label>

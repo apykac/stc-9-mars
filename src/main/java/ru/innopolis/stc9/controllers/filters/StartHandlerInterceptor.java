@@ -26,8 +26,9 @@ public class StartHandlerInterceptor implements HandlerInterceptor {
         HttpSession session = request.getSession();
         if (session.getAttribute(SessionDataInform.ID) == null) {
             User user = userDao.findLoginByName(SecurityContextHolder.getContext().getAuthentication().getName());
-            List<Message> countOfMessage = messageDao.getAllMessagesByRole(user.getPermissionGroup());
-            addStartAttributeToSession(session, user, countOfMessage.size());
+            List<Message> commonMessage = messageDao.getAllMessagesByRole(user.getPermissionGroup());
+            List<Message> privateMessage = messageDao.getAllMessagesByToUserId(user.getId());
+            addStartAttributeToSession(session, user, commonMessage.size() + privateMessage.size());
             response.sendRedirect(request.getContextPath() + "/university/start");
         }
         return true;

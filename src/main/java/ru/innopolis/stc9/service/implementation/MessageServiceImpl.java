@@ -40,21 +40,9 @@ public class MessageServiceImpl implements MessageService {
     @Override
     public List<Message>[] getAllMessages(int toUserId, String role) {
         if ((toUserId < 0) || (role == null) || role.isEmpty()) return new List[2];
-        List<Message> commonList = messageDao.getAllMessagesByRole(role);
-        List<Message> privateList = messageDao.getAllMessagesByToUserId(toUserId);
-        return splitList(commonList, privateList);
-    }
-
-    private List<Message>[] splitList(List<Message> commonList, List<Message> privateList) {
         List<Message>[] result = new List[2];
-        for (Message message : privateList)
-            for (int j = 0; j < commonList.size(); j++)
-                if (message.getId() == commonList.get(j).getId()) {
-                    commonList.remove(j);
-                    break;
-                }
-        result[0] = commonList;
-        result[1] = privateList;
+        result[0] = messageDao.getAllMessagesByRole(role);
+        result[1] = messageDao.getAllMessagesByToUserId(toUserId);
         return result;
     }
 

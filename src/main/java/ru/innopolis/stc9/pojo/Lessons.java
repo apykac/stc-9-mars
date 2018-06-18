@@ -9,13 +9,13 @@ import java.sql.Date;
 
 @NoArgsConstructor
 @AllArgsConstructor
-public class Lessons implements DBObject {
+public class Lessons {
     @Getter
     @Setter
     private int id;
     @Getter
     @Setter
-    private int subject_id;
+    private int subjectId;
     @Getter
     @Setter
     private String sname;
@@ -26,15 +26,15 @@ public class Lessons implements DBObject {
     @Setter
     private String name;
 
-    public Lessons(int id, int subject_id, Date date, String name) {
+    public Lessons(int id, int subjectId, Date date, String name) {
         this.id = id;
-        this.subject_id = subject_id;
+        this.subjectId = subjectId;
         this.date = date;
         this.name = name;
     }
 
-    public Lessons(int subject_id, Date date, String name) {
-        this.subject_id = subject_id;
+    public Lessons(int subjectId, Date date, String name) {
+        this.subjectId = subjectId;
         this.date = date;
         this.name = name;
     }

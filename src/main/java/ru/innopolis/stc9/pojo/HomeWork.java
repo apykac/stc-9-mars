@@ -9,7 +9,7 @@ import org.apache.commons.lang.builder.HashCodeBuilder;
 
 @NoArgsConstructor
 @AllArgsConstructor
-public class HomeWork implements DBObject {
+public class HomeWork {
     @Getter
     @Setter
     private int id;
