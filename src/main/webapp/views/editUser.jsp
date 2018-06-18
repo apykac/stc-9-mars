@@ -41,19 +41,19 @@
                             <label for="editFirstName" class="col-sm-2 control-label">Имя</label>
                             <div class="col-sm-10"><input type="text" class="form-control" id="editFirstName"
                                                           placeholder="First name"
-                                                          name="first_name" value="${user.firstName}"></div>
+                                                          name="firstName" value="${user.firstName}"></div>
                         </div>
                         <div class="form-group">
                             <label for="editLastName" class="col-sm-2 control-label">Фамилия</label>
                             <div class="col-sm-10"><input type="text" class="form-control" id="editLastName"
                                                           placeholder="Last name"
-                                                          name="second_name" value="${user.secondName}"></div>
+                                                          name="secondName" value="${user.secondName}"></div>
                         </div>
                         <div class="form-group">
                             <label for="editMiddleName" class="col-sm-2 control-label">Отчество</label>
                             <div class="col-sm-10"><input type="text" class="form-control" id="editMiddleName"
                                                           placeholder="Middle name"
-                                                          name="middle_name" value="${user.middleName}"></div>
+                                                          name="middleName" value="${user.middleName}"></div>
                         </div>
                         <c:choose>
                         <c:when test="${user.id == sessionScope.get('entered_user_id') || sessionScope.get('entered_role') != 'ROLE_ADMIN'}">
@@ -65,7 +65,7 @@
                                 </c:choose>
                             <label class="col-sm-2 control-label">Права доступа</label>
                             <div class="col-sm-10">
-                                <select class="form-control" name="permission_group">
+                                <select class="form-control" name="permissionGroup">
                                     <option disabled>Необходимо выбрать роль пользователя</option>
                                     <option ${user.permissionGroup == 'ROLE_ADMIN' ? "selected" : ""} value="ROLE_ADMIN">Admin
                                     </option>
@@ -102,7 +102,7 @@
                             <label for="oldPassword" class="col-sm-2 control-label">Старый пароль</label>
                             <div class="col-sm-10"><input class="form-control" type="password" id="oldPassword"
                                                           plaseholder="Old password"
-                                                          name="hash_password" value=""></div>
+                                                          name="hashPassword" value=""></div>
                         </div>
                         <div class="form-group">
                             <label for="newPassword" class="col-sm-2 control-label">Новый пароль</label>

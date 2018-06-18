@@ -69,29 +69,29 @@ public class UserServiceImplTest {
 
     private MultiValueMap<String, String> createLegalMap(boolean someNulls) {
         MultiValueMap<String, String> map = new HttpHeaders();
-        map.put("login", new ArrayList<>(Collections.singletonList("user1")));
-        map.put("hash_password", new ArrayList<>(Collections.singletonList("password1")));
+        map.put(UserMapper.LOGIN, new ArrayList<>(Collections.singletonList("user1")));
+        map.put(UserMapper.HASH, new ArrayList<>(Collections.singletonList("password1")));
         if (!someNulls) {
-            map.put("first_name", new ArrayList<>(Collections.singletonList("FirstName")));
-            map.put("second_name", new ArrayList<>(Collections.singletonList("SecondName")));
+            map.put(UserMapper.FNAME, new ArrayList<>(Collections.singletonList("FirstName")));
+            map.put(UserMapper.SNAME, new ArrayList<>(Collections.singletonList("SecondName")));
         }
-        map.put("middle_name", new ArrayList<>(Collections.singletonList("MiddleName")));
-        map.put("group_id", new ArrayList<>(Collections.singletonList("1")));
-        map.put("enabled", new ArrayList<>(Collections.singletonList("1")));
+        map.put(UserMapper.MNAME, new ArrayList<>(Collections.singletonList("MiddleName")));
+        map.put(UserMapper.GROUPID, new ArrayList<>(Collections.singletonList("1")));
+        map.put(UserMapper.ENABLED, new ArrayList<>(Collections.singletonList("1")));
         return map;
     }
 
     private MultiValueMap<String, String> createIllegalMap(boolean someNulls) {
         MultiValueMap<String, String> map = new HttpHeaders();
-        map.put("login", new ArrayList<>(Collections.singletonList("user1")));
-        map.put("hash_password", new ArrayList<>(Collections.singletonList("password1")));
+        map.put(UserMapper.LOGIN, new ArrayList<>(Collections.singletonList("user1")));
+        map.put(UserMapper.HASH, new ArrayList<>(Collections.singletonList("password1")));
         if (!someNulls) {
-            map.put("first_name", new ArrayList<>(Collections.singletonList("1")));
-            map.put("second_name", new ArrayList<>(Collections.singletonList("2")));
+            map.put(UserMapper.FNAME, new ArrayList<>(Collections.singletonList("1")));
+            map.put(UserMapper.SNAME, new ArrayList<>(Collections.singletonList("2")));
         }
-        map.put("middle_name", new ArrayList<>(Collections.singletonList("3")));
-        map.put("group_id", new ArrayList<>(Collections.singletonList("-1")));
-        map.put("enabled", new ArrayList<>(Collections.singletonList("3")));
+        map.put(UserMapper.MNAME, new ArrayList<>(Collections.singletonList("3")));
+        map.put(UserMapper.GROUPID, new ArrayList<>(Collections.singletonList("-1")));
+        map.put(UserMapper.ENABLED, new ArrayList<>(Collections.singletonList("3")));
         return map;
     }
 
@@ -111,8 +111,8 @@ public class UserServiceImplTest {
         List<String> result1 = userService.isCorrectData(createIllegalMap(false));
         List<String> result2 = userService.isCorrectData(createIllegalMap(true));
         List<String> result3 = userService.isCorrectData(null);
-        map.put("group_id", new ArrayList<>(Collections.singletonList("s")));
-        map.put("enabled", new ArrayList<>(Collections.singletonList("s")));
+        map.put(UserMapper.GROUPID, new ArrayList<>(Collections.singletonList("s")));
+        map.put(UserMapper.ENABLED, new ArrayList<>(Collections.singletonList("s")));
         List<String> result4 = userService.isCorrectData(map);
         Assert.assertEquals(5, result1.size());
         Assert.assertEquals(3, result2.size());
@@ -286,7 +286,7 @@ public class UserServiceImplTest {
     @Test
     public void checkPasswordUpdateIsPossibleCorrectDataTest() {
         MultiValueMap<String, String> map = new HttpHeaders();
-        map.put("hash_password", new ArrayList<>(Collections.singletonList("password1")));
+        map.put(UserMapper.HASH, new ArrayList<>(Collections.singletonList("password1")));
         map.put("newPassword", new ArrayList<>(Collections.singletonList("1")));
         map.put("repeatNewPassword", new ArrayList<>(Collections.singletonList("1")));
         PowerMockito.when(userDao.findUserByUserId(1)).thenReturn(createLegalUser(1, "ROLE_ADMIN", 1, 1));
@@ -298,7 +298,7 @@ public class UserServiceImplTest {
     @Test
     public void checkPasswordUpdateIsPossibleCorrectDataWrongOldPassTest() {
         MultiValueMap<String, String> map = new HttpHeaders();
-        map.put("hash_password", new ArrayList<>(Collections.singletonList("password1")));
+        map.put(UserMapper.HASH, new ArrayList<>(Collections.singletonList("password1")));
         map.put("newPassword", new ArrayList<>(Collections.singletonList("1")));
         map.put("repeatNewPassword", new ArrayList<>(Collections.singletonList("1")));
         User userFounded = createLegalUser(1, "ROLE_ADMIN", 1, 1);
@@ -312,7 +312,7 @@ public class UserServiceImplTest {
     @Test
     public void checkPasswordUpdateIsPossibleCorrectDataNewPassNotMatchedTest() {
         MultiValueMap<String, String> map = new HttpHeaders();
-        map.put("hash_password", new ArrayList<>(Collections.singletonList("password1")));
+        map.put(UserMapper.HASH, new ArrayList<>(Collections.singletonList("password1")));
         map.put("newPassword", new ArrayList<>(Collections.singletonList("1")));
         map.put("repeatNewPassword", new ArrayList<>(Collections.singletonList("2")));
         PowerMockito.when(userDao.findUserByUserId(1)).thenReturn(createLegalUser(1, "ROLE_ADMIN", 1, 1));
@@ -324,7 +324,7 @@ public class UserServiceImplTest {
     @Test
     public void checkPasswordUpdateIsPossibleIncorrectDataTest() {
         MultiValueMap<String, String> map = new HttpHeaders();
-        map.put("hash_password", new ArrayList<>(Collections.singletonList("password1")));
+        map.put(UserMapper.HASH, new ArrayList<>(Collections.singletonList("password1")));
         PowerMockito.when(userDao.findUserByUserId(1)).thenReturn(createLegalUser(1, "ROLE_ADMIN", 1, 1));
         PowerMockito.mockStatic(CryptService.class);
         PowerMockito.when(CryptService.isMatched("password1", "password1")).thenReturn(true);
@@ -342,7 +342,7 @@ public class UserServiceImplTest {
     @Test
     public void editUserCorrectDataTest() {
         MultiValueMap<String, String> map = createLegalMap(false);
-        map.put("hash_password", new ArrayList<>(Collections.singletonList("password1")));
+        map.put(UserMapper.HASH, new ArrayList<>(Collections.singletonList("password1")));
         map.put("newPassword", new ArrayList<>(Collections.singletonList("1")));
         map.put("repeatNewPassword", new ArrayList<>(Collections.singletonList("1")));
         PowerMockito.when(userDao.findUserByUserId(1)).thenReturn(legalUser);
@@ -363,7 +363,7 @@ public class UserServiceImplTest {
     @Test
     public void editUserCorrectDataWithCheckPassSuccessWithErrorsTest() {
         MultiValueMap<String, String> map = createLegalMap(false);
-        map.put("hash_password", new ArrayList<>(Collections.singletonList("password1")));
+        map.put(UserMapper.HASH, new ArrayList<>(Collections.singletonList("password1")));
         map.put("newPassword", new ArrayList<>(Collections.singletonList("1")));
         map.put("repeatNewPassword", new ArrayList<>(Collections.singletonList("1")));
         PowerMockito.when(userDao.findUserByUserId(1)).thenReturn(legalUser);
@@ -384,7 +384,7 @@ public class UserServiceImplTest {
     @Test
     public void editUserCorrectDataWithoutCheckPassSuccessWithErrorsTest() {
         MultiValueMap<String, String> map = createLegalMap(false);
-        map.put("hash_password", new ArrayList<>(Collections.singletonList("password1")));
+        map.put(UserMapper.HASH, new ArrayList<>(Collections.singletonList("password1")));
         map.put("newPassword", new ArrayList<>(Collections.singletonList("1")));
         map.put("repeatNewPassword", new ArrayList<>(Collections.singletonList("2")));
         PowerMockito.when(userDao.findUserByUserId(1)).thenReturn(legalUser);

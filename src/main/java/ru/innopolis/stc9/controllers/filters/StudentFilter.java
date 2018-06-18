@@ -12,7 +12,7 @@ import java.io.IOException;
 
 @WebFilter("/university/student/*")
 public class StudentFilter implements Filter {
-    private static Logger logger = Logger.getLogger(StartFilter.class);
+    private static Logger logger = Logger.getLogger(StudentFilter.class);
 
     @Override
     public void init(FilterConfig filterConfig) {

@@ -1,25 +1,22 @@
 package ru.innopolis.stc9.dao.implementation;
 
-import org.springframework.stereotype.Component;
+import org.hibernate.Session;
+import org.hibernate.SessionFactory;
+import org.hibernate.Transaction;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Repository;
 import ru.innopolis.stc9.dao.interfaces.UserDao;
 import ru.innopolis.stc9.dao.mappers.Mapper;
 import ru.innopolis.stc9.dao.mappers.UserMapper;
-import ru.innopolis.stc9.pojo.DBObject;
 import ru.innopolis.stc9.pojo.User;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
+import javax.persistence.criteria.*;
 import java.util.List;
 
-/**
- * Created by Семушев on 24.05.2018.
- */
-@Component
+@Repository("userDaoImpl")
 public class UserDaoImpl extends DBObjectDao implements UserDao {
-    private String selectPrefix = "SELECT * FROM users ";
-    private String updatePrefix = "UPDATE users SET ";
-    private String wherePostfix = " WHERE ";
+    @Autowired
+    SessionFactory factory;
 
     @Override
     public Mapper getMapper() {
@@ -27,98 +24,156 @@ public class UserDaoImpl extends DBObjectDao implements UserDao {
     }
 
     @Override
-    public boolean delUserById(int id) {
-        if (id < 0) return false;
-        User user = new User();
-        user.setId(id);
-        List<String> secondaryParam = new ArrayList<>(Collections.singletonList(UserMapper.ID));
-        return executor(user, "DELETE FROM users ", null, wherePostfix, secondaryParam, true);
-    }
-
-    @Override
     public boolean addUser(User user) {
         if (user == null) return false;
-        List<String> mainParam = new ArrayList<>(Arrays.asList(UserMapper.LOGIN, UserMapper.HASH,
-                UserMapper.FNAME, UserMapper.SNAME, UserMapper.MNAME));
-        return executor(user, "INSERT INTO users (", mainParam, ") VALUES (?, ?, ?, ?, ?)", null, false);
-    }
-
-    @Override
-    public List<User> getUsersList() {
-        List<DBObject> getList = getter(new User(), selectPrefix, null, null, null, true);
-        List<User> result = new ArrayList<>();
-        for (DBObject object : getList) result.add((User) object);
-        return result;
+        try (Session session = factory.openSession()) {
+            session.beginTransaction();
+            session.save(user);
+            session.getTransaction().commit();
+        }
+        return true;
     }
 
     @Override
     public User findUserByUserId(int id) {
         if (id < 0) return null;
-        User user = new User();
-        user.setId(id);
-        List<String> secondaryParam = new ArrayList<>(Collections.singletonList(UserMapper.ID));
-        List<DBObject> result = getter(user, selectPrefix, null, wherePostfix, secondaryParam, true);
-        return result.isEmpty() ? null : (User) result.get(0);
+        User user;
+        try (Session session = factory.openSession()) {
+            user = session.get(User.class, id);
+        }
+        return user;
     }
-
 
     @Override
     public User findLoginByName(String login) {
         if (login.equals("anonymousUser") || login.isEmpty()) return null;
-        User user = new User();
-        user.setLogin(login);
-        List<String> secondaryParam = new ArrayList<>(Collections.singletonList(UserMapper.LOGIN));
-        List<DBObject> result = getter(user, selectPrefix, null, wherePostfix, secondaryParam, true);
-        return result.isEmpty() ? null : (User) result.get(0);
+        List<User> resultList;
+        try (Session session = factory.openSession()) {
+            CriteriaBuilder builder = session.getCriteriaBuilder();
+            CriteriaQuery<User> criteria = builder.createQuery(User.class);
+            Root<User> root = criteria.from(User.class);
+            criteria.select(root);
+            criteria.where(builder.equal(root.get(UserMapper.LOGIN), login));
+            resultList = session.createQuery(criteria).getResultList();
+        }
+        if (!resultList.isEmpty()) return resultList.get(0);
+        else return null;
+    }
+
+    @Override
+    public boolean delUserById(int id) {
+        if (id < 0) return false;
+        int result;
+        try (Session session = factory.openSession()) {
+            CriteriaBuilder builder = session.getCriteriaBuilder();
+            CriteriaDelete<User> criteria = builder.createCriteriaDelete(User.class);
+            Root<User> root = criteria.from(User.class);
+            criteria.where(builder.equal(root.get(UserMapper.ID), id));
+            Transaction transaction = session.beginTransaction();
+            result = session.createQuery(criteria).executeUpdate();
+            transaction.commit();
+        }
+        return result != 0;
+    }
+
+
+    @Override
+    public List<User> getUsersList() {
+        List<User> resultList;
+        try (Session session = factory.openSession()) {
+            CriteriaBuilder builder = session.getCriteriaBuilder();
+            CriteriaQuery<User> criteria = builder.createQuery(User.class);
+            Root<User> root = criteria.from(User.class);
+            criteria.select(root);
+            resultList = session.createQuery(criteria).getResultList();
+        }
+        return resultList;
     }
 
     @Override
     public boolean deactivateUser(int id) {
         if (id < 0) return false;
-        User user = new User();
-        user.setId(id);
-        user.setEnabled(0);
-        List<String> mainParam = new ArrayList<>(Collections.singletonList(UserMapper.ENABLED));
-        List<String> secondaryParam = new ArrayList<>(Collections.singletonList(UserMapper.ID));
-        return executor(user, updatePrefix, mainParam, wherePostfix, secondaryParam, true);
+        int result;
+        try (Session session = factory.openSession()) {
+            CriteriaBuilder builder = session.getCriteriaBuilder();
+            CriteriaUpdate<User> criteria = builder.createCriteriaUpdate(User.class);
+            Root<User> root = criteria.from(User.class);
+            criteria.set(root.get(UserMapper.ENABLED), 0).
+                    where(builder.equal(root.get(UserMapper.ID), id));
+            Transaction transaction = session.beginTransaction();
+            result = session.createQuery(criteria).executeUpdate();
+            transaction.commit();
+        }
+        return result != 0;
     }
 
     @Override
     public boolean updateUserByFIOL(User newUser) {
         if (newUser == null) return false;
-        List<String> mainParam = new ArrayList<>(Arrays.asList(UserMapper.FNAME, UserMapper.SNAME, UserMapper.MNAME,
-                UserMapper.LOGIN, UserMapper.ENABLED, UserMapper.PERMGORUP));
-        List<String> secondaryParam = new ArrayList<>(Collections.singletonList(UserMapper.ID));
-        return executor(newUser, updatePrefix, mainParam, wherePostfix, secondaryParam, true);
+        int result;
+        try (Session session = factory.openSession()) {
+            CriteriaBuilder builder = session.getCriteriaBuilder();
+            CriteriaUpdate<User> criteria = builder.createCriteriaUpdate(User.class);
+            Root<User> root = criteria.from(User.class);
+            criteria.set(root.get(UserMapper.LOGIN), newUser.getLogin()).
+                    set(root.get(UserMapper.FNAME), newUser.getFirstName()).
+                    set(root.get(UserMapper.SNAME), newUser.getSecondName()).
+                    set(root.get(UserMapper.MNAME), newUser.getMiddleName()).
+                    set(root.get(UserMapper.PERMGORUP), newUser.getPermissionGroup()).
+                    set(root.get(UserMapper.ENABLED), newUser.getEnabled()).
+                    where(builder.equal(root.get(UserMapper.ID), newUser.getId()));
+            Transaction transaction = session.beginTransaction();
+            result = session.createQuery(criteria).executeUpdate();
+            transaction.commit();
+        }
+        return result != 0;
     }
 
     @Override
     public boolean updateUserPassword(User newUser) {
         if (newUser == null) return false;
-        List<String> mainParam = new ArrayList<>(Collections.singletonList(UserMapper.HASH));
-        List<String> secondaryParam = new ArrayList<>(Collections.singletonList(UserMapper.ID));
-        return executor(newUser, updatePrefix, mainParam, wherePostfix, secondaryParam, true);
+        int result;
+        try (Session session = factory.openSession()) {
+            CriteriaBuilder builder = session.getCriteriaBuilder();
+            CriteriaUpdate<User> criteria = builder.createCriteriaUpdate(User.class);
+            Root<User> root = criteria.from(User.class);
+            criteria.set(root.get(UserMapper.HASH), newUser.getHashPassword()).
+                    where(builder.equal(root.get(UserMapper.ID), newUser.getId()));
+            Transaction transaction = session.beginTransaction();
+            result = session.createQuery(criteria).executeUpdate();
+            transaction.commit();
+        }
+        return result != 0;
     }
 
     @Override
     public boolean updateGroupId(int userId, Integer groupId) {
         if ((userId < 0)) return false;
-        User user = new User();
-        user.setGroupId(groupId);
-        user.setId(userId);
-        List<String> mainParam = new ArrayList<>(Collections.singletonList(UserMapper.GROUPID));
-        List<String> secondaryParam = new ArrayList<>(Collections.singletonList(UserMapper.ID));
-        return executor(user, "UPDATE users SET ", mainParam, wherePostfix, secondaryParam, true);
+        int result;
+        try (Session session = factory.openSession()) {
+            CriteriaBuilder builder = session.getCriteriaBuilder();
+            CriteriaUpdate<User> criteria = builder.createCriteriaUpdate(User.class);
+            Root<User> root = criteria.from(User.class);
+            criteria.set(root.get(UserMapper.GROUPID), groupId).
+                    where(builder.equal(root.get(UserMapper.ID), userId));
+            Transaction transaction = session.beginTransaction();
+            result = session.createQuery(criteria).executeUpdate();
+            transaction.commit();
+        }
+        return result != 0;
     }
 
     @Override
     public List<User> getAllStudents() {
-        User user = new User();
-        user.setPermissionGroup("ROLE_STUDENT");
-        List<String> secondaryParam = new ArrayList<>(Collections.singletonList(UserMapper.PERMGORUP));
-        List<DBObject> getList = getter(user, selectPrefix, null, wherePostfix, secondaryParam, true);
-        List<User> result = new ArrayList<>();
-        for (DBObject object : getList) result.add((User) object);
-        return result;
+        List<User> resultList;
+        try (Session session = factory.openSession()) {
+            CriteriaBuilder builder = session.getCriteriaBuilder();
+            CriteriaQuery<User> criteria = builder.createQuery(User.class);
+            Root<User> root = criteria.from(User.class);
+            criteria.select(root).
+                    where(builder.equal(root.get(UserMapper.PERMGORUP), "ROLE_STUDENT"));
+            resultList = session.createQuery(criteria).getResultList();
+        }
+        return resultList;
     }
 }

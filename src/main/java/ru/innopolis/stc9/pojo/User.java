@@ -3,16 +3,20 @@ package ru.innopolis.stc9.pojo;
 import lombok.Getter;
 import lombok.Setter;
 
-/**
- * Created by Семушев on 24.05.2018.
- */
+import javax.persistence.*;
 
+@Entity
+@Table(name = "users")
 public class User implements DBObject {
     @Getter
     @Setter
+    @Id
+    @SequenceGenerator(name = "userSeq", sequenceName = "USER_SEQUENCE", allocationSize = 0)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "userSeq")
     private int id;
     @Getter
     @Setter
+    @Column(unique = true)
     private String login;
     @Getter
     @Setter
@@ -34,6 +38,7 @@ public class User implements DBObject {
     private Integer groupId;
     @Getter
     @Setter
+    @Transient
     private Group group;
     @Getter
     @Setter
