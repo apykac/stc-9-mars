@@ -23,10 +23,6 @@
         <property name="suffix" value=".jsp"/>
     </bean>
 
-    <bean class="org.springframework.web.servlet.mvc.annotation.DefaultAnnotationHandlerMapping">
-        <property name="defaultHandler" ref="defaultController"/>
-    </bean>
-
     <bean class="org.springframework.web.servlet.view.XmlViewResolver">
         <property name="order" value="0"/>
         <property name="location" value="/WEB-INF/beans.xml"/>

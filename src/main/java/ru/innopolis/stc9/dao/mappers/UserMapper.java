@@ -11,12 +11,12 @@ import java.util.Map;
 public class UserMapper extends Mapper {
     public static final String ID = "id";
     public static final String LOGIN = "login";
-    public static final String HASH = "hash_password";
-    public static final String PERMGORUP = "permission_group";
-    public static final String FNAME = "first_name";
-    public static final String SNAME = "second_name";
-    public static final String MNAME = "middle_name";
-    public static final String GROUPID = "group_id";
+    public static final String HASH = "hashPassword";
+    public static final String PERMGORUP = "permissionGroup";
+    public static final String FNAME = "firstName";
+    public static final String SNAME = "secondName";
+    public static final String MNAME = "middleName";
+    public static final String GROUPID = "groupId";
     public static final String ENABLED = "enabled";
     private static final Map<String, Object[]> sourceMap = new HashMap<>();
 

@@ -29,20 +29,20 @@
                 <span class="glyphicon fa fa-user form-control-feedback"></span>
             </div>
             <div class="form-group has-feedback">
-                <input type="password" class="form-control" placeholder="Пароль" name="hash_password" required>
+                <input type="password" class="form-control" placeholder="Пароль" name="hashPassword" required>
                 <span class="glyphicon fa fa-lock form-control-feedback"></span>
             </div>
             <br/>
             <div class="form-group has-feedback">
-                <input type="text" class="form-control" placeholder="Имя" name="first_name">
+                <input type="text" class="form-control" placeholder="Имя" name="firstName">
                 <span class="glyphicon fa fa-user-plus form-control-feedback"></span>
             </div>
             <div class="form-group has-feedback">
-                <input type="text" class="form-control" placeholder="Фамилия" name="second_name">
+                <input type="text" class="form-control" placeholder="Фамилия" name="secondName">
                 <span class="glyphicon fa fa-user-plus form-control-feedback"></span>
             </div>
             <div class="form-group has-feedback">
-                <input type="text" class="form-control" placeholder="Отчество" name="middle_name">
+                <input type="text" class="form-control" placeholder="Отчество" name="middleName">
                 <span class="glyphicon fa fa-user-plus form-control-feedback"></span>
             </div>
 
