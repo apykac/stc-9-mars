@@ -1,6 +1,5 @@
 package ru.innopolis.stc9.dao.implementation;
 
-import org.apache.log4j.Logger;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
@@ -8,17 +7,15 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import ru.innopolis.stc9.dao.interfaces.AttendanceDao;
 import ru.innopolis.stc9.dao.mappers.AttendanceMapper;
-import ru.innopolis.stc9.db.connection.ConnectionManager;
-import ru.innopolis.stc9.db.connection.ConnectionManagerImpl;
+import ru.innopolis.stc9.dao.mappers.UserMapper;
 import ru.innopolis.stc9.pojo.Attendance;
+import ru.innopolis.stc9.pojo.Lessons;
+import ru.innopolis.stc9.pojo.User;
 
 import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.CriteriaUpdate;
 import javax.persistence.criteria.Root;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -26,9 +23,6 @@ import java.util.List;
 public class AttendanceDaoImpl implements AttendanceDao {
     @Autowired
     private SessionFactory factory;
-
-    private static ConnectionManager connectionManager = ConnectionManagerImpl.getInstance();
-    private Logger logger = Logger.getLogger(AttendanceDaoImpl.class);
 
     @Override
     public boolean addLessonAttendance(int lessonId, int[] students) {
@@ -72,25 +66,22 @@ public class AttendanceDaoImpl implements AttendanceDao {
     @Override
     public int getNumberOfMissedLessons(int id) {
         int result = 0;
-        if (id <= 0) {
-            return result;
-        }
-        try (Connection connection = connectionManager.getConnection();
-             PreparedStatement statement = connection.prepareStatement(
-                     "SELECT " +
-                             "COUNT(lessons.name)" +
-                             "-" +
-                             "(SELECT COUNT(attendance.user_id) FROM attendance WHERE attendance.user_id = ?) as number " +
-                             "FROM lessons")) {
-            statement.setInt(1, id);
-            try (ResultSet resultSet = statement.executeQuery()) {
-                while (resultSet.next()) {
-                    result = resultSet.getInt("number");
-                }
-                logger.info("number of missed lessons = " + id);
-            }
-        } catch (SQLException e) {
-            logger.info(e.getMessage());
+        if (id <= 0) return result;
+        try (Session session = factory.openSession()) {
+            CriteriaBuilder builder = session.getCriteriaBuilder();
+            CriteriaQuery<Attendance> criteriaAttendance = builder.createQuery(Attendance.class);
+            CriteriaQuery<Lessons> criteriaLessons = builder.createQuery(Lessons.class);
+
+            Root<Attendance> rootAttendance = criteriaAttendance.from(Attendance.class);
+            Root<Lessons> rootLesson = criteriaLessons.from(Lessons.class);
+
+            criteriaAttendance.select(rootAttendance).
+                    where(builder.equal(rootAttendance.get(AttendanceMapper.USERID), id));
+            criteriaLessons.select(rootLesson);
+
+            List<Lessons> totalLessons = session.createQuery(criteriaLessons).getResultList();
+            List<Attendance> totalAttendance = session.createQuery(criteriaAttendance).getResultList();
+            result = totalLessons.size() - totalAttendance.size();
         }
         return result;
     }
@@ -107,28 +98,21 @@ public class AttendanceDaoImpl implements AttendanceDao {
         if (groupId < 1 && lessonId < 1) {
             return result;
         }
-        logger.info("Started requesting attendance by group id " + groupId + " and lesson id " + lessonId);
-        try (Connection connection = connectionManager.getConnection();
-             PreparedStatement statement = connection.prepareStatement(
-                     "SELECT attendance.user_id, attendance.attended FROM attendance " +
-                             "INNER JOIN users ON attendance.user_id = users.id " +
-                             "WHERE attendance.lesson_id = ? AND users.group_id = ?"
-             )) {
-            statement.setInt(1, lessonId);
-            statement.setInt(2, groupId);
-            try (ResultSet resultSet = statement.executeQuery()) {
-                while (resultSet.next()) {
-                    Attendance attendance = new Attendance();
-                    attendance.setUserId(resultSet.getInt("user_id"));
-                    attendance.setLessonId(lessonId);
-                    attendance.setAttended(resultSet.getBoolean("attended"));
-                    result.add(attendance);
-                }
-                return result;
-            }
-        } catch (SQLException e) {
-            logger.error(e.getMessage());
-            return result;
+        try (Session session = factory.openSession()) {
+            CriteriaBuilder builder = session.getCriteriaBuilder();
+            CriteriaQuery<Attendance> criteria = builder.createQuery(Attendance.class);
+            Root<Attendance> rootAttendance = criteria.from(Attendance.class);
+            Root<User> rootUser = criteria.from(User.class);
+            criteria.select(rootAttendance).
+                    where(builder.and(
+                            builder.equal(rootAttendance.get(AttendanceMapper.USERID), rootUser.get(UserMapper.ID)),
+                            builder.and(
+                                    builder.equal(rootAttendance.get(AttendanceMapper.LESSONID), lessonId),
+                                    builder.equal(rootUser.get(UserMapper.GROUPID), groupId)
+                            )
+                    ));
+            result = session.createQuery(criteria).getResultList();
         }
+        return result;
     }
 }
