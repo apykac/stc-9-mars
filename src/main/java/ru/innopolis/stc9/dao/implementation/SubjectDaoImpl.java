@@ -1,17 +1,18 @@
 package ru.innopolis.stc9.dao.implementation;
 
-import org.apache.log4j.Logger;
+import org.hibernate.Session;
+import org.hibernate.SessionFactory;
+import org.hibernate.Transaction;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import ru.innopolis.stc9.dao.interfaces.SubjectDao;
-import ru.innopolis.stc9.db.connection.ConnectionManager;
-import ru.innopolis.stc9.db.connection.ConnectionManagerImpl;
+import ru.innopolis.stc9.dao.mappers.SubjectMapper;
 import ru.innopolis.stc9.pojo.Subject;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.util.ArrayList;
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaDelete;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Root;
 import java.util.List;
 
 /**
@@ -19,75 +20,56 @@ import java.util.List;
  */
 @Component
 public class SubjectDaoImpl implements SubjectDao {
-    private static ConnectionManager connectionManager = ConnectionManagerImpl.getInstance();
-    private Logger logger = Logger.getLogger(SubjectDaoImpl.class);
+    @Autowired
+    private SessionFactory factory;
 
     @Override
     public boolean addSubject(Subject subject) {
-        try (Connection connection = connectionManager.getConnection();
-             PreparedStatement statement = connection.prepareStatement("INSERT " +
-                     "INTO subjects(sname) " +
-                     "VALUES (?)")) {
-            statement.setString(1, subject.getName());
-            statement.execute();
-            return true;
-        } catch (SQLException e) {
-            logger.info(e.getMessage());
-            return false;
+
+        if (subject == null) return false;
+        try (Session session = factory.openSession()) {
+            session.beginTransaction();
+            session.save(subject);
+            session.getTransaction().commit();
         }
+        return true;
     }
 
     @Override
     public boolean deleteSubject(int subjectId) {
         if (subjectId < 0) return false;
-        try (Connection connection = connectionManager.getConnection();
-             PreparedStatement statement = connection.prepareStatement(
-                     "DELETE FROM subjects WHERE id = ?")) {
-            statement.setInt(1, subjectId);
-            statement.execute();
-            logger.info(" delete subject");
-            return true;
-        } catch (SQLException e) {
-            logger.error(e.getMessage());
-            return false;
+        int result;
+        try (Session session = factory.openSession()) {
+            CriteriaBuilder builder = session.getCriteriaBuilder();
+            CriteriaDelete<Subject> criteria = builder.createCriteriaDelete(Subject.class);
+            Root<Subject> root = criteria.from(Subject.class);
+            criteria.where(builder.equal(root.get(SubjectMapper.ID), subjectId));
+            Transaction transaction = session.beginTransaction();
+            result = session.createQuery(criteria).executeUpdate();
+            transaction.commit();
         }
+        return result != 0;
     }
 
     @Override
     public List<Subject> findAllSubject() {
-        logger.info("Subject list requested.");
-        List<Subject> result = new ArrayList<>();
-        try (Connection connection = connectionManager.getConnection();
-             PreparedStatement statement = connection.prepareStatement("SELECT * FROM subjects")) {
-            try (ResultSet resultSet = statement.executeQuery()) {
-                while (resultSet.next()) {
-                    Subject subject = new Subject(
-                            resultSet.getInt("id"),
-                            resultSet.getString("sname"));
-                    result.add(subject);
-                }
-                logger.info("Subject list returned successfully");
-            }
-        } catch (SQLException e) {
-            logger.info(e.getMessage());
+        List<Subject> resultList;
+        try (Session session = factory.openSession()) {
+            CriteriaBuilder builder = session.getCriteriaBuilder();
+            CriteriaQuery<Subject> criteria = builder.createQuery(Subject.class);
+            Root<Subject> root = criteria.from(Subject.class);
+            criteria.select(root);
+            resultList = session.createQuery(criteria).getResultList();
         }
-        return result;
+        return resultList;
     }
 
     @Override
     public Subject findById(int id) {
         if (id < 0) return null;
-        Subject subject = null;
-        try (Connection connection = connectionManager.getConnection();
-             PreparedStatement statement = connection.prepareStatement("SELECT * FROM subjects WHERE id = ?")) {
-            statement.setInt(1, id);
-            try (ResultSet set = statement.executeQuery()) {
-                while (set.next()) subject = new Subject(set.getInt("id"), set.getString("sname"));
-            }
-            logger.info("get subject by id");
-            return subject;
-        } catch (SQLException e) {
-            logger.error(e.getMessage());
+        Subject subject;
+        try (Session session = factory.openSession()) {
+            subject = session.get(Subject.class, id);
         }
         return subject;
     }

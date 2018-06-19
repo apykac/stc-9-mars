@@ -74,9 +74,9 @@ public class LessonsServiceImplTest {
     @Test
     public void findAllLessonsTest() {
         List<Lessons> result = lessonsService.findAllLessons();
-        assertEquals(result.get(0).getName(), "some");
+        assertEquals("some", result.get(0).getName());
         assertEquals(result.get(0).getDate(), dateSql);
-        assertEquals(result.get(0).getSubject_id(), 1);
+        assertEquals(1, result.get(0).getSubjectId());
     }
 
     @Test

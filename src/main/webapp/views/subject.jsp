@@ -65,7 +65,7 @@
                 </div>
             </div>
             <div class="col-md-4">
-                <div class="box box-primary" id="win_subj" style="display:none;">
+                <div class="box box-primary" id="win_subj">
                     <div class="box-header with-border">
                         <h3 class="box-title">Настройки</h3>
 
