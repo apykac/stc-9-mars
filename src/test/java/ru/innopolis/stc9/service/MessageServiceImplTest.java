@@ -100,19 +100,10 @@ public class MessageServiceImplTest {
     public void getAllMessagesCorrectDataTest() {
         List<Message> commonList = new ArrayList<>(Arrays.asList(new Message(), new Message(), new Message(), new Message()));
         List<Message> privateList = new ArrayList<>(Arrays.asList(new Message(), new Message()));
-        commonList.get(0).setId(1);
-        commonList.get(1).setId(1);
-        commonList.get(2).setId(2);
-        commonList.get(3).setId(3);
-        privateList.get(0).setId(1);
-        privateList.get(1).setId(1);
-        List<Message> cloneCommonList = new ArrayList<>(commonList);
-        cloneCommonList.remove(0);
-        cloneCommonList.remove(0);
         PowerMockito.when(messageDao.getAllMessagesByRole("ROLE_STUDENT")).thenReturn(commonList);
         PowerMockito.when(messageDao.getAllMessagesByToUserId(1)).thenReturn(privateList);
         List<Message>[] result = messageService.getAllMessages(1,"ROLE_STUDENT");
-        Assert.assertEquals(cloneCommonList,result[0]);
+        Assert.assertEquals(commonList, result[0]);
         Assert.assertEquals(privateList,result[1]);
     }
 

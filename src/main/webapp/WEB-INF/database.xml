@@ -23,12 +23,9 @@
         <property name="packagesToScan" value="ru.innopolis.stc9.pojo"/>
         <property name="hibernateProperties">
             <props>
-                <prop key="hibernate.hbm2ddl.auto">
-                    update
-                </prop>
-                <prop key="hibernate.dialect">
-                    org.hibernate.dialect.MySQL8Dialect
-                </prop>
+                <prop key="hibernate.hbm2ddl.auto">update</prop>
+                <prop key="hibernate.dialect">org.hibernate.dialect.MySQL8Dialect</prop>
+                <prop key="hibernate.connection.charset">UTF-8</prop>
             </props>
         </property>
     </bean>

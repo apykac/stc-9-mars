@@ -9,7 +9,7 @@ import java.sql.Date;
 
 @NoArgsConstructor
 @AllArgsConstructor
-public class Progress implements DBObject {
+public class Progress {
     @Getter
     @Setter
     private int id;

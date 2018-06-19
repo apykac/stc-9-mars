@@ -7,7 +7,7 @@ import lombok.Setter;
 
 @NoArgsConstructor
 @AllArgsConstructor
-public class Mark implements DBObject {
+public class Mark {
     @Getter
     @Setter
     private int id;

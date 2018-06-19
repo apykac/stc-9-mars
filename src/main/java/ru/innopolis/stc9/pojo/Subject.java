@@ -5,7 +5,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @NoArgsConstructor
-public class Subject implements DBObject {
+public class Subject {
     @Getter
     @Setter
     private int id;

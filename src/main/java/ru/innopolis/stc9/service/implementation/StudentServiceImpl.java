@@ -104,7 +104,7 @@ public class StudentServiceImpl implements StudentService {
 
     @Override
     public void distributionStudentsByGroup(List<Group> groupsList, List<User> studentsList) {
-        /*if ((groupsList == null) || groupsList.isEmpty())
+        if ((groupsList == null) || groupsList.isEmpty())
             return;
         if ((studentsList == null) || studentsList.isEmpty())
             return;
@@ -112,6 +112,6 @@ public class StudentServiceImpl implements StudentService {
             Integer groupId = group.getId();
             for (User student : studentsList)
                 if (groupId.equals(student.getGroupId())) student.setGroup(group);
-        }*/
+        }
     }
 }

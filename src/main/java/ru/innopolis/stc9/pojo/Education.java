@@ -10,7 +10,7 @@ import lombok.Setter;
  */
 @NoArgsConstructor
 @AllArgsConstructor
-public class Education implements DBObject {
+public class Education {
     @Getter
     @Setter
     private int id;

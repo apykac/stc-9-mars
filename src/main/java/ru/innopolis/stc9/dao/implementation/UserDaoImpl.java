@@ -6,22 +6,16 @@ import org.hibernate.Transaction;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import ru.innopolis.stc9.dao.interfaces.UserDao;
-import ru.innopolis.stc9.dao.mappers.Mapper;
 import ru.innopolis.stc9.dao.mappers.UserMapper;
 import ru.innopolis.stc9.pojo.User;
 
 import javax.persistence.criteria.*;
 import java.util.List;
 
-@Repository("userDaoImpl")
-public class UserDaoImpl extends DBObjectDao implements UserDao {
+@Repository
+public class UserDaoImpl implements UserDao {
     @Autowired
     SessionFactory factory;
-
-    @Override
-    public Mapper getMapper() {
-        return new UserMapper();
-    }
 
     @Override
     public boolean addUser(User user) {
