@@ -10,6 +10,7 @@ import org.apache.commons.lang.builder.HashCodeBuilder;
 import javax.persistence.*;
 
 @Entity
+@Table(name = "homework")
 @NoArgsConstructor
 @AllArgsConstructor
 public class HomeWork {

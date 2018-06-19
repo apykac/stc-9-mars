@@ -8,9 +8,9 @@ import lombok.Setter;
 import javax.persistence.*;
 
 @Entity
+@Table(name = "studygroup")
 @AllArgsConstructor
 @NoArgsConstructor
-@Table(name = "studygroup")
 public class Group {
     @Getter
     @Setter

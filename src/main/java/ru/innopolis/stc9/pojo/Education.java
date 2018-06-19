@@ -8,6 +8,7 @@ import lombok.Setter;
 import javax.persistence.*;
 
 @Entity
+@Table(name = "education")
 @NoArgsConstructor
 @AllArgsConstructor
 public class Education {

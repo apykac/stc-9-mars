@@ -9,6 +9,7 @@ import javax.persistence.*;
 import java.sql.Date;
 
 @Entity
+@Table(name = "lessons")
 @NoArgsConstructor
 @AllArgsConstructor
 public class Lessons {

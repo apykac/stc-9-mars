@@ -274,7 +274,7 @@
                                         <c:forEach items="${requestScope.get('lessons')}" var="lessons">
                                             <tr>
                                                 <td>${lessons.id}</td>
-                                                <td>${lessons.subject_id}</td>
+                                                <td>${lessons.subjectId}</td>
                                                 <td>${lessons.date}</td>
                                                 <td>${lessons.name}</td>
                                             </tr>

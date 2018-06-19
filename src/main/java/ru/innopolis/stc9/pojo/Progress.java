@@ -9,6 +9,7 @@ import javax.persistence.*;
 import java.sql.Date;
 
 @Entity
+@Table(name = "progress")
 @NoArgsConstructor
 @AllArgsConstructor
 public class Progress {
