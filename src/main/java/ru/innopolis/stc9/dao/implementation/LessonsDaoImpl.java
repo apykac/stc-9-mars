@@ -28,7 +28,7 @@ public class LessonsDaoImpl implements LessonsDao {
              PreparedStatement statement = connection.prepareStatement("INSERT " +
                      "INTO lessons(subject_id, date, name) " +
                      "VALUES (?, ?, ?)")) {
-            statement.setInt(1, lesson.getSubject_id());
+            statement.setInt(1, lesson.getSubjectId());
             statement.setDate(2, lesson.getDate());
             statement.setString(3, lesson.getName());
             statement.execute();

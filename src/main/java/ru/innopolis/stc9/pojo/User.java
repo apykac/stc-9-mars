@@ -11,8 +11,8 @@ public class User implements DBObject {
     @Getter
     @Setter
     @Id
-    @SequenceGenerator(name = "userSeq", sequenceName = "USER_SEQUENCE", allocationSize = 0)
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "userSeq")
+    @SequenceGenerator(name = "usersSeq", sequenceName = "USERS_SEQUENCE", allocationSize = 0)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "usersSeq")
     private int id;
     @Getter
     @Setter

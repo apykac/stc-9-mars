@@ -15,7 +15,7 @@ import java.util.List;
 @Repository
 public class UserDaoImpl implements UserDao {
     @Autowired
-    SessionFactory factory;
+    private SessionFactory factory;
 
     @Override
     public boolean addUser(User user) {

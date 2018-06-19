@@ -4,10 +4,16 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import javax.persistence.*;
+
+@Entity
 @NoArgsConstructor
 public class Subject {
     @Getter
     @Setter
+    @Id
+    @SequenceGenerator(name = "subjectSeq", sequenceName = "SUBJECT_SEQUENCE", allocationSize = 0)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "subjectSeq")
     private int id;
     @Getter
     @Setter

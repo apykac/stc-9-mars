@@ -1,94 +1,73 @@
 package ru.innopolis.stc9.dao.implementation;
 
-import org.apache.log4j.Logger;
-import org.springframework.stereotype.Component;
+import org.hibernate.Session;
+import org.hibernate.SessionFactory;
+import org.hibernate.Transaction;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Repository;
 import ru.innopolis.stc9.dao.interfaces.GroupDao;
-import ru.innopolis.stc9.db.connection.ConnectionManager;
-import ru.innopolis.stc9.db.connection.ConnectionManagerImpl;
+import ru.innopolis.stc9.dao.mappers.GroupMapper;
 import ru.innopolis.stc9.pojo.Group;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.util.ArrayList;
+import javax.persistence.criteria.*;
 import java.util.List;
 
-/**
- * Created by Сергей on 23.05.2018.
- * Класс реализует интерфейс GroupDao
- */
-@Component
+
+@Repository
 public class GroupDaoImpl implements GroupDao {
-    private Logger logger = Logger.getLogger(GroupDaoImpl.class);
-    private static ConnectionManager connectionManager = ConnectionManagerImpl.getInstance();
-    private String errMessage = "SQLException. ";
-    private String gname = "gname";
+    @Autowired
+    private SessionFactory factory;
 
     @Override
     public boolean addGroup(Group group) {
         if (group == null) return false;
-        try (Connection connection = connectionManager.getConnection();
-             PreparedStatement statement = connection.prepareStatement(
-                     "INSERT INTO stgroup (gname) " +
-                             "VALUES (?)\n")) {
-            statement.setString(1, group.getName());
-            statement.execute();
-            logger.info("group added to DB");
-            return true;
-        } catch (SQLException e) {
-            logger.error(errMessage + " " + e.getMessage());
-            return false;
+        try (Session session = factory.openSession()) {
+            session.beginTransaction();
+            session.save(group);
+            session.getTransaction().commit();
         }
+        return true;
     }
 
     @Override
     public boolean updateGroup(Group group) {
         if (group == null) return false;
-        try (Connection connection = connectionManager.getConnection();
-             PreparedStatement statement = connection.prepareStatement(
-                     "UPDATE stgroup SET gname = ? WHERE id = ?")) {
-            statement.setString(1, group.getName());
-            statement.setInt(2, group.getId());
-            statement.executeUpdate();
-            logger.info("update group");
-            return true;
-        } catch (SQLException e) {
-            logger.error(errMessage + " " + e.getMessage());
-            return false;
+        int result;
+        try (Session session = factory.openSession()) {
+            CriteriaBuilder builder = session.getCriteriaBuilder();
+            CriteriaUpdate<Group> criteria = builder.createCriteriaUpdate(Group.class);
+            Root<Group> root = criteria.from(Group.class);
+            criteria.set(root.get(GroupMapper.NAME), group.getName()).
+                    where(builder.equal(root.get(GroupMapper.ID), group.getId()));
+            Transaction transaction = session.beginTransaction();
+            result = session.createQuery(criteria).executeUpdate();
+            transaction.commit();
         }
+        return result != 0;
     }
 
     @Override
     public boolean deleteGroup(int groupId) {
         if (groupId < 0) return false;
-        try (Connection connection = connectionManager.getConnection();
-             PreparedStatement statement = connection.prepareStatement(
-                     "DELETE  FROM stgroup WHERE id =?")) {
-            statement.setInt(1, groupId);
-            statement.execute();
-            logger.info(" delete group");
-            return true;
-        } catch (SQLException e) {
-            logger.error(errMessage + e.getMessage());
-            return false;
+        int result;
+        try (Session session = factory.openSession()) {
+            CriteriaBuilder builder = session.getCriteriaBuilder();
+            CriteriaDelete<Group> criteria = builder.createCriteriaDelete(Group.class);
+            Root<Group> root = criteria.from(Group.class);
+            criteria.where(builder.equal(root.get(GroupMapper.ID), groupId));
+            Transaction transaction = session.beginTransaction();
+            result = session.createQuery(criteria).executeUpdate();
+            transaction.commit();
         }
+        return result != 0;
     }
 
     @Override
     public Group findGroupById(Integer id) {
         if ((id == null) || (id < 0)) return null;
-        Group group = null;
-        try (Connection connection = connectionManager.getConnection();
-             PreparedStatement statement = connection.prepareStatement("SELECT * FROM stgroup WHERE id = ?")) {
-            statement.setInt(1, id);
-            try (ResultSet set = statement.executeQuery()) {
-                while (set.next()) group = new Group(set.getInt("id"), set.getString(gname));
-            }
-            logger.info("get group by id");
-            return group;
-        } catch (SQLException e) {
-            logger.error(errMessage + e.getMessage());
+        Group group;
+        try (Session session = factory.openSession()) {
+            group = session.get(Group.class, id);
         }
         return group;
     }
@@ -96,38 +75,29 @@ public class GroupDaoImpl implements GroupDao {
     @Override
     public Group findGroupByName(String name) {
         if ((name == null) || name.isEmpty()) return null;
-        Group group = null;
-        try (Connection connection = connectionManager.getConnection();
-             PreparedStatement statement = connection.prepareStatement("SELECT * FROM stgroup WHERE gname = ?")) {
-            statement.setString(1, name);
-            try (ResultSet set = statement.executeQuery()) {
-                while (set.next()) {
-                    group = new Group(set.getString(gname));
-                    logger.info("get group by name");
-                }
-            }
-            return group;
-        } catch (SQLException e) {
-            logger.error(errMessage + e.getMessage());
+        List<Group> resultList;
+        try (Session session = factory.openSession()) {
+            CriteriaBuilder builder = session.getCriteriaBuilder();
+            CriteriaQuery<Group> criteria = builder.createQuery(Group.class);
+            Root<Group> root = criteria.from(Group.class);
+            criteria.select(root);
+            criteria.where(builder.equal(root.get(GroupMapper.NAME), name));
+            resultList = session.createQuery(criteria).getResultList();
         }
-        return group;
+        if (!resultList.isEmpty()) return resultList.get(0);
+        else return null;
     }
 
     @Override
     public List<Group> findAllGroups() {
-        List<Group> list = new ArrayList<>();
-        try (Connection connection = connectionManager.getConnection();
-             PreparedStatement statement = connection.prepareStatement("SELECT * FROM stgroup");
-             ResultSet set = statement.executeQuery()) {
-            while (set.next()) {
-                Group group = new Group(set.getInt("id"), set.getString(gname));
-                list.add(group);
-            }
-            logger.info("get all groups");
-            return list;
-        } catch (SQLException e) {
-            logger.error(errMessage + e.getMessage());
+        List<Group> resultList;
+        try (Session session = factory.openSession()) {
+            CriteriaBuilder builder = session.getCriteriaBuilder();
+            CriteriaQuery<Group> criteria = builder.createQuery(Group.class);
+            Root<Group> root = criteria.from(Group.class);
+            criteria.select(root);
+            resultList = session.createQuery(criteria).getResultList();
         }
-        return list;
+        return resultList;
     }
 }

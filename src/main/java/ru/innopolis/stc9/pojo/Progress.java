@@ -5,13 +5,18 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import javax.persistence.*;
 import java.sql.Date;
 
+@Entity
 @NoArgsConstructor
 @AllArgsConstructor
 public class Progress {
     @Getter
     @Setter
+    @Id
+    @SequenceGenerator(name = "progressSeq", sequenceName = "PROGRESS_SEQUENCE", allocationSize = 0)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "progressSeq")
     private int id;
     @Getter
     @Setter

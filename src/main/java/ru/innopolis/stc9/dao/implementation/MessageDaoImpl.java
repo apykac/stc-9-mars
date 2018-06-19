@@ -4,7 +4,7 @@ import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Repository;
 import ru.innopolis.stc9.dao.interfaces.MessageDao;
 import ru.innopolis.stc9.dao.mappers.MessageMapper;
 import ru.innopolis.stc9.pojo.Message;
@@ -16,10 +16,10 @@ import javax.persistence.criteria.Root;
 import java.util.ArrayList;
 import java.util.List;
 
-@Component
+@Repository
 public class MessageDaoImpl implements MessageDao {
     @Autowired
-    SessionFactory factory;
+    private SessionFactory factory;
 
     @Override
     public boolean addMessage(Message message) {

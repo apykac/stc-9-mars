@@ -5,11 +5,18 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import javax.persistence.*;
+
+@Entity
 @AllArgsConstructor
 @NoArgsConstructor
+@Table(name = "studygroup")
 public class Group {
     @Getter
     @Setter
+    @Id
+    @SequenceGenerator(name = "studygroupSeq", sequenceName = "STUDYGROUP_SEQUENCE", allocationSize = 0)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "studygroupSeq")
     private int id;
     @Getter
     @Setter
