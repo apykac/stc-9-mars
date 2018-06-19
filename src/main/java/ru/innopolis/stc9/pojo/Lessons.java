@@ -5,13 +5,19 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import javax.persistence.*;
 import java.sql.Date;
 
+@Entity
+@Table(name = "lessons")
 @NoArgsConstructor
 @AllArgsConstructor
 public class Lessons {
     @Getter
     @Setter
+    @Id
+    @SequenceGenerator(name = "lessonSeq", sequenceName = "LESSON_SEQUENCE", allocationSize = 0)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "lessonSeq")
     private int id;
     @Getter
     @Setter

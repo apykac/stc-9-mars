@@ -5,14 +5,18 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-/**
- * Created by Сергей on 01.06.2018.
- */
+import javax.persistence.*;
+
+@Entity
+@Table(name = "education")
 @NoArgsConstructor
 @AllArgsConstructor
 public class Education {
     @Getter
     @Setter
+    @Id
+    @SequenceGenerator(name = "educationSeq", sequenceName = "EDUCATION_SEQUENCE", allocationSize = 0)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "educationSeq")
     private int id;
     @Getter
     @Setter

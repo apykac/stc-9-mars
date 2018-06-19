@@ -1,43 +1,33 @@
 package ru.innopolis.stc9.dao.implementation;
 
-import org.apache.log4j.Logger;
-import org.springframework.stereotype.Component;
+import org.hibernate.Session;
+import org.hibernate.SessionFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Repository;
 import ru.innopolis.stc9.dao.interfaces.EducationDao;
-import ru.innopolis.stc9.db.connection.ConnectionManager;
-import ru.innopolis.stc9.db.connection.ConnectionManagerImpl;
 import ru.innopolis.stc9.pojo.Education;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.util.ArrayList;
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Root;
 import java.util.List;
 
-/**
- * Created by Сергей on 01.06.2018.
- */
-@Component
+
+@Repository
 public class EducationDaoImpl implements EducationDao {
-    private Logger logger = Logger.getLogger(GroupDaoImpl.class);
-    private static ConnectionManager connectionManager = ConnectionManagerImpl.getInstance();
+    @Autowired
+    private SessionFactory factory;
 
     @Override
     public List<Education> findAllEducations() {
-        List<Education> list = new ArrayList<>();
-        try (Connection connection = connectionManager.getConnection();
-             PreparedStatement statement = connection.prepareStatement("SELECT * FROM education");
-             ResultSet set = statement.executeQuery()) {
-            while (set.next()) {
-                Education education = new Education(set.getInt("id"),
-                        set.getInt("stgroup_id"), set.getInt("subject_id"));
-                list.add(education);
-            }
-            logger.info("get all educations");
-            return list;
-        } catch (SQLException e) {
-            logger.error(e.getMessage());
+        List<Education> resultList;
+        try (Session session = factory.openSession()) {
+            CriteriaBuilder builder = session.getCriteriaBuilder();
+            CriteriaQuery<Education> criteria = builder.createQuery(Education.class);
+            Root<Education> root = criteria.from(Education.class);
+            criteria.select(root);
+            resultList = session.createQuery(criteria).getResultList();
         }
-        return list;
+        return resultList;
     }
 }

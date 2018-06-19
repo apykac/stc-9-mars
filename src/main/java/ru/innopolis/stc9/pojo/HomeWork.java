@@ -7,11 +7,18 @@ import lombok.Setter;
 import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang.builder.HashCodeBuilder;
 
+import javax.persistence.*;
+
+@Entity
+@Table(name = "homework")
 @NoArgsConstructor
 @AllArgsConstructor
 public class HomeWork {
     @Getter
     @Setter
+    @Id
+    @SequenceGenerator(name = "homeWorkSeq", sequenceName = "HOMEWORK_SEQUENCE", allocationSize = 0)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "homeWorkSeq")
     private int id;
     @Getter
     @Setter
