@@ -1,12 +1,20 @@
 package ru.innopolis.stc9.dao.implementation;
 
 import org.apache.log4j.Logger;
-import org.springframework.stereotype.Component;
+import org.hibernate.Session;
+import org.hibernate.SessionFactory;
+import org.hibernate.Transaction;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Repository;
 import ru.innopolis.stc9.dao.interfaces.AttendanceDao;
+import ru.innopolis.stc9.dao.mappers.AttendanceMapper;
 import ru.innopolis.stc9.db.connection.ConnectionManager;
 import ru.innopolis.stc9.db.connection.ConnectionManagerImpl;
 import ru.innopolis.stc9.pojo.Attendance;
 
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaUpdate;
+import javax.persistence.criteria.Root;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -14,8 +22,10 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-@Component
+@Repository
 public class AttendanceDaoImpl implements AttendanceDao {
+    @Autowired
+    private SessionFactory factory;
 
     private static ConnectionManager connectionManager = ConnectionManagerImpl.getInstance();
     private Logger logger = Logger.getLogger(AttendanceDaoImpl.class);
@@ -23,21 +33,17 @@ public class AttendanceDaoImpl implements AttendanceDao {
     @Override
     public boolean addLessonAttendance(int lessonId, int[] students) {
         boolean result = true;
-        if (lessonId < 1 || students == null || students.length < 1) {
+        if (lessonId < 1 || students == null || students.length < 1)
             result = false;
-        }
         for (int studentId : students) {
-            try (Connection connection = connectionManager.getConnection();
-                 PreparedStatement statement = connection.prepareStatement(
-                         "INSERT INTO attendance (lesson_id, user_id, attended)" +
-                                 "VALUES (?,?, TRUE)"
-                 )) {
-                statement.setInt(1, lessonId);
-                statement.setInt(2, studentId);
-                statement.execute();
-            } catch (SQLException e) {
-                logger.error(e.getMessage());
-                result = false;
+            Attendance attendance = new Attendance();
+            attendance.setLessonId(lessonId);
+            attendance.setUserId(studentId);
+            attendance.setAttended(true);
+            try (Session session = factory.openSession()) {
+                session.beginTransaction();
+                session.save(attendance);
+                session.getTransaction().commit();
             }
         }
         return result;
@@ -45,25 +51,22 @@ public class AttendanceDaoImpl implements AttendanceDao {
 
     @Override
     public boolean updateAttendance(Attendance attendance) {
-        if (attendance == null) {
-            return false;
+        if (attendance == null) return false;
+        int result;
+        try (Session session = factory.openSession()) {
+            CriteriaBuilder builder = session.getCriteriaBuilder();
+            CriteriaUpdate<Attendance> criteria = builder.createCriteriaUpdate(Attendance.class);
+            Root<Attendance> root = criteria.from(Attendance.class);
+            criteria.set(root.get(AttendanceMapper.ATTENDED), attendance.isAttended()).
+                    where(builder.and(
+                            builder.equal(root.get(AttendanceMapper.LESSONID), attendance.getLessonId()),
+                            builder.equal(root.get(AttendanceMapper.USERID), attendance.getUserId())
+                    ));
+            Transaction transaction = session.beginTransaction();
+            result = session.createQuery(criteria).executeUpdate();
+            transaction.commit();
         }
-        logger.info("Started updating attendance");
-        try (Connection connection = connectionManager.getConnection();
-             PreparedStatement statement = connection.prepareStatement(
-                     "UPDATE attendance SET attended = ? WHERE " +
-                             "user_id = ? AND lesson_id=?"
-             )) {
-            statement.setBoolean(1, attendance.isAttended());
-            statement.setInt(2, attendance.getUserId());
-            statement.setInt(3, attendance.getLessonId());
-            statement.execute();
-            logger.info("Attendance successfully updated");
-            return true;
-        } catch (SQLException e) {
-            logger.error(e.getMessage());
-            return false;
-        }
+        return result != 0;
     }
 
     @Override

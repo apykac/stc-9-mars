@@ -1,112 +1,80 @@
 package ru.innopolis.stc9.dao.implementation;
 
-import org.apache.log4j.Logger;
-import org.springframework.stereotype.Component;
+import org.hibernate.Session;
+import org.hibernate.SessionFactory;
+import org.hibernate.Transaction;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Repository;
 import ru.innopolis.stc9.dao.interfaces.MarkDao;
 import ru.innopolis.stc9.dao.mappers.MarkMapper;
-import ru.innopolis.stc9.db.connection.ConnectionManager;
-import ru.innopolis.stc9.db.connection.ConnectionManagerImpl;
 import ru.innopolis.stc9.pojo.Mark;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.CriteriaUpdate;
+import javax.persistence.criteria.Root;
 import java.util.ArrayList;
 import java.util.List;
 
-@Component
+@Repository
 public class MarkDaoImpl implements MarkDao {
-    private static ConnectionManager connectionManager = ConnectionManagerImpl.getInstance();
-    private Logger logger = Logger.getLogger(MarkDaoImpl.class);
-    private String loggerPrefix = "Mark with id ";
+    @Autowired
+    private SessionFactory factory;
 
     @Override
     public List<Mark> getMarksByLessonId(int lessonId) {
-        logger.info("Marks by lesson id " + lessonId + " requested");
-        List<Mark> result = new ArrayList<>();
-        try (Connection connection = connectionManager.getConnection();
-             PreparedStatement statement = connection.prepareStatement(
-                     "SELECT * FROM marks WHERE lesson_id = ?"
-             )) {
-            statement.setInt(1, lessonId);
-            try (ResultSet resultSet = statement.executeQuery()) {
-                while (resultSet.next()) {
-                    Mark mark = MarkMapper.getMarkFromResultSet(resultSet);
-                    result.add(mark);
-                }
-                logger.info("Marks list returned successfully");
-            }
-
-        } catch (SQLException e) {
-            logger.error(e.getMessage());
+        if (lessonId < 0) return new ArrayList<>();
+        List<Mark> resultList;
+        try (Session session = factory.openSession()) {
+            CriteriaBuilder builder = session.getCriteriaBuilder();
+            CriteriaQuery<Mark> criteria = builder.createQuery(Mark.class);
+            Root<Mark> root = criteria.from(Mark.class);
+            criteria.select(root);
+            criteria.where(builder.equal(root.get(MarkMapper.LESSONID), lessonId));
+            resultList = session.createQuery(criteria).getResultList();
         }
-        return result;
+        return resultList;
     }
 
     @Override
     public Mark getMarkById(int id) {
-        logger.info(loggerPrefix + id + " requested");
-        Mark result = null;
-        try (Connection connection = connectionManager.getConnection();
-             PreparedStatement statement = connection.prepareStatement(
-                     "SELECT * FROM marks WHERE id = ?"
-             )) {
-            statement.setInt(1, id);
-            try (ResultSet resultSet = statement.executeQuery()) {
-                if (resultSet.next()) {
-                    result = MarkMapper.getMarkFromResultSet(resultSet);
-                    logger.info("Mark with id " + id + " returned successfully");
-                }
-            }
-        } catch (SQLException e) {
-            logger.error(e.getMessage());
+        if (id < 0) return null;
+        Mark mark;
+        try (Session session = factory.openSession()) {
+            mark = session.get(Mark.class, id);
         }
-        return result;
+        return mark;
     }
 
     @Override
     public boolean addMark(Mark mark) {
-        if (mark == null) {
-            return false;
+        if (mark == null) return false;
+        mark.setComment("");
+        mark.setValue(0);
+        try (Session session = factory.openSession()) {
+            session.beginTransaction();
+            session.save(mark);
+            session.getTransaction().commit();
         }
-        logger.info("Started adding mark for student id " + mark.getUserId() + " and lesson id " + mark.getLessonId());
-        try (Connection connection = connectionManager.getConnection();
-             PreparedStatement statement = connection.prepareStatement(
-                     "INSERT INTO marks (user_id, lesson_id) VALUES (?, ?)"
-             )) {
-            statement.setInt(1, mark.getUserId());
-            statement.setInt(2, mark.getLessonId());
-            statement.execute();
-            logger.info(loggerPrefix + mark.getUserId() + " and lesson id " + mark.getLessonId() + " added successfully.");
-            return true;
-        } catch (SQLException e) {
-            logger.error(e.getMessage());
-            return false;
-        }
-
+        return true;
     }
 
     @Override
     public boolean updateMark(Mark mark) {
-        if (mark == null) {
-            return false;
+        if (mark == null) return false;
+        int result;
+        try (Session session = factory.openSession()) {
+            CriteriaBuilder builder = session.getCriteriaBuilder();
+            CriteriaUpdate<Mark> criteria = builder.createCriteriaUpdate(Mark.class);
+            Root<Mark> root = criteria.from(Mark.class);
+            criteria.set(root.get(MarkMapper.VALUE), mark.getValue()).
+                    set(root.get(MarkMapper.COMMENT), mark.getComment()).
+                    where(builder.equal(root.get(MarkMapper.ID), mark.getId()));
+            Transaction transaction = session.beginTransaction();
+            result = session.createQuery(criteria).executeUpdate();
+            transaction.commit();
         }
-        logger.info("Started updating mark with id " + mark.getId());
-        try (Connection connection = connectionManager.getConnection();
-             PreparedStatement statement = connection.prepareStatement(
-                     "UPDATE marks SET value = ?, comment = ? WHERE id = ?"
-             )) {
-            statement.setInt(1, mark.getValue());
-            statement.setString(2, mark.getComment());
-            statement.setInt(3, mark.getId());
-            statement.execute();
-            logger.info(loggerPrefix + mark.getId() + " updated.");
-            return true;
-        } catch (SQLException e) {
-            logger.error(e.getMessage());
-            return false;
-        }
+        return result != 0;
     }
 
 

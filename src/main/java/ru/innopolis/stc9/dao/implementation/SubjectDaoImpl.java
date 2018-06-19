@@ -4,7 +4,7 @@ import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Repository;
 import ru.innopolis.stc9.dao.interfaces.SubjectDao;
 import ru.innopolis.stc9.dao.mappers.SubjectMapper;
 import ru.innopolis.stc9.pojo.Subject;
@@ -18,7 +18,7 @@ import java.util.List;
 /**
  * Класс реализует интерфейс SubjectDao
  */
-@Component
+@Repository
 public class SubjectDaoImpl implements SubjectDao {
     @Autowired
     private SessionFactory factory;

@@ -4,7 +4,7 @@ import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Repository;
 import ru.innopolis.stc9.dao.interfaces.LessonsDao;
 import ru.innopolis.stc9.dao.mappers.LessonMapper;
 import ru.innopolis.stc9.dao.mappers.SubjectMapper;
@@ -18,10 +18,7 @@ import javax.persistence.criteria.Root;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * Класс реализует интерфейс LessonsDao
- */
-@Component
+@Repository
 public class LessonsDaoImpl implements LessonsDao {
     @Autowired
     private SessionFactory factory;
