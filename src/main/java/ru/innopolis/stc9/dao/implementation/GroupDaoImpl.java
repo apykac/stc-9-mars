@@ -13,7 +13,7 @@ import javax.persistence.criteria.*;
 import java.util.List;
 
 
-@Repository
+//@Repository
 public class GroupDaoImpl implements GroupDao {
     @Autowired
     private SessionFactory factory;
