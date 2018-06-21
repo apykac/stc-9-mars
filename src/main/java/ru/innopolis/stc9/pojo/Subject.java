@@ -5,8 +5,9 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
+import java.util.List;
 
-//@Entity
+@Entity
 @Table(name = "subject")
 @NoArgsConstructor
 public class Subject {
@@ -19,6 +20,13 @@ public class Subject {
     @Getter
     @Setter
     private String name;
+    @Getter
+    @Setter
+    @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @JoinTable(name = "education",
+            joinColumns = @JoinColumn(name = "subjectId"),
+            inverseJoinColumns = @JoinColumn(name = "groupId"))
+    private List<Group> group;
 
     public Subject(int id, String name) {
         this.id = id;

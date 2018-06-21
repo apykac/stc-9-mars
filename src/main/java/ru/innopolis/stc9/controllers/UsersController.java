@@ -35,6 +35,7 @@ public class UsersController {
         return "/views/allUsers";
     }
 
+    //TODO user.setGroup(groupService.findGroupById(user.getGroupId())) need to delete
     @RequestMapping(value = "/admin/edit_user/{id}", method = RequestMethod.GET)
     public String editUserGet(@PathVariable("id") int id,
                               HttpSession session,

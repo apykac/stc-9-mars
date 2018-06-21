@@ -38,6 +38,7 @@ public class User implements DBObject {
     @Getter
     @Setter
     @Transient
+    //TODO need to delete
     private Integer groupId;
     @Getter
     @Setter

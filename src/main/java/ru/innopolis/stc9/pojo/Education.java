@@ -7,6 +7,7 @@ import lombok.Setter;
 
 import javax.persistence.*;
 
+//TODO need to delete this class
 //@Entity
 @Table(name = "education")
 @NoArgsConstructor
