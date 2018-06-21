@@ -4,19 +4,19 @@
        xsi:schemaLocation="http://www.springframework.org/schema/beans
        http://www.springframework.org/schema/beans/spring-beans.xsd">
 
-    <bean id="datasource" class="org.springframework.jdbc.datasource.DriverManagerDataSource">
+    <!--<bean id="datasource" class="org.springframework.jdbc.datasource.DriverManagerDataSource">
         <property name="driverClassName" value="com.mysql.cj.jdbc.Driver"/>
         <property name="url" value="jdbc:mysql://server190.hosting.reg.ru:3306/u0425587_mars2?serverTimezone=UTC&amp;useUnicode=yes&amp;characterEncoding=UTF-8"/>
         <property name="username" value="u0425587_mars"/>
         <property name="password" value="vrKWZga2bt"/>
-    </bean>
-    <!--<bean id="datasource" class="org.springframework.jdbc.datasource.DriverManagerDataSource">
+    </bean>-->
+    <bean id="datasource" class="org.springframework.jdbc.datasource.DriverManagerDataSource">
         <property name="driverClassName" value="com.mysql.cj.jdbc.Driver"/>
         <property name="url"
-                  value="jdbc:mysql://localhost:3306/university?serverTimezone=UTC&amp;useUnicode=yes&amp;characterEncoding=UTF-8"/>
+                  value="jdbc:mysql://localhost:3306/u0425587_mars?serverTimezone=UTC&amp;useUnicode=yes&amp;characterEncoding=UTF-8"/>
         <property name="username" value="root"/>
-        <property name="password" value="1234"/>
-    </bean>-->
+        <property name="password" value="365308"/>
+    </bean>
 
     <bean id="sessionFactory" class="org.springframework.orm.hibernate4.LocalSessionFactoryBean">
         <property name="dataSource" ref="datasource"/>

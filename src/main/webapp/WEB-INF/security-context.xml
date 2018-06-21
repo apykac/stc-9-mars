@@ -31,13 +31,24 @@
         <logout logout-url="/j_spring_security_logout"/>
     </http>
 
-    <beans:bean id="dataSource"
+    <!--remote db-->
+    <!--<beans:bean id="dataSource"
                 class="org.springframework.jdbc.datasource.DriverManagerDataSource">
         <beans:property name="driverClassName" value="com.mysql.cj.jdbc.Driver" />
         <beans:property name="url"
                         value="jdbc:mysql://server190.hosting.reg.ru:3306/u0425587_mars2?serverTimezone=UTC&amp;useUnicode=yes&amp;characterEncoding=UTF-8"/>
         <beans:property name="username" value="u0425587_mars"/>
         <beans:property name="password" value="vrKWZga2bt" />
+    </beans:bean>-->
+
+    <!--local db-->
+    <beans:bean id="dataSource"
+                class="org.springframework.jdbc.datasource.DriverManagerDataSource">
+        <beans:property name="driverClassName" value="com.mysql.jdbc.Driver"/>
+        <beans:property name="url"
+                        value="jdbc:mysql://localhost:3306/u0425587_mars?serverTimezone=UTC&amp;useUnicode=yes&amp;characterEncoding=UTF-8"/>
+        <beans:property name="username" value="root"/>
+        <beans:property name="password" value="365308"/>
     </beans:bean>
     <!--<beans:bean id="dataSource"
                 class="org.springframework.jdbc.datasource.DriverManagerDataSource">

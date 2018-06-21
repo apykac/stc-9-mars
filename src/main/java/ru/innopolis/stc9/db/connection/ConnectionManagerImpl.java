@@ -32,12 +32,22 @@ public class ConnectionManagerImpl implements ConnectionManager {
         try {
             Class.forName("com.mysql.cj.jdbc.Driver");
             connection = DriverManager.getConnection(
-                    "jdbc:mysql://server190.hosting.reg.ru:3306/u0425587_mars?" +
+                    //новая база
+                    //"jdbc:mysql://server190.hosting.reg.ru:3306/u0425587_mars2?" +
+                    //старая база
+                    /*"jdbc:mysql://server190.hosting.reg.ru:3306/u0425587_mars?" +
                             "serverTimezone=UTC" +
                             "&useUnicode=yes" +
                             "&characterEncoding=UTF-8",
                     "u0425587_mars",
-                    "vrKWZga2bt");
+                    "vrKWZga2bt");*/
+                    //локальная база
+                    "jdbc:mysql://localhost:3306/u0425587_mars?" +
+                            "serverTimezone=UTC" +
+                            "&useUnicode=yes" +
+                            "&characterEncoding=UTF-8",
+                    "root",
+                    "365308");
         } catch (ClassNotFoundException | SQLException e) {
             logger.error(e.getMessage());
         }
