@@ -9,7 +9,6 @@ import ru.innopolis.stc9.dao.mappers.Mapper;
 import ru.innopolis.stc9.dao.mappers.UserMapper;
 import ru.innopolis.stc9.pojo.User;
 import ru.innopolis.stc9.service.CryptService;
-import ru.innopolis.stc9.service.interfaces.GroupService;
 import ru.innopolis.stc9.service.interfaces.UserService;
 
 import java.util.ArrayList;
@@ -34,14 +33,15 @@ public class UserServiceImpl implements UserService {
         List<String> result = new ArrayList<>();
         if ((incParam == null) || incParam.isEmpty()) return result;
         nameCheck(result, incParam);
-        if ((incParam.get(UserMapper.GROUPID) != null)) {
+        //TODO fix isCorrectData with Incorrect Group name
+        /*if ((incParam.get(UserMapper.GROUPID) != null)) {
             try {
                 int groupId = Integer.parseInt(incParam.get(UserMapper.GROUPID).get(0));
                 if (groupDao.findGroupById(groupId) == null) result.add("Group id is not Exist");
             } catch (NumberFormatException e) {
                 result.add("Invalid group id");
             }
-        }
+        }*/
         if ((incParam.get(UserMapper.ENABLED) != null)) {
             try {
                 int enabled = Integer.parseInt(incParam.get(UserMapper.ENABLED).get(0));
@@ -111,6 +111,7 @@ public class UserServiceImpl implements UserService {
      * @param groupId - id группы
      */
     @Override
+    //TODO Integer groupId -> Group group
     public List<User> getStudentsByGroupId(Integer groupId) {
         List<User> students = new ArrayList<>();
         for (User u : userDao.getAllStudents())
@@ -185,6 +186,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    //TODO Integer groupId -> Group group
     public boolean updateGroupId(int userId, Integer groupId) {
         if ((userId < 0) || ((groupId != null) && (groupId < 0))) return false;
         return userDao.updateGroupId(userId, groupId);

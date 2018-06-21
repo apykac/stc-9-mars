@@ -1,9 +1,6 @@
 package ru.innopolis.stc9.pojo;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import javax.persistence.*;
 
@@ -11,6 +8,7 @@ import javax.persistence.*;
 @Table(name = "studygroup")
 @AllArgsConstructor
 @NoArgsConstructor
+@EqualsAndHashCode
 public class Group {
     @Getter
     @Setter

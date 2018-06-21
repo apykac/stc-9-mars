@@ -9,7 +9,7 @@ import org.apache.commons.lang.builder.HashCodeBuilder;
 
 import javax.persistence.*;
 
-@Entity
+//@Entity
 @Table(name = "homework")
 @NoArgsConstructor
 @AllArgsConstructor

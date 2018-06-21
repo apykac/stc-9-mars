@@ -1,5 +1,6 @@
 package ru.innopolis.stc9.pojo;
 
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -7,6 +8,7 @@ import javax.persistence.*;
 
 @Entity
 @Table(name = "users")
+@EqualsAndHashCode
 public class User implements DBObject {
     @Getter
     @Setter
@@ -35,10 +37,12 @@ public class User implements DBObject {
     private String middleName;
     @Getter
     @Setter
+    @Transient
     private Integer groupId;
     @Getter
     @Setter
-    @Transient
+    @OneToOne(optional = false, cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @JoinColumn(name = "groupId")
     private Group group;
     @Getter
     @Setter
@@ -59,10 +63,16 @@ public class User implements DBObject {
         this.enabled = 1;
     }
 
-    public User(String firstName, String secondName, String middleName, Integer groupId) {
+    /*public User(String firstName, String secondName, String middleName, Integer groupId) {
         this.firstName = firstName;
         this.secondName = secondName;
         this.middleName = middleName;
         this.groupId = groupId;
+    }*/
+    public User(String firstName, String secondName, String middleName, Group group) {
+        this.firstName = firstName;
+        this.secondName = secondName;
+        this.middleName = middleName;
+        this.group = group;
     }
 }

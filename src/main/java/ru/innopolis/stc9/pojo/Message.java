@@ -5,7 +5,7 @@ import lombok.Setter;
 
 import javax.persistence.*;
 
-@Entity
+//@Entity
 @Table(name = "message")
 public class Message implements DBObject {
     @Getter
