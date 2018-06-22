@@ -1,15 +1,17 @@
 package ru.innopolis.stc9.pojo;
 
 
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
 
-//@Entity
+@Entity
 @Table(name = "attendance")
 @NoArgsConstructor
+@EqualsAndHashCode
 public class Attendance {
     @Getter
     @Setter
@@ -19,11 +21,25 @@ public class Attendance {
     private int id;
     @Getter
     @Setter
+    private boolean attended;
+    @Getter
+    @Setter
+    @ManyToOne(optional = false, cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @JoinColumn(name = "lessonId")
+    private Lessons lesson;
+    @Getter
+    @Setter
+    @ManyToOne(optional = false, cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @JoinColumn(name = "userId")
+    private User user;
+    @Getter
+    @Setter
+    @Transient
+    //TODO need to delete
     private int lessonId;
     @Getter
     @Setter
+    @Transient
+    //TODO need to delete
     private int userId;
-    @Getter
-    @Setter
-    private boolean attended;
 }

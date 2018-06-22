@@ -3,6 +3,7 @@ package ru.innopolis.stc9.pojo;
 import lombok.*;
 
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -26,7 +27,11 @@ public class Group {
     @JoinTable(name = "education",
             joinColumns = @JoinColumn(name = "groupId"),
             inverseJoinColumns = @JoinColumn(name = "subjectId"))
-    private List<Subject> subject;
+    private List<Subject> subjects;
+    @Getter
+    @Setter
+    @OneToMany(mappedBy = "group", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private List<User> users = new ArrayList<>();
 
     public Group(String name) {
         this.name = name;

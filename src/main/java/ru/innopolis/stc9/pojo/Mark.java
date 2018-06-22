@@ -7,7 +7,7 @@ import lombok.Setter;
 
 import javax.persistence.*;
 
-//@Entity
+@Entity
 @Table(name = "mark")
 @NoArgsConstructor
 @AllArgsConstructor
@@ -23,11 +23,25 @@ public class Mark {
     private int value;
     @Getter
     @Setter
+    private String comment;
+    @Getter
+    @Setter
+    @ManyToOne(optional = false, cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @JoinColumn(name = "studentId")
+    private User student;
+    @Getter
+    @Setter
+    @ManyToOne(optional = false, cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @JoinColumn(name = "lessonId")
+    private Lessons lesson;
+    @Getter
+    @Setter
+    @Transient
+    //TODO need to delete
     private int userId;
     @Getter
     @Setter
+    @Transient
+    //TODO need to delete
     private int lessonId;
-    @Getter
-    @Setter
-    private String comment;
 }

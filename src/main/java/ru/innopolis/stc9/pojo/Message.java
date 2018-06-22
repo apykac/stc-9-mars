@@ -1,12 +1,14 @@
 package ru.innopolis.stc9.pojo;
 
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
 
 import javax.persistence.*;
 
-//@Entity
+@Entity
 @Table(name = "message")
+@EqualsAndHashCode
 public class Message implements DBObject {
     @Getter
     @Setter
@@ -31,6 +33,13 @@ public class Message implements DBObject {
     private String theme;
     @Getter
     @Setter
+    @ManyToOne(optional = false, cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @JoinColumn(name = "toUserId")
+    private User user;
+    @Getter
+    @Setter
+    @Transient
+    //TODO need to delete
     private Integer toUserId;
 
     public Message() {

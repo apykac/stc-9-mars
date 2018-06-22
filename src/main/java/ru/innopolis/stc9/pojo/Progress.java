@@ -9,6 +9,7 @@ import javax.persistence.*;
 import java.sql.Date;
 
 //@Entity
+//TODO need to delete class
 @Table(name = "progress")
 @NoArgsConstructor
 @AllArgsConstructor

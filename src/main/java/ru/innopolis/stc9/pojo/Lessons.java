@@ -1,17 +1,16 @@
 package ru.innopolis.stc9.pojo;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import javax.persistence.*;
 import java.sql.Date;
+import java.util.List;
 
-//@Entity
+@Entity
 @Table(name = "lessons")
 @NoArgsConstructor
 @AllArgsConstructor
+@EqualsAndHashCode
 public class Lessons {
     @Getter
     @Setter
@@ -21,9 +20,6 @@ public class Lessons {
     private int id;
     @Getter
     @Setter
-    private int subjectId;
-    @Getter
-    @Setter
     private String sname;
     @Getter
     @Setter
@@ -31,6 +27,28 @@ public class Lessons {
     @Getter
     @Setter
     private String name;
+    @Getter
+    @Setter
+    @ManyToOne(optional = false, cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @JoinColumn(name = "subjectId")
+    private Subject subject;
+    @Getter
+    @Setter
+    @OneToMany(mappedBy = "lesson", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private List<Attendance> attendances;
+    @Getter
+    @Setter
+    @OneToMany(mappedBy = "lesson", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private List<HomeWork> homeWorks;
+    @Getter
+    @Setter
+    @OneToMany(mappedBy = "lesson", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private List<Mark> marks;
+    @Getter
+    @Setter
+    @Transient
+    //TODO need to delete
+    private int subjectId;
 
     public Lessons(int id, int subjectId, Date date, String name) {
         this.id = id;

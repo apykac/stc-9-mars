@@ -1,18 +1,16 @@
 package ru.innopolis.stc9.pojo;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang.builder.HashCodeBuilder;
 
 import javax.persistence.*;
 
-//@Entity
+@Entity
 @Table(name = "homework")
 @NoArgsConstructor
 @AllArgsConstructor
+@EqualsAndHashCode
 public class HomeWork {
     @Getter
     @Setter
@@ -25,9 +23,23 @@ public class HomeWork {
     private String homeWorkURL;
     @Getter
     @Setter
+    @ManyToOne(optional = false, cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @JoinColumn(name = "studentId")
+    private User student;
+    @Getter
+    @Setter
+    @ManyToOne(optional = false, cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @JoinColumn(name = "lessonId")
+    private Lessons lesson;
+    @Getter
+    @Setter
+    @Transient
+    //TODO need to delete
     private int studentId;
     @Getter
     @Setter
+    @Transient
+    //TODO need to delete
     private int lessonId;
 
     public HomeWork(String homeWorkURL, int studentId, int lessonId) {
