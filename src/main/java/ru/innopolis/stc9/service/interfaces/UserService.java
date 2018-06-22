@@ -25,6 +25,8 @@ public interface UserService {
 
     User findUserById(long userId);
 
+    User findUserByIdWithSubjectList(long userId);
+
     User findUserByLogin(String login);
 
     boolean deactivationCurrentAccount(long id);
@@ -34,4 +36,5 @@ public interface UserService {
     Object[] editUser(MultiValueMap<String, String> incParam);
 
     boolean updateGroupId(long userId, Long groupId);
+
 }

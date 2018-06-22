@@ -5,10 +5,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.bind.annotation.*;
-import ru.innopolis.stc9.pojo.Subject;
 import ru.innopolis.stc9.pojo.User;
-import ru.innopolis.stc9.service.interfaces.GroupService;
-import ru.innopolis.stc9.service.interfaces.SubjectService;
 import ru.innopolis.stc9.service.interfaces.UserService;
 
 import javax.servlet.http.HttpSession;
@@ -18,13 +15,11 @@ import java.util.List;
 public class UsersController {
     @Autowired
     private UserService userService;
-    @Autowired
-    private GroupService groupService;
-    @Autowired
-    private SubjectService subjectService;
 
     @RequestMapping(value = "/admin/edit_user/{id}/delete", method = RequestMethod.POST)
-    public String delUserPost(@PathVariable("id") int id, HttpSession session, Model model) {
+    public String delUserPost(@PathVariable("id") Long id,
+                              HttpSession session,
+                              Model model) {
         if (userService.delUserById(id)) return getUserListGet(model);
         else return editUserGet(id, session, false, model);
     }
@@ -35,23 +30,18 @@ public class UsersController {
         return "/views/allUsers";
     }
 
-    //TODO user.setGroup(groupService.findGroupById(user.getGroupId())) need to delete
     @RequestMapping(value = "/admin/edit_user/{id}", method = RequestMethod.GET)
-    public String editUserGet(@PathVariable("id") int id,
+    public String editUserGet(@PathVariable("id") long id,
                               HttpSession session,
                               boolean isOwner,
                               Model model) {
         if (id > 0) {
-            User user = userService.findUserById(id);
-            //user.setGroup(groupService.findGroupById(user.getGroupId()));
-            //List<Subject> subjectList = subjectService.findByGroupId(user.getGroupId());
-            List<Subject> subjectList = user.getGroup().getSubjects();
+            User user = userService.findUserByIdWithSubjectList(id);
             if (!isOwner && user.getEnabled() != 0 &&
-                    ((id == (Integer) session.getAttribute(SessionDataInform.ID))
+                    ((id == (long) session.getAttribute(SessionDataInform.ID))
                             || (user.getPermissionGroup().equals("ROLE_ADMIN"))))
                 return "redirect:/start";
             model.addAttribute("user", user);
-            model.addAttribute("subjects", subjectList);
             model.addAttribute("isOwner", isOwner);
         }
         return "/views/editUser";
@@ -63,22 +53,25 @@ public class UsersController {
     }
 
     @RequestMapping(value = "/temp/edit_user", method = RequestMethod.POST)
-    public String editUserPost(@RequestBody MultiValueMap<String, String> incParam, HttpSession session, Model model) {
+    public String editUserPost(@RequestBody MultiValueMap<String, String> incParam,
+                               HttpSession session,
+                               Model model) {
         Object[] info = userService.editUser(incParam);
         if (((List) info[0]).isEmpty()) info[0] = null;
         if (((List) info[1]).isEmpty()) info[1] = null;
         if ((Boolean) info[2]) updateSession(session);
         model.addAttribute("errors", info[0]);
         model.addAttribute("success_list", info[1]);
-        return editUserGet(Integer.parseInt(incParam.get("id").get(0)),
+        return editUserGet(Long.parseLong(incParam.get("id").get(0)),
                 session,
                 Boolean.parseBoolean(incParam.get("isOwner").get(0)),
                 model);
     }
 
     @RequestMapping(value = "/university/profile", method = RequestMethod.GET)
-    public String editOwnerProfile(HttpSession session, Model model) {
-        return editUserGet((Integer) session.getAttribute(SessionDataInform.ID),
+    public String editOwnerProfile(HttpSession session,
+                                   Model model) {
+        return editUserGet((Long) session.getAttribute(SessionDataInform.ID),
                 session,
                 true,
                 model);
@@ -90,8 +83,10 @@ public class UsersController {
     }
 
     @RequestMapping(value = "/university/profile/delete", method = RequestMethod.POST)
-    public String deleteAccountPost(@RequestParam(value = "password") String candidate, HttpSession session, Model model) {
-        int id = (Integer) session.getAttribute(SessionDataInform.ID);
+    public String deleteAccountPost(@RequestParam(value = "password") String candidate,
+                                    HttpSession session,
+                                    Model model) {
+        long id = (long) session.getAttribute(SessionDataInform.ID);
         if (userService.checkPasswordOfCurrentAccount(id, candidate))
             if (userService.deactivationCurrentAccount(id))
                 return new LoginController().logout(session);
@@ -101,7 +96,7 @@ public class UsersController {
     }
 
     private void updateSession(HttpSession session) {
-        User user = userService.findUserById((Integer) session.getAttribute(SessionDataInform.ID));
+        User user = userService.findUserById((Long) session.getAttribute(SessionDataInform.ID));
         session.setAttribute(SessionDataInform.LOGIN, user.getLogin());
         session.setAttribute(SessionDataInform.NAME, user.getFirstName() + " " + user.getSecondName());
         session.setAttribute(SessionDataInform.ROLE, user.getPermissionGroup());

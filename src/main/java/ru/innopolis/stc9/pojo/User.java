@@ -41,7 +41,7 @@ public class User implements DBObject {
     private int enabled = 1;
     @Getter
     @Setter
-    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @JoinColumn(name = "groupId", nullable = true)
     private Group group = null;
     @Getter

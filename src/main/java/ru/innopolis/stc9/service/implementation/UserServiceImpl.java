@@ -100,6 +100,12 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    public User findUserByIdWithSubjectList(long userId) {
+        if (userId < 0) return null;
+        return userDao.findUserByIdWithSubjectList(userId);
+    }
+
+    @Override
     public User findUserByLogin(String login) {
         if ((login == null) || login.equals("")) return null;
         return userDao.findLoginByName(login);

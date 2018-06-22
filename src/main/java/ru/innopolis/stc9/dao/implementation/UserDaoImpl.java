@@ -1,5 +1,6 @@
 package ru.innopolis.stc9.dao.implementation;
 
+import org.hibernate.Hibernate;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
@@ -9,7 +10,10 @@ import ru.innopolis.stc9.dao.interfaces.UserDao;
 import ru.innopolis.stc9.dao.mappers.UserMapper;
 import ru.innopolis.stc9.pojo.User;
 
-import javax.persistence.criteria.*;
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.CriteriaUpdate;
+import javax.persistence.criteria.Root;
 import java.util.List;
 
 @Repository
@@ -39,6 +43,17 @@ public class UserDaoImpl implements UserDao {
     }
 
     @Override
+    public User findUserByIdWithSubjectList(long id) {
+        if (id < 0) return null;
+        User user;
+        try (Session session = factory.openSession()) {
+            user = session.get(User.class, id);
+            if (user.getGroup() != null) Hibernate.initialize(user.getGroup().getSubjects());
+        }
+        return user;
+    }
+
+    @Override
     public User findLoginByName(String login) {
         if (login.equals("anonymousUser") || login.isEmpty()) return null;
         User user;
@@ -56,7 +71,13 @@ public class UserDaoImpl implements UserDao {
     @Override
     public boolean delUserById(long id) {
         if (id < 0) return false;
-        int result;
+        try (Session session = factory.openSession()) {
+            User user = session.get(User.class, id);
+            Transaction transaction = session.beginTransaction();
+            session.delete(user);
+            transaction.commit();
+        }
+        /*int result;
         try (Session session = factory.openSession()) {
             CriteriaBuilder builder = session.getCriteriaBuilder();
             CriteriaDelete<User> criteria = builder.createCriteriaDelete(User.class);
@@ -65,8 +86,9 @@ public class UserDaoImpl implements UserDao {
             Transaction transaction = session.beginTransaction();
             result = session.createQuery(criteria).executeUpdate();
             transaction.commit();
-        }
-        return result != 0;
+        }*/
+        /*return result != 0;*/
+        return true;
     }
 
 
