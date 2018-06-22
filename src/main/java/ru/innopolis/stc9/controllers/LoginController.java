@@ -33,6 +33,7 @@ public class LoginController {
             session.removeAttribute(SessionDataInform.LOGIN);
             session.removeAttribute(SessionDataInform.NAME);
             session.removeAttribute(SessionDataInform.ROLE);
+            session.removeAttribute(SessionDataInform.MSG);
         }
         return "redirect:/j_spring_security_logout";
     }

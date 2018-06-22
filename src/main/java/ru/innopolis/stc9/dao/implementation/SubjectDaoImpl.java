@@ -36,7 +36,7 @@ public class SubjectDaoImpl implements SubjectDao {
     }
 
     @Override
-    public boolean deleteSubject(int subjectId) {
+    public boolean deleteSubject(long subjectId) {
         if (subjectId < 0) return false;
         int result;
         try (Session session = factory.openSession()) {
@@ -65,7 +65,7 @@ public class SubjectDaoImpl implements SubjectDao {
     }
 
     @Override
-    public Subject findById(int id) {
+    public Subject findById(long id) {
         if (id < 0) return null;
         Subject subject;
         try (Session session = factory.openSession()) {

@@ -77,7 +77,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public boolean delUserById(int id) {
+    public boolean delUserById(long id) {
         if (id < 0) return false;
         return userDao.delUserById(id);
     }
@@ -94,7 +94,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public User findUserById(int userId) {
+    public User findUserById(long userId) {
         if (userId < 0) return null;
         return userDao.findUserByUserId(userId);
     }
@@ -112,7 +112,7 @@ public class UserServiceImpl implements UserService {
      */
     @Override
     //TODO Integer groupId -> Group group
-    public List<User> getStudentsByGroupId(Integer groupId) {
+    public List<User> getStudentsByGroupId(Long groupId) {
         List<User> students = new ArrayList<>();
         for (User u : userDao.getAllStudents())
             if (groupId.equals(u.getGroupId()))
@@ -126,7 +126,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public boolean checkPasswordOfCurrentAccount(int id, String candidate) {
+    public boolean checkPasswordOfCurrentAccount(long id, String candidate) {
         if ((id < 0) || (candidate == null) || candidate.equals("")) return false;
         User user = findUserById(id);
         if (user == null) return false;
@@ -134,7 +134,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public boolean deactivationCurrentAccount(int id) {
+    public boolean deactivationCurrentAccount(long id) {
         if (id < 0) return false;
         return userDao.deactivateUser(id);
     }
@@ -187,7 +187,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     //TODO Integer groupId -> Group group
-    public boolean updateGroupId(int userId, Integer groupId) {
+    public boolean updateGroupId(long userId, Long groupId) {
         if ((userId < 0) || ((groupId != null) && (groupId < 0))) return false;
         return userDao.updateGroupId(userId, groupId);
     }

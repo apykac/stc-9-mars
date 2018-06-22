@@ -7,6 +7,7 @@ import ru.innopolis.stc9.dao.interfaces.MessageDao;
 import ru.innopolis.stc9.dao.mappers.Mapper;
 import ru.innopolis.stc9.dao.mappers.MessageMapper;
 import ru.innopolis.stc9.pojo.Message;
+import ru.innopolis.stc9.pojo.User;
 import ru.innopolis.stc9.service.interfaces.MessageService;
 
 import java.util.ArrayList;
@@ -38,7 +39,7 @@ public class MessageServiceImpl implements MessageService {
     }
 
     @Override
-    public List<Message>[] getAllMessages(int toUserId, String role) {
+    public List<Message>[] getAllMessages(long toUserId, String role) {
         if ((toUserId < 0) || (role == null) || role.isEmpty()) return new List[2];
         List<Message>[] result = new List[2];
         result[0] = messageDao.getAllMessagesByRole(role);
@@ -47,14 +48,20 @@ public class MessageServiceImpl implements MessageService {
     }
 
     @Override
-    public Message getMessageById(int id) {
+    public Message getMessageById(long id) {
         if (id < 0) return null;
         return messageDao.getMessageById(id);
     }
 
     @Override
-    public boolean deleteMessageById(int id) {
+    public boolean deleteMessageById(long id) {
         if (id < 0) return false;
         return messageDao.deleteMessageById(id);
+    }
+
+    @Override
+    public long getNumberOfMessage(User user) {
+        if (user == null) return 0;
+        return messageDao.getNumberOfMessage(user);
     }
 }

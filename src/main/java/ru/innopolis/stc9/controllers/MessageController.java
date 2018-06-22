@@ -45,7 +45,7 @@ public class MessageController {
 
     @RequestMapping(value = "/university/messages", method = RequestMethod.GET)
     public String messagesToPage(HttpSession session, Model model) {
-        int currentUserId = (int) session.getAttribute(SessionDataInform.ID);
+        long currentUserId = (long) session.getAttribute(SessionDataInform.ID);
         String currentUserRole = (String) session.getAttribute(SessionDataInform.ROLE);
         List<Message>[] commonMessagesList = messageService.getAllMessages(currentUserId, currentUserRole);
         session.setAttribute(SessionDataInform.MSG, commonMessagesList[0].size() + commonMessagesList[1].size());

@@ -7,9 +7,9 @@ import java.util.List;
 public interface SubjectDao {
     boolean addSubject(Subject subject);
 
-    boolean deleteSubject(int subjectId);
+    boolean deleteSubject(long subjectId);
 
     List<Subject> findAllSubject();
 
-    Subject findById(int id);
+    Subject findById(long id);
 }

@@ -5,36 +5,33 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.servlet.HandlerInterceptor;
 import org.springframework.web.servlet.ModelAndView;
 import ru.innopolis.stc9.controllers.SessionDataInform;
-import ru.innopolis.stc9.dao.interfaces.MessageDao;
-import ru.innopolis.stc9.dao.interfaces.UserDao;
-import ru.innopolis.stc9.pojo.Message;
 import ru.innopolis.stc9.pojo.User;
+import ru.innopolis.stc9.service.interfaces.MessageService;
+import ru.innopolis.stc9.service.interfaces.UserService;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
-import java.util.List;
 
 public class StartHandlerInterceptor implements HandlerInterceptor {
     @Autowired
-    private UserDao userDao;
+    private MessageService messageService;
     @Autowired
-    private MessageDao messageDao;
+    private UserService userService;
 
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
         HttpSession session = request.getSession();
         if (session.getAttribute(SessionDataInform.ID) == null) {
-            User user = userDao.findLoginByName(SecurityContextHolder.getContext().getAuthentication().getName());
-            List<Message> commonMessage = messageDao.getAllMessagesByRole(user.getPermissionGroup());
-            List<Message> privateMessage = messageDao.getAllMessagesByToUserId(user.getId());
-            addStartAttributeToSession(session, user, commonMessage.size() + privateMessage.size());
+            User user = userService.findUserByLogin(SecurityContextHolder.getContext().getAuthentication().getName());
+            long numberOfMessage = messageService.getNumberOfMessage(user);
+            addStartAttributeToSession(session, user, numberOfMessage);
             response.sendRedirect(request.getContextPath() + "/university/start");
         }
         return true;
     }
 
-    private void addStartAttributeToSession(HttpSession session, User user, int count) {
+    private void addStartAttributeToSession(HttpSession session, User user, long count) {
         session.setAttribute(SessionDataInform.ID, user.getId());
         session.setAttribute(SessionDataInform.LOGIN, user.getLogin());
         session.setAttribute(SessionDataInform.NAME, user.getFirstName() + " " + user.getSecondName());

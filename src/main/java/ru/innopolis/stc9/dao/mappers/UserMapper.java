@@ -25,7 +25,7 @@ public class UserMapper implements Mapper {
         if (incParam.get(FNAME) != null) user.setFirstName(incParam.get(FNAME).get(0));
         if (incParam.get(SNAME) != null) user.setSecondName(incParam.get(SNAME).get(0));
         if (incParam.get(MNAME) != null) user.setMiddleName(incParam.get(MNAME).get(0));
-        if (incParam.get(GROUPID) != null) user.setGroupId(Integer.parseInt(incParam.get(GROUPID).get(0)));
+        if (incParam.get(GROUPID) != null) user.setGroupId(Long.parseLong(incParam.get(GROUPID).get(0)));
         if (incParam.get(ENABLED) != null) user.setEnabled(Integer.parseInt(incParam.get(ENABLED).get(0)));
         return user;
     }

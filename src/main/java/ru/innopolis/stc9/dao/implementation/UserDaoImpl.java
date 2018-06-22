@@ -29,7 +29,7 @@ public class UserDaoImpl implements UserDao {
     }
 
     @Override
-    public User findUserByUserId(int id) {
+    public User findUserByUserId(long id) {
         if (id < 0) return null;
         User user;
         try (Session session = factory.openSession()) {
@@ -41,21 +41,20 @@ public class UserDaoImpl implements UserDao {
     @Override
     public User findLoginByName(String login) {
         if (login.equals("anonymousUser") || login.isEmpty()) return null;
-        List<User> resultList;
+        User user;
         try (Session session = factory.openSession()) {
             CriteriaBuilder builder = session.getCriteriaBuilder();
             CriteriaQuery<User> criteria = builder.createQuery(User.class);
             Root<User> root = criteria.from(User.class);
             criteria.select(root);
             criteria.where(builder.equal(root.get(UserMapper.LOGIN), login));
-            resultList = session.createQuery(criteria).getResultList();
+            user = session.createQuery(criteria).uniqueResult();
         }
-        if (!resultList.isEmpty()) return resultList.get(0);
-        else return null;
+        return user;
     }
 
     @Override
-    public boolean delUserById(int id) {
+    public boolean delUserById(long id) {
         if (id < 0) return false;
         int result;
         try (Session session = factory.openSession()) {
@@ -85,7 +84,7 @@ public class UserDaoImpl implements UserDao {
     }
 
     @Override
-    public boolean deactivateUser(int id) {
+    public boolean deactivateUser(long id) {
         if (id < 0) return false;
         int result;
         try (Session session = factory.openSession()) {
@@ -141,7 +140,7 @@ public class UserDaoImpl implements UserDao {
     }
 
     @Override
-    public boolean updateGroupId(int userId, Integer groupId) {
+    public boolean updateGroupId(long userId, Long groupId) {
         if ((userId < 0)) return false;
         int result;
         try (Session session = factory.openSession()) {

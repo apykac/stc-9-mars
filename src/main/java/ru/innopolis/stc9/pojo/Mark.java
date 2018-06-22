@@ -17,7 +17,7 @@ public class Mark {
     @Id
     @SequenceGenerator(name = "markSeq", sequenceName = "MARK_SEQUENCE", allocationSize = 0)
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "markSeq")
-    private int id;
+    private long id;
     @Getter
     @Setter
     private int value;
@@ -26,22 +26,22 @@ public class Mark {
     private String comment;
     @Getter
     @Setter
-    @ManyToOne(optional = false, cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    @JoinColumn(name = "studentId")
+    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @JoinColumn(name = "studentId", nullable = false)
     private User student;
     @Getter
     @Setter
-    @ManyToOne(optional = false, cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    @JoinColumn(name = "lessonId")
+    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @JoinColumn(name = "lessonId", nullable = false)
     private Lessons lesson;
     @Getter
     @Setter
     @Transient
     //TODO need to delete
-    private int userId;
+    private long userId;
     @Getter
     @Setter
     @Transient
     //TODO need to delete
-    private int lessonId;
+    private long lessonId;
 }

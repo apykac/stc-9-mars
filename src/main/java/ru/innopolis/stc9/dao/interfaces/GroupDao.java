@@ -13,9 +13,9 @@ public interface GroupDao {
 
     boolean updateGroup(Group group);
 
-    boolean deleteGroup(int groupId);
+    boolean deleteGroup(long groupId);
 
-    Group findGroupById(Integer id);
+    Group findGroupById(Long id);
 
     Group findGroupByName(String name);
 

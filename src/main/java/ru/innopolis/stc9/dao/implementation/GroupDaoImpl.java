@@ -13,7 +13,7 @@ import javax.persistence.criteria.*;
 import java.util.List;
 
 
-//@Repository
+@Repository
 public class GroupDaoImpl implements GroupDao {
     @Autowired
     private SessionFactory factory;
@@ -47,7 +47,7 @@ public class GroupDaoImpl implements GroupDao {
     }
 
     @Override
-    public boolean deleteGroup(int groupId) {
+    public boolean deleteGroup(long groupId) {
         if (groupId < 0) return false;
         int result;
         try (Session session = factory.openSession()) {
@@ -63,7 +63,7 @@ public class GroupDaoImpl implements GroupDao {
     }
 
     @Override
-    public Group findGroupById(Integer id) {
+    public Group findGroupById(Long id) {
         if ((id == null) || (id < 0)) return null;
         Group group;
         try (Session session = factory.openSession()) {

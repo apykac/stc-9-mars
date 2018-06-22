@@ -40,7 +40,7 @@ public class MarkServiceImpl implements MarkService {
      * @return
      */
     @Override
-    public Map<String, Mark> getMarksByLessonId(int lessonId) {
+    public Map<String, Mark> getMarksByLessonId(long lessonId) {
         Map<String, Mark> result = new HashMap<>();
         if (lessonId < 1) {
             return result;
@@ -54,7 +54,7 @@ public class MarkServiceImpl implements MarkService {
     }
 
     @Override
-    public Mark getMarkById(int id) {
+    public Mark getMarkById(long id) {
         return markDao.getMarkById(id);
     }
 
@@ -64,7 +64,7 @@ public class MarkServiceImpl implements MarkService {
     }
 
     @Override
-    public String getFullStudentNameInOneString(int markId) {
+    public String getFullStudentNameInOneString(long markId) {
         Mark mark = getMarkById(markId);
         User user = userDao.findUserByUserId(mark.getUserId());
         return user.getSecondName() +
@@ -75,14 +75,14 @@ public class MarkServiceImpl implements MarkService {
     }
 
     @Override
-    public String getLessonNameByMarkId(int markId) {
+    public String getLessonNameByMarkId(long markId) {
         Mark mark = getMarkById(markId);
         Lessons lesson = lessonsDao.getLessonById(mark.getLessonId());
         return lesson.getName();
     }
 
     @Override
-    public String getLessonNameByLessonId(int lessonId) {
+    public String getLessonNameByLessonId(long lessonId) {
         Lessons lesson = lessonsDao.getLessonById(lessonId);
         return lesson.getName();
     }

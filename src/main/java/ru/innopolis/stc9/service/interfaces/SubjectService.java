@@ -7,13 +7,13 @@ import java.util.List;
 public interface SubjectService {
     boolean addSubject(String name);
 
-    boolean deleteSubject(int subjectId);
+    boolean deleteSubject(long subjectId);
 
     List<Subject> findAllSubject();
 
-    Subject findById(int id);
+    Subject findById(long id);
 
-    List<Subject> findByGroupId(Integer id);
+    List<Subject> findByGroupId(Long id);
 
     boolean checkSubjectName(String name);
 }

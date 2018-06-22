@@ -36,7 +36,7 @@ public class StudentServiceImpl implements StudentService {
     }
 
     @Override
-    public void addingMainAttributeToModel(Model model, int id, Integer filterId) {
+    public void addingMainAttributeToModel(Model model, long id, Long filterId) {
         if ((model == null) || (id < 0) || ((filterId != null) && (filterId < 0)))
             return;
         List<Group> allGroupsList = groupService.findAllGroups();
@@ -50,7 +50,7 @@ public class StudentServiceImpl implements StudentService {
     }
 
     @Override
-    public List<User> studentFilter(List<User> studentsList, Integer filterId, int currentGroupId) {
+    public List<User> studentFilter(List<User> studentsList, Long filterId, long currentGroupId) {
         List<User> list = new ArrayList<>();
         if ((studentsList == null) || studentsList.isEmpty())
             return list;
@@ -66,7 +66,7 @@ public class StudentServiceImpl implements StudentService {
     }
 
     @Override
-    public String findNameById(List<Group> groupsList, int id) {
+    public String findNameById(List<Group> groupsList, long id) {
         if ((groupsList == null) || (id < 0)) return "";
         for (Group group : groupsList)
             if (group.getId() == id)
@@ -75,7 +75,7 @@ public class StudentServiceImpl implements StudentService {
     }
 
     @Override
-    public List<User> getStudentsByGroupId(List<User> studentsList, Integer groupId) {
+    public List<User> getStudentsByGroupId(List<User> studentsList, Long groupId) {
         List<User> allStudentsByGroupId = new ArrayList<>();
         if ((studentsList == null) || studentsList.isEmpty() || ((groupId != null) && groupId < 0))
             return allStudentsByGroupId;
@@ -89,7 +89,7 @@ public class StudentServiceImpl implements StudentService {
     }
 
     @Override
-    public List<User> getAllStudentExceptId(List<User> studentsList, Integer groupId) {
+    public List<User> getAllStudentExceptId(List<User> studentsList, Long groupId) {
         List<User> allStudentsExceptId = new ArrayList<>();
         if ((studentsList == null) || studentsList.isEmpty() || ((groupId != null) && groupId < 0))
             return allStudentsExceptId;
@@ -109,7 +109,7 @@ public class StudentServiceImpl implements StudentService {
         if ((studentsList == null) || studentsList.isEmpty())
             return;
         for (Group group : groupsList) {
-            Integer groupId = group.getId();
+            Long groupId = group.getId();
             for (User student : studentsList)
                 if (groupId.equals(student.getGroupId())) student.setGroup(group);
         }

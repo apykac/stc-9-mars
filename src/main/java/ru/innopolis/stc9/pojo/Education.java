@@ -18,15 +18,15 @@ public class Education {
     @Id
     @SequenceGenerator(name = "educationSeq", sequenceName = "EDUCATION_SEQUENCE", allocationSize = 0)
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "educationSeq")
-    private int id;
+    private long id;
     @Getter
     @Setter
-    private int groupId;
+    private long groupId;
     @Getter
     @Setter
-    private int subjectId;
+    private long subjectId;
 
-    public Education(int groupId, int subjectId) {
+    public Education(long groupId, long subjectId) {
         this.groupId = groupId;
         this.subjectId = subjectId;
     }

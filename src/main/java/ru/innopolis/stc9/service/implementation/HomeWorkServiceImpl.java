@@ -41,30 +41,30 @@ public class HomeWorkServiceImpl implements HomeWorkService {
     }
 
     @Override
-    public HomeWork findById(int id) {
+    public HomeWork findById(long id) {
         return homeWorkDao.findById(id);
     }
 
     @Override
-    public List<HomeWork> getHomeWorkListByLessonId(int lessonId) {
+    public List<HomeWork> getHomeWorkListByLessonId(long lessonId) {
         return homeWorkDao.getHomeWorkListByLessonId(lessonId);
     }
 
     @Override
-    public HomeWork findByStudentId(int studentId) {
+    public HomeWork findByStudentId(long studentId) {
         return homeWorkDao.findByStudentId(studentId);
     }
 
     @Override
-    public HomeWork findByLessonId(int lessonId) {
+    public HomeWork findByLessonId(long lessonId) {
         return homeWorkDao.findByLessonId(lessonId);
     }
 
     @Override
-    public String findHomeWorkByMarkId(int markId) {
+    public String findHomeWorkByMarkId(long markId) {
         Mark mark = markDao.getMarkById(markId);
-        int studentId = mark.getUserId();
-        int lessonId = mark.getLessonId();
+        long studentId = mark.getUserId();
+        long lessonId = mark.getLessonId();
         HomeWork homeWork = homeWorkDao.findHomeWorkByStudentIdAndLessonId(studentId, lessonId);
         return homeWork.getHomeWorkURL();
     }
@@ -80,7 +80,7 @@ public class HomeWorkServiceImpl implements HomeWorkService {
     }
 
     @Override
-    public boolean deleteHomeWork(int id) {
+    public boolean deleteHomeWork(long id) {
         return homeWorkDao.deleteHomeWork(id);
     }
 }

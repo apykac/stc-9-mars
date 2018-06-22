@@ -3,11 +3,13 @@ package ru.innopolis.stc9.dao.implementation;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
+import org.hibernate.query.Query;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import ru.innopolis.stc9.dao.interfaces.MessageDao;
 import ru.innopolis.stc9.dao.mappers.MessageMapper;
 import ru.innopolis.stc9.pojo.Message;
+import ru.innopolis.stc9.pojo.User;
 
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaDelete;
@@ -50,7 +52,7 @@ public class MessageDaoImpl implements MessageDao {
     }
 
     @Override
-    public List<Message> getAllMessagesByToUserId(int toUserId) {
+    public List<Message> getAllMessagesByToUserId(long toUserId) {
         if (toUserId < 0) return new ArrayList<>();
         List<Message> resultList;
         try (Session session = factory.openSession()) {
@@ -65,7 +67,7 @@ public class MessageDaoImpl implements MessageDao {
     }
 
     @Override
-    public boolean deleteMessageById(int id) {
+    public boolean deleteMessageById(long id) {
         if (id < 0) return false;
         int result;
         try (Session session = factory.openSession()) {
@@ -81,12 +83,28 @@ public class MessageDaoImpl implements MessageDao {
     }
 
     @Override
-    public Message getMessageById(int id) {
+    public Message getMessageById(long id) {
         if (id < 0) return null;
         Message message;
         try (Session session = factory.openSession()) {
             message = session.get(Message.class, id);
         }
         return message;
+    }
+
+    @Override
+    public long getNumberOfMessage(User user) {
+        if ((user == null) || (user.getId() < 0) ||
+                (user.getPermissionGroup() == null) || user.getPermissionGroup().equals(""))
+            return 0;
+        long result;
+        try (Session session = factory.openSession()) {
+            Query query = session.createQuery(
+                    "SELECT count(*) FROM Message m where (m.user.id is null and m.toUserGroup = :role) or m.user.id = :userId");
+            query.setParameter("userId", user.getId());
+            query.setParameter("role", user.getPermissionGroup());
+            result = (Long) query.uniqueResult();
+        }
+        return result;
     }
 }

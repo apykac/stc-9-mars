@@ -17,7 +17,7 @@ public class Lessons {
     @Id
     @SequenceGenerator(name = "lessonSeq", sequenceName = "LESSON_SEQUENCE", allocationSize = 0)
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "lessonSeq")
-    private int id;
+    private long id;
     @Getter
     @Setter
     private String sname;
@@ -29,8 +29,8 @@ public class Lessons {
     private String name;
     @Getter
     @Setter
-    @ManyToOne(optional = false, cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    @JoinColumn(name = "subjectId")
+    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @JoinColumn(name = "subjectId", nullable = false)
     private Subject subject;
     @Getter
     @Setter
@@ -48,16 +48,16 @@ public class Lessons {
     @Setter
     @Transient
     //TODO need to delete
-    private int subjectId;
+    private long subjectId;
 
-    public Lessons(int id, int subjectId, Date date, String name) {
+    public Lessons(long id, long subjectId, Date date, String name) {
         this.id = id;
         this.subjectId = subjectId;
         this.date = date;
         this.name = name;
     }
 
-    public Lessons(int subjectId, Date date, String name) {
+    public Lessons(long subjectId, Date date, String name) {
         this.subjectId = subjectId;
         this.date = date;
         this.name = name;

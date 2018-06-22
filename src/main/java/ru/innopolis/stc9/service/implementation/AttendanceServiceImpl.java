@@ -25,13 +25,13 @@ public class AttendanceServiceImpl implements AttendanceService {
     }
 
     @Override
-    public void addLessonAttendance(int groupId, int lessonId, int[] studentsList) {
+    public void addLessonAttendance(long groupId, long lessonId, long[] studentsList) {
         attendanceDao.addLessonAttendance(lessonId, studentsList);
-        Map<Integer, Boolean> savedAttendance = getLessonAttendance(lessonId, groupId);
-        for (Map.Entry<Integer, Boolean> entry : savedAttendance.entrySet()) {
-            Integer key = entry.getKey();
+        Map<Long, Boolean> savedAttendance = getLessonAttendance(lessonId, groupId);
+        for (Map.Entry<Long, Boolean> entry : savedAttendance.entrySet()) {
+            Long key = entry.getKey();
             Boolean value = false;
-            for (int i : studentsList) {
+            for (long i : studentsList) {
                 if (key == i) {
                     value = true;
                 }
@@ -45,13 +45,13 @@ public class AttendanceServiceImpl implements AttendanceService {
     }
 
     @Override
-    public void clearLessonAttendance(int lessonId, int groupId) {
+    public void clearLessonAttendance(long lessonId, long groupId) {
         if (lessonId < 1 || groupId < 1) {
             return;
         }
-        Map<Integer, Boolean> savedAttendance = getLessonAttendance(lessonId, groupId);
-        for (Map.Entry<Integer, Boolean> entry : savedAttendance.entrySet()) {
-            Integer key = entry.getKey();
+        Map<Long, Boolean> savedAttendance = getLessonAttendance(lessonId, groupId);
+        for (Map.Entry<Long, Boolean> entry : savedAttendance.entrySet()) {
+            Long key = entry.getKey();
             Attendance attendance = new Attendance();
             attendance.setUserId(key);
             attendance.setLessonId(lessonId);
@@ -61,8 +61,8 @@ public class AttendanceServiceImpl implements AttendanceService {
     }
 
     @Override
-    public Map<Integer, Boolean> getLessonAttendance(int lessonId, int groupId) {
-        Map<Integer, Boolean> result = new HashMap<>();
+    public Map<Long, Boolean> getLessonAttendance(long lessonId, long groupId) {
+        Map<Long, Boolean> result = new HashMap<>();
         if (lessonId < 1 || groupId < 1) {
             return result;
         }
@@ -74,7 +74,7 @@ public class AttendanceServiceImpl implements AttendanceService {
     }
 
     @Override
-    public int getNumberOfMissedLessons(int id) {
+    public int getNumberOfMissedLessons(long id) {
         return attendanceDao.getNumberOfMissedLessons(id);
     }
 }

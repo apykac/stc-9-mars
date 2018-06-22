@@ -8,7 +8,7 @@ import java.util.List;
 public interface LessonsService {
     boolean addLesson(Lessons lesson);
 
-    boolean deleteLesson(int lessonId);
+    boolean deleteLesson(long lessonId);
 
     List<Lessons> findAllLessons();
 

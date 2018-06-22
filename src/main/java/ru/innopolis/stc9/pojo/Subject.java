@@ -18,7 +18,7 @@ public class Subject {
     @Id
     @SequenceGenerator(name = "subjectSeq", sequenceName = "SUBJECT_SEQUENCE", allocationSize = 0)
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "subjectSeq")
-    private int id;
+    private long id;
     @Getter
     @Setter
     private String name;
@@ -34,7 +34,7 @@ public class Subject {
     @OneToMany(mappedBy = "subject", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<Lessons> lessons;
 
-    public Subject(int id, String name) {
+    public Subject(long id, String name) {
         this.id = id;
         this.name = name;
     }

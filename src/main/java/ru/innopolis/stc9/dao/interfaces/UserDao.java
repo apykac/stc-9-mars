@@ -10,21 +10,21 @@ import java.util.List;
 public interface UserDao {
     boolean addUser(User user);
 
-    boolean delUserById(int id);
+    boolean delUserById(long id);
 
-    boolean deactivateUser(int id);
+    boolean deactivateUser(long id);
 
     boolean updateUserByFIOL(User newUser);
 
     boolean updateUserPassword(User newUser);
 
-    User findUserByUserId(int id);
+    User findUserByUserId(long id);
 
     List<User> getUsersList();
 
     User findLoginByName(String login);
 
-    boolean updateGroupId(int userId, Integer groupId);
+    boolean updateGroupId(long userId, Long groupId);
 
     List<User> getAllStudents();
 }

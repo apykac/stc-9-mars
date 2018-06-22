@@ -16,7 +16,7 @@ public class User implements DBObject {
     @Id
     @SequenceGenerator(name = "usersSeq", sequenceName = "USERS_SEQUENCE", allocationSize = 0)
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "usersSeq")
-    private int id;
+    private long id;
     @Getter
     @Setter
     @Column(unique = true)
@@ -41,9 +41,9 @@ public class User implements DBObject {
     private int enabled = 1;
     @Getter
     @Setter
-    @ManyToOne(optional = false, cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    @JoinColumn(name = "groupId")
-    private Group group;
+    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @JoinColumn(name = "groupId", nullable = true)
+    private Group group = null;
     @Getter
     @Setter
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
@@ -64,7 +64,7 @@ public class User implements DBObject {
     @Setter
     @Transient
     //TODO need to delete
-    private Integer groupId;
+    private Long groupId;
 
     public User() {
         this.permissionGroup = "ROLE_STUDENT";

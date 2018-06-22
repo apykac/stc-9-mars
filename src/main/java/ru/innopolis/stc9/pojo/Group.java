@@ -17,9 +17,10 @@ public class Group {
     @Id
     @SequenceGenerator(name = "studygroupSeq", sequenceName = "STUDYGROUP_SEQUENCE", allocationSize = 0)
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "studygroupSeq")
-    private int id;
+    private long id;
     @Getter
     @Setter
+    @Column(unique = true)
     private String name;
     @Getter
     @Setter

@@ -43,8 +43,9 @@ public class UsersController {
                               Model model) {
         if (id > 0) {
             User user = userService.findUserById(id);
-            user.setGroup(groupService.findGroupById(user.getGroupId()));
-            List<Subject> subjectList = subjectService.findByGroupId(user.getGroupId());
+            //user.setGroup(groupService.findGroupById(user.getGroupId()));
+            //List<Subject> subjectList = subjectService.findByGroupId(user.getGroupId());
+            List<Subject> subjectList = user.getGroup().getSubjects();
             if (!isOwner && user.getEnabled() != 0 &&
                     ((id == (Integer) session.getAttribute(SessionDataInform.ID))
                             || (user.getPermissionGroup().equals("ROLE_ADMIN"))))

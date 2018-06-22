@@ -39,7 +39,8 @@ public class GroupController {
      * выводи список всех групп
      */
     @RequestMapping("/university/teacher/allgroup")
-    public String viewAllGroups(Model model, @RequestParam(required = false) List<Group> groupsList) {
+    public String viewAllGroups(Model model,
+                                @RequestParam(required = false) List<Group> groupsList) {
         allGroupsList = ((groupsList) == null || groupsList.isEmpty()) ? groupService.findAllGroups() : groupsList;
         model.addAttribute("groups", allGroupsList);
         logger.info("view all groups");
@@ -52,7 +53,8 @@ public class GroupController {
      * @param name имя группы
      */
     @RequestMapping("/university/teacher/addgroups")
-    public String addGroup(@RequestParam("name") String name, Model model) {
+    public String addGroup(@RequestParam("name") String name,
+                           Model model) {
         Group tempGroup = new Group(name);
         allGroupsList = groupService.findAllGroups();
         if (studentService.isDuplicate(allGroupsList, model, name)) return viewAllGroups(model, allGroupsList);
@@ -68,8 +70,8 @@ public class GroupController {
      * @param id - идентификатор группы
      */
     @RequestMapping("/university/teacher/group/{id}")
-    public String forUpdateGroup(@PathVariable("id") int id,
-                                 @RequestParam(value = "groupStatus", defaultValue = "") Integer filterId,
+    public String forUpdateGroup(@PathVariable("id") long id,
+                                 @RequestParam(value = "groupStatus", defaultValue = "") Long filterId,
                                  Model model) {
         studentService.addingMainAttributeToModel(model, id, filterId);
         logger.info("group for update");
@@ -83,7 +85,9 @@ public class GroupController {
      * @param id   - идентификатор
      */
     @RequestMapping("/university/teacher/updateGroup")
-    public String updateGroup(@RequestParam("name") String name, @RequestParam("id") int id, Model model) {
+    public String updateGroup(@RequestParam("name") String name,
+                              @RequestParam("id") long id,
+                              Model model) {
         Group tempGroup = groupService.findGroupById(id);
         tempGroup.setName(name);
         allGroupsList = groupService.findAllGroups();
@@ -99,7 +103,8 @@ public class GroupController {
      * @param id - идентификатор удаляемой группы
      */
     @RequestMapping("/university/teacher/deleteGroup")
-    public String deleteGroup(@RequestParam("id") int id, Model model) {
+    public String deleteGroup(@RequestParam("id") long id,
+                              Model model) {
         groupService.deleteGroup(id);
         logger.info(loggerPrefix + id + " deleted");
         return viewAllGroups(model, null);
@@ -112,7 +117,9 @@ public class GroupController {
      * @param studentId - идентификатор студента
      */
     @RequestMapping("/university/teacher/addStudent")
-    public String addStudentToGroup(@RequestParam("id") int id, @RequestParam("studentId") int studentId, Model model) {
+    public String addStudentToGroup(@RequestParam("id") long id,
+                                    @RequestParam("studentId") long studentId,
+                                    Model model) {
         userService.updateGroupId(studentId, id);
         logger.info("student added in group " + id);
         return forUpdateGroup(id, null, model);
@@ -125,7 +132,9 @@ public class GroupController {
      * @param studentId - идентификатор студента
      */
     @RequestMapping("/university/teacher/group/deleteStudentFromGroup/{id}/{studentId}")
-    public String deleteStudentFromGroup(@PathVariable("id") int id, @PathVariable("studentId") int studentId, Model model) {
+    public String deleteStudentFromGroup(@PathVariable("id") long id,
+                                         @PathVariable("studentId") long studentId,
+                                         Model model) {
         userService.updateGroupId(studentId, null);
         logger.info("student deleted from group " + id);
         return forUpdateGroup(id, null, model);

@@ -33,7 +33,7 @@ public class SubjectServiceImpl implements SubjectService {
     }
 
     @Override
-    public boolean deleteSubject(int subjectId) {
+    public boolean deleteSubject(long subjectId) {
         if (subjectId < 0) {
             return false;
         } else {
@@ -47,19 +47,19 @@ public class SubjectServiceImpl implements SubjectService {
     }
 
     @Override
-    public Subject findById(int id) {
+    public Subject findById(long id) {
         return subjectDao.findById(id);
     }
 
     @Override
-    public List<Subject> findByGroupId(Integer id) {
+    public List<Subject> findByGroupId(Long id) {
         ArrayList<Subject> subjectList = new ArrayList<>();
         if (id == null) return subjectList;
         findIdInAllEducations(id, subjectList);
         return subjectList;
     }
 
-    private void findIdInAllEducations(int id, ArrayList<Subject> subjectList) {
+    private void findIdInAllEducations(long id, ArrayList<Subject> subjectList) {
         for (Education e : educationService.findAllEducations()) {
             if (e.getGroupId() == id) {
                 subjectList.add(findById(e.getSubjectId()));

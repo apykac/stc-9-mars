@@ -5,9 +5,9 @@ import ru.innopolis.stc9.pojo.Mark;
 import java.util.List;
 
 public interface MarkDao {
-    List<Mark> getMarksByLessonId(int id);
+    List<Mark> getMarksByLessonId(long id);
 
-    Mark getMarkById(int id);
+    Mark getMarkById(long id);
 
     boolean addMark(Mark mark);
 

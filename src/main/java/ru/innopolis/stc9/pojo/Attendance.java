@@ -18,28 +18,28 @@ public class Attendance {
     @Id
     @SequenceGenerator(name = "attendanceSeq", sequenceName = "ATTENDANCE_SEQUENCE", allocationSize = 0)
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "attendanceSeq")
-    private int id;
+    private long id;
     @Getter
     @Setter
     private boolean attended;
     @Getter
     @Setter
     @ManyToOne(optional = false, cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    @JoinColumn(name = "lessonId")
+    @JoinColumn(name = "lessonId", nullable = false)
     private Lessons lesson;
     @Getter
     @Setter
     @ManyToOne(optional = false, cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    @JoinColumn(name = "userId")
+    @JoinColumn(name = "userId", nullable = false)
     private User user;
     @Getter
     @Setter
     @Transient
     //TODO need to delete
-    private int lessonId;
+    private long lessonId;
     @Getter
     @Setter
     @Transient
     //TODO need to delete
-    private int userId;
+    private long userId;
 }
