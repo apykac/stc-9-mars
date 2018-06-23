@@ -4,6 +4,7 @@ import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.query.Query;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Repository;
 import ru.innopolis.stc9.dao.interfaces.GroupDao;
 import ru.innopolis.stc9.pojo.Group;
 
@@ -12,7 +13,7 @@ import java.util.List;
 /**
  * Created by Patrushev Sergey on 19.06.2018.
  */
-//@Repository
+@Repository
 public class GroupDaoHibernateImpl implements GroupDao {
 
     private final SessionFactory factory;
@@ -46,7 +47,7 @@ public class GroupDaoHibernateImpl implements GroupDao {
     }
 
     @Override
-    public boolean deleteGroup(long groupId) {
+    public boolean deleteGroup(int groupId) {
         if (groupId < 0) return false;
         try (Session session = factory.openSession()) {
             session.beginTransaction();
@@ -57,7 +58,7 @@ public class GroupDaoHibernateImpl implements GroupDao {
     }
 
     @Override
-    public Group findGroupById(Long id) {
+    public Group findGroupById(Integer id) {
         Group group;
         try (Session session = factory.openSession()) {
             session.beginTransaction();

@@ -18,7 +18,7 @@ public class Subject {
     @Id
     @SequenceGenerator(name = "subjectSeq", sequenceName = "SUBJECT_SEQUENCE", allocationSize = 0)
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "subjectSeq")
-    private long id;
+    private int id;
     @Getter
     @Setter
     private String name;
@@ -26,15 +26,15 @@ public class Subject {
     @Setter
     @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JoinTable(name = "education",
-            joinColumns = @JoinColumn(name = "subjectId"),
-            inverseJoinColumns = @JoinColumn(name = "groupId"))
+            joinColumns = @JoinColumn(name = "subjectId", nullable = false),
+            inverseJoinColumns = @JoinColumn(name = "groupId", nullable = false))
     private List<Group> groups;
     @Getter
     @Setter
     @OneToMany(mappedBy = "subject", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<Lessons> lessons;
 
-    public Subject(long id, String name) {
+    public Subject(int id, String name) {
         this.id = id;
         this.name = name;
     }

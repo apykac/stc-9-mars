@@ -15,7 +15,10 @@ public class Message implements DBObject {
     @Id
     @SequenceGenerator(name = "messageSeq", sequenceName = "MESSAGE_SEQUENCE", allocationSize = 0)
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "messageSeq")
-    private long id;
+    private int id;
+    @Getter
+    @Setter
+    private int userId;
     @Getter
     @Setter
     private String text;
@@ -30,14 +33,9 @@ public class Message implements DBObject {
     private String theme;
     @Getter
     @Setter
-    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @ManyToOne(optional = false, cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JoinColumn(name = "toUserId", nullable = true)
     private User user;
-    @Getter
-    @Setter
-    @Transient
-    //TODO need to delete
-    private long userId;
     @Getter
     @Setter
     @Transient

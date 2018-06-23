@@ -12,17 +12,17 @@ public interface HomeWorkDao {
 
     boolean updateHomeWork(HomeWork homeWork);
 
-    HomeWork findById(long id);
+    HomeWork findById(int id);
 
-    HomeWork findByStudentId(long studentId);
+    HomeWork findByStudentId(int studentId);
 
-    HomeWork findByLessonId(long lessonId);
+    HomeWork findByLessonId(int lessonId);
 
-    List<HomeWork> getHomeWorkListByLessonId(long lessonId);
+    List<HomeWork> getHomeWorkListByLessonId(int lessonId);
 
-    HomeWork findHomeWorkByStudentIdAndLessonId(long studentId, long lessonId);
+    HomeWork findHomeWorkByStudentIdAndLessonId(int studentId, int lessonId);
 
     List<HomeWork> findAllHomeWork();
 
-    boolean deleteHomeWork(long id);
+    boolean deleteHomeWork(int id);
 }

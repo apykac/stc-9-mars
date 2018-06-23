@@ -3,11 +3,11 @@ package ru.innopolis.stc9.service.interfaces;
 import java.util.Map;
 
 public interface AttendanceService {
-    void addLessonAttendance(long groupId, long lessonId, long[] studentsList);
+    void addLessonAttendance(int groupId, int lessonId, int[] studentsList);
 
-    void clearLessonAttendance(long lessonId, long groupId);
+    void clearLessonAttendance(int lessonId, int groupId);
 
-    Map<Long, Boolean> getLessonAttendance(long lessonId, long groupId);
+    Map<Integer, Boolean> getLessonAttendance(int lessonId, int groupId);
 
-    int getNumberOfMissedLessons(long id);
+    int getNumberOfMissedLessons(int id);
 }

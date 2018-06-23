@@ -10,11 +10,11 @@ public interface MessageDao {
 
     List<Message> getAllMessagesByRole(String role);
 
-    List<Message> getAllMessagesByToUserId(long toUserId);
+    List<Message> getAllMessagesByToUserId(int toUserId);
 
-    boolean deleteMessageById(long id);
+    boolean deleteMessageById(int id);
 
-    Message getMessageById(long id);
+    Message getMessageById(int id);
 
-    long getNumberOfMessage(User user);
+    int getNumberOfMessage(User user);
 }

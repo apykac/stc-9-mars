@@ -17,17 +17,16 @@ public class Group {
     @Id
     @SequenceGenerator(name = "studygroupSeq", sequenceName = "STUDYGROUP_SEQUENCE", allocationSize = 0)
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "studygroupSeq")
-    private long id;
+    private int id;
     @Getter
     @Setter
-    @Column(unique = true)
     private String name;
     @Getter
     @Setter
     @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JoinTable(name = "education",
-            joinColumns = @JoinColumn(name = "groupId"),
-            inverseJoinColumns = @JoinColumn(name = "subjectId"))
+            joinColumns = @JoinColumn(name = "groupId", nullable = false),
+            inverseJoinColumns = @JoinColumn(name = "subjectId", nullable = false))
     private List<Subject> subjects;
     @Getter
     @Setter

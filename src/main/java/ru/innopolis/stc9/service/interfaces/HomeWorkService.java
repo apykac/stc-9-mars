@@ -14,19 +14,19 @@ public interface HomeWorkService {
 
     boolean updateHomeWork(HomeWork homeWork);
 
-    HomeWork findById(long id);
+    HomeWork findById(int id);
 
-    List<HomeWork> getHomeWorkListByLessonId(long lessonId);
+    List<HomeWork> getHomeWorkListByLessonId(int lessonId);
 
-    HomeWork findByStudentId(long studentId);
+    HomeWork findByStudentId(int studentId);
 
-    HomeWork findByLessonId(long lessonId);
+    HomeWork findByLessonId(int lessonId);
 
-    String findHomeWorkByMarkId(long markId);
+    String findHomeWorkByMarkId(int markId);
 
     boolean homeWorkIsURL(String homeWork);
 
     List<HomeWork> findAllHomeWork();
 
-    boolean deleteHomeWork(long id);
+    boolean deleteHomeWork(int id);
 }

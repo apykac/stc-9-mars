@@ -25,11 +25,11 @@ public class AttendanceDaoImpl implements AttendanceDao {
     private SessionFactory factory;
 
     @Override
-    public boolean addLessonAttendance(long lessonId, long[] students) {
+    public boolean addLessonAttendance(int lessonId, int[] students) {
         boolean result = true;
         if (lessonId < 1 || students == null || students.length < 1)
             result = false;
-        for (long studentId : students) {
+        for (int studentId : students) {
             Attendance attendance = new Attendance();
             attendance.setLessonId(lessonId);
             attendance.setUserId(studentId);
@@ -64,7 +64,7 @@ public class AttendanceDaoImpl implements AttendanceDao {
     }
 
     @Override
-    public int getNumberOfMissedLessons(long id) {
+    public int getNumberOfMissedLessons(int id) {
         int result = 0;
         if (id <= 0) return result;
         try (Session session = factory.openSession()) {
@@ -93,7 +93,7 @@ public class AttendanceDaoImpl implements AttendanceDao {
      * @param lessonId id урока
      * @return объект List<User>
      */
-    public List<Attendance> getLessonAttendance(long lessonId, long groupId) {
+    public List<Attendance> getLessonAttendance(int lessonId, int groupId) {
         List<Attendance> result = new ArrayList<>();
         if (groupId < 1 && lessonId < 1) {
             return result;

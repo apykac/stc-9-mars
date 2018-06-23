@@ -12,11 +12,13 @@ import ru.innopolis.stc9.pojo.Attendance;
 import ru.innopolis.stc9.service.implementation.AttendanceServiceImpl;
 import ru.innopolis.stc9.service.interfaces.AttendanceService;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 import static org.junit.Assert.*;
 import static org.mockito.Matchers.anyObject;
-import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.when;
 

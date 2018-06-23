@@ -11,7 +11,6 @@ import org.springframework.jdbc.datasource.DriverManagerDataSource;
 import org.springframework.orm.hibernate4.HibernateTransactionManager;
 import org.springframework.orm.hibernate4.LocalSessionFactoryBean;
 import ru.innopolis.stc9.dao.implementation.GroupDaoHibernateImpl;
-import ru.innopolis.stc9.dao.implementation.GroupDaoImpl;
 import ru.innopolis.stc9.dao.implementation.UserDaoImpl;
 import ru.innopolis.stc9.dao.interfaces.GroupDao;
 import ru.innopolis.stc9.dao.interfaces.UserDao;

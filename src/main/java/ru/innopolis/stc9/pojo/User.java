@@ -2,6 +2,7 @@ package ru.innopolis.stc9.pojo;
 
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
@@ -10,13 +11,14 @@ import java.util.List;
 @Entity
 @Table(name = "users")
 @EqualsAndHashCode
+@NoArgsConstructor
 public class User implements DBObject {
     @Getter
     @Setter
     @Id
     @SequenceGenerator(name = "usersSeq", sequenceName = "USERS_SEQUENCE", allocationSize = 0)
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "usersSeq")
-    private long id;
+    private int id;
     @Getter
     @Setter
     @Column(unique = true)
@@ -41,9 +43,9 @@ public class User implements DBObject {
     private int enabled = 1;
     @Getter
     @Setter
-    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @ManyToOne(optional = false, cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @JoinColumn(name = "groupId", nullable = true)
-    private Group group = null;
+    private Group group;
     @Getter
     @Setter
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
@@ -64,12 +66,7 @@ public class User implements DBObject {
     @Setter
     @Transient
     //TODO need to delete
-    private Long groupId;
-
-    public User() {
-        this.permissionGroup = "ROLE_STUDENT";
-        this.enabled = 1;
-    }
+    private Integer groupId;
 
     public User(String login, String hashPassword, String firstName, String secondName, String middleName) {
         this.login = login;

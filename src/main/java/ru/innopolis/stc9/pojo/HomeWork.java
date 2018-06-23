@@ -15,7 +15,7 @@ public class HomeWork {
     @Id
     @SequenceGenerator(name = "homeWorkSeq", sequenceName = "HOMEWORK_SEQUENCE", allocationSize = 0)
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "homeWorkSeq")
-    private long id;
+    private int id;
     @Getter
     @Setter
     private String homeWorkURL;
@@ -33,14 +33,14 @@ public class HomeWork {
     @Setter
     @Transient
     //TODO need to delete
-    private long studentId;
+    private int studentId;
     @Getter
     @Setter
     @Transient
     //TODO need to delete
-    private long lessonId;
+    private int lessonId;
 
-    public HomeWork(String homeWorkURL, long studentId, long lessonId) {
+    public HomeWork(String homeWorkURL, int studentId, int lessonId) {
         this.homeWorkURL = homeWorkURL;
         this.studentId = studentId;
         this.lessonId = lessonId;

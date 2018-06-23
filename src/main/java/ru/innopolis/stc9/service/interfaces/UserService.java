@@ -13,28 +13,28 @@ public interface UserService {
 
     boolean addUserByParam(MultiValueMap<String, String> incParam);
 
-    boolean delUserById(long id);
+    boolean delUserById(int id);
 
     boolean isExist(String login);
 
     List<User> getUserList();
 
-    List<User> getStudentsByGroupId(Long groupId);
+    List<User> getStudentsByGroupId(Integer groupId);
 
     List<User> getAllStudents();
 
-    User findUserById(long userId);
+    User findUserById(int userId);
 
-    User findUserByIdWithSubjectList(long userId);
+    User findUserByIdWithSubjectList(int userId);
 
     User findUserByLogin(String login);
 
-    boolean deactivationCurrentAccount(long id);
+    boolean deactivationCurrentAccount(int id);
 
-    boolean checkPasswordOfCurrentAccount(long id, String candidate);
+    boolean checkPasswordOfCurrentAccount(int id, String candidate);
 
     Object[] editUser(MultiValueMap<String, String> incParam);
 
-    boolean updateGroupId(long userId, Long groupId);
+    boolean updateGroupId(int userId, Integer groupId);
 
 }

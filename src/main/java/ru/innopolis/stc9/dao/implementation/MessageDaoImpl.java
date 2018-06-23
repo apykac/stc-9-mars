@@ -52,7 +52,7 @@ public class MessageDaoImpl implements MessageDao {
     }
 
     @Override
-    public List<Message> getAllMessagesByToUserId(long toUserId) {
+    public List<Message> getAllMessagesByToUserId(int toUserId) {
         if (toUserId < 0) return new ArrayList<>();
         List<Message> resultList;
         try (Session session = factory.openSession()) {
@@ -67,7 +67,7 @@ public class MessageDaoImpl implements MessageDao {
     }
 
     @Override
-    public boolean deleteMessageById(long id) {
+    public boolean deleteMessageById(int id) {
         if (id < 0) return false;
         int result;
         try (Session session = factory.openSession()) {
@@ -83,7 +83,7 @@ public class MessageDaoImpl implements MessageDao {
     }
 
     @Override
-    public Message getMessageById(long id) {
+    public Message getMessageById(int id) {
         if (id < 0) return null;
         Message message;
         try (Session session = factory.openSession()) {
@@ -93,17 +93,17 @@ public class MessageDaoImpl implements MessageDao {
     }
 
     @Override
-    public long getNumberOfMessage(User user) {
+    public int getNumberOfMessage(User user) {
         if ((user == null) || (user.getId() < 0) ||
                 (user.getPermissionGroup() == null) || user.getPermissionGroup().equals(""))
             return 0;
-        long result;
+        int result;
         try (Session session = factory.openSession()) {
             Query query = session.createQuery(
                     "SELECT count(*) FROM Message m where (m.user.id is null and m.toUserGroup = :role) or m.user.id = :userId");
             query.setParameter("userId", user.getId());
             query.setParameter("role", user.getPermissionGroup());
-            result = (Long) query.uniqueResult();
+            result = (Integer) query.uniqueResult();
         }
         return result;
     }

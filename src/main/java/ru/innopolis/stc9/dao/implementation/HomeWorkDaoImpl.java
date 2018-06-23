@@ -49,7 +49,7 @@ public class HomeWorkDaoImpl implements HomeWorkDao {
     }
 
     @Override
-    public HomeWork findById(long id) {
+    public HomeWork findById(int id) {
         if (id < 0) return null;
         HomeWork homeWork;
         try (Session session = factory.openSession()) {
@@ -59,7 +59,7 @@ public class HomeWorkDaoImpl implements HomeWorkDao {
     }
 
     @Override
-    public HomeWork findByStudentId(long studentId) {
+    public HomeWork findByStudentId(int studentId) {
         if (studentId < 0) return null;
         List<HomeWork> resultList;
         try (Session session = factory.openSession()) {
@@ -75,7 +75,7 @@ public class HomeWorkDaoImpl implements HomeWorkDao {
     }
 
     @Override
-    public HomeWork findByLessonId(long lessonId) {
+    public HomeWork findByLessonId(int lessonId) {
         if (lessonId < 0) return null;
         List<HomeWork> resultList;
         try (Session session = factory.openSession()) {
@@ -91,7 +91,7 @@ public class HomeWorkDaoImpl implements HomeWorkDao {
     }
 
     @Override
-    public List<HomeWork> getHomeWorkListByLessonId(long lessonId) {
+    public List<HomeWork> getHomeWorkListByLessonId(int lessonId) {
         if (lessonId < 0) return new ArrayList<>();
         List<HomeWork> resultList;
         try (Session session = factory.openSession()) {
@@ -106,7 +106,7 @@ public class HomeWorkDaoImpl implements HomeWorkDao {
     }
 
     @Override
-    public HomeWork findHomeWorkByStudentIdAndLessonId(long studentId, long lessonId) {
+    public HomeWork findHomeWorkByStudentIdAndLessonId(int studentId, int lessonId) {
         if (lessonId < 0 || studentId < 0) return null;
         List<HomeWork> resultList;
         try (Session session = factory.openSession()) {
@@ -138,7 +138,7 @@ public class HomeWorkDaoImpl implements HomeWorkDao {
     }
 
     @Override
-    public boolean deleteHomeWork(long id) {
+    public boolean deleteHomeWork(int id) {
         if (id < 0) return false;
         int result;
         try (Session session = factory.openSession()) {

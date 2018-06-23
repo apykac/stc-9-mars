@@ -4,7 +4,6 @@ import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Repository;
 import ru.innopolis.stc9.dao.interfaces.GroupDao;
 import ru.innopolis.stc9.dao.mappers.GroupMapper;
 import ru.innopolis.stc9.pojo.Group;
@@ -13,7 +12,7 @@ import javax.persistence.criteria.*;
 import java.util.List;
 
 
-@Repository
+//@Repository
 public class GroupDaoImpl implements GroupDao {
     @Autowired
     private SessionFactory factory;
@@ -47,7 +46,7 @@ public class GroupDaoImpl implements GroupDao {
     }
 
     @Override
-    public boolean deleteGroup(long groupId) {
+    public boolean deleteGroup(int groupId) {
         if (groupId < 0) return false;
         int result;
         try (Session session = factory.openSession()) {
@@ -63,7 +62,7 @@ public class GroupDaoImpl implements GroupDao {
     }
 
     @Override
-    public Group findGroupById(Long id) {
+    public Group findGroupById(Integer id) {
         if ((id == null) || (id < 0)) return null;
         Group group;
         try (Session session = factory.openSession()) {

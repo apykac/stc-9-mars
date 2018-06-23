@@ -36,7 +36,7 @@ public class LessonsServiceImpl implements LessonsService {
     }
 
     @Override
-    public boolean deleteLesson(long lessonId) {
+    public boolean deleteLesson(int lessonId) {
         if (lessonsDao.deleteLesson(lessonId)) {
             logger.info("lesson " + lessonId + " deleted");
             return true;

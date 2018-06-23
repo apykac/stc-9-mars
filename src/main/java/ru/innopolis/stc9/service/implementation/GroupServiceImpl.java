@@ -30,13 +30,13 @@ public class GroupServiceImpl implements GroupService {
     }
 
     @Override
-    public boolean deleteGroup(long groupId) {
+    public boolean deleteGroup(int groupId) {
         if (groupId < 0) return false;
         return groupDao.deleteGroup(groupId);
     }
 
     @Override
-    public Group findGroupById(Long id) {
+    public Group findGroupById(Integer id) {
         if ((id == null) || (id < 0)) return null;
         return groupDao.findGroupById(id);
     }

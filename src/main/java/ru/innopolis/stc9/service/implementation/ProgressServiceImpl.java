@@ -64,7 +64,7 @@ public class ProgressServiceImpl implements ProgressService {
 
     @Override
     public int getNumberOfMissedLessons(String login) {
-        long id = getUser(login).getId();
+        int id = getUser(login).getId();
         return attendanceService.getNumberOfMissedLessons(id);
     }
 

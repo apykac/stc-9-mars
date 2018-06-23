@@ -6,17 +6,17 @@ import ru.innopolis.stc9.pojo.User;
 import java.util.Map;
 
 public interface MarkService {
-    Map<String, Mark> getMarksByLessonId(long lessonId);
+    Map<String, Mark> getMarksByLessonId(int lessonId);
 
-    Mark getMarkById(long id);
+    Mark getMarkById(int id);
 
     boolean updateMark(Mark mark);
 
-    String getFullStudentNameInOneString(long markId);
+    String getFullStudentNameInOneString(int markId);
 
-    String getLessonNameByMarkId(long lessonId);
+    String getLessonNameByMarkId(int lessonId);
 
-    String getLessonNameByLessonId(long markId);
+    String getLessonNameByLessonId(int markId);
 
     String getFullStudentName(User student);
 }

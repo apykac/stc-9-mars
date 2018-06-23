@@ -22,7 +22,7 @@ public class MarkDaoImpl implements MarkDao {
     private SessionFactory factory;
 
     @Override
-    public List<Mark> getMarksByLessonId(long lessonId) {
+    public List<Mark> getMarksByLessonId(int lessonId) {
         if (lessonId < 0) return new ArrayList<>();
         List<Mark> resultList;
         try (Session session = factory.openSession()) {
@@ -37,7 +37,7 @@ public class MarkDaoImpl implements MarkDao {
     }
 
     @Override
-    public Mark getMarkById(long id) {
+    public Mark getMarkById(int id) {
         if (id < 0) return null;
         Mark mark;
         try (Session session = factory.openSession()) {

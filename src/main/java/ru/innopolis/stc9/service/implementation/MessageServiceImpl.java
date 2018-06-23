@@ -39,7 +39,7 @@ public class MessageServiceImpl implements MessageService {
     }
 
     @Override
-    public List<Message>[] getAllMessages(long toUserId, String role) {
+    public List<Message>[] getAllMessages(int toUserId, String role) {
         if ((toUserId < 0) || (role == null) || role.isEmpty()) return new List[2];
         List<Message>[] result = new List[2];
         result[0] = messageDao.getAllMessagesByRole(role);
@@ -48,19 +48,19 @@ public class MessageServiceImpl implements MessageService {
     }
 
     @Override
-    public Message getMessageById(long id) {
+    public Message getMessageById(int id) {
         if (id < 0) return null;
         return messageDao.getMessageById(id);
     }
 
     @Override
-    public boolean deleteMessageById(long id) {
+    public boolean deleteMessageById(int id) {
         if (id < 0) return false;
         return messageDao.deleteMessageById(id);
     }
 
     @Override
-    public long getNumberOfMessage(User user) {
+    public int getNumberOfMessage(User user) {
         if (user == null) return 0;
         return messageDao.getNumberOfMessage(user);
     }

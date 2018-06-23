@@ -10,10 +10,7 @@ import ru.innopolis.stc9.dao.interfaces.UserDao;
 import ru.innopolis.stc9.dao.mappers.UserMapper;
 import ru.innopolis.stc9.pojo.User;
 
-import javax.persistence.criteria.CriteriaBuilder;
-import javax.persistence.criteria.CriteriaQuery;
-import javax.persistence.criteria.CriteriaUpdate;
-import javax.persistence.criteria.Root;
+import javax.persistence.criteria.*;
 import java.util.List;
 
 @Repository
@@ -33,7 +30,7 @@ public class UserDaoImpl implements UserDao {
     }
 
     @Override
-    public User findUserByUserId(long id) {
+    public User findUserByUserId(int id) {
         if (id < 0) return null;
         User user;
         try (Session session = factory.openSession()) {
@@ -43,12 +40,13 @@ public class UserDaoImpl implements UserDao {
     }
 
     @Override
-    public User findUserByIdWithSubjectList(long id) {
+    public User findUserByIdWithSubjectList(int id) {
         if (id < 0) return null;
         User user;
         try (Session session = factory.openSession()) {
             user = session.get(User.class, id);
-            if (user.getGroup() != null) Hibernate.initialize(user.getGroup().getSubjects());
+            if (user.getGroup() != null)
+                Hibernate.initialize(user.getGroup().getSubjects());
         }
         return user;
     }
@@ -56,28 +54,23 @@ public class UserDaoImpl implements UserDao {
     @Override
     public User findLoginByName(String login) {
         if (login.equals("anonymousUser") || login.isEmpty()) return null;
-        User user;
+        List<User> resultList;
         try (Session session = factory.openSession()) {
             CriteriaBuilder builder = session.getCriteriaBuilder();
             CriteriaQuery<User> criteria = builder.createQuery(User.class);
             Root<User> root = criteria.from(User.class);
             criteria.select(root);
             criteria.where(builder.equal(root.get(UserMapper.LOGIN), login));
-            user = session.createQuery(criteria).uniqueResult();
+            resultList = session.createQuery(criteria).getResultList();
         }
-        return user;
+        if (!resultList.isEmpty()) return resultList.get(0);
+        else return null;
     }
 
     @Override
-    public boolean delUserById(long id) {
+    public boolean delUserById(int id) {
         if (id < 0) return false;
-        try (Session session = factory.openSession()) {
-            User user = session.get(User.class, id);
-            Transaction transaction = session.beginTransaction();
-            session.delete(user);
-            transaction.commit();
-        }
-        /*int result;
+        int result;
         try (Session session = factory.openSession()) {
             CriteriaBuilder builder = session.getCriteriaBuilder();
             CriteriaDelete<User> criteria = builder.createCriteriaDelete(User.class);
@@ -86,9 +79,8 @@ public class UserDaoImpl implements UserDao {
             Transaction transaction = session.beginTransaction();
             result = session.createQuery(criteria).executeUpdate();
             transaction.commit();
-        }*/
-        /*return result != 0;*/
-        return true;
+        }
+        return result != 0;
     }
 
 
@@ -106,7 +98,7 @@ public class UserDaoImpl implements UserDao {
     }
 
     @Override
-    public boolean deactivateUser(long id) {
+    public boolean deactivateUser(int id) {
         if (id < 0) return false;
         int result;
         try (Session session = factory.openSession()) {
@@ -162,7 +154,7 @@ public class UserDaoImpl implements UserDao {
     }
 
     @Override
-    public boolean updateGroupId(long userId, Long groupId) {
+    public boolean updateGroupId(int userId, Integer groupId) {
         if ((userId < 0)) return false;
         int result;
         try (Session session = factory.openSession()) {

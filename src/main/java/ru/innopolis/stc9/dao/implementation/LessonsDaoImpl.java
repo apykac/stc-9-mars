@@ -36,7 +36,7 @@ public class LessonsDaoImpl implements LessonsDao {
     }
 
     @Override
-    public boolean deleteLesson(long lessonId) {
+    public boolean deleteLesson(int lessonId) {
         if (lessonId < 0) return false;
         int result;
         try (Session session = factory.openSession()) {
@@ -73,7 +73,7 @@ public class LessonsDaoImpl implements LessonsDao {
     }
 
     @Override
-    public Lessons getLessonById(long id) {
+    public Lessons getLessonById(int id) {
         if (id < 0) return null;
         Lessons lesson;
         try (Session session = factory.openSession()) {

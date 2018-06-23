@@ -77,7 +77,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public boolean delUserById(long id) {
+    public boolean delUserById(int id) {
         if (id < 0) return false;
         return userDao.delUserById(id);
     }
@@ -94,13 +94,13 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public User findUserById(long userId) {
+    public User findUserById(int userId) {
         if (userId < 0) return null;
         return userDao.findUserByUserId(userId);
     }
 
     @Override
-    public User findUserByIdWithSubjectList(long userId) {
+    public User findUserByIdWithSubjectList(int userId) {
         if (userId < 0) return null;
         return userDao.findUserByIdWithSubjectList(userId);
     }
@@ -118,7 +118,7 @@ public class UserServiceImpl implements UserService {
      */
     @Override
     //TODO Integer groupId -> Group group
-    public List<User> getStudentsByGroupId(Long groupId) {
+    public List<User> getStudentsByGroupId(Integer groupId) {
         List<User> students = new ArrayList<>();
         for (User u : userDao.getAllStudents())
             if (groupId.equals(u.getGroupId()))
@@ -132,7 +132,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public boolean checkPasswordOfCurrentAccount(long id, String candidate) {
+    public boolean checkPasswordOfCurrentAccount(int id, String candidate) {
         if ((id < 0) || (candidate == null) || candidate.equals("")) return false;
         User user = findUserById(id);
         if (user == null) return false;
@@ -140,7 +140,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public boolean deactivationCurrentAccount(long id) {
+    public boolean deactivationCurrentAccount(int id) {
         if (id < 0) return false;
         return userDao.deactivateUser(id);
     }
@@ -193,7 +193,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     //TODO Integer groupId -> Group group
-    public boolean updateGroupId(long userId, Long groupId) {
+    public boolean updateGroupId(int userId, Integer groupId) {
         if ((userId < 0) || ((groupId != null) && (groupId < 0))) return false;
         return userDao.updateGroupId(userId, groupId);
     }

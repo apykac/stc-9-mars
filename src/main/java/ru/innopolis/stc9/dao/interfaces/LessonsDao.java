@@ -7,9 +7,9 @@ import java.util.List;
 public interface LessonsDao {
     boolean addLesson(Lessons lesson);
 
-    boolean deleteLesson(long lessonId);
+    boolean deleteLesson(int lessonId);
 
     List<Lessons> findAllLessons();
 
-    Lessons getLessonById(long id);
+    Lessons getLessonById(int id);
 }

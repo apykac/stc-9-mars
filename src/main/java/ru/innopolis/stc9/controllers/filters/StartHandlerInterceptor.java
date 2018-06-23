@@ -24,14 +24,14 @@ public class StartHandlerInterceptor implements HandlerInterceptor {
         HttpSession session = request.getSession();
         if (session.getAttribute(SessionDataInform.ID) == null) {
             User user = userService.findUserByLogin(SecurityContextHolder.getContext().getAuthentication().getName());
-            long numberOfMessage = messageService.getNumberOfMessage(user);
+            int numberOfMessage = messageService.getNumberOfMessage(user);
             addStartAttributeToSession(session, user, numberOfMessage);
             response.sendRedirect(request.getContextPath() + "/university/start");
         }
         return true;
     }
 
-    private void addStartAttributeToSession(HttpSession session, User user, long count) {
+    private void addStartAttributeToSession(HttpSession session, User user, int count) {
         session.setAttribute(SessionDataInform.ID, user.getId());
         session.setAttribute(SessionDataInform.LOGIN, user.getLogin());
         session.setAttribute(SessionDataInform.NAME, user.getFirstName() + " " + user.getSecondName());

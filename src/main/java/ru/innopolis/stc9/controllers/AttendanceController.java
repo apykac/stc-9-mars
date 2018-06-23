@@ -21,19 +21,19 @@ public class AttendanceController {
     @Autowired
     private AttendanceService attendanceService;
 
-    private void addHeadAttributesToModel(Model model, long lessonId) {
+    private void addHeadAttributesToModel(Model model, int lessonId) {
         model.addAttribute("lessonId", lessonId);
         model.addAttribute("groups", groupService.findAllGroups());
     }
 
     @RequestMapping(value = "/university/teacher/attendance", method = RequestMethod.GET)
-    private String getGroups(@RequestParam long lessonId, Model model) {
+    private String getGroups(@RequestParam int lessonId, Model model) {
         addHeadAttributesToModel(model, lessonId);
         return defaultPath;
     }
 
     @RequestMapping(value = "/university/teacher/attendanceSelectGroup")
-    private String editAttendance(@RequestParam("selectGroup") long groupId, @RequestParam("lessonId") int lessonId, Model model) {
+    private String editAttendance(@RequestParam("selectGroup") int groupId, @RequestParam("lessonId") int lessonId, Model model) {
         addHeadAttributesToModel(model, lessonId);
         model.addAttribute("groupSelected", groupService.findGroupById(groupId));
         model.addAttribute("studentsInGroup", userService.getStudentsByGroupId(groupId));
@@ -42,10 +42,7 @@ public class AttendanceController {
     }
 
     @RequestMapping(value = "/university/teacher/attendanceSendStudentsList", method = RequestMethod.POST)
-    private String sendStudentsList(@RequestParam(value = "list", required = false) long[] studentsList,
-                                    @RequestParam("lessonId") long lessonId,
-                                    @RequestParam("groupSelected") long groupSelected,
-                                    Model model) {
+    private String sendStudentsList(@RequestParam(value = "list", required = false) int[] studentsList, @RequestParam("lessonId") int lessonId, @RequestParam("groupSelected") int groupSelected, Model model) {
         addHeadAttributesToModel(model, lessonId);
         if (studentsList == null) {
             attendanceService.clearLessonAttendance(lessonId, groupSelected);
