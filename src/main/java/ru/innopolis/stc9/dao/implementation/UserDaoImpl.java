@@ -3,10 +3,12 @@ package ru.innopolis.stc9.dao.implementation;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
+import org.hibernate.query.Query;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import ru.innopolis.stc9.dao.interfaces.UserDao;
 import ru.innopolis.stc9.dao.mappers.UserMapper;
+import ru.innopolis.stc9.pojo.Group;
 import ru.innopolis.stc9.pojo.User;
 
 import javax.persistence.criteria.*;
@@ -145,16 +147,23 @@ public class UserDaoImpl implements UserDao {
         if ((userId < 0)) return false;
         int result;
         try (Session session = factory.openSession()) {
-            CriteriaBuilder builder = session.getCriteriaBuilder();
-            CriteriaUpdate<User> criteria = builder.createCriteriaUpdate(User.class);
-            Root<User> root = criteria.from(User.class);
-            criteria.set(root.get(UserMapper.GROUPID), groupId).
-                    where(builder.equal(root.get(UserMapper.ID), userId));
+//            CriteriaBuilder builder = session.getCriteriaBuilder();
+//            CriteriaUpdate<User> criteria = builder.createCriteriaUpdate(User.class);
+//            Root<User> root = criteria.from(User.class);
+//            criteria.set(root.get(UserMapper.GROUPID), groupId).
+//                    where(builder.equal(root.get(UserMapper.ID), userId));
             Transaction transaction = session.beginTransaction();
-            result = session.createQuery(criteria).executeUpdate();
+            User user = session.get(User.class, userId);
+            Group group = null;
+            if (groupId != null) {
+                group = session.get(Group.class, groupId);
+            }
+            user.setGroup(group);
+            session.update(user);
+//            result = session.createQuery(criteria).executeUpdate();
             transaction.commit();
         }
-        return result != 0;
+        return true;
     }
 
     @Override

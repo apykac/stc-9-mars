@@ -6,6 +6,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import ru.innopolis.stc9.pojo.Group;
 import ru.innopolis.stc9.service.interfaces.GroupService;
@@ -69,7 +70,7 @@ public class GroupController {
      */
     @RequestMapping("/university/teacher/group/{id}")
     public String forUpdateGroup(@PathVariable("id") int id,
-                                 @RequestParam(value = "groupStatus", defaultValue = "") Integer filterId,
+                                 @RequestParam(value = "groupStatus", defaultValue = "0") int filterId,
                                  Model model) {
         studentService.addingMainAttributeToModel(model, id, filterId);
         logger.info("group for update");
@@ -87,7 +88,7 @@ public class GroupController {
         Group tempGroup = groupService.findGroupById(id);
         tempGroup.setName(name);
         allGroupsList = groupService.findAllGroups();
-        if (studentService.isDuplicate(allGroupsList, model, name)) return forUpdateGroup(id, null, model);
+        if (studentService.isDuplicate(allGroupsList, model, name)) return forUpdateGroup(id, 0, model);
         groupService.updateGroup(tempGroup);
         logger.info(loggerPrefix + id + " updated");
         return viewAllGroups(model, null);
@@ -115,7 +116,7 @@ public class GroupController {
     public String addStudentToGroup(@RequestParam("id") int id, @RequestParam("studentId") int studentId, Model model) {
         userService.updateGroupId(studentId, id);
         logger.info("student added in group " + id);
-        return forUpdateGroup(id, null, model);
+        return forUpdateGroup(id, 0, model);
     }
 
     /**
@@ -128,6 +129,13 @@ public class GroupController {
     public String deleteStudentFromGroup(@PathVariable("id") int id, @PathVariable("studentId") int studentId, Model model) {
         userService.updateGroupId(studentId, null);
         logger.info("student deleted from group " + id);
-        return forUpdateGroup(id, null, model);
+        return forUpdateGroup(id, 0, model);
     }
+
+    //обработчик ошибки error 404
+    @RequestMapping(value = "/404", method = RequestMethod.GET)
+    public String error404Keeper(){
+        return "error404";
+    }
+
 }

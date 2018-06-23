@@ -6,6 +6,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
+import java.util.Set;
 
 @Entity
 @Table(name = "studygroup")
@@ -22,7 +23,21 @@ public class Group {
     @Setter
     private String name;
 
+    @Getter
+    @Setter
+    @OneToMany(mappedBy = "group", fetch = FetchType.LAZY)
+    private Set<User> users;
+
+    public void addUsers(User user) {
+        users.add(user);
+    }
+
     public Group(String name) {
+        this.name = name;
+    }
+
+    public Group(int id, String name) {
+        this.id = id;
         this.name = name;
     }
 }

@@ -36,13 +36,18 @@ public class User implements DBObject {
     @Getter
     @Setter
     private Integer groupId;
-    @Getter
-    @Setter
-    @Transient
-    private Group group;
+//    @Getter
+//    @Setter
+//    @Transient
+//    private Group group;
     @Getter
     @Setter
     private int enabled;
+
+    @Getter
+    @Setter
+    @ManyToOne(targetEntity = Group.class)
+    private Group group;
 
     public User() {
         this.permissionGroup = "ROLE_STUDENT";

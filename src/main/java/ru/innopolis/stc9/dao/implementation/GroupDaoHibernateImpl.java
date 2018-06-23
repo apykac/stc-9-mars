@@ -1,5 +1,6 @@
 package ru.innopolis.stc9.dao.implementation;
 
+import org.hibernate.Hibernate;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.query.Query;
@@ -63,6 +64,7 @@ public class GroupDaoHibernateImpl implements GroupDao {
         try (Session session = factory.openSession()) {
             session.beginTransaction();
             group = session.get(Group.class, id);
+            Hibernate.initialize(group.getUsers());
             session.getTransaction().commit();
         }
         return group;
@@ -71,13 +73,16 @@ public class GroupDaoHibernateImpl implements GroupDao {
     @Override
     public Group findGroupByName(String name) {
         Query query;
+        Group group;
         try (Session session = factory.openSession()) {
             session.beginTransaction();
             query = session.createQuery("from Group where group.name = name");
             query.setParameter("name", name);
+            group = (Group) query.iterate().next();
+            Hibernate.initialize(group.getUsers());
             session.getTransaction().commit();
         }
-        return (Group) query.iterate().next();
+        return group;
     }
 
     @Override
