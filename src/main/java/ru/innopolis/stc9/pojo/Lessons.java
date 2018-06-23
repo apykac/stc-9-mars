@@ -29,7 +29,7 @@ public class Lessons {
     private String name;
     @Getter
     @Setter
-    @ManyToOne(optional = false, cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JoinColumn(name = "subjectId", nullable = false)
     private Subject subject;
     @Getter
@@ -48,7 +48,7 @@ public class Lessons {
     @Setter
     @Transient
     //TODO need to delete
-    private int subjectId;
+    private long subjectId;
 
     public Lessons(int id, int subjectId, Date date, String name) {
         this.id = id;

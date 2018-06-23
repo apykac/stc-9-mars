@@ -20,13 +20,14 @@ public class Group {
     private int id;
     @Getter
     @Setter
+    @Column(unique = true)
     private String name;
     @Getter
     @Setter
     @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JoinTable(name = "education",
-            joinColumns = @JoinColumn(name = "groupId", nullable = false),
-            inverseJoinColumns = @JoinColumn(name = "subjectId", nullable = false))
+            joinColumns = @JoinColumn(name = "groupId"),
+            inverseJoinColumns = @JoinColumn(name = "subjectId"))
     private List<Subject> subjects;
     @Getter
     @Setter

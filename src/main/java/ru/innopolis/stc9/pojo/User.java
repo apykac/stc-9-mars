@@ -43,9 +43,9 @@ public class User implements DBObject {
     private int enabled = 1;
     @Getter
     @Setter
-    @ManyToOne(optional = false, cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @JoinColumn(name = "groupId", nullable = true)
-    private Group group;
+    private Group group = null;
     @Getter
     @Setter
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
@@ -78,13 +78,6 @@ public class User implements DBObject {
         this.enabled = 1;
     }
 
-    //TODO need to delete
-    /*public User(String firstName, String secondName, String middleName, Integer groupId) {
-        this.firstName = firstName;
-        this.secondName = secondName;
-        this.middleName = middleName;
-        this.groupId = groupId;
-    }*/
     public User(String firstName, String secondName, String middleName, Group group) {
         this.firstName = firstName;
         this.secondName = secondName;

@@ -97,14 +97,14 @@ public class MessageDaoImpl implements MessageDao {
         if ((user == null) || (user.getId() < 0) ||
                 (user.getPermissionGroup() == null) || user.getPermissionGroup().equals(""))
             return 0;
-        int result;
+        Long result;
         try (Session session = factory.openSession()) {
             Query query = session.createQuery(
                     "SELECT count(*) FROM Message m where (m.user.id is null and m.toUserGroup = :role) or m.user.id = :userId");
             query.setParameter("userId", user.getId());
             query.setParameter("role", user.getPermissionGroup());
-            result = (Integer) query.uniqueResult();
+            result = (Long) query.uniqueResult();
         }
-        return result;
+        return Math.toIntExact(result);
     }
 }

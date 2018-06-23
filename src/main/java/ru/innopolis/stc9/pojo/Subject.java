@@ -26,8 +26,8 @@ public class Subject {
     @Setter
     @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JoinTable(name = "education",
-            joinColumns = @JoinColumn(name = "subjectId", nullable = false),
-            inverseJoinColumns = @JoinColumn(name = "groupId", nullable = false))
+            joinColumns = @JoinColumn(name = "subjectId"),
+            inverseJoinColumns = @JoinColumn(name = "groupId"))
     private List<Group> groups;
     @Getter
     @Setter

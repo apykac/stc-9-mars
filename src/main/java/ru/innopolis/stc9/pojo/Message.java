@@ -18,9 +18,6 @@ public class Message implements DBObject {
     private int id;
     @Getter
     @Setter
-    private int userId;
-    @Getter
-    @Setter
     private String text;
     @Getter
     @Setter
@@ -33,9 +30,14 @@ public class Message implements DBObject {
     private String theme;
     @Getter
     @Setter
-    @ManyToOne(optional = false, cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JoinColumn(name = "toUserId", nullable = true)
     private User user;
+    @Getter
+    @Setter
+    @Transient
+    //TODO need to delete
+    private int userId;
     @Getter
     @Setter
     @Transient

@@ -19,7 +19,7 @@ public class Progress {
     @Id
     @SequenceGenerator(name = "progressSeq", sequenceName = "PROGRESS_SEQUENCE", allocationSize = 0)
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "progressSeq")
-    private int id;
+    private Integer id;
     @Getter
     @Setter
     private int value;
