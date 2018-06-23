@@ -12,12 +12,4 @@ public interface StudentService {
     boolean isDuplicate(List<Group> groupsList, Model model, String name);
 
     List<User> studentFilter(List<User> studentsList, int filterId, int currentGroupId);
-
-    String findNameById(List<Group> groupsList, int id);
-
-    List<User> getStudentsByGroupId(List<User> studentsList, Integer groupId);
-
-    List<User> getAllStudentExceptId(List<User> studentsList, Integer groupId);
-
-    void distributionStudentsByGroup(List<Group> groupsList, List<User> studentsList);
 }

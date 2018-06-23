@@ -41,13 +41,10 @@ public class StudentServiceImpl implements StudentService {
             return;
         List<Group> allGroupsList = groupService.findAllGroups();
         List<User> allStudentsList = userService.getAllStudents();
-//        distributionStudentsByGroup(allGroupsList, allStudentsList);
         model.addAttribute("groups", allGroupsList);
         model.addAttribute("groupName", groupService.findGroupById(id).getName());
         model.addAttribute("id", id);
-//        model.addAttribute("students", getStudentsByGroupId(allStudentsList, id));
         model.addAttribute("students", groupService.findGroupById(id).getUsers());
-
         model.addAttribute("studentsWOG", studentFilter(allStudentsList, filterId, id));
     }
 
@@ -66,69 +63,5 @@ public class StudentServiceImpl implements StudentService {
             }
         }
         return filteredStudents;
-    }
-//    public List<User> studentFilter(List<User> studentsList, Integer filterId, int currentGroupId) {
-//        List<User> list = new ArrayList<>();
-//        if ((studentsList == null) || studentsList.isEmpty())
-//            return list;
-//        if (((filterId != null) && (filterId < 0)) || (currentGroupId < 0))
-//            return list;
-//        for (User u : getAllStudentExceptId(studentsList, currentGroupId))
-//            if (filterId == null) {
-//                if (u.getGroup() == null) list.add(u);
-//            } else {
-//                if (filterId.equals((Integer)u.getGroup().getId())) list.add(u);
-//            }
-//        return list;
-//    }
-
-    @Override
-    public String findNameById(List<Group> groupsList, int id) {
-        if ((groupsList == null) || (id < 0)) return "";
-        for (Group group : groupsList)
-            if (group.getId() == id)
-                return group.getName();
-        return "";
-    }
-
-    @Override
-    public List<User> getStudentsByGroupId(List<User> studentsList, Integer groupId) {
-        List<User> allStudentsByGroupId = new ArrayList<>();
-        if ((studentsList == null) || studentsList.isEmpty() || ((groupId != null) && groupId < 0))
-            return allStudentsByGroupId;
-        for (User student : studentsList)
-            if (groupId == null) {
-                if (student.getGroup() == null)
-                    allStudentsByGroupId.add(student);
-            } else if (groupId.equals(student.getGroup().getId()))
-                allStudentsByGroupId.add(student);
-        return allStudentsByGroupId;
-    }
-
-    @Override
-    public List<User> getAllStudentExceptId(List<User> studentsList, Integer groupId) {
-        List<User> allStudentsExceptId = new ArrayList<>();
-        if ((studentsList == null) || studentsList.isEmpty() || ((groupId != null) && groupId < 0))
-            return allStudentsExceptId;
-        for (User student : studentsList)
-            if (groupId == null) {
-                if (student.getGroup() != null)
-                    allStudentsExceptId.add(student);
-            } else if (!groupId.equals((Integer) student.getGroup().getId()))
-                allStudentsExceptId.add(student);
-        return allStudentsExceptId;
-    }
-
-    @Override
-    public void distributionStudentsByGroup(List<Group> groupsList, List<User> studentsList) {
-//        if ((groupsList == null) || groupsList.isEmpty())
-//            return;
-//        if ((studentsList == null) || studentsList.isEmpty())
-//            return;
-//        for (Group group : groupsList) {
-//            Integer groupId = group.getId();
-//            for (User student : studentsList)
-//                if (groupId.equals(student.getGroupId())) student.setGroup(group);
-//        }
     }
 }

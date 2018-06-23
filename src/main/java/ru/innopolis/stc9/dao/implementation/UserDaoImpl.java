@@ -142,16 +142,17 @@ public class UserDaoImpl implements UserDao {
         return result != 0;
     }
 
+    /**
+     * Метод обновляет группу у юзера
+     * @param userId - юзер, у которого обновляем
+     * @param groupId - id группы, которую присваиваем юзеру;
+     *                Может быть null, что будет соответствовать удалению группы у этого пользователя
+     * @return true при успешном обновлении.
+     */
     @Override
     public boolean updateGroupId(int userId, Integer groupId) {
         if ((userId < 0)) return false;
-        int result;
         try (Session session = factory.openSession()) {
-//            CriteriaBuilder builder = session.getCriteriaBuilder();
-//            CriteriaUpdate<User> criteria = builder.createCriteriaUpdate(User.class);
-//            Root<User> root = criteria.from(User.class);
-//            criteria.set(root.get(UserMapper.GROUPID), groupId).
-//                    where(builder.equal(root.get(UserMapper.ID), userId));
             Transaction transaction = session.beginTransaction();
             User user = session.get(User.class, userId);
             Group group = null;
@@ -160,7 +161,6 @@ public class UserDaoImpl implements UserDao {
             }
             user.setGroup(group);
             session.update(user);
-//            result = session.createQuery(criteria).executeUpdate();
             transaction.commit();
         }
         return true;

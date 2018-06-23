@@ -72,6 +72,9 @@ public class GroupController {
     public String forUpdateGroup(@PathVariable("id") int id,
                                  @RequestParam(value = "groupStatus", defaultValue = "0") int filterId,
                                  Model model) {
+        if (!groupService.isEntityFound(id, 0)) {
+            return error404Keeper();
+        }
         studentService.addingMainAttributeToModel(model, id, filterId);
         logger.info("group for update");
         return "views/group";
@@ -127,6 +130,9 @@ public class GroupController {
      */
     @RequestMapping("/university/teacher/group/deleteStudentFromGroup/{id}/{studentId}")
     public String deleteStudentFromGroup(@PathVariable("id") int id, @PathVariable("studentId") int studentId, Model model) {
+       if (!groupService.isEntityFound(id, studentId)) {
+           return error404Keeper();
+       }
         userService.updateGroupId(studentId, null);
         logger.info("student deleted from group " + id);
         return forUpdateGroup(id, 0, model);

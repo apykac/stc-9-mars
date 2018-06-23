@@ -36,10 +36,6 @@ public class User implements DBObject {
     @Getter
     @Setter
     private Integer groupId;
-//    @Getter
-//    @Setter
-//    @Transient
-//    private Group group;
     @Getter
     @Setter
     private int enabled;
