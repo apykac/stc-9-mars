@@ -11,8 +11,10 @@ import ru.innopolis.stc9.dao.mappers.UserMapper;
 import ru.innopolis.stc9.pojo.Group;
 import ru.innopolis.stc9.pojo.User;
 
-import javax.persistence.criteria.*;
-import java.util.ArrayList;
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.CriteriaUpdate;
+import javax.persistence.criteria.Root;
 import java.util.List;
 
 @Repository
@@ -137,7 +139,7 @@ public class UserDaoImpl implements UserDao {
     public List<User> getAllStudents() {
         Session session = factory.getCurrentSession();
         Query query = session.createQuery(
-                "SELECT u.id FROM User u where u.permissionGroup = :role");
+                "FROM User u where u.permissionGroup = :role");
         query.setParameter("role", "ROLE_STUDENT");
         return query.getResultList();
     }

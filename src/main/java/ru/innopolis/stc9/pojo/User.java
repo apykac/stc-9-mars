@@ -43,7 +43,7 @@ public class User implements DBObject {
     private int enabled = 1;
     @Getter
     @Setter
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinTable(name = "user_group",
             joinColumns = @JoinColumn( name="userId"),
             inverseJoinColumns = @JoinColumn( name="groupId"))
@@ -68,11 +68,6 @@ public class User implements DBObject {
     @Setter
     @OneToMany(mappedBy = "student", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<Mark> marks;
-    @Getter
-    @Setter
-    @Transient
-    //TODO need to delete
-    private Integer groupId;
 
     public User(String login, String hashPassword, String firstName, String secondName, String middleName) {
         this.login = login;

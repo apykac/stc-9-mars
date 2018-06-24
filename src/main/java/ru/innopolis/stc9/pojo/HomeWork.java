@@ -45,4 +45,11 @@ public class HomeWork {
         this.studentId = studentId;
         this.lessonId = lessonId;
     }
+
+    public HomeWork(int id, String homeWorkURL, int studentId, int lessonId) {
+        this.id = id;
+        this.homeWorkURL = homeWorkURL;
+        this.studentId = studentId;
+        this.lessonId = lessonId;
+    }
 }

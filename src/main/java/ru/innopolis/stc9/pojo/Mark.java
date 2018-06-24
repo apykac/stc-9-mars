@@ -44,4 +44,12 @@ public class Mark {
     @Transient
     //TODO need to delete
     private int lessonId;
+
+    public Mark(int id, int value, int userId, int lessonId, String comment) {
+        this.id = id;
+        this.value = value;
+        this.comment = comment;
+        this.userId = userId;
+        this.lessonId = lessonId;
+    }
 }

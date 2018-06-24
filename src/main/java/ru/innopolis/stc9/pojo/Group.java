@@ -40,4 +40,9 @@ public class Group {
     public Group(String name) {
         this.name = name;
     }
+
+    public Group(int id, String name) {
+        this.id = id;
+        this.name = name;
+    }
 }

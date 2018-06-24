@@ -11,6 +11,7 @@ import ru.innopolis.stc9.dao.interfaces.GroupDao;
 import ru.innopolis.stc9.pojo.Group;
 import ru.innopolis.stc9.service.implementation.GroupServiceImpl;
 import ru.innopolis.stc9.service.interfaces.GroupService;
+import ru.innopolis.stc9.service.interfaces.UserService;
 
 import java.lang.reflect.Field;
 import java.util.ArrayList;
@@ -29,10 +30,12 @@ public class GroupServiceImplTest {
     private GroupDao groupDao;
     private List<Group> list;
     private GroupService groupService;
+    private UserService userService;
+
     @Before
     public void setUp() throws Exception {
         group = new Group(1, "test");
-        groupService = new GroupServiceImpl();
+        groupService = new GroupServiceImpl(groupDao, userService);
         groupDao = PowerMockito.mock(GroupDaoImpl.class);
         Field field = PowerMockito.field(GroupServiceImpl.class, "groupDao");
         field.set(groupService, groupDao);

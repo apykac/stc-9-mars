@@ -24,7 +24,7 @@ import static org.mockito.Mockito.when;
 
 
 public class AttendanceServiceImplTest {
-    Attendance attendance;
+    private Attendance attendance;
     private AttendanceServiceImpl attendanceService;
     private AttendanceDao attendanceDao;
     private List<Attendance> savedAttendance;

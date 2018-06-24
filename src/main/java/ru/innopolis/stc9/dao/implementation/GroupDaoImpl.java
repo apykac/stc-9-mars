@@ -1,102 +1,86 @@
 package ru.innopolis.stc9.dao.implementation;
 
+import org.hibernate.Hibernate;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
-import org.hibernate.Transaction;
+import org.hibernate.query.Query;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Repository;
 import ru.innopolis.stc9.dao.interfaces.GroupDao;
-import ru.innopolis.stc9.dao.mappers.GroupMapper;
 import ru.innopolis.stc9.pojo.Group;
+import ru.innopolis.stc9.pojo.User;
 
-import javax.persistence.criteria.*;
 import java.util.List;
 
-
-//@Repository
+/**
+ * Created by Patrushev Sergey on 19.06.2018.
+ */
+@Repository
 public class GroupDaoImpl implements GroupDao {
+
+    private final SessionFactory factory;
+
     @Autowired
-    private SessionFactory factory;
+    public GroupDaoImpl(SessionFactory factory) {
+        this.factory = factory;
+    }
+
 
     @Override
     public boolean addGroup(Group group) {
         if (group == null) return false;
-        try (Session session = factory.openSession()) {
-            session.beginTransaction();
-            session.save(group);
-            session.getTransaction().commit();
-        }
+        Session session = factory.getCurrentSession();
+        session.save(group);
         return true;
     }
 
     @Override
     public boolean updateGroup(Group group) {
         if (group == null) return false;
-        int result;
-        try (Session session = factory.openSession()) {
-            CriteriaBuilder builder = session.getCriteriaBuilder();
-            CriteriaUpdate<Group> criteria = builder.createCriteriaUpdate(Group.class);
-            Root<Group> root = criteria.from(Group.class);
-            criteria.set(root.get(GroupMapper.NAME), group.getName()).
-                    where(builder.equal(root.get(GroupMapper.ID), group.getId()));
-            Transaction transaction = session.beginTransaction();
-            result = session.createQuery(criteria).executeUpdate();
-            transaction.commit();
-        }
-        return result != 0;
+        Session session = factory.getCurrentSession();
+        session.update(group);
+        return true;
     }
 
     @Override
     public boolean deleteGroup(int groupId) {
         if (groupId < 0) return false;
-        int result;
-        try (Session session = factory.openSession()) {
-            CriteriaBuilder builder = session.getCriteriaBuilder();
-            CriteriaDelete<Group> criteria = builder.createCriteriaDelete(Group.class);
-            Root<Group> root = criteria.from(Group.class);
-            criteria.where(builder.equal(root.get(GroupMapper.ID), groupId));
-            Transaction transaction = session.beginTransaction();
-            result = session.createQuery(criteria).executeUpdate();
-            transaction.commit();
+        Group group;
+        Session session = factory.getCurrentSession();
+        group = findGroupById(groupId);
+        for (User u : group.getUsers()) {
+            u.setGroup(null);
+            session.update(u);
         }
-        return result != 0;
+        session.delete(group);
+        return true;
     }
 
     @Override
     public Group findGroupById(Integer id) {
-        if ((id == null) || (id < 0)) return null;
         Group group;
-        try (Session session = factory.openSession()) {
-            group = session.get(Group.class, id);
-        }
+        Session session = factory.getCurrentSession();
+        group = session.get(Group.class, id);
+        Hibernate.initialize(group.getUsers());
         return group;
     }
 
     @Override
     public Group findGroupByName(String name) {
-        if ((name == null) || name.isEmpty()) return null;
-        List<Group> resultList;
-        try (Session session = factory.openSession()) {
-            CriteriaBuilder builder = session.getCriteriaBuilder();
-            CriteriaQuery<Group> criteria = builder.createQuery(Group.class);
-            Root<Group> root = criteria.from(Group.class);
-            criteria.select(root);
-            criteria.where(builder.equal(root.get(GroupMapper.NAME), name));
-            resultList = session.createQuery(criteria).getResultList();
-        }
-        if (!resultList.isEmpty()) return resultList.get(0);
-        else return null;
+        Query query;
+        Group group;
+        Session session = factory.getCurrentSession();
+        query = session.createQuery("from Group where group.name = name");
+        query.setParameter("name", name);
+        group = (Group) query.iterate().next();
+        Hibernate.initialize(group.getUsers());
+        return group;
     }
 
     @Override
     public List<Group> findAllGroups() {
-        List<Group> resultList;
-        try (Session session = factory.openSession()) {
-            CriteriaBuilder builder = session.getCriteriaBuilder();
-            CriteriaQuery<Group> criteria = builder.createQuery(Group.class);
-            Root<Group> root = criteria.from(Group.class);
-            criteria.select(root);
-            resultList = session.createQuery(criteria).getResultList();
-        }
-        return resultList;
+        Session session = factory.getCurrentSession();
+        Query query = session.createQuery("from Group");
+        return query.getResultList();
     }
 }

@@ -130,9 +130,9 @@ public class GroupController {
      */
     @RequestMapping("/university/teacher/group/deleteStudentFromGroup/{id}/{studentId}")
     public String deleteStudentFromGroup(@PathVariable("id") int id, @PathVariable("studentId") int studentId, Model model) {
-       if (!groupService.isEntityFound(id, studentId)) {
-           return error404Keeper();
-       }
+        if (!groupService.isEntityFound(id, studentId)) {
+            return error404Keeper();
+        }
         userService.updateGroupId(studentId, null);
         logger.info("student deleted from group " + id);
         return forUpdateGroup(id, 0, model);

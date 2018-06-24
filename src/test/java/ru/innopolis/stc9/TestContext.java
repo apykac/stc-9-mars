@@ -10,11 +10,10 @@ import org.springframework.core.env.Environment;
 import org.springframework.jdbc.datasource.DriverManagerDataSource;
 import org.springframework.orm.hibernate4.HibernateTransactionManager;
 import org.springframework.orm.hibernate4.LocalSessionFactoryBean;
-import ru.innopolis.stc9.dao.implementation.GroupDaoHibernateImpl;
+import ru.innopolis.stc9.dao.implementation.GroupDaoImpl;
 import ru.innopolis.stc9.dao.implementation.UserDaoImpl;
 import ru.innopolis.stc9.dao.interfaces.GroupDao;
 import ru.innopolis.stc9.dao.interfaces.UserDao;
-import ru.innopolis.stc9.pojo.Group;
 import ru.innopolis.stc9.service.implementation.GroupServiceImpl;
 import ru.innopolis.stc9.service.implementation.StudentServiceImpl;
 import ru.innopolis.stc9.service.implementation.UserServiceImpl;
@@ -42,7 +41,7 @@ public class TestContext {
 
     @Bean
     public GroupDao groupDao() {
-        return Mockito.mock(GroupDaoHibernateImpl.class);
+        return Mockito.mock(GroupDaoImpl.class);
     }
 
     @Bean

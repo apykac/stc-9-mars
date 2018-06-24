@@ -5,7 +5,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.innopolis.stc9.dao.interfaces.GroupDao;
 import ru.innopolis.stc9.pojo.Group;
+import ru.innopolis.stc9.pojo.User;
 import ru.innopolis.stc9.service.interfaces.GroupService;
+import ru.innopolis.stc9.service.interfaces.UserService;
 
 import java.util.List;
 
@@ -16,8 +18,14 @@ import java.util.List;
 @Service
 @Transactional
 public class GroupServiceImpl implements GroupService {
-    @Autowired
     private GroupDao groupDao;
+    private UserService userService;
+
+    @Autowired
+    public GroupServiceImpl(GroupDao groupDao, UserService userService) {
+        this.groupDao = groupDao;
+        this.userService = userService;
+    }
 
     @Override
     public boolean addGroup(Group group) {
@@ -52,5 +60,39 @@ public class GroupServiceImpl implements GroupService {
     @Override
     public List<Group> findAllGroups() {
         return groupDao.findAllGroups();
+    }
+
+    /**
+     * Метод проверяет, есть ли в БД группа и студент с заданными id.
+     *
+     * @param groupId   - id группы, если не нужно проверять, то указываем "0"
+     * @param studentId - id тудента, если не нужно проверять, то указываем "0"
+     * @return true - если сущности найдены; false - если хотя б одной сущности нет
+     */
+    @Override
+    public boolean isEntityFound(int groupId, int studentId) {
+        boolean foundGroup = false;
+        boolean foundStudent = false;
+        if (groupId != 0) {
+            for (Group g : findAllGroups()) {
+                if (g.getId() == groupId) {
+                    foundGroup = true;
+                    break;
+                }
+            }
+        } else {
+            foundGroup = true;
+        }
+        if (studentId != 0) {
+            for (User u : userService.getAllStudents()) {
+                if (u.getId() == studentId) {
+                    foundStudent = true;
+                    break;
+                }
+            }
+        } else {
+            foundStudent = true;
+        }
+        return (foundGroup && foundStudent);
     }
 }

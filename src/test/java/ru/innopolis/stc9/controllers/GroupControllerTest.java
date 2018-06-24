@@ -3,7 +3,6 @@ package ru.innopolis.stc9.controllers;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.mockito.Mock;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.ContextConfiguration;
@@ -18,7 +17,9 @@ import ru.innopolis.stc9.service.interfaces.GroupService;
 import ru.innopolis.stc9.service.interfaces.StudentService;
 import ru.innopolis.stc9.service.interfaces.UserService;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 import static org.hamcrest.collection.IsCollectionWithSize.hasSize;
 import static org.mockito.Mockito.mock;
