@@ -14,6 +14,7 @@ import ru.innopolis.stc9.dao.implementation.GroupDaoHibernateImpl;
 import ru.innopolis.stc9.dao.implementation.UserDaoImpl;
 import ru.innopolis.stc9.dao.interfaces.GroupDao;
 import ru.innopolis.stc9.dao.interfaces.UserDao;
+import ru.innopolis.stc9.pojo.Group;
 import ru.innopolis.stc9.service.implementation.GroupServiceImpl;
 import ru.innopolis.stc9.service.implementation.StudentServiceImpl;
 import ru.innopolis.stc9.service.implementation.UserServiceImpl;

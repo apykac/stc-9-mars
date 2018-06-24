@@ -84,7 +84,7 @@
                                     <select name="groupStatus" class="form-control" id="groupStatus"
                                             data-toggle="tooltip" data-placement="top"
                                             title="Выбрать группу из которой нужно перенести студента">
-                                        <option value="">Без группы</option>
+                                        <option value="0">Без группы</option>
                                         <c:forEach var="group" items="${requestScope.get('groups')}">
                                             <c:if test="${group.id != requestScope.get('id')}">
                                                 <option value="${group.id}">${group.name}</option>
