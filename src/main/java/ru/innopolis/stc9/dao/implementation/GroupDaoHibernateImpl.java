@@ -8,6 +8,7 @@ import org.hibernate.exception.ConstraintViolationException;
 import org.hibernate.query.Query;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.EnableTransactionManagement;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import ru.innopolis.stc9.dao.interfaces.GroupDao;
@@ -31,80 +32,68 @@ public class GroupDaoHibernateImpl implements GroupDao {
 
 
     @Override
+    @Transactional
     public boolean addGroup(Group group) {
         if (group == null) return false;
-        try (Session session = factory.openSession()) {
-            session.beginTransaction();
+        Session session = factory.getCurrentSession();
             session.save(group);
-            session.getTransaction().commit();
             return true;
-        }
     }
 
     @Override
+    @Transactional
     public boolean updateGroup(Group group) {
         if (group == null) return false;
-        try (Session session = factory.openSession()) {
-            session.beginTransaction();
+        Session session = factory.getCurrentSession();
             session.update(group);
-            session.getTransaction().commit();
             return true;
-        }
     }
 
     @Override
+    @Transactional
     public boolean deleteGroup(int groupId) {
         if (groupId < 0) return false;
         Group group;
-        try (Session session = factory.openSession()) {
-            session.beginTransaction();
+        Session session = factory.getCurrentSession();
             group = findGroupById(groupId);
             for (User u: group.getUsers()) {
                 u.setGroup(null);
                 session.update(u);
             }
             session.delete(group);
-            session.getTransaction().commit();
             return true;
-        }
     }
 
     @Override
+    @Transactional
     public Group findGroupById(Integer id) {
         Group group;
-        try (Session session = factory.openSession()) {
-            session.beginTransaction();
+        Session session = factory.getCurrentSession();
             group = session.get(Group.class, id);
             Hibernate.initialize(group.getUsers());
-            session.getTransaction().commit();
-        }
         return group;
     }
 
     @Override
+    @Transactional
     public Group findGroupByName(String name) {
         Query query;
         Group group;
-        try (Session session = factory.openSession()) {
-            session.beginTransaction();
+        Session session = factory.getCurrentSession();
             query = session.createQuery("from Group where group.name = name");
             query.setParameter("name", name);
             group = (Group) query.iterate().next();
             Hibernate.initialize(group.getUsers());
-            session.getTransaction().commit();
-        }
         return group;
     }
 
     @Override
+    @Transactional
     public List<Group> findAllGroups() {
         List<Group> list;
-        try (Session session = factory.openSession()) {
-            session.beginTransaction();
+        Session session = factory.getCurrentSession();
             Query query = session.createQuery("from Group");
             list = query.list();
-            session.getTransaction().commit();
-        }
         return list;
     }
 }
