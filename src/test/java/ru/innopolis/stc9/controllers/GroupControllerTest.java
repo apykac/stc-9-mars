@@ -50,7 +50,7 @@ public class GroupControllerTest {
         mockMvc = MockMvcBuilders.standaloneSetup(new GroupController(groupServiceMock, userServiceMock, studentService)).build();
         Group one = new Group(1, "test");
         Group two = new Group(2, "test2");
-        Set<User> set = new HashSet<>();
+        List<User> set = new ArrayList<>();
         User user = new User();
         User user2 = new User();
         groupList.add(one);

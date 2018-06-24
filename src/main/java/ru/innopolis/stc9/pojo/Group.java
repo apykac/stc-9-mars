@@ -1,17 +1,17 @@
 package ru.innopolis.stc9.pojo;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Set;
 
 @Entity
 @Table(name = "studygroup")
 @AllArgsConstructor
 @NoArgsConstructor
+@EqualsAndHashCode
 public class Group {
     @Getter
     @Setter
@@ -21,17 +21,26 @@ public class Group {
     private int id;
     @Getter
     @Setter
+    @Column(unique = true)
     private String name;
-
     @Getter
     @Setter
-    @OneToMany(mappedBy = "group", fetch = FetchType.LAZY)
-    private Set<User> users;
+    @ManyToMany(fetch = FetchType.LAZY)
+    @JoinTable(name = "education",
+            joinColumns = @JoinColumn(name = "groupId"),
+            inverseJoinColumns = @JoinColumn(name = "subjectId"))
+    private List<Subject> subjects;
+    @Getter
+    @Setter
+    @OneToMany(fetch = FetchType.LAZY)
+    @JoinTable(name = "user_group",
+            joinColumns = @JoinColumn( name="groupId"),
+            inverseJoinColumns = @JoinColumn( name="userId"))
+    private List<User> users = new ArrayList<>();
 
     public Group(String name) {
         this.name = name;
     }
-
     public Group(int id, String name) {
         this.id = id;
         this.name = name;

@@ -100,7 +100,7 @@ public class StudentsServiceImplTest {
         Assert.assertEquals(groupList, model.asMap().get("groups"));
         Assert.assertEquals("", model.asMap().get("groupName"));
         Assert.assertEquals(123, model.asMap().get("id"));
-        Assert.assertEquals(new HashSet<>(), model.asMap().get("students"));
+        Assert.assertEquals(new ArrayList<>(), model.asMap().get("students"));
         Assert.assertEquals(studentsWithoutGroupId, model.asMap().get("studentsWOG"));
     }
 
