@@ -11,9 +11,11 @@ public interface MessageService {
 
     boolean addMessage(MultiValueMap<String, String> incParam);
 
-    List<Message>[] getAllMessages(int userId, String role);
+    List<Message>[] getAllMessages(User user);
 
     Message getMessageById(int id);
+
+    Message getMessageByIdWithFromUser(int id);
 
     boolean deleteMessageById(int id);
 

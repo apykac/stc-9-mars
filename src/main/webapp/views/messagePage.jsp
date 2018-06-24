@@ -27,10 +27,10 @@
                                     <table class="table">
                                         <tbody>
                                         <tr class="m_editSubject" style="cursor:pointer">
-                                            <td><b>От кого:</b> ${message.uname}</td>
+                                            <td><b>От кого:</b>${message.uname}</td>
                                         </tr>
                                         <tr class="m_editSubject" style="cursor:pointer">
-                                            <td><b>Тема:</b> ${message.theme}</td>
+                                            <td><b>Тема:</b>${message.theme}</td>
                                         </tr>
                                         <tr class="m_editSubject" style="cursor:pointer">
                                             <td>${message.text}</td>
@@ -77,7 +77,13 @@
                                 <label for="to_user_id" class="col-sm-2 control-label">Тема</label>
                                 <div class="col-sm-10"><input type="text" class="form-control" id="to_user_id"
                                                               placeholder="to_user_id"
-                                                              name="toUserId" value="${message.userId}"></div>
+                                                              name="toUserId" value="${message.fromUser.id}"></div>
+                            </div>
+                            <div class="form-group hidden">
+                                <label for="to_user_id" class="col-sm-2 control-label">Тема</label>
+                                <div class="col-sm-10"><input type="text" class="form-control" id="from_user_id"
+                                                              placeholder="from_user_id"
+                                                              name="fromUserId" value="${fromUser}"></div>
                             </div>
                             <div class="form-group">
                                 <label for="editTheme" class="col-sm-2 control-label">Тема</label>

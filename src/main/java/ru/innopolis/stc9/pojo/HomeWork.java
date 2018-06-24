@@ -21,12 +21,12 @@ public class HomeWork {
     private String homeWorkURL;
     @Getter
     @Setter
-    @ManyToOne(optional = false, cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @ManyToOne(optional = false, fetch = FetchType.LAZY)
     @JoinColumn(name = "studentId", nullable = false)
     private User student;
     @Getter
     @Setter
-    @ManyToOne(optional = false, cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @ManyToOne(optional = false, fetch = FetchType.LAZY)
     @JoinColumn(name = "lessonId", nullable = false)
     private Lessons lesson;
     @Getter

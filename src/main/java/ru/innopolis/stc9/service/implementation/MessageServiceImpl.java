@@ -2,6 +2,7 @@ package ru.innopolis.stc9.service.implementation;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.MultiValueMap;
 import ru.innopolis.stc9.dao.interfaces.MessageDao;
 import ru.innopolis.stc9.dao.mappers.Mapper;
@@ -14,15 +15,20 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Service
+@Transactional
 public class MessageServiceImpl implements MessageService {
     private Mapper mapper = new MessageMapper();
-    @Autowired
     MessageDao messageDao;
+
+    @Autowired
+    public MessageServiceImpl(MessageDao messageDao) {
+        this.messageDao = messageDao;
+    }
 
     @Override
     public List<String> isCorrectData(MultiValueMap<String, String> incParam) {
         List<String> result = new ArrayList<>();
-        if((incParam == null) || incParam.isEmpty())
+        if ((incParam == null) || incParam.isEmpty())
             return result;
         if ((incParam.get(MessageMapper.TEXT) != null) && incParam.get(MessageMapper.TEXT).get(0).isEmpty())
             result.add("Не пытайтесь отправить пустое сообщение!");
@@ -31,19 +37,24 @@ public class MessageServiceImpl implements MessageService {
 
     @Override
     public boolean addMessage(MultiValueMap<String, String> incParam) {
-        if((incParam == null) || incParam.isEmpty())
+        if ((incParam == null) || incParam.isEmpty())
             return false;
+        String toUser = "toUserId";
+        String fromUser = "fromUserId";
+        Integer toUserId = incParam.get(toUser) == null? null : Integer.parseInt(incParam.get(toUser).get(0));
+        Integer fromUserId = incParam.get(fromUser) == null? null : Integer.parseInt(incParam.get(fromUser).get(0));
         return messageDao.addMessage(
-                (Message) mapper.getByParam(
-                        incParam));
+                (Message) mapper.getByParam(incParam),
+                toUserId,
+                fromUserId);
     }
 
     @Override
-    public List<Message>[] getAllMessages(int toUserId, String role) {
-        if ((toUserId < 0) || (role == null) || role.isEmpty()) return new List[2];
+    public List<Message>[] getAllMessages(User user) {
+        if (user == null) return new List[2];
         List<Message>[] result = new List[2];
-        result[0] = messageDao.getAllMessagesByRole(role);
-        result[1] = messageDao.getAllMessagesByToUserId(toUserId);
+        result[0] = messageDao.getAllMessagesByRole(user);
+        result[1] = messageDao.getAllMessagesByToUserId(user);
         return result;
     }
 
@@ -51,6 +62,12 @@ public class MessageServiceImpl implements MessageService {
     public Message getMessageById(int id) {
         if (id < 0) return null;
         return messageDao.getMessageById(id);
+    }
+
+    @Override
+    public Message getMessageByIdWithFromUser(int id) {
+        if (id < 0) return null;
+        return messageDao.getMessageByIdWithFromUser(id);
     }
 
     @Override

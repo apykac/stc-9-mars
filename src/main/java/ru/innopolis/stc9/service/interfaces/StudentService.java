@@ -19,5 +19,5 @@ public interface StudentService {
 
     List<User> getAllStudentExceptId(List<User> studentsList, Integer groupId);
 
-    void distributionStudentsByGroup(List<Group> groupsList, List<User> studentsList);
+    //void distributionStudentsByGroup(List<Group> groupsList, List<User> studentsList);
 }

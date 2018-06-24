@@ -34,7 +34,7 @@
                                         </tr>
                                         </thead>
                                         <tbody>
-                                        <c:forEach items="${requestScope.get('commonList')}" var="message">
+                                        <c:forEach items="${commonList}" var="message">
                                             <tr>
                                                 <td>${message.uname}</td>
                                                 <td>${message.theme}</td>
@@ -78,7 +78,7 @@
                                         </tr>
                                         </thead>
                                         <tbody>
-                                        <c:forEach items="${requestScope.get('privateList')}" var="message">
+                                        <c:forEach items="${privateList}" var="message">
                                             <tr>
                                                 <td>${message.id}</td>
                                                 <td>${message.uname}</td>

@@ -43,13 +43,19 @@ public class User implements DBObject {
     private int enabled = 1;
     @Getter
     @Setter
-    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-    @JoinColumn(name = "groupId", nullable = true)
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinTable(name = "user_group",
+            joinColumns = @JoinColumn( name="userId"),
+            inverseJoinColumns = @JoinColumn( name="groupId"))
     private Group group = null;
     @Getter
     @Setter
-    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    private List<Message> messages;
+    @OneToMany(mappedBy = "toUser", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private List<Message> incomingMessages;
+    @Getter
+    @Setter
+    @OneToMany(mappedBy = "fromUser", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private List<Message> upcomingMessages;
     @Getter
     @Setter
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
@@ -74,14 +80,5 @@ public class User implements DBObject {
         this.firstName = firstName;
         this.secondName = secondName;
         this.middleName = middleName;
-        this.permissionGroup = "ROLE_STUDENT";
-        this.enabled = 1;
-    }
-
-    public User(String firstName, String secondName, String middleName, Group group) {
-        this.firstName = firstName;
-        this.secondName = secondName;
-        this.middleName = middleName;
-        this.group = group;
     }
 }

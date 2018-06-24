@@ -2,6 +2,7 @@ package ru.innopolis.stc9.service.implementation;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import ru.innopolis.stc9.dao.interfaces.GroupDao;
 import ru.innopolis.stc9.pojo.Group;
 import ru.innopolis.stc9.service.interfaces.GroupService;
@@ -13,6 +14,7 @@ import java.util.List;
  * Реализация интерфейса GroupService
  */
 @Service
+@Transactional
 public class GroupServiceImpl implements GroupService {
     @Autowired
     private GroupDao groupDao;

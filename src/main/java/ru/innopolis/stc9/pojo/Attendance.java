@@ -24,12 +24,12 @@ public class Attendance {
     private boolean attended;
     @Getter
     @Setter
-    @ManyToOne(optional = false, cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @ManyToOne(optional = false, fetch = FetchType.LAZY)
     @JoinColumn(name = "lessonId", nullable = false)
     private Lessons lesson;
     @Getter
     @Setter
-    @ManyToOne(optional = false, cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @ManyToOne(optional = false, fetch = FetchType.LAZY)
     @JoinColumn(name = "userId", nullable = false)
     private User user;
     @Getter

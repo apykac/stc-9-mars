@@ -2,6 +2,7 @@ package ru.innopolis.stc9.pojo;
 
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
@@ -9,6 +10,7 @@ import javax.persistence.*;
 @Entity
 @Table(name = "message")
 @EqualsAndHashCode
+@NoArgsConstructor
 public class Message implements DBObject {
     @Getter
     @Setter
@@ -30,24 +32,12 @@ public class Message implements DBObject {
     private String theme;
     @Getter
     @Setter
-    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "toUserId", nullable = true)
-    private User user;
+    private User toUser;
     @Getter
     @Setter
-    @Transient
-    //TODO need to delete
-    private int userId;
-    @Getter
-    @Setter
-    @Transient
-    //TODO need to delete
-    private Integer toUserId;
-
-    public Message() {
-        this.text = "";
-        this.toUserGroup = "ROLE_ADMIN";
-        this.uname = "";
-        this.theme = "";
-    }
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "fromUserId", nullable = true)
+    private User fromUser;
 }

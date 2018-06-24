@@ -24,14 +24,17 @@ public class Group {
     private String name;
     @Getter
     @Setter
-    @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(name = "education",
             joinColumns = @JoinColumn(name = "groupId"),
             inverseJoinColumns = @JoinColumn(name = "subjectId"))
     private List<Subject> subjects;
     @Getter
     @Setter
-    @OneToMany(mappedBy = "group", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @OneToMany(fetch = FetchType.LAZY)
+    @JoinTable(name = "user_group",
+            joinColumns = @JoinColumn( name="groupId"),
+            inverseJoinColumns = @JoinColumn( name="userId"))
     private List<User> users = new ArrayList<>();
 
     public Group(String name) {

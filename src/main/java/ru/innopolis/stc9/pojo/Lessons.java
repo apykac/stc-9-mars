@@ -29,7 +29,7 @@ public class Lessons {
     private String name;
     @Getter
     @Setter
-    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "subjectId", nullable = false)
     private Subject subject;
     @Getter

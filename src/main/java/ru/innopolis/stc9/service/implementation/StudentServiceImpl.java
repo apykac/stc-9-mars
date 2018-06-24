@@ -2,7 +2,8 @@ package ru.innopolis.stc9.service.implementation;
 
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
 import ru.innopolis.stc9.pojo.Group;
 import ru.innopolis.stc9.pojo.User;
@@ -13,13 +14,18 @@ import ru.innopolis.stc9.service.interfaces.UserService;
 import java.util.ArrayList;
 import java.util.List;
 
-@Component
+@Service
+@Transactional
 public class StudentServiceImpl implements StudentService {
     private static Logger logger = Logger.getLogger(StudentServiceImpl.class);
-    @Autowired
     GroupService groupService;
-    @Autowired
     UserService userService;
+
+    @Autowired
+    public StudentServiceImpl(GroupService groupService, UserService userService) {
+        this.groupService = groupService;
+        this.userService = userService;
+    }
 
     @Override
     public boolean isDuplicate(List<Group> groupsList, Model model, String name) {

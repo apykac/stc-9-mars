@@ -49,12 +49,10 @@ public class GroupDaoHibernateImpl implements GroupDao {
     @Override
     public boolean deleteGroup(int groupId) {
         if (groupId < 0) return false;
-        try (Session session = factory.openSession()) {
-            session.beginTransaction();
-            session.delete(findGroupById(groupId));
-            session.getTransaction().commit();
-            return true;
-        }
+        Session session = factory.getCurrentSession();
+        Group group = findGroupById(groupId);
+        session.delete(group);
+        return true;
     }
 
     @Override

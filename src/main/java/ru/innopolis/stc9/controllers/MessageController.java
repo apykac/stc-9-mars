@@ -10,7 +10,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import ru.innopolis.stc9.dao.mappers.MessageMapper;
 import ru.innopolis.stc9.pojo.Message;
+import ru.innopolis.stc9.pojo.User;
 import ru.innopolis.stc9.service.interfaces.MessageService;
+import ru.innopolis.stc9.service.interfaces.UserService;
 
 import javax.servlet.http.HttpSession;
 import java.util.ArrayList;
@@ -20,8 +22,14 @@ import java.util.List;
 public class MessageController {
     private String error = "error";
 
-    @Autowired
     MessageService messageService;
+    UserService userService;
+
+    @Autowired
+    public MessageController(MessageService messageService, UserService userService) {
+        this.messageService = messageService;
+        this.userService = userService;
+    }
 
     @RequestMapping(value = "/university/profile/feedback", method = RequestMethod.GET)
     public String feedbackGet(Model model) {
@@ -32,7 +40,9 @@ public class MessageController {
     public String feedbackPost(@RequestBody MultiValueMap<String, String> incParam,
                                HttpSession session,
                                Model model) {
-        addHeadToMessage(incParam, session);
+        incParam.add(MessageMapper.USERID, session.getAttribute(SessionDataInform.ID).toString());
+        incParam.add(MessageMapper.UNAME, "[" + session.getAttribute(SessionDataInform.LOGIN) + "] " +
+                session.getAttribute(SessionDataInform.NAME));
         List<String> errors = messageService.isCorrectData(incParam);
         List<String> successList = new ArrayList<>();
         if (errors.isEmpty())
@@ -45,9 +55,8 @@ public class MessageController {
 
     @RequestMapping(value = "/university/messages", method = RequestMethod.GET)
     public String messagesToPage(HttpSession session, Model model) {
-        int currentUserId = (int) session.getAttribute(SessionDataInform.ID);
-        String currentUserRole = (String) session.getAttribute(SessionDataInform.ROLE);
-        List<Message>[] commonMessagesList = messageService.getAllMessages(currentUserId, currentUserRole);
+        User user = userService.findUserById((int)session.getAttribute(SessionDataInform.ID));
+        List<Message>[] commonMessagesList = messageService.getAllMessages(user);
         session.setAttribute(SessionDataInform.MSG, commonMessagesList[0].size() + commonMessagesList[1].size());
         model.addAttribute("commonList", commonMessagesList[0] == null ? new ArrayList<>() : commonMessagesList[0]);
         model.addAttribute("privateList", commonMessagesList[1] == null ? new ArrayList<>() : commonMessagesList[1]);
@@ -55,9 +64,10 @@ public class MessageController {
     }
 
     @RequestMapping(value = "/university/messages/{id}", method = RequestMethod.GET)
-    public String editMessageGet(@PathVariable("id") int id, Model model) {
-        Message message = messageService.getMessageById(id);
+    public String editMessageGet(@PathVariable("id") int id, Model model, HttpSession session) {
+        Message message = messageService.getMessageByIdWithFromUser(id);
         model.addAttribute("message", message);
+        model.addAttribute("fromUser",session.getAttribute(SessionDataInform.ID));
         return "/views/messagePage";
     }
 
@@ -70,7 +80,7 @@ public class MessageController {
     public String deleteMessagePost(@PathVariable("id") int id, Model model, HttpSession session) {
         if (!messageService.deleteMessageById(id)) {
             model.addAttribute(error, "Fail to delete message by DAO");
-            return editMessageGet(id, model);
+            return editMessageGet(id, model, session);
         } else {
             session.setAttribute(SessionDataInform.MSG, (int) session.getAttribute(SessionDataInform.MSG) - 1);
             return "redirect:/university/start?message=deleted";
@@ -89,19 +99,17 @@ public class MessageController {
                                    Model model) {
         if (!messageService.isCorrectData(incParam).isEmpty())
             model.addAttribute(error, "Сообщение пустое, введите текст");
-        else tryToAddMessage(incParam, session, model);
-        return editMessageGet(id, model);
+        else{
+
+            tryToAddMessage(incParam, session, model);
+        }
+        return editMessageGet(id, model, session);
     }
 
     private void tryToAddMessage(MultiValueMap<String, String> incParam, HttpSession session, Model model) {
-        addHeadToMessage(incParam, session);
-        if (!messageService.addMessage(incParam)) model.addAttribute(error, "Fail to add message by DAO");
-        else model.addAttribute("success", "Сообщение отправлено успешно");
-    }
-
-    private void addHeadToMessage(MultiValueMap<String, String> incParam, HttpSession session) {
-        incParam.add(MessageMapper.USERID, session.getAttribute(SessionDataInform.ID).toString());
         incParam.add(MessageMapper.UNAME, "[" + session.getAttribute(SessionDataInform.LOGIN) + "] " +
                 session.getAttribute(SessionDataInform.NAME));
+        if (!messageService.addMessage(incParam)) model.addAttribute(error, "Fail to add message by DAO");
+        else model.addAttribute("success", "Сообщение отправлено успешно");
     }
 }

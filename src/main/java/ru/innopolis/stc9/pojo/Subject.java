@@ -24,7 +24,7 @@ public class Subject {
     private String name;
     @Getter
     @Setter
-    @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(name = "education",
             joinColumns = @JoinColumn(name = "subjectId"),
             inverseJoinColumns = @JoinColumn(name = "groupId"))
