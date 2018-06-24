@@ -64,6 +64,11 @@ public class UserServiceImplTest {
         user.setMiddleName("MiddleName");
         user.setGroupId(groupId);
         user.setEnabled(enabled);
+        if (groupId!=null) {
+            user.setGroup(new Group(groupId, "test" + groupId));
+        } else {
+            user.setGroup(null);
+        }
         return user;
     }
 
@@ -328,15 +333,15 @@ public class UserServiceImplTest {
         PowerMockito.when(userDao.findUserByUserId(1)).thenReturn(createLegalUser(1, "ROLE_ADMIN", 1, 1));
         PowerMockito.mockStatic(CryptService.class);
         PowerMockito.when(CryptService.isMatched("password1", "password1")).thenReturn(true);
-        Assert.assertEquals("Wrong old password", userService.checkPasswordUpdateIsPossible(null,legalUser));
-        Assert.assertEquals("Wrong old password", userService.checkPasswordUpdateIsPossible(new HttpHeaders(),legalUser));
-        Assert.assertEquals("Wrong old password", userService.checkPasswordUpdateIsPossible(map,null));
-        Assert.assertEquals("Wrong old password", userService.checkPasswordUpdateIsPossible(null,legalUser));
-        Assert.assertEquals("Passwords not match", userService.checkPasswordUpdateIsPossible(map,legalUser));
+        Assert.assertEquals("Wrong old password", userService.checkPasswordUpdateIsPossible(null, legalUser));
+        Assert.assertEquals("Wrong old password", userService.checkPasswordUpdateIsPossible(new HttpHeaders(), legalUser));
+        Assert.assertEquals("Wrong old password", userService.checkPasswordUpdateIsPossible(map, null));
+        Assert.assertEquals("Wrong old password", userService.checkPasswordUpdateIsPossible(null, legalUser));
+        Assert.assertEquals("Passwords not match", userService.checkPasswordUpdateIsPossible(map, legalUser));
         map.put("newPassword", new ArrayList<>(Collections.singletonList("")));
-        Assert.assertEquals("Passwords not match", userService.checkPasswordUpdateIsPossible(map,legalUser));
+        Assert.assertEquals("Passwords not match", userService.checkPasswordUpdateIsPossible(map, legalUser));
         map.put("newPassword", new ArrayList<>(Collections.singletonList("1")));
-        Assert.assertEquals("Passwords not match", userService.checkPasswordUpdateIsPossible(map,legalUser));
+        Assert.assertEquals("Passwords not match", userService.checkPasswordUpdateIsPossible(map, legalUser));
     }
 
     @Test

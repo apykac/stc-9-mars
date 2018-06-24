@@ -112,8 +112,6 @@ public class GroupControllerTest {
                 .andExpect(model().attribute("groups", hasSize(2)))
                 .andExpect(model().attribute("groupName", "test"))
                 .andExpect(model().attribute("id", 1))
-                //todo найти как тестировать hibernate(
-//                .andExpect(model().attribute("students", hasSize(0)))
                 .andExpect(model().attribute("studentsWOG", hasSize(0)));
     }
 

@@ -30,6 +30,7 @@ public class StudentsServiceImplTest {
     private UserService userService;
     private List<Group> groupList;
     private List<User> studentList;
+    private Group group;
 
     @Before
     public void setUp() throws IllegalAccessException {
@@ -44,6 +45,7 @@ public class StudentsServiceImplTest {
         groupList = getGroupList();
         studentList = getStudentList();
         model = new BindingAwareModelMap();
+         group = PowerMockito.mock(Group.class);
     }
 
     private List<Group> getGroupList() {
@@ -64,13 +66,13 @@ public class StudentsServiceImplTest {
     public void addingMainAttributeToModelCorrectDataFullMatchesTest() {
         PowerMockito.when(groupService.findAllGroups()).thenReturn(groupList);
         PowerMockito.when(userService.getAllStudents()).thenReturn(studentList);
-        List<User> studentsWithGroupId = new ArrayList<>(Arrays.asList(studentList.get(2), studentList.get(3)));
+        PowerMockito.when(groupService.findGroupById(2)).thenReturn(group);
+        PowerMockito.when(group.getName()).thenReturn("2");
         List<User> studentsWithoutGroupId = new ArrayList<>(Arrays.asList(studentList.get(0), studentList.get(1)));
         studentService.addingMainAttributeToModel(model, 2, 1);
         Assert.assertEquals(groupList, model.asMap().get("groups"));
         Assert.assertEquals("2", model.asMap().get("groupName"));
         Assert.assertEquals(2, model.asMap().get("id"));
-        Assert.assertEquals(studentsWithGroupId, model.asMap().get("students"));
         Assert.assertEquals(studentsWithoutGroupId, model.asMap().get("studentsWOG"));
     }
 
@@ -78,12 +80,12 @@ public class StudentsServiceImplTest {
     public void addingMainAttributeToModelCorrectDataNotFullMatchesTest1() {
         PowerMockito.when(groupService.findAllGroups()).thenReturn(groupList);
         PowerMockito.when(userService.getAllStudents()).thenReturn(studentList);
-        List<User> studentsWithGroupId = new ArrayList<>(Arrays.asList(studentList.get(0), studentList.get(1)));
+        PowerMockito.when(groupService.findGroupById(1)).thenReturn(group);
+        PowerMockito.when(group.getName()).thenReturn("1");
         studentService.addingMainAttributeToModel(model, 1, 1);
         Assert.assertEquals(groupList, model.asMap().get("groups"));
         Assert.assertEquals("1", model.asMap().get("groupName"));
         Assert.assertEquals(1, model.asMap().get("id"));
-        Assert.assertEquals(studentsWithGroupId, model.asMap().get("students"));
         Assert.assertEquals(new ArrayList<>(), model.asMap().get("studentsWOG"));
     }
 
@@ -91,12 +93,14 @@ public class StudentsServiceImplTest {
     public void addingMainAttributeToModelCorrectDataNotFullMatchesTest2() {
         PowerMockito.when(groupService.findAllGroups()).thenReturn(groupList);
         PowerMockito.when(userService.getAllStudents()).thenReturn(studentList);
+        PowerMockito.when(groupService.findGroupById(123)).thenReturn(group);
+        PowerMockito.when(group.getName()).thenReturn("");
         List<User> studentsWithoutGroupId = new ArrayList<>(Arrays.asList(studentList.get(0), studentList.get(1)));
         studentService.addingMainAttributeToModel(model, 123, 1);
         Assert.assertEquals(groupList, model.asMap().get("groups"));
         Assert.assertEquals("", model.asMap().get("groupName"));
         Assert.assertEquals(123, model.asMap().get("id"));
-        Assert.assertEquals(new ArrayList<>(), model.asMap().get("students"));
+        Assert.assertEquals(new HashSet<>(), model.asMap().get("students"));
         Assert.assertEquals(studentsWithoutGroupId, model.asMap().get("studentsWOG"));
     }
 
@@ -104,12 +108,12 @@ public class StudentsServiceImplTest {
     public void addingMainAttributeToModelCorrectDataNotFullMatchesTest3() {
         PowerMockito.when(groupService.findAllGroups()).thenReturn(groupList);
         PowerMockito.when(userService.getAllStudents()).thenReturn(studentList);
-        List<User> studentsWithGroupId = new ArrayList<>(Arrays.asList(studentList.get(0), studentList.get(1)));
+        PowerMockito.when(groupService.findGroupById(1)).thenReturn(group);
+        PowerMockito.when(group.getName()).thenReturn("1");
         studentService.addingMainAttributeToModel(model, 1, 123);
         Assert.assertEquals(groupList, model.asMap().get("groups"));
         Assert.assertEquals("1", model.asMap().get("groupName"));
         Assert.assertEquals(1, model.asMap().get("id"));
-        Assert.assertEquals(studentsWithGroupId, model.asMap().get("students"));
         Assert.assertEquals(new ArrayList<>(), model.asMap().get("studentsWOG"));
     }
 
@@ -154,7 +158,6 @@ public class StudentsServiceImplTest {
 
     @Test
     public void studentFilterIncorrectDataTest() {
-        Assert.assertEquals(new ArrayList<>(), studentService.studentFilter(null, 2, 1));
         Assert.assertEquals(new ArrayList<>(), studentService.studentFilter(new ArrayList<>(), 2, 1));
         Assert.assertEquals(new ArrayList<>(), studentService.studentFilter(studentList, -1, 1));
         Assert.assertEquals(new ArrayList<>(), studentService.studentFilter(studentList, 2, -1));

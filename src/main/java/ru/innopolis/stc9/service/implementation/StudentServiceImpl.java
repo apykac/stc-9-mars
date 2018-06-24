@@ -51,13 +51,16 @@ public class StudentServiceImpl implements StudentService {
     @Override
     public List<User> studentFilter(List<User> studentList, int filterId, int currentGroupId) {
         List<User> filteredStudents = new ArrayList<>();
+        if (studentList == null || studentList.isEmpty() || filterId < 0 || currentGroupId < 0) {
+            return filteredStudents;
+        }
         for (User u : studentList) {
             if (filterId == 0) {
                 if (u.getGroup() == null) {
                     filteredStudents.add(u);
                 }
             } else {
-                if (u.getGroup() != null && u.getGroup().getId() == filterId) {
+                if (u.getGroup() != null && u.getGroup().getId() == filterId && u.getGroup().getId() != currentGroupId) {
                     filteredStudents.add(u);
                 }
             }

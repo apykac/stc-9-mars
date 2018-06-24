@@ -28,10 +28,6 @@ public class Group {
     @OneToMany(mappedBy = "group", fetch = FetchType.LAZY)
     private Set<User> users;
 
-    public void addUsers(User user) {
-        users.add(user);
-    }
-
     public Group(String name) {
         this.name = name;
     }

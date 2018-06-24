@@ -1,13 +1,18 @@
 package ru.innopolis.stc9.dao.implementation;
 
 import org.hibernate.Hibernate;
+import org.hibernate.ObjectNotFoundException;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
+import org.hibernate.exception.ConstraintViolationException;
 import org.hibernate.query.Query;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 import ru.innopolis.stc9.dao.interfaces.GroupDao;
 import ru.innopolis.stc9.pojo.Group;
+import ru.innopolis.stc9.pojo.User;
 
 import java.util.List;
 
@@ -50,9 +55,15 @@ public class GroupDaoHibernateImpl implements GroupDao {
     @Override
     public boolean deleteGroup(int groupId) {
         if (groupId < 0) return false;
+        Group group;
         try (Session session = factory.openSession()) {
             session.beginTransaction();
-            session.delete(findGroupById(groupId));
+            group = findGroupById(groupId);
+            for (User u: group.getUsers()) {
+                u.setGroup(null);
+                session.update(u);
+            }
+            session.delete(group);
             session.getTransaction().commit();
             return true;
         }
