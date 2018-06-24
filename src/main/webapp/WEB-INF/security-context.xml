@@ -35,9 +35,9 @@
                 class="org.springframework.jdbc.datasource.DriverManagerDataSource">
         <beans:property name="driverClassName" value="com.mysql.cj.jdbc.Driver" />
         <beans:property name="url"
-                        value="jdbc:mysql://server190.hosting.reg.ru:3306/u0425587_mars2?serverTimezone=UTC&amp;useUnicode=yes&amp;characterEncoding=UTF-8"/>
-        <beans:property name="username" value="u0425587_mars"/>
-        <beans:property name="password" value="vrKWZga2bt" />
+                        value="jdbc:mysql://localhost:3306/test?serverTimezone=UTC&amp;useUnicode=yes&amp;characterEncoding=UTF-8"/>
+        <beans:property name="username" value="test"/>
+        <beans:property name="password" value="test"/>
     </beans:bean>
     <!--<beans:bean id="dataSource"
                 class="org.springframework.jdbc.datasource.DriverManagerDataSource">

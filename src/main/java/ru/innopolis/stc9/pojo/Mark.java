@@ -23,11 +23,25 @@ public class Mark {
     private int value;
     @Getter
     @Setter
+    private String comment;
+    @Getter
+    @Setter
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "studentId", nullable = false)
+    private User student;
+    @Getter
+    @Setter
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "lessonId", nullable = false)
+    private Lessons lesson;
+    @Getter
+    @Setter
+    @Transient
+    //TODO need to delete
     private int userId;
     @Getter
     @Setter
+    @Transient
+    //TODO need to delete
     private int lessonId;
-    @Getter
-    @Setter
-    private String comment;
 }

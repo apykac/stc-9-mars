@@ -1,11 +1,6 @@
 package ru.innopolis.stc9.pojo;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
-import org.apache.commons.lang.builder.EqualsBuilder;
-import org.apache.commons.lang.builder.HashCodeBuilder;
+import lombok.*;
 
 import javax.persistence.*;
 
@@ -13,6 +8,7 @@ import javax.persistence.*;
 @Table(name = "homework")
 @NoArgsConstructor
 @AllArgsConstructor
+@EqualsAndHashCode
 public class HomeWork {
     @Getter
     @Setter
@@ -25,40 +21,28 @@ public class HomeWork {
     private String homeWorkURL;
     @Getter
     @Setter
+    @ManyToOne(optional = false, fetch = FetchType.LAZY)
+    @JoinColumn(name = "studentId", nullable = false)
+    private User student;
+    @Getter
+    @Setter
+    @ManyToOne(optional = false, fetch = FetchType.LAZY)
+    @JoinColumn(name = "lessonId", nullable = false)
+    private Lessons lesson;
+    @Getter
+    @Setter
+    @Transient
+    //TODO need to delete
     private int studentId;
     @Getter
     @Setter
+    @Transient
+    //TODO need to delete
     private int lessonId;
 
     public HomeWork(String homeWorkURL, int studentId, int lessonId) {
         this.homeWorkURL = homeWorkURL;
         this.studentId = studentId;
         this.lessonId = lessonId;
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-
-        if (o == null || getClass() != o.getClass()) return false;
-
-        HomeWork homeWork = (HomeWork) o;
-
-        return new EqualsBuilder()
-                .append(getId(), homeWork.getId())
-                .append(getStudentId(), homeWork.getStudentId())
-                .append(getLessonId(), homeWork.getLessonId())
-                .append(getHomeWorkURL(), homeWork.getHomeWorkURL())
-                .isEquals();
-    }
-
-    @Override
-    public int hashCode() {
-        return new HashCodeBuilder(17, 37)
-                .append(getId())
-                .append(getHomeWorkURL())
-                .append(getStudentId())
-                .append(getLessonId())
-                .toHashCode();
     }
 }
