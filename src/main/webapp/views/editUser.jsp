@@ -146,7 +146,7 @@
                 </form>
                 </c:if>
                 <br/><br/>
-                <c:if test="${(sessionScope.get('entered_role') == 'ROLE_STUDENT') && (requestScope.get('subjects') != null)}">
+                <c:if test="${(sessionScope.get('entered_role') == 'ROLE_STUDENT') && (user.group.subjects != null)}">
                 <div class="col-md-5">
                     <div class="content-box-header">
                         <div class="panel-title ">Предметы</div>
@@ -162,7 +162,7 @@
                             </thead>
 
                             <tbody>
-                            <c:forEach items="${requestScope.get('subjects')}" var="subject">
+                            <c:forEach items="${user.group.subjects}" var="subject">
                                 <tr>
                                     <td>${subject.name}</td>
                                     <td>

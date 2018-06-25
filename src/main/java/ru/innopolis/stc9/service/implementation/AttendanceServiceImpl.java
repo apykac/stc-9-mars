@@ -3,6 +3,7 @@ package ru.innopolis.stc9.service.implementation;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import ru.innopolis.stc9.dao.interfaces.AttendanceDao;
 import ru.innopolis.stc9.pojo.Attendance;
 import ru.innopolis.stc9.service.interfaces.AttendanceService;
@@ -25,6 +26,7 @@ public class AttendanceServiceImpl implements AttendanceService {
     }
 
     @Override
+    @Transactional
     public void addLessonAttendance(int groupId, int lessonId, int[] studentsList) {
         attendanceDao.addLessonAttendance(lessonId, studentsList);
         Map<Integer, Boolean> savedAttendance = getLessonAttendance(lessonId, groupId);
@@ -45,6 +47,7 @@ public class AttendanceServiceImpl implements AttendanceService {
     }
 
     @Override
+    @Transactional
     public void clearLessonAttendance(int lessonId, int groupId) {
         if (lessonId < 1 || groupId < 1) {
             return;
@@ -61,6 +64,7 @@ public class AttendanceServiceImpl implements AttendanceService {
     }
 
     @Override
+    @Transactional
     public Map<Integer, Boolean> getLessonAttendance(int lessonId, int groupId) {
         Map<Integer, Boolean> result = new HashMap<>();
         if (lessonId < 1 || groupId < 1) {
@@ -74,6 +78,7 @@ public class AttendanceServiceImpl implements AttendanceService {
     }
 
     @Override
+    @Transactional
     public int getNumberOfMissedLessons(int id) {
         return attendanceDao.getNumberOfMissedLessons(id);
     }

@@ -5,10 +5,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.bind.annotation.*;
-import ru.innopolis.stc9.pojo.Subject;
 import ru.innopolis.stc9.pojo.User;
-import ru.innopolis.stc9.service.interfaces.GroupService;
-import ru.innopolis.stc9.service.interfaces.SubjectService;
 import ru.innopolis.stc9.service.interfaces.UserService;
 
 import javax.servlet.http.HttpSession;
@@ -16,12 +13,12 @@ import java.util.List;
 
 @Controller
 public class UsersController {
-    @Autowired
     private UserService userService;
+
     @Autowired
-    private GroupService groupService;
-    @Autowired
-    private SubjectService subjectService;
+    public UsersController(UserService userService) {
+        this.userService = userService;
+    }
 
     @RequestMapping(value = "/admin/edit_user/{id}/delete", method = RequestMethod.POST)
     public String delUserPost(@PathVariable("id") int id, HttpSession session, Model model) {
@@ -41,15 +38,12 @@ public class UsersController {
                               boolean isOwner,
                               Model model) {
         if (id > 0) {
-            User user = userService.findUserById(id);
-            user.setGroup(groupService.findGroupById(user.getGroupId()));
-            List<Subject> subjectList = subjectService.findByGroupId(user.getGroupId());
+            User user = userService.findUserByIdWithSubjectList(id);
             if (!isOwner && user.getEnabled() != 0 &&
                     ((id == (Integer) session.getAttribute(SessionDataInform.ID))
                             || (user.getPermissionGroup().equals("ROLE_ADMIN"))))
                 return "redirect:/start";
             model.addAttribute("user", user);
-            model.addAttribute("subjects", subjectList);
             model.addAttribute("isOwner", isOwner);
         }
         return "/views/editUser";

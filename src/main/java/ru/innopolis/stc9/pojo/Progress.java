@@ -8,7 +8,8 @@ import lombok.Setter;
 import javax.persistence.*;
 import java.sql.Date;
 
-@Entity
+//@Entity
+//TODO need to delete class
 @Table(name = "progress")
 @NoArgsConstructor
 @AllArgsConstructor
@@ -18,7 +19,7 @@ public class Progress {
     @Id
     @SequenceGenerator(name = "progressSeq", sequenceName = "PROGRESS_SEQUENCE", allocationSize = 0)
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "progressSeq")
-    private int id;
+    private Integer id;
     @Getter
     @Setter
     private int value;

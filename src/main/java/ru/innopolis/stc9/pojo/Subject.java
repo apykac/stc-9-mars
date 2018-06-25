@@ -1,14 +1,17 @@
 package ru.innopolis.stc9.pojo;
 
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
+import java.util.List;
 
 @Entity
 @Table(name = "subject")
 @NoArgsConstructor
+@EqualsAndHashCode
 public class Subject {
     @Getter
     @Setter
@@ -19,6 +22,17 @@ public class Subject {
     @Getter
     @Setter
     private String name;
+    @Getter
+    @Setter
+    @ManyToMany(fetch = FetchType.LAZY)
+    @JoinTable(name = "education",
+            joinColumns = @JoinColumn(name = "subjectId"),
+            inverseJoinColumns = @JoinColumn(name = "groupId"))
+    private List<Group> groups;
+    @Getter
+    @Setter
+    @OneToMany(mappedBy = "subject", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private List<Lessons> lessons;
 
     public Subject(int id, String name) {
         this.id = id;

@@ -18,8 +18,10 @@ import ru.innopolis.stc9.service.interfaces.GroupService;
 import ru.innopolis.stc9.service.interfaces.StudentService;
 import ru.innopolis.stc9.service.interfaces.UserService;
 
-import java.lang.reflect.Field;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
 
 @RunWith(PowerMockRunner.class)
 public class StudentsServiceImplTest {
@@ -33,14 +35,10 @@ public class StudentsServiceImplTest {
     private Group group;
 
     @Before
-    public void setUp() throws IllegalAccessException {
+    public void setUp() {
         groupService = PowerMockito.mock(GroupServiceImpl.class);
         userService = PowerMockito.mock(UserServiceImpl.class);
-        studentService = new StudentServiceImpl();
-        Field fieldGroupService = PowerMockito.field(StudentServiceImpl.class, "groupService");
-        Field fieldUserService = PowerMockito.field(StudentServiceImpl.class, "userService");
-        fieldGroupService.set(studentService, groupService);
-        fieldUserService.set(studentService, userService);
+        studentService = new StudentServiceImpl(groupService, userService);
         userTest = new UserServiceImplTest();
         groupList = getGroupList();
         studentList = getStudentList();

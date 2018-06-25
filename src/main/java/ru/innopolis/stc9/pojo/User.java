@@ -48,27 +48,26 @@ public class User implements DBObject {
             joinColumns = @JoinColumn( name="userId"),
             inverseJoinColumns = @JoinColumn( name="groupId"))
     private Group group = null;
-//    @Getter
-//    @Setter
-//    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-//    private List<Message> messages;
-//    @Getter
-//    @Setter
-//    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-//    private List<Attendance> attendances;
-//    @Getter
-//    @Setter
-//    @OneToMany(mappedBy = "student", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-//    private List<HomeWork> homeWorks;
-//    @Getter
-//    @Setter
-//    @OneToMany(mappedBy = "student", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-//    private List<Mark> marks;
     @Getter
     @Setter
-    @Transient
-    //TODO need to delete
-    private Integer groupId;
+    @OneToMany(mappedBy = "toUser", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private List<Message> incomingMessages;
+    @Getter
+    @Setter
+    @OneToMany(mappedBy = "fromUser", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private List<Message> upcomingMessages;
+    @Getter
+    @Setter
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private List<Attendance> attendances;
+    @Getter
+    @Setter
+    @OneToMany(mappedBy = "student", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private List<HomeWork> homeWorks;
+    @Getter
+    @Setter
+    @OneToMany(mappedBy = "student", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private List<Mark> marks;
 
     public User(String login, String hashPassword, String firstName, String secondName, String middleName) {
         this.login = login;
@@ -76,7 +75,5 @@ public class User implements DBObject {
         this.firstName = firstName;
         this.secondName = secondName;
         this.middleName = middleName;
-        this.permissionGroup = "ROLE_STUDENT";
-        this.enabled = 1;
     }
 }

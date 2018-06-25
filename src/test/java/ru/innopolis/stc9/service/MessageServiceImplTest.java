@@ -27,13 +27,11 @@ public class MessageServiceImplTest {
 
     @Before
     public void setUp() throws IllegalAccessException {
-        messageService = new MessageServiceImpl();
+        messageService = new MessageServiceImpl(messageDao);
         mapper = PowerMockito.mock(MessageMapper.class);
         messageDao = PowerMockito.mock(MessageDao.class);
         Field fieldMapper = PowerMockito.field(MessageServiceImpl.class, "mapper");
-        Field fieldMessageDao = PowerMockito.field(MessageServiceImpl.class, "messageDao");
         fieldMapper.set(messageService, mapper);
-        fieldMessageDao.set(messageService, messageDao);
     }
 
     @Test
@@ -59,7 +57,7 @@ public class MessageServiceImplTest {
         MultiValueMap<String, String> param = new HttpHeaders();
         param.put("some", new ArrayList<>(Collections.singletonList("not empty")));
         PowerMockito.when(mapper.getByParam(Mockito.any(MultiValueMap.class))).thenReturn(new Message());
-        PowerMockito.when(messageDao.addMessage(Mockito.any(Message.class))).thenReturn(true);
+        PowerMockito.when(messageDao.addMessage(Mockito.any(Message.class), Mockito.anyInt(), Mockito.anyInt())).thenReturn(true);
         Assert.assertTrue(messageService.addMessage(param));
     }
 
@@ -102,20 +100,20 @@ public class MessageServiceImplTest {
         List<Message> privateList = new ArrayList<>(Arrays.asList(new Message(), new Message()));
         PowerMockito.when(messageDao.getAllMessagesByRole("ROLE_STUDENT")).thenReturn(commonList);
         PowerMockito.when(messageDao.getAllMessagesByToUserId(1)).thenReturn(privateList);
-        List<Message>[] result = messageService.getAllMessages(1,"ROLE_STUDENT");
+        List<Message>[] result = messageService.getAllMessages(1, "ROLE_STUDENT");
         Assert.assertEquals(commonList, result[0]);
-        Assert.assertEquals(privateList,result[1]);
+        Assert.assertEquals(privateList, result[1]);
     }
 
     @Test
     public void getAllMessagesIncorrectDataTest() {
-        List<Message>[] result = messageService.getAllMessages(-1,"ROLE_STUDENT");
+        List<Message>[] result = messageService.getAllMessages(-1, "ROLE_STUDENT");
         Assert.assertNull(result[0]);
         Assert.assertNull(result[0]);
-        result = messageService.getAllMessages(1,null);
+        result = messageService.getAllMessages(1, null);
         Assert.assertNull(result[0]);
         Assert.assertNull(result[0]);
-        result = messageService.getAllMessages(1,"");
+        result = messageService.getAllMessages(1, "");
         Assert.assertNull(result[0]);
         Assert.assertNull(result[0]);
     }

@@ -2,6 +2,7 @@ package ru.innopolis.stc9.service.interfaces;
 
 import org.springframework.util.MultiValueMap;
 import ru.innopolis.stc9.pojo.Message;
+import ru.innopolis.stc9.pojo.User;
 
 import java.util.List;
 
@@ -10,9 +11,13 @@ public interface MessageService {
 
     boolean addMessage(MultiValueMap<String, String> incParam);
 
-    List<Message>[] getAllMessages(int userId, String role);
+    List<Message>[] getAllMessages(User user);
 
     Message getMessageById(int id);
 
+    Message getMessageByIdWithFromUser(int id);
+
     boolean deleteMessageById(int id);
+
+    int getNumberOfMessage(User user);
 }

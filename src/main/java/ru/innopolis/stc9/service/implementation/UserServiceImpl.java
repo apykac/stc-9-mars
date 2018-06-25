@@ -2,6 +2,7 @@ package ru.innopolis.stc9.service.implementation;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.MultiValueMap;
 import ru.innopolis.stc9.dao.interfaces.GroupDao;
 import ru.innopolis.stc9.dao.interfaces.UserDao;
@@ -15,13 +16,13 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Service("userServiceImpl")
+@Transactional
 public class UserServiceImpl implements UserService {
     private Mapper mapper = new UserMapper();
 
-    @Autowired
     private UserDao userDao;
-    @Autowired
-    private GroupDao groupDao;
+    /*@Autowired
+    private GroupDao groupDao;*/
 
     @Autowired
     public UserServiceImpl(UserDao userDao) {
@@ -33,14 +34,6 @@ public class UserServiceImpl implements UserService {
         List<String> result = new ArrayList<>();
         if ((incParam == null) || incParam.isEmpty()) return result;
         nameCheck(result, incParam);
-        if ((incParam.get(UserMapper.GROUPID) != null)) {
-            try {
-                int groupId = Integer.parseInt(incParam.get(UserMapper.GROUPID).get(0));
-                if (groupDao.findGroupById(groupId) == null) result.add("Group id is not Exist");
-            } catch (NumberFormatException e) {
-                result.add("Invalid group id");
-            }
-        }
         if ((incParam.get(UserMapper.ENABLED) != null)) {
             try {
                 int enabled = Integer.parseInt(incParam.get(UserMapper.ENABLED).get(0));
@@ -99,6 +92,12 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    public User findUserByIdWithSubjectList(int userId) {
+        if (userId < 0) return null;
+        return userDao.findUserByIdWithSubjectList(userId);
+    }
+
+    @Override
     public User findUserByLogin(String login) {
         if ((login == null) || login.equals("")) return null;
         return userDao.findLoginByName(login);
@@ -113,7 +112,7 @@ public class UserServiceImpl implements UserService {
     public List<User> getStudentsByGroupId(Integer groupId) {
         List<User> students = new ArrayList<>();
         for (User u : userDao.getAllStudents())
-            if (groupId.equals(u.getGroupId()))
+            if (groupId.equals(u.getGroup().getId()))
                 students.add(u);
         return students;
     }

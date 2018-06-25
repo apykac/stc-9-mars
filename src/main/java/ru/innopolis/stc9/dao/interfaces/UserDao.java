@@ -20,6 +20,8 @@ public interface UserDao {
 
     User findUserByUserId(int id);
 
+    User findUserByIdWithSubjectList(int id);
+
     List<User> getUsersList();
 
     User findLoginByName(String login);

@@ -2,7 +2,6 @@ package ru.innopolis.stc9.service;
 
 import org.junit.Before;
 import org.junit.Test;
-import org.powermock.api.mockito.PowerMockito;
 import ru.innopolis.stc9.dao.implementation.ProgressDaoImpl;
 import ru.innopolis.stc9.dao.interfaces.ProgressDao;
 import ru.innopolis.stc9.pojo.Lessons;
