@@ -4,7 +4,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.MultiValueMap;
-import ru.innopolis.stc9.dao.interfaces.GroupDao;
 import ru.innopolis.stc9.dao.interfaces.UserDao;
 import ru.innopolis.stc9.dao.mappers.Mapper;
 import ru.innopolis.stc9.dao.mappers.UserMapper;
@@ -21,8 +20,6 @@ public class UserServiceImpl implements UserService {
     private Mapper mapper = new UserMapper();
 
     private UserDao userDao;
-    /*@Autowired
-    private GroupDao groupDao;*/
 
     @Autowired
     public UserServiceImpl(UserDao userDao) {
@@ -110,11 +107,9 @@ public class UserServiceImpl implements UserService {
      */
     @Override
     public List<User> getStudentsByGroupId(Integer groupId) {
-        List<User> students = new ArrayList<>();
-        for (User u : userDao.getAllStudents())
-            if (groupId.equals(u.getGroup().getId()))
-                students.add(u);
-        return students;
+        if ((groupId == null) || (groupId < 0))
+            return new ArrayList<>();
+        return userDao.getStudentsByGroupId(groupId);
     }
 
     @Override

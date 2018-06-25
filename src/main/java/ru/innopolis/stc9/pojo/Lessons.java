@@ -50,6 +50,15 @@ public class Lessons {
     //TODO need to delete
     private long subjectId;
 
+    public Lessons(int id, int subjectId, String sname, Date date, String name) {
+        this.id = id;
+        this.subjectId = subjectId;
+        this.sname = sname;
+        this.date = date;
+        this.name = name;
+    }
+
+
     public Lessons(int id, int subjectId, Date date, String name) {
         this.id = id;
         this.subjectId = subjectId;

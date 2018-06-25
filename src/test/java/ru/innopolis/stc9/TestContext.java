@@ -11,14 +11,10 @@ import org.springframework.jdbc.datasource.DriverManagerDataSource;
 import org.springframework.orm.hibernate4.HibernateTransactionManager;
 import org.springframework.orm.hibernate4.LocalSessionFactoryBean;
 import ru.innopolis.stc9.dao.implementation.GroupDaoImpl;
-import ru.innopolis.stc9.dao.implementation.UserDaoImpl;
 import ru.innopolis.stc9.dao.interfaces.GroupDao;
-import ru.innopolis.stc9.dao.interfaces.UserDao;
 import ru.innopolis.stc9.service.implementation.GroupServiceImpl;
-import ru.innopolis.stc9.service.implementation.StudentServiceImpl;
 import ru.innopolis.stc9.service.implementation.UserServiceImpl;
 import ru.innopolis.stc9.service.interfaces.GroupService;
-import ru.innopolis.stc9.service.interfaces.StudentService;
 import ru.innopolis.stc9.service.interfaces.UserService;
 
 import javax.sql.DataSource;
@@ -49,7 +45,8 @@ public class TestContext {
         return Mockito.mock(UserServiceImpl.class);
     }
 
-    @Bean
+    //TODO конструкторов по умолчанию больше нет
+    /*@Bean
     public UserDao userDao() {
         return new UserDaoImpl();
     }
@@ -57,7 +54,7 @@ public class TestContext {
     @Bean
     public StudentService studentService() {
         return new StudentServiceImpl();
-    }
+    }*/
 
     @Bean
     public LocalSessionFactoryBean sessionFactory() {

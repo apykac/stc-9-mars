@@ -43,7 +43,7 @@ public class StudentsServiceImplTest {
         groupList = getGroupList();
         studentList = getStudentList();
         model = new BindingAwareModelMap();
-         group = PowerMockito.mock(Group.class);
+        group = PowerMockito.mock(Group.class);
     }
 
     private List<Group> getGroupList() {
@@ -117,11 +117,11 @@ public class StudentsServiceImplTest {
 
     @Test
     public void addingMainAttributeToModelIncorrectDataTest() {
-        studentService.addingMainAttributeToModel(null,1,1);
+        studentService.addingMainAttributeToModel(null, 1, 1);
         Assert.assertTrue(model.asMap().isEmpty());
-        studentService.addingMainAttributeToModel(null,-1,0);
+        studentService.addingMainAttributeToModel(null, -1, 0);
         Assert.assertTrue(model.asMap().isEmpty());
-        studentService.addingMainAttributeToModel(null,1,-1);
+        studentService.addingMainAttributeToModel(null, 1, -1);
         Assert.assertTrue(model.asMap().isEmpty());
     }
 
