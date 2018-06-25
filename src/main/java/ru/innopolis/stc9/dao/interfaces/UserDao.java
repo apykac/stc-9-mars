@@ -29,4 +29,6 @@ public interface UserDao {
     boolean updateGroupId(int userId, Integer groupId);
 
     List<User> getAllStudents();
+
+    List<User> getStudentsByGroupId(int groupId);
 }

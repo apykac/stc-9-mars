@@ -15,6 +15,7 @@ import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.CriteriaUpdate;
 import javax.persistence.criteria.Root;
+import java.util.ArrayList;
 import java.util.List;
 
 @Repository
@@ -145,5 +146,14 @@ public class UserDaoImpl implements UserDao {
                 "FROM User u where u.permissionGroup = :role");
         query.setParameter("role", "ROLE_STUDENT");
         return query.getResultList();
+    }
+
+    @Override
+    public List<User> getStudentsByGroupId(int groupId) {
+        if (groupId < 0) return new ArrayList<>();
+        Session session = factory.getCurrentSession();
+        Group group = session.get(Group.class, groupId);
+        Hibernate.initialize(group.getUsers());
+        return group.getUsers();
     }
 }

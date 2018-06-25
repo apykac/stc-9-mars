@@ -10,9 +10,7 @@ import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.PowerMockRunner;
 import org.springframework.http.HttpHeaders;
 import org.springframework.util.MultiValueMap;
-import ru.innopolis.stc9.dao.implementation.GroupDaoImpl;
 import ru.innopolis.stc9.dao.implementation.UserDaoImpl;
-import ru.innopolis.stc9.dao.interfaces.GroupDao;
 import ru.innopolis.stc9.dao.interfaces.UserDao;
 import ru.innopolis.stc9.dao.mappers.Mapper;
 import ru.innopolis.stc9.dao.mappers.UserMapper;
@@ -31,26 +29,18 @@ import java.util.List;
 @PrepareForTest({User.class, CryptService.class})
 public class UserServiceImplTest {
     private Mapper mapper;
-    private Group group;
     private User legalUser;
     private UserDao userDao;
-    private GroupDao groupDao;
     private UserService userService;
 
     @Before
     public void setUp() throws IllegalAccessException {
         legalUser = createLegalUser(1, "ROLE_ADMIN", 1, 1);
-        group = new Group(1, "1");
         userDao = PowerMockito.mock(UserDaoImpl.class);
-        groupDao = PowerMockito.mock(GroupDaoImpl.class);
         userService = new UserServiceImpl(userDao);
         mapper = PowerMockito.mock(UserMapper.class);
         Field fieldMapper = PowerMockito.field(UserServiceImpl.class, "mapper");
-        Field fieldUserDao = PowerMockito.field(UserServiceImpl.class, "userDao");
-        Field fieldGroupDao = PowerMockito.field(UserServiceImpl.class, "groupDao");
         fieldMapper.set(userService, mapper);
-        fieldUserDao.set(userService, userDao);
-        fieldGroupDao.set(userService, groupDao);
     }
 
     User createLegalUser(int id, String role, Integer groupId, int enabled) {
@@ -63,7 +53,7 @@ public class UserServiceImplTest {
         user.setSecondName("SecondName");
         user.setMiddleName("MiddleName");
         user.setEnabled(enabled);
-        if (groupId!=null) {
+        if (groupId != null) {
             user.setGroup(new Group(groupId, "test" + groupId));
         } else {
             user.setGroup(null);
@@ -80,7 +70,6 @@ public class UserServiceImplTest {
             map.put(UserMapper.SNAME, new ArrayList<>(Collections.singletonList("SecondName")));
         }
         map.put(UserMapper.MNAME, new ArrayList<>(Collections.singletonList("MiddleName")));
-        map.put(UserMapper.GROUPID, new ArrayList<>(Collections.singletonList("1")));
         map.put(UserMapper.ENABLED, new ArrayList<>(Collections.singletonList("1")));
         return map;
     }
@@ -94,14 +83,12 @@ public class UserServiceImplTest {
             map.put(UserMapper.SNAME, new ArrayList<>(Collections.singletonList("2")));
         }
         map.put(UserMapper.MNAME, new ArrayList<>(Collections.singletonList("3")));
-        map.put(UserMapper.GROUPID, new ArrayList<>(Collections.singletonList("-1")));
         map.put(UserMapper.ENABLED, new ArrayList<>(Collections.singletonList("3")));
         return map;
     }
 
     @Test
     public void isCorrectDataWithCorrectDataTest() {
-        PowerMockito.when(groupDao.findGroupById(1)).thenReturn(group);
         List<String> result1 = userService.isCorrectData(createLegalMap(false));
         List<String> result2 = userService.isCorrectData(createLegalMap(true));
         Assert.assertEquals(0, result1.size());
@@ -111,27 +98,25 @@ public class UserServiceImplTest {
     @Test
     public void isCorrectDataWithIncorrectDataTest() {
         MultiValueMap<String, String> map = createLegalMap(false);
-        PowerMockito.when(groupDao.findGroupById(-1)).thenReturn(null);
         List<String> result1 = userService.isCorrectData(createIllegalMap(false));
         List<String> result2 = userService.isCorrectData(createIllegalMap(true));
         List<String> result3 = userService.isCorrectData(null);
-        map.put(UserMapper.GROUPID, new ArrayList<>(Collections.singletonList("s")));
         map.put(UserMapper.ENABLED, new ArrayList<>(Collections.singletonList("s")));
         List<String> result4 = userService.isCorrectData(map);
-        Assert.assertEquals(5, result1.size());
-        Assert.assertEquals(3, result2.size());
+        Assert.assertEquals(4, result1.size());
+        Assert.assertEquals(2, result2.size());
         Assert.assertEquals(0, result3.size());
-        Assert.assertEquals(2, result4.size());
+        Assert.assertEquals(1, result4.size());
     }
 
     @Test
-    public void addUserByParamCorrectDataTest() throws Exception {
+    public void addUserByParamCorrectDataTest() {
         PowerMockito.mockStatic(CryptService.class);
         PowerMockito.when(CryptService.crypting("password1")).thenReturn("password1");
-        PowerMockito.whenNew(User.class).withArguments(Mockito.anyString(), Mockito.anyString(), Mockito.anyString(),
-                Mockito.anyString(), Mockito.anyString()).thenReturn(legalUser);
         PowerMockito.when(userDao.addUser(Mockito.any(User.class))).thenReturn(true);
         Assert.assertTrue(userService.addUserByParam(createLegalMap(false)));
+        PowerMockito.when(userDao.addUser(Mockito.any(User.class))).thenReturn(false);
+        Assert.assertFalse(userService.addUserByParam(createLegalMap(false)));
     }
 
     @Test
@@ -204,45 +189,17 @@ public class UserServiceImplTest {
     }
 
     @Test
-    public void getStudentsByGroupIdTest() {
-        List<User> fullMatch = new ArrayList<>(Arrays.asList(
-                createLegalUser(1, "ROLE_STUDENT", 1, 1),
-                createLegalUser(2, "ROLE_STUDENT", 1, 0),
-                createLegalUser(3, "ROLE_STUDENT", 1, 1)));
-        List<User> oneMatch = new ArrayList<>(Arrays.asList(
-                createLegalUser(1, "ROLE_STUDENT", 1, 1),
-                createLegalUser(2, "ROLE_STUDENT", 3, 0),
-                createLegalUser(3, "ROLE_STUDENT", null, 1)));
-        List<User> noMatches = new ArrayList<>(Arrays.asList(
-                createLegalUser(1, "ROLE_STUDENT", 2, 1),
-                createLegalUser(2, "ROLE_STUDENT", 3, 0),
-                createLegalUser(3, "ROLE_STUDENT", null, 1)));
-        PowerMockito.when(userDao.getAllStudents()).thenReturn(fullMatch);
-        Assert.assertEquals(3, userService.getStudentsByGroupId(1).size());
-        Assert.assertEquals(userService.getStudentsByGroupId(1), fullMatch);
-
-        PowerMockito.when(userDao.getAllStudents()).thenReturn(oneMatch);
-        Assert.assertEquals(1, userService.getStudentsByGroupId(1).size());
-        oneMatch.remove(1);
-        oneMatch.remove(1);
-        Assert.assertEquals(userService.getStudentsByGroupId(1), oneMatch);
-
-        PowerMockito.when(userDao.getAllStudents()).thenReturn(noMatches);
-        Assert.assertEquals(0, userService.getStudentsByGroupId(1).size());
-        noMatches = new ArrayList<>();
-        Assert.assertEquals(userService.getStudentsByGroupId(1), noMatches);
+    public void getStudentsByGroupIdCorrectDataTest() {
+        List<User> list = new ArrayList<>(Arrays.asList(new User(), new User()));
+        PowerMockito.when(userDao.getStudentsByGroupId(1)).thenReturn(list);
+        Assert.assertEquals(list, userService.getStudentsByGroupId(1));
     }
 
     @Test
-    public void getAllStudentsTest() {
-        List<User> list = new ArrayList<>(Arrays.asList(
-                createLegalUser(1, "ROLE_STUDENT", 1, 1),
-                createLegalUser(2, "ROLE_STUDENT", 1, 0),
-                createLegalUser(3, "ROLE_STUDENT", 1, 1)));
-        PowerMockito.when(userDao.getAllStudents()).thenReturn(list);
-        List<User> resultList = userService.getAllStudents();
-        Assert.assertEquals(3, resultList.size());
-        Assert.assertEquals(resultList, list);
+    public void getAllStudentsByGroupIdIncorrectDataTest() {
+        List<User> emptyList = new ArrayList<>();
+        Assert.assertEquals(emptyList, userService.getStudentsByGroupId(-1));
+        Assert.assertEquals(emptyList, userService.getStudentsByGroupId(null));
     }
 
     @Test
@@ -351,7 +308,6 @@ public class UserServiceImplTest {
         map.put("repeatNewPassword", new ArrayList<>(Collections.singletonList("1")));
         PowerMockito.when(userDao.findUserByUserId(1)).thenReturn(legalUser);
         PowerMockito.when(mapper.getByParam(Mockito.anyObject())).thenReturn(legalUser);
-        PowerMockito.when(groupDao.findGroupById(1)).thenReturn(new Group(1, "1"));
         PowerMockito.mockStatic(CryptService.class);
         PowerMockito.when(CryptService.isMatched("password1", "password1")).thenReturn(true);
         PowerMockito.when(userDao.updateUserByFIOL(legalUser)).thenReturn(true);
@@ -372,7 +328,6 @@ public class UserServiceImplTest {
         map.put("repeatNewPassword", new ArrayList<>(Collections.singletonList("1")));
         PowerMockito.when(userDao.findUserByUserId(1)).thenReturn(legalUser);
         PowerMockito.when(mapper.getByParam(Mockito.anyObject())).thenReturn(legalUser);
-        PowerMockito.when(groupDao.findGroupById(1)).thenReturn(new Group(1, "1"));
         PowerMockito.mockStatic(CryptService.class);
         PowerMockito.when(CryptService.isMatched("password1", "password1")).thenReturn(true);
         PowerMockito.when(userDao.updateUserByFIOL(legalUser)).thenReturn(false);
@@ -393,7 +348,6 @@ public class UserServiceImplTest {
         map.put("repeatNewPassword", new ArrayList<>(Collections.singletonList("2")));
         PowerMockito.when(userDao.findUserByUserId(1)).thenReturn(legalUser);
         PowerMockito.when(mapper.getByParam(Mockito.anyObject())).thenReturn(legalUser);
-        PowerMockito.when(groupDao.findGroupById(1)).thenReturn(new Group(1, "1"));
         PowerMockito.mockStatic(CryptService.class);
         PowerMockito.when(CryptService.isMatched("password1", "password1")).thenReturn(true);
         PowerMockito.when(userDao.updateUserByFIOL(legalUser)).thenReturn(false);
@@ -415,5 +369,24 @@ public class UserServiceImplTest {
         Assert.assertEquals(emtpyObj[0], result2[0]);
         Assert.assertEquals(emtpyObj[1], result2[1]);
         Assert.assertEquals(emtpyObj[2], result2[2]);
+    }
+
+    @Test
+    public void findUserByIdWithSubjectListCorrectDataTest() {
+        User user = new User();
+        PowerMockito.when(userService.findUserByIdWithSubjectList(1)).thenReturn(user);
+        Assert.assertEquals(user, userService.findUserByIdWithSubjectList(1));
+    }
+
+    @Test
+    public void findUserByIdWithSubjectListIncorrectDataTest() {
+        Assert.assertNull(userService.findUserByIdWithSubjectList(1));
+    }
+
+    @Test
+    public void getAllStudentsTest() {
+        List<User> students = new ArrayList<>();
+        PowerMockito.when(userDao.getAllStudents()).thenReturn(students);
+        Assert.assertEquals(students, userService.getAllStudents());
     }
 }
