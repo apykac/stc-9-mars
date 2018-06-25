@@ -3,6 +3,7 @@ package ru.innopolis.stc9.service.implementation;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import ru.innopolis.stc9.dao.interfaces.LessonsDao;
 import ru.innopolis.stc9.pojo.Lessons;
 import ru.innopolis.stc9.service.interfaces.LessonsService;
@@ -12,6 +13,7 @@ import java.text.SimpleDateFormat;
 import java.util.List;
 
 @Service
+@Transactional
 public class LessonsServiceImpl implements LessonsService {
     private final Logger logger = Logger.getLogger(LessonsServiceImpl.class);
     private final LessonsDao lessonsDao;

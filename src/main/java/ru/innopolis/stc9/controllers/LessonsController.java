@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import ru.innopolis.stc9.pojo.Lessons;
+import ru.innopolis.stc9.pojo.Subject;
 import ru.innopolis.stc9.service.interfaces.LessonsService;
 import ru.innopolis.stc9.service.interfaces.SubjectService;
 
@@ -33,11 +34,12 @@ public class LessonsController {
     }
 
     @RequestMapping(method = RequestMethod.POST)
-    public String addLessonsMethodPost(@RequestParam(value = "add_subject_id", required = false) int subject_id,
+    public String addLessonsMethodPost(@RequestParam(value = "add_subject_id", required = false) int subjectId,
                                        @RequestParam(value = "add_date", required = false) String strDate,
                                        @RequestParam(value = "add_name", required = false) String name,
                                        Model model) {
-        Lessons lessons = new Lessons(subject_id, lessonsService.stringToDate(strDate), name);
+        Subject subject = subjectService.findById(subjectId);
+        Lessons lessons = new Lessons(subject, lessonsService.stringToDate(strDate), name);
         lessonsService.addLesson(lessons);
         return doGet(model);
     }

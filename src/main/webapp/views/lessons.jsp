@@ -41,11 +41,11 @@
                                         <tbody>
                                         <c:forEach items="${requestScope.get('lessons')}" var="lessons">
                                             <tr class="m_editLessons"
-                                                idless="${lessons.id}" subjidless="${lessons.subjectId}"
+                                                idless="${lessons.id}" subjidless="${lessons.subject.id}"
                                                 snameless="${lessons.sname}"
                                                 dateless="${lessons.date}" nameless="${lessons.name}"
                                                 style="cursor:pointer">
-                                                <td>${lessons.sname}</td>
+                                                <td>${lessons.subject.id}</td>
                                                 <td>${lessons.date}</td>
                                                 <td>${lessons.name}</td>
                                                 <td>
