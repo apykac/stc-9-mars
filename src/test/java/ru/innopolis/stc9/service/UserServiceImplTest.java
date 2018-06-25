@@ -62,7 +62,6 @@ public class UserServiceImplTest {
         user.setFirstName("FirstName");
         user.setSecondName("SecondName");
         user.setMiddleName("MiddleName");
-        user.setGroupId(groupId);
         user.setEnabled(enabled);
         if (groupId!=null) {
             user.setGroup(new Group(groupId, "test" + groupId));

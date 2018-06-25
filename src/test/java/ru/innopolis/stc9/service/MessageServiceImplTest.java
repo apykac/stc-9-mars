@@ -11,6 +11,7 @@ import ru.innopolis.stc9.dao.interfaces.MessageDao;
 import ru.innopolis.stc9.dao.mappers.Mapper;
 import ru.innopolis.stc9.dao.mappers.MessageMapper;
 import ru.innopolis.stc9.pojo.Message;
+import ru.innopolis.stc9.pojo.User;
 import ru.innopolis.stc9.service.implementation.MessageServiceImpl;
 import ru.innopolis.stc9.service.interfaces.MessageService;
 
@@ -27,9 +28,9 @@ public class MessageServiceImplTest {
 
     @Before
     public void setUp() throws IllegalAccessException {
-        messageService = new MessageServiceImpl(messageDao);
-        mapper = PowerMockito.mock(MessageMapper.class);
         messageDao = PowerMockito.mock(MessageDao.class);
+        mapper = PowerMockito.mock(MessageMapper.class);
+        messageService = new MessageServiceImpl(messageDao);
         Field fieldMapper = PowerMockito.field(MessageServiceImpl.class, "mapper");
         fieldMapper.set(messageService, mapper);
     }
@@ -56,8 +57,30 @@ public class MessageServiceImplTest {
     public void addMessageCorrectDataTest() {
         MultiValueMap<String, String> param = new HttpHeaders();
         param.put("some", new ArrayList<>(Collections.singletonList("not empty")));
-        PowerMockito.when(mapper.getByParam(Mockito.any(MultiValueMap.class))).thenReturn(new Message());
-        PowerMockito.when(messageDao.addMessage(Mockito.any(Message.class), Mockito.anyInt(), Mockito.anyInt())).thenReturn(true);
+        param.put("toUserId", new ArrayList<>(Collections.singletonList("1")));
+        param.put("fromUserId", new ArrayList<>(Collections.singletonList("1")));
+        PowerMockito.when(mapper.getByParam(Mockito.any(MultiValueMap.class))).
+                thenReturn(new Message());
+        PowerMockito.
+                when(messageDao.addMessage(Mockito.any(Message.class), Mockito.any(Integer.class), Mockito.any(Integer.class))).
+                thenReturn(true);
+        Assert.assertTrue(messageService.addMessage(param));
+        param.put("toUserId", new ArrayList<>(Collections.singletonList("1")));
+        param.remove("fromUserId");
+        PowerMockito.
+                when(messageDao.addMessage(Mockito.any(Message.class), Mockito.any(Integer.class), Mockito.any(Integer.class))).
+                thenReturn(true);
+        Assert.assertTrue(messageService.addMessage(param));
+        param.remove("toUserId");
+        param.put("fromUserId", new ArrayList<>(Collections.singletonList("1")));
+        PowerMockito.
+                when(messageDao.addMessage(Mockito.any(Message.class), Mockito.any(Integer.class), Mockito.any(Integer.class))).
+                thenReturn(true);
+        Assert.assertTrue(messageService.addMessage(param));
+        param.remove("fromUserId");
+        PowerMockito.
+                when(messageDao.addMessage(Mockito.any(Message.class), Mockito.any(Integer.class), Mockito.any(Integer.class))).
+                thenReturn(true);
         Assert.assertTrue(messageService.addMessage(param));
     }
 
@@ -82,6 +105,20 @@ public class MessageServiceImplTest {
     }
 
     @Test
+    public void getMessageByIdWithFromUserCorrectDataTest() {
+        Message message = new Message();
+        PowerMockito.when(messageDao.getMessageByIdWithFromUser(1)).thenReturn(message);
+        Assert.assertEquals(message, messageService.getMessageByIdWithFromUser(1));
+        PowerMockito.when(messageDao.getMessageByIdWithFromUser(1)).thenReturn(null);
+        Assert.assertNull(messageService.getMessageByIdWithFromUser(1));
+    }
+
+    @Test
+    public void getMessageByIdWithFromUserIncorrectDataTest() {
+        Assert.assertNull(messageService.getMessageById(-1));
+    }
+
+    @Test
     public void deleteMessageByIdCorrectDataTest() {
         PowerMockito.when(messageDao.deleteMessageById(1)).thenReturn(true);
         Assert.assertTrue(messageService.deleteMessageById(1));
@@ -96,25 +133,34 @@ public class MessageServiceImplTest {
 
     @Test
     public void getAllMessagesCorrectDataTest() {
+        User user = new User();
+        user.setPermissionGroup("ROLE_ADMIN");
+        user.setId(1);
         List<Message> commonList = new ArrayList<>(Arrays.asList(new Message(), new Message(), new Message(), new Message()));
         List<Message> privateList = new ArrayList<>(Arrays.asList(new Message(), new Message()));
-        PowerMockito.when(messageDao.getAllMessagesByRole("ROLE_STUDENT")).thenReturn(commonList);
-        PowerMockito.when(messageDao.getAllMessagesByToUserId(1)).thenReturn(privateList);
-        List<Message>[] result = messageService.getAllMessages(1, "ROLE_STUDENT");
+        PowerMockito.when(messageDao.getAllMessagesByRole(user)).thenReturn(commonList);
+        PowerMockito.when(messageDao.getAllMessagesByToUserId(user)).thenReturn(privateList);
+        List<Message>[] result = messageService.getAllMessages(user);
         Assert.assertEquals(commonList, result[0]);
         Assert.assertEquals(privateList, result[1]);
     }
 
     @Test
     public void getAllMessagesIncorrectDataTest() {
-        List<Message>[] result = messageService.getAllMessages(-1, "ROLE_STUDENT");
+        List<Message>[] result = messageService.getAllMessages(null);
         Assert.assertNull(result[0]);
         Assert.assertNull(result[0]);
-        result = messageService.getAllMessages(1, null);
-        Assert.assertNull(result[0]);
-        Assert.assertNull(result[0]);
-        result = messageService.getAllMessages(1, "");
-        Assert.assertNull(result[0]);
-        Assert.assertNull(result[0]);
+    }
+
+    @Test
+    public void getNumberOfMessageCorrectData() {
+        User user = new User();
+        PowerMockito.when(messageDao.getNumberOfMessage(user)).thenReturn(2);
+        Assert.assertEquals(2, messageService.getNumberOfMessage(user));
+    }
+
+    @Test
+    public void getNumberOfMessageIncorrectData() {
+        Assert.assertEquals(0, messageService.getNumberOfMessage(null));
     }
 }

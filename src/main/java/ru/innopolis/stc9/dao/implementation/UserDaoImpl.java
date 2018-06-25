@@ -130,7 +130,10 @@ public class UserDaoImpl implements UserDao {
         if ((userId < 0)) return false;
         Session session = factory.getCurrentSession();
         User user = session.get(User.class, userId);
-        user.setGroup(session.get(Group.class, groupId));
+        if (groupId == null)
+            user.setGroup(null);
+        else
+            user.setGroup(session.get(Group.class, groupId));
         session.update(user);
         return true;
     }

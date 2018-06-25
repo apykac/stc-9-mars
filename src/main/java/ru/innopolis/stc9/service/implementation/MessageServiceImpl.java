@@ -41,12 +41,12 @@ public class MessageServiceImpl implements MessageService {
             return false;
         String toUser = "toUserId";
         String fromUser = "fromUserId";
-        Integer toUserId = incParam.get(toUser) == null? null : Integer.parseInt(incParam.get(toUser).get(0));
-        Integer fromUserId = incParam.get(fromUser) == null? null : Integer.parseInt(incParam.get(fromUser).get(0));
-        return messageDao.addMessage(
-                (Message) mapper.getByParam(incParam),
-                toUserId,
-                fromUserId);
+        Integer toUserId = incParam.get(toUser) == null ? null : Integer.parseInt(incParam.get(toUser).get(0));
+        Integer fromUserId = incParam.get(fromUser) == null ? null : Integer.parseInt(incParam.get(fromUser).get(0));
+        Message message = (Message) mapper.getByParam(incParam);
+        boolean result = messageDao.addMessage(message, toUserId, fromUserId);
+
+        return result;
     }
 
     @Override
