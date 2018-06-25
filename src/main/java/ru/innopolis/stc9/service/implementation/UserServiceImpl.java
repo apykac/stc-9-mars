@@ -9,7 +9,6 @@ import ru.innopolis.stc9.dao.mappers.Mapper;
 import ru.innopolis.stc9.dao.mappers.UserMapper;
 import ru.innopolis.stc9.pojo.User;
 import ru.innopolis.stc9.service.CryptService;
-import ru.innopolis.stc9.service.interfaces.GroupService;
 import ru.innopolis.stc9.service.interfaces.UserService;
 
 import java.util.ArrayList;

@@ -36,82 +36,35 @@ public class StudentServiceImpl implements StudentService {
     }
 
     @Override
-    public void addingMainAttributeToModel(Model model, int id, Integer filterId) {
-        if ((model == null) || (id < 0) || ((filterId != null) && (filterId < 0)))
+    public void addingMainAttributeToModel(Model model, int id, int filterId) {
+        if ((model == null) || (id < 0) || ((filterId != 0) && (filterId < 0)))
             return;
         List<Group> allGroupsList = groupService.findAllGroups();
         List<User> allStudentsList = userService.getAllStudents();
-        distributionStudentsByGroup(allGroupsList, allStudentsList);
         model.addAttribute("groups", allGroupsList);
-        model.addAttribute("groupName", findNameById(allGroupsList, id));
+        model.addAttribute("groupName", groupService.findGroupById(id).getName());
         model.addAttribute("id", id);
-        model.addAttribute("students", getStudentsByGroupId(allStudentsList, id));
+        model.addAttribute("students", groupService.findGroupById(id).getUsers());
         model.addAttribute("studentsWOG", studentFilter(allStudentsList, filterId, id));
     }
 
     @Override
-    public List<User> studentFilter(List<User> studentsList, Integer filterId, int currentGroupId) {
-        List<User> list = new ArrayList<>();
-        if ((studentsList == null) || studentsList.isEmpty())
-            return list;
-        if (((filterId != null) && (filterId < 0)) || (currentGroupId < 0))
-            return list;
-        for (User u : getAllStudentExceptId(studentsList, currentGroupId))
-            if (filterId == null) {
-                if (u.getGroupId() == null) list.add(u);
-            } else {
-                if (filterId.equals(u.getGroupId())) list.add(u);
-            }
-        return list;
-    }
-
-    @Override
-    public String findNameById(List<Group> groupsList, int id) {
-        if ((groupsList == null) || (id < 0)) return "";
-        for (Group group : groupsList)
-            if (group.getId() == id)
-                return group.getName();
-        return "";
-    }
-
-    @Override
-    public List<User> getStudentsByGroupId(List<User> studentsList, Integer groupId) {
-        List<User> allStudentsByGroupId = new ArrayList<>();
-        if ((studentsList == null) || studentsList.isEmpty() || ((groupId != null) && groupId < 0))
-            return allStudentsByGroupId;
-        for (User student : studentsList)
-            if (groupId == null) {
-                if (student.getGroupId() == null)
-                    allStudentsByGroupId.add(student);
-            } else if (groupId.equals(student.getGroupId()))
-                allStudentsByGroupId.add(student);
-        return allStudentsByGroupId;
-    }
-
-    @Override
-    public List<User> getAllStudentExceptId(List<User> studentsList, Integer groupId) {
-        List<User> allStudentsExceptId = new ArrayList<>();
-        if ((studentsList == null) || studentsList.isEmpty() || ((groupId != null) && groupId < 0))
-            return allStudentsExceptId;
-        for (User student : studentsList)
-            if (groupId == null) {
-                if (student.getGroupId() != null)
-                    allStudentsExceptId.add(student);
-            } else if (!groupId.equals(student.getGroupId()))
-                allStudentsExceptId.add(student);
-        return allStudentsExceptId;
-    }
-
-    @Override
-    public void distributionStudentsByGroup(List<Group> groupsList, List<User> studentsList) {
-        if ((groupsList == null) || groupsList.isEmpty())
-            return;
-        if ((studentsList == null) || studentsList.isEmpty())
-            return;
-        for (Group group : groupsList) {
-            Integer groupId = group.getId();
-            for (User student : studentsList)
-                if (groupId.equals(student.getGroupId())) student.setGroup(group);
+    public List<User> studentFilter(List<User> studentList, int filterId, int currentGroupId) {
+        List<User> filteredStudents = new ArrayList<>();
+        if (studentList == null || studentList.isEmpty() || filterId < 0 || currentGroupId < 0) {
+            return filteredStudents;
         }
+        for (User u : studentList) {
+            if (filterId == 0) {
+                if (u.getGroup() == null) {
+                    filteredStudents.add(u);
+                }
+            } else {
+                if (u.getGroup() != null && u.getGroup().getId() == filterId && u.getGroup().getId() != currentGroupId) {
+                    filteredStudents.add(u);
+                }
+            }
+        }
+        return filteredStudents;
     }
 }

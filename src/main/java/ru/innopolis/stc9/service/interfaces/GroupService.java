@@ -20,4 +20,6 @@ public interface GroupService {
     Group findGroupByName(String name);
 
     List<Group> findAllGroups();
+
+    boolean isEntityFound(int groupId, int studentId);
 }

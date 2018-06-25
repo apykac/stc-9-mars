@@ -30,6 +30,7 @@ public class StudentsServiceImplTest {
     private UserService userService;
     private List<Group> groupList;
     private List<User> studentList;
+    private Group group;
 
     @Before
     public void setUp() throws IllegalAccessException {
@@ -44,6 +45,7 @@ public class StudentsServiceImplTest {
         groupList = getGroupList();
         studentList = getStudentList();
         model = new BindingAwareModelMap();
+         group = PowerMockito.mock(Group.class);
     }
 
     private List<Group> getGroupList() {
@@ -64,13 +66,13 @@ public class StudentsServiceImplTest {
     public void addingMainAttributeToModelCorrectDataFullMatchesTest() {
         PowerMockito.when(groupService.findAllGroups()).thenReturn(groupList);
         PowerMockito.when(userService.getAllStudents()).thenReturn(studentList);
-        List<User> studentsWithGroupId = new ArrayList<>(Arrays.asList(studentList.get(2), studentList.get(3)));
+        PowerMockito.when(groupService.findGroupById(2)).thenReturn(group);
+        PowerMockito.when(group.getName()).thenReturn("2");
         List<User> studentsWithoutGroupId = new ArrayList<>(Arrays.asList(studentList.get(0), studentList.get(1)));
         studentService.addingMainAttributeToModel(model, 2, 1);
         Assert.assertEquals(groupList, model.asMap().get("groups"));
         Assert.assertEquals("2", model.asMap().get("groupName"));
         Assert.assertEquals(2, model.asMap().get("id"));
-        Assert.assertEquals(studentsWithGroupId, model.asMap().get("students"));
         Assert.assertEquals(studentsWithoutGroupId, model.asMap().get("studentsWOG"));
     }
 
@@ -78,12 +80,12 @@ public class StudentsServiceImplTest {
     public void addingMainAttributeToModelCorrectDataNotFullMatchesTest1() {
         PowerMockito.when(groupService.findAllGroups()).thenReturn(groupList);
         PowerMockito.when(userService.getAllStudents()).thenReturn(studentList);
-        List<User> studentsWithGroupId = new ArrayList<>(Arrays.asList(studentList.get(0), studentList.get(1)));
+        PowerMockito.when(groupService.findGroupById(1)).thenReturn(group);
+        PowerMockito.when(group.getName()).thenReturn("1");
         studentService.addingMainAttributeToModel(model, 1, 1);
         Assert.assertEquals(groupList, model.asMap().get("groups"));
         Assert.assertEquals("1", model.asMap().get("groupName"));
         Assert.assertEquals(1, model.asMap().get("id"));
-        Assert.assertEquals(studentsWithGroupId, model.asMap().get("students"));
         Assert.assertEquals(new ArrayList<>(), model.asMap().get("studentsWOG"));
     }
 
@@ -91,6 +93,8 @@ public class StudentsServiceImplTest {
     public void addingMainAttributeToModelCorrectDataNotFullMatchesTest2() {
         PowerMockito.when(groupService.findAllGroups()).thenReturn(groupList);
         PowerMockito.when(userService.getAllStudents()).thenReturn(studentList);
+        PowerMockito.when(groupService.findGroupById(123)).thenReturn(group);
+        PowerMockito.when(group.getName()).thenReturn("");
         List<User> studentsWithoutGroupId = new ArrayList<>(Arrays.asList(studentList.get(0), studentList.get(1)));
         studentService.addingMainAttributeToModel(model, 123, 1);
         Assert.assertEquals(groupList, model.asMap().get("groups"));
@@ -104,12 +108,12 @@ public class StudentsServiceImplTest {
     public void addingMainAttributeToModelCorrectDataNotFullMatchesTest3() {
         PowerMockito.when(groupService.findAllGroups()).thenReturn(groupList);
         PowerMockito.when(userService.getAllStudents()).thenReturn(studentList);
-        List<User> studentsWithGroupId = new ArrayList<>(Arrays.asList(studentList.get(0), studentList.get(1)));
+        PowerMockito.when(groupService.findGroupById(1)).thenReturn(group);
+        PowerMockito.when(group.getName()).thenReturn("1");
         studentService.addingMainAttributeToModel(model, 1, 123);
         Assert.assertEquals(groupList, model.asMap().get("groups"));
         Assert.assertEquals("1", model.asMap().get("groupName"));
         Assert.assertEquals(1, model.asMap().get("id"));
-        Assert.assertEquals(studentsWithGroupId, model.asMap().get("students"));
         Assert.assertEquals(new ArrayList<>(), model.asMap().get("studentsWOG"));
     }
 
@@ -117,7 +121,7 @@ public class StudentsServiceImplTest {
     public void addingMainAttributeToModelIncorrectDataTest() {
         studentService.addingMainAttributeToModel(null,1,1);
         Assert.assertTrue(model.asMap().isEmpty());
-        studentService.addingMainAttributeToModel(null,-1,null);
+        studentService.addingMainAttributeToModel(null,-1,0);
         Assert.assertTrue(model.asMap().isEmpty());
         studentService.addingMainAttributeToModel(null,1,-1);
         Assert.assertTrue(model.asMap().isEmpty());
@@ -145,86 +149,19 @@ public class StudentsServiceImplTest {
         List<User> resultList1 = new ArrayList<>(Arrays.asList(studentList.get(0), studentList.get(1)));
         List<User> resultList2 = new ArrayList<>(Collections.singletonList(studentList.get(5)));
         Assert.assertEquals(resultList1, studentService.studentFilter(studentList, 1, 2));
-        Assert.assertEquals(resultList2, studentService.studentFilter(studentList, null, 2));
+        Assert.assertEquals(resultList2, studentService.studentFilter(studentList, 0, 2));
         Assert.assertEquals(new ArrayList<>(), studentService.studentFilter(studentList, 1, 1));
         Assert.assertEquals(resultList1, studentService.studentFilter(studentList, 1, 123));
-        Assert.assertEquals(resultList2, studentService.studentFilter(studentList, null, 123));
+        Assert.assertEquals(resultList2, studentService.studentFilter(studentList, 0, 123));
         Assert.assertEquals(new ArrayList<>(), studentService.studentFilter(studentList, 123, 2));
     }
 
     @Test
     public void studentFilterIncorrectDataTest() {
-        Assert.assertEquals(new ArrayList<>(), studentService.studentFilter(null, 2, 1));
         Assert.assertEquals(new ArrayList<>(), studentService.studentFilter(new ArrayList<>(), 2, 1));
         Assert.assertEquals(new ArrayList<>(), studentService.studentFilter(studentList, -1, 1));
         Assert.assertEquals(new ArrayList<>(), studentService.studentFilter(studentList, 2, -1));
     }
 
-    @Test
-    public void findNameByIdCorrectDataTest() {
-        Assert.assertEquals("1", studentService.findNameById(groupList, 1));
-        Assert.assertEquals("", studentService.findNameById(groupList, 12312));
-    }
 
-    @Test
-    public void findNameByIdIncorrectDataTest() {
-        Assert.assertEquals("", studentService.findNameById(null, 1));
-        Assert.assertEquals("", studentService.findNameById(groupList, -1));
-    }
-
-    @Test
-    public void getStudentsByGroupIdCorrectDataTest() {
-        List<User> resultList1 = new ArrayList<>(Arrays.asList(studentList.get(0), studentList.get(1)));
-        List<User> resultList2 = new ArrayList<>(Collections.singletonList(studentList.get(5)));
-        Assert.assertEquals(resultList1, studentService.getStudentsByGroupId(studentList, 1));
-        Assert.assertEquals(resultList2, studentService.getStudentsByGroupId(studentList, null));
-        Assert.assertEquals(new ArrayList<>(), studentService.getStudentsByGroupId(studentList, 12312));
-    }
-
-    @Test
-    public void getStudentsByGroupIdIncorrectDataTest() {
-        Assert.assertEquals(new ArrayList<>(), studentService.getStudentsByGroupId(null, 1));
-        Assert.assertEquals(new ArrayList<>(), studentService.getStudentsByGroupId(new ArrayList<>(), 1));
-        Assert.assertEquals(new ArrayList<>(), studentService.getStudentsByGroupId(studentList, -1));
-    }
-
-    @Test
-    public void getAllStudentExceptIdCorrectDataTest() {
-        List<User> resultList1 = new ArrayList<>(Arrays.asList(studentList.get(0), studentList.get(1),
-                studentList.get(4), studentList.get(5)));
-        List<User> resultList2 = new ArrayList<>(Arrays.asList(studentList.get(0), studentList.get(1),
-                studentList.get(2), studentList.get(3), studentList.get(4)));
-        Assert.assertEquals(resultList1, studentService.getAllStudentExceptId(studentList, 2));
-        Assert.assertEquals(resultList2, studentService.getAllStudentExceptId(studentList, null));
-    }
-
-    @Test
-    public void getAllStudentExceptIdIncorrectDataTest() {
-        Assert.assertEquals(new ArrayList<>(), studentService.getAllStudentExceptId(null, 1));
-        Assert.assertEquals(new ArrayList<>(), studentService.getAllStudentExceptId(new ArrayList<>(), 1));
-        Assert.assertEquals(new ArrayList<>(), studentService.getAllStudentExceptId(studentList, -1));
-    }
-
-    @Test
-    public void distributionStudentsByGroupCorrectData() {
-        studentService.distributionStudentsByGroup(groupList, studentList);
-        Assert.assertEquals(studentList.get(0).getGroup(), groupList.get(0));
-        Assert.assertEquals(studentList.get(1).getGroup(), groupList.get(0));
-        Assert.assertEquals(studentList.get(2).getGroup(), groupList.get(1));
-        Assert.assertEquals(studentList.get(3).getGroup(), groupList.get(1));
-        Assert.assertEquals(studentList.get(4).getGroup(), groupList.get(2));
-    }
-
-    @Test
-    public void distributionStudentsByGroupIncorrectData() {
-        studentService.distributionStudentsByGroup(null, null);
-        List<User> cloneStudentList = new ArrayList<>(studentList);
-        List<Group> cloneGroupList = new ArrayList<>(groupList);
-        studentService.distributionStudentsByGroup(null, studentList);
-        studentService.distributionStudentsByGroup(new ArrayList<>(), studentList);
-        Assert.assertEquals(cloneStudentList, studentList);
-        studentService.distributionStudentsByGroup(groupList, null);
-        studentService.distributionStudentsByGroup(groupList, new ArrayList<>());
-        Assert.assertEquals(cloneGroupList, groupList);
-    }
 }
