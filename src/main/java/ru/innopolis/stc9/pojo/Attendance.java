@@ -9,37 +9,30 @@ import lombok.Setter;
 import javax.persistence.*;
 
 @Entity
+@IdClass(AttendancePK.class)
 @Table(name = "attendance")
 @NoArgsConstructor
 @EqualsAndHashCode
 public class Attendance {
-    @Getter
+    /*@Getter
     @Setter
     @Id
     @SequenceGenerator(name = "attendanceSeq", sequenceName = "ATTENDANCE_SEQUENCE", allocationSize = 0)
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "attendanceSeq")
-    private int id;
+    private int id;*/
     @Getter
     @Setter
     private boolean attended;
+    @Id
     @Getter
     @Setter
     @ManyToOne(optional = false, fetch = FetchType.LAZY)
     @JoinColumn(name = "lessonId", nullable = false)
     private Lessons lesson;
+    @Id
     @Getter
     @Setter
     @ManyToOne(optional = false, fetch = FetchType.LAZY)
     @JoinColumn(name = "userId", nullable = false)
     private User user;
-    @Getter
-    @Setter
-    @Transient
-    //TODO need to delete
-    private int lessonId;
-    @Getter
-    @Setter
-    @Transient
-    //TODO need to delete
-    private int userId;
 }

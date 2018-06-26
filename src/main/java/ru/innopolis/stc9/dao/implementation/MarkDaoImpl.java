@@ -2,18 +2,13 @@ package ru.innopolis.stc9.dao.implementation;
 
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
-import org.hibernate.Transaction;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import ru.innopolis.stc9.dao.interfaces.LessonsDao;
 import ru.innopolis.stc9.dao.interfaces.MarkDao;
-import ru.innopolis.stc9.dao.mappers.MarkMapper;
 import ru.innopolis.stc9.pojo.Lessons;
 import ru.innopolis.stc9.pojo.Mark;
 
-import javax.persistence.criteria.CriteriaBuilder;
-import javax.persistence.criteria.CriteriaUpdate;
-import javax.persistence.criteria.Root;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -60,6 +55,14 @@ public class MarkDaoImpl implements MarkDao {
     @Override
     public boolean updateMark(Mark mark) {
         if (mark == null) return false;
+        Session session = factory.getCurrentSession();
+        session.update(mark);
+        return true;
+    }
+
+    /*@Override
+    public boolean updateMark(Mark mark) {
+        if (mark == null) return false;
         int result;
         try (Session session = factory.openSession()) {
             CriteriaBuilder builder = session.getCriteriaBuilder();
@@ -73,7 +76,7 @@ public class MarkDaoImpl implements MarkDao {
             transaction.commit();
         }
         return result != 0;
-    }
+    }*/
 
 
 }

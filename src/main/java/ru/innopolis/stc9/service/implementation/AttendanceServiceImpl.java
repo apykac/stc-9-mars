@@ -5,6 +5,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.innopolis.stc9.dao.interfaces.AttendanceDao;
+import ru.innopolis.stc9.dao.interfaces.LessonsDao;
+import ru.innopolis.stc9.dao.interfaces.UserDao;
 import ru.innopolis.stc9.pojo.Attendance;
 import ru.innopolis.stc9.service.interfaces.AttendanceService;
 
@@ -17,13 +19,18 @@ public class AttendanceServiceImpl implements AttendanceService {
 
     @Autowired
     private AttendanceDao attendanceDao;
+    @Autowired
+    private UserDao userDao;
+    @Autowired
+    private LessonsDao lessonDao;
 
     public AttendanceServiceImpl() {
     }
 
-    public AttendanceServiceImpl(AttendanceDao attendanceDao) {
+
+    /*public AttendanceServiceImpl(AttendanceDao attendanceDao) {
         this.attendanceDao = attendanceDao;
-    }
+    }*/
 
     @Override
     @Transactional
@@ -39,8 +46,8 @@ public class AttendanceServiceImpl implements AttendanceService {
                 }
             }
             Attendance attendance = new Attendance();
-            attendance.setUserId(key);
-            attendance.setLessonId(lessonId);
+            attendance.setUser(userDao.findUserByUserId(key));
+            attendance.setLesson(lessonDao.getLessonById(lessonId));
             attendance.setAttended(value);
             attendanceDao.updateAttendance(attendance);
         }
@@ -56,8 +63,8 @@ public class AttendanceServiceImpl implements AttendanceService {
         for (Map.Entry<Integer, Boolean> entry : savedAttendance.entrySet()) {
             Integer key = entry.getKey();
             Attendance attendance = new Attendance();
-            attendance.setUserId(key);
-            attendance.setLessonId(lessonId);
+            attendance.setUser(userDao.findUserByUserId(key));
+            attendance.setLesson(lessonDao.getLessonById(lessonId));
             attendance.setAttended(false);
             attendanceDao.updateAttendance(attendance);
         }
@@ -72,7 +79,7 @@ public class AttendanceServiceImpl implements AttendanceService {
         }
         List<Attendance> attendances = attendanceDao.getLessonAttendance(lessonId, groupId);
         for (Attendance attendance : attendances) {
-            result.put(attendance.getUserId(), attendance.isAttended());
+            result.put(attendance.getUser().getId(), attendance.isAttended());
         }
         return result;
     }

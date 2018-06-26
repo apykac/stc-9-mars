@@ -2,11 +2,11 @@ package ru.innopolis.stc9.dao.implementation;
 
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
-import org.hibernate.Transaction;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import ru.innopolis.stc9.dao.interfaces.AttendanceDao;
-import ru.innopolis.stc9.dao.mappers.AttendanceMapper;
+import ru.innopolis.stc9.dao.interfaces.LessonsDao;
+import ru.innopolis.stc9.dao.interfaces.UserDao;
 import ru.innopolis.stc9.dao.mappers.UserMapper;
 import ru.innopolis.stc9.pojo.Attendance;
 import ru.innopolis.stc9.pojo.Lessons;
@@ -14,7 +14,6 @@ import ru.innopolis.stc9.pojo.User;
 
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
-import javax.persistence.criteria.CriteriaUpdate;
 import javax.persistence.criteria.Root;
 import java.util.ArrayList;
 import java.util.List;
@@ -23,6 +22,10 @@ import java.util.List;
 public class AttendanceDaoImpl implements AttendanceDao {
     @Autowired
     private SessionFactory factory;
+    @Autowired
+    private LessonsDao lessonDao;
+    @Autowired
+    private UserDao userDao;
 
     @Override
     public boolean addLessonAttendance(int lessonId, int[] students) {
@@ -31,8 +34,10 @@ public class AttendanceDaoImpl implements AttendanceDao {
             result = false;
         for (int studentId : students) {
             Attendance attendance = new Attendance();
-            attendance.setLessonId(lessonId);
-            attendance.setUserId(studentId);
+            Lessons lesson = lessonDao.getLessonById(lessonId);
+            User student = userDao.findUserByUserId(studentId);
+            attendance.setLesson(lesson);
+            attendance.setUser(student);
             attendance.setAttended(true);
             try (Session session = factory.openSession()) {
                 session.beginTransaction();
@@ -46,6 +51,14 @@ public class AttendanceDaoImpl implements AttendanceDao {
     @Override
     public boolean updateAttendance(Attendance attendance) {
         if (attendance == null) return false;
+        Session session = factory.getCurrentSession();
+        session.update(attendance);
+        return true;
+    }
+
+   /*@Override
+    public boolean updateAttendance(Attendance attendance) {
+        if (attendance == null) return false;
         int result;
         try (Session session = factory.openSession()) {
             CriteriaBuilder builder = session.getCriteriaBuilder();
@@ -53,15 +66,15 @@ public class AttendanceDaoImpl implements AttendanceDao {
             Root<Attendance> root = criteria.from(Attendance.class);
             criteria.set(root.get(AttendanceMapper.ATTENDED), attendance.isAttended()).
                     where(builder.and(
-                            builder.equal(root.get(AttendanceMapper.LESSONID), attendance.getLessonId()),
-                            builder.equal(root.get(AttendanceMapper.USERID), attendance.getUserId())
+                            builder.equal(root.get("lesson").get("id"), attendance.getLesson().getId()),
+                            builder.equal(root.get("user").get("id"), attendance.getUser().getId())
                     ));
             Transaction transaction = session.beginTransaction();
             result = session.createQuery(criteria).executeUpdate();
             transaction.commit();
         }
         return result != 0;
-    }
+    }*/
 
     @Override
     public int getNumberOfMissedLessons(int id) {
@@ -76,7 +89,7 @@ public class AttendanceDaoImpl implements AttendanceDao {
             Root<Lessons> rootLesson = criteriaLessons.from(Lessons.class);
 
             criteriaAttendance.select(rootAttendance).
-                    where(builder.equal(rootAttendance.get(AttendanceMapper.USERID), id));
+                    where(builder.equal(rootAttendance.get("user").get("id"), id));
             criteriaLessons.select(rootLesson);
 
             List<Lessons> totalLessons = session.createQuery(criteriaLessons).getResultList();
@@ -105,10 +118,10 @@ public class AttendanceDaoImpl implements AttendanceDao {
             Root<User> rootUser = criteria.from(User.class);
             criteria.select(rootAttendance).
                     where(builder.and(
-                            builder.equal(rootAttendance.get(AttendanceMapper.USERID), rootUser.get(UserMapper.ID)),
+                            builder.equal(rootAttendance.get("user").get("id"), rootUser.get(UserMapper.ID)),
                             builder.and(
-                                    builder.equal(rootAttendance.get(AttendanceMapper.LESSONID), lessonId),
-                                    builder.equal(rootUser.get(UserMapper.GROUPID), groupId)
+                                    builder.equal(rootAttendance.get("lesson").get("id"), lessonId),
+                                    builder.equal(rootUser.get("group").get("id"), groupId)
                             )
                     ));
             result = session.createQuery(criteria).getResultList();
