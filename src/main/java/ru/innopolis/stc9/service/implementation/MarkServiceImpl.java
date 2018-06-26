@@ -2,6 +2,7 @@ package ru.innopolis.stc9.service.implementation;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import ru.innopolis.stc9.dao.interfaces.LessonsDao;
 import ru.innopolis.stc9.dao.interfaces.MarkDao;
 import ru.innopolis.stc9.dao.interfaces.UserDao;
@@ -14,6 +15,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 @Service
+@Transactional
 public class MarkServiceImpl implements MarkService {
 
     @Autowired

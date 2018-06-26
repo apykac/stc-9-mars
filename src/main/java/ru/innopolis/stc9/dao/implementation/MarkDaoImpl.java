@@ -5,12 +5,13 @@ import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
+import ru.innopolis.stc9.dao.interfaces.LessonsDao;
 import ru.innopolis.stc9.dao.interfaces.MarkDao;
 import ru.innopolis.stc9.dao.mappers.MarkMapper;
+import ru.innopolis.stc9.pojo.Lessons;
 import ru.innopolis.stc9.pojo.Mark;
 
 import javax.persistence.criteria.CriteriaBuilder;
-import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.CriteriaUpdate;
 import javax.persistence.criteria.Root;
 import java.util.ArrayList;
@@ -20,19 +21,16 @@ import java.util.List;
 public class MarkDaoImpl implements MarkDao {
     @Autowired
     private SessionFactory factory;
+    @Autowired
+    private LessonsDao lessonsDao;
 
     @Override
     public List<Mark> getMarksByLessonId(int lessonId) {
         if (lessonId < 0) return new ArrayList<>();
         List<Mark> resultList;
-        try (Session session = factory.openSession()) {
-            CriteriaBuilder builder = session.getCriteriaBuilder();
-            CriteriaQuery<Mark> criteria = builder.createQuery(Mark.class);
-            Root<Mark> root = criteria.from(Mark.class);
-            criteria.select(root);
-            criteria.where(builder.equal(root.get(MarkMapper.LESSONID), lessonId));
-            resultList = session.createQuery(criteria).getResultList();
-        }
+        Session session = factory.getCurrentSession();
+        Lessons lesson = lessonsDao.getLessonById(lessonId);
+        resultList = session.createQuery("FROM Mark WHERE lesson = :lesson").setParameter("lesson", lesson).list();
         return resultList;
     }
 

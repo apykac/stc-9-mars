@@ -3,6 +3,7 @@ package ru.innopolis.stc9.service.implementation;
 import org.apache.commons.validator.UrlValidator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import ru.innopolis.stc9.dao.interfaces.HomeWorkDao;
 import ru.innopolis.stc9.dao.interfaces.MarkDao;
 import ru.innopolis.stc9.pojo.HomeWork;
@@ -15,6 +16,7 @@ import java.util.List;
  * Created by Сергей on 31.05.2018.
  */
 @Service
+@Transactional
 public class HomeWorkServiceImpl implements HomeWorkService {
     @Autowired
     private HomeWorkDao homeWorkDao;

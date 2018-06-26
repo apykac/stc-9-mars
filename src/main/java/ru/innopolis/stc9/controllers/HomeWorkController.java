@@ -8,7 +8,9 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import ru.innopolis.stc9.dao.interfaces.LessonsDao;
 import ru.innopolis.stc9.pojo.HomeWork;
+import ru.innopolis.stc9.pojo.Lessons;
 import ru.innopolis.stc9.service.interfaces.HomeWorkService;
 import ru.innopolis.stc9.service.interfaces.UserService;
 
@@ -21,6 +23,8 @@ public class HomeWorkController {
     private HomeWorkService homeWorkService;
     @Autowired
     private UserService userService;
+    @Autowired
+    private LessonsDao lessonDao;
     private Logger logger = Logger.getLogger(HomeWorkController.class);
     private String addHomeWork = "views/addHomeWork";
     private String attributeLessonId = "lessonId";
@@ -46,7 +50,8 @@ public class HomeWorkController {
         }
         org.springframework.security.core.userdetails.User activeUser =
                 (org.springframework.security.core.userdetails.User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        homeWorkService.addHomeWork(new HomeWork(url, userService.findUserByLogin(activeUser.getUsername()).getId(), lessonId));
+        Lessons lesson = lessonDao.getLessonById(lessonId);
+        homeWorkService.addHomeWork(new HomeWork(url, userService.findUserByLogin(activeUser.getUsername()), lesson));
         model.addAttribute(attributeLessonId, lessonId);
         logger.info("Homework added");
         return "redirect:/university/profile";

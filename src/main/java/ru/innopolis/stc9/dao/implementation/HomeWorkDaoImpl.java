@@ -6,10 +6,17 @@ import org.hibernate.Transaction;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import ru.innopolis.stc9.dao.interfaces.HomeWorkDao;
+import ru.innopolis.stc9.dao.interfaces.LessonsDao;
+import ru.innopolis.stc9.dao.interfaces.UserDao;
 import ru.innopolis.stc9.dao.mappers.HomeWokMapper;
 import ru.innopolis.stc9.pojo.HomeWork;
+import ru.innopolis.stc9.pojo.Lessons;
+import ru.innopolis.stc9.pojo.User;
 
-import javax.persistence.criteria.*;
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaDelete;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Root;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -17,6 +24,10 @@ import java.util.List;
 public class HomeWorkDaoImpl implements HomeWorkDao {
     @Autowired
     private SessionFactory factory;
+    @Autowired
+    private UserDao userDao;
+    @Autowired
+    private LessonsDao lessonDao;
 
     @Override
     public boolean addHomeWork(HomeWork homeWork) {
@@ -30,6 +41,14 @@ public class HomeWorkDaoImpl implements HomeWorkDao {
     }
 
     @Override
+    public boolean updateHomeWork(HomeWork homeWork) {
+        if (homeWork == null) return false;
+        Session session = factory.getCurrentSession();
+        session.update(homeWork);
+        return true;
+    }
+
+    /*@Override
     public boolean updateHomeWork(HomeWork homeWork) {
         if (homeWork == null) return false;
         int result;
@@ -46,7 +65,7 @@ public class HomeWorkDaoImpl implements HomeWorkDao {
             transaction.commit();
         }
         return result != 0;
-    }
+    }*/
 
     @Override
     public HomeWork findById(int id) {
@@ -58,7 +77,15 @@ public class HomeWorkDaoImpl implements HomeWorkDao {
         return homeWork;
     }
 
-    @Override
+    public HomeWork findByStudentId(int studentId) {
+        if (studentId < 0) return null;
+        Session session = factory.getCurrentSession();
+        User student = userDao.findUserByUserId(studentId);
+        return (HomeWork) session.createQuery("FROM HomeWork WHERE student = :student").setParameter("student", student).uniqueResult();
+    }
+
+
+    /*@Override
     public HomeWork findByStudentId(int studentId) {
         if (studentId < 0) return null;
         List<HomeWork> resultList;
@@ -72,7 +99,7 @@ public class HomeWorkDaoImpl implements HomeWorkDao {
         }
         if (!resultList.isEmpty()) return resultList.get(resultList.size() - 1);
         else return null;
-    }
+    }*/
 
     @Override
     public HomeWork findByLessonId(int lessonId) {
@@ -83,7 +110,7 @@ public class HomeWorkDaoImpl implements HomeWorkDao {
             CriteriaQuery<HomeWork> criteria = builder.createQuery(HomeWork.class);
             Root<HomeWork> root = criteria.from(HomeWork.class);
             criteria.select(root);
-            criteria.where(builder.equal(root.get(HomeWokMapper.LESSID), lessonId));
+            //criteria.where(builder.equal(root.get(HomeWokMapper.LESSID), lessonId));
             resultList = session.createQuery(criteria).getResultList();
         }
         if (!resultList.isEmpty()) return resultList.get(resultList.size() - 1);
@@ -91,6 +118,16 @@ public class HomeWorkDaoImpl implements HomeWorkDao {
     }
 
     @Override
+    public List<HomeWork> getHomeWorkListByLessonId(int lessonId) {
+        if (lessonId < 0) return new ArrayList<>();
+        List<HomeWork> resultList;
+        Lessons lesson = lessonDao.getLessonById(lessonId);
+        Session session = factory.getCurrentSession();
+        resultList = session.createQuery("FROM HomeWork WHERE lesson = :lesson").setParameter("lesson", lesson).list();
+        return resultList;
+    }
+
+    /*@Override
     public List<HomeWork> getHomeWorkListByLessonId(int lessonId) {
         if (lessonId < 0) return new ArrayList<>();
         List<HomeWork> resultList;
@@ -103,9 +140,21 @@ public class HomeWorkDaoImpl implements HomeWorkDao {
             resultList = session.createQuery(criteria).getResultList();
         }
         return resultList;
-    }
+    }*/
 
     @Override
+    public HomeWork findHomeWorkByStudentIdAndLessonId(int studentId, int lessonId) {
+        if (lessonId < 0 || studentId < 0) return null;
+        User student = userDao.findUserByUserId(studentId);
+        Lessons lesson = lessonDao.getLessonById(lessonId);
+        Session session = factory.getCurrentSession();
+        return (HomeWork) session.createQuery("FROM HomeWork WHERE student = :student AND lesson = :lesson")
+                .setParameter("student", student)
+                .setParameter("lesson", lesson)
+                .uniqueResult();
+    }
+
+    /*@Override
     public HomeWork findHomeWorkByStudentIdAndLessonId(int studentId, int lessonId) {
         if (lessonId < 0 || studentId < 0) return null;
         List<HomeWork> resultList;
@@ -122,9 +171,16 @@ public class HomeWorkDaoImpl implements HomeWorkDao {
         }
         if (!resultList.isEmpty()) return resultList.get(resultList.size() - 1);
         else return null;
-    }
+    }*/
 
     @Override
+    public List<HomeWork> findAllHomeWork() {
+        List<HomeWork> resultList;
+        Session session = factory.getCurrentSession();
+        return session.createQuery("from HomeWork").getResultList();
+    }
+
+    /*@Override
     public List<HomeWork> findAllHomeWork() {
         List<HomeWork> resultList;
         try (Session session = factory.openSession()) {
@@ -135,7 +191,7 @@ public class HomeWorkDaoImpl implements HomeWorkDao {
             resultList = session.createQuery(criteria).getResultList();
         }
         return resultList;
-    }
+    }*/
 
     @Override
     public boolean deleteHomeWork(int id) {

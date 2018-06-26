@@ -7,7 +7,7 @@ public class MarkMapper implements Mapper {
     public static final String ID = "id";
     public static final String VALUE = "value";
     public static final String USERID = "userId";
-    public static final String LESSONID = "lessonId";
+    //public static final String LESSONID = "lessonId";
     public static final String COMMENT = "comment";
 
     @Override
