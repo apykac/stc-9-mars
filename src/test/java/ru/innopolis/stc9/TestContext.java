@@ -11,10 +11,15 @@ import org.springframework.jdbc.datasource.DriverManagerDataSource;
 import org.springframework.orm.hibernate4.HibernateTransactionManager;
 import org.springframework.orm.hibernate4.LocalSessionFactoryBean;
 import ru.innopolis.stc9.dao.implementation.GroupDaoImpl;
+import ru.innopolis.stc9.dao.implementation.UserDaoImpl;
 import ru.innopolis.stc9.dao.interfaces.GroupDao;
+import ru.innopolis.stc9.dao.interfaces.UserDao;
 import ru.innopolis.stc9.service.implementation.GroupServiceImpl;
+import ru.innopolis.stc9.service.implementation.StudentServiceImpl;
 import ru.innopolis.stc9.service.implementation.UserServiceImpl;
 import ru.innopolis.stc9.service.interfaces.GroupService;
+import ru.innopolis.stc9.service.interfaces.MessageService;
+import ru.innopolis.stc9.service.interfaces.StudentService;
 import ru.innopolis.stc9.service.interfaces.UserService;
 
 import javax.sql.DataSource;
@@ -45,22 +50,26 @@ public class TestContext {
         return Mockito.mock(UserServiceImpl.class);
     }
 
-    //TODO конструкторов по умолчанию больше нет
-    /*@Bean
+    @Bean
     public UserDao userDao() {
-        return new UserDaoImpl();
+        return Mockito.mock(UserDaoImpl.class);
     }
 
     @Bean
     public StudentService studentService() {
-        return new StudentServiceImpl();
-    }*/
+        return Mockito.mock(StudentServiceImpl.class);
+    }
+
+    @Bean
+    public MessageService messageService() {
+        return Mockito.mock(MessageService.class);
+    }
 
     @Bean
     public LocalSessionFactoryBean sessionFactory() {
         LocalSessionFactoryBean sessionFactory = new LocalSessionFactoryBean();
         sessionFactory.setDataSource(dataSource());
-        sessionFactory.setPackagesToScan(new String[] { "ru.innopolis.stc9.pojo" });
+        sessionFactory.setPackagesToScan(new String[]{"ru.innopolis.stc9.pojo"});
         sessionFactory.setHibernateProperties(hibernateProperties());
         return sessionFactory;
     }
@@ -73,7 +82,7 @@ public class TestContext {
         return properties;
     }
 
-        @Bean
+    @Bean
     public DataSource dataSource() {
         DriverManagerDataSource dataSource = new DriverManagerDataSource();
         dataSource.setDriverClassName(environment.getRequiredProperty("jdbc.driverClassName"));

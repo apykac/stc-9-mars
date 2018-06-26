@@ -81,7 +81,6 @@ public class GroupControllerTest {
 
     @Test
     public void addGroupWithDuplicateNameTest() throws Exception {
-
         mockMvc.perform(post("/university/teacher/addgroups")
                 .contentType(MediaType.APPLICATION_FORM_URLENCODED)
                 .param("name", "test"))
