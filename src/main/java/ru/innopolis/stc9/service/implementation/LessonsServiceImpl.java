@@ -3,22 +3,28 @@ package ru.innopolis.stc9.service.implementation;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import ru.innopolis.stc9.dao.interfaces.LessonsDao;
 import ru.innopolis.stc9.pojo.Lessons;
+import ru.innopolis.stc9.pojo.Subject;
 import ru.innopolis.stc9.service.interfaces.LessonsService;
+import ru.innopolis.stc9.service.interfaces.SubjectService;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.List;
 
 @Service
+@Transactional
 public class LessonsServiceImpl implements LessonsService {
     private final Logger logger = Logger.getLogger(LessonsServiceImpl.class);
     private final LessonsDao lessonsDao;
+    private final SubjectService subjectService;
 
     @Autowired
-    public LessonsServiceImpl(LessonsDao lessonsDao) {
+    public LessonsServiceImpl(LessonsDao lessonsDao, SubjectService subjectService) {
         this.lessonsDao = lessonsDao;
+        this.subjectService = subjectService;
     }
 
 
@@ -47,7 +53,17 @@ public class LessonsServiceImpl implements LessonsService {
 
     @Override
     public List<Lessons> findAllLessons() {
-        return lessonsDao.findAllLessons();
+        List<Subject> subjectList = subjectService.findAllSubject();
+        List<Lessons> lessonsList = lessonsDao.findAllLessons();
+
+        for (Lessons lessons : lessonsList) {
+            lessons.setSname(
+                    subjectList.get(lessons.getId())
+                            .getName()
+            );
+        }
+
+        return lessonsList;
     }
 
     @Override

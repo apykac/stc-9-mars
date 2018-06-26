@@ -1,12 +1,12 @@
 package ru.innopolis.stc9.service.interfaces;
 
 import ru.innopolis.stc9.pojo.Lessons;
-import ru.innopolis.stc9.pojo.Progress;
+import ru.innopolis.stc9.pojo.Mark;
 
 import java.util.List;
 
 public interface ProgressService {
-    List<Progress> getProgress(int greaterOrEqualMark, int lessOrEqualMark, String login);
+    List<Mark> getProgress(int greaterOrEqualMark, int lessOrEqualMark, String login);
 
     List<Integer> getAmountMarks(String login);
 

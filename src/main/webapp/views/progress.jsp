@@ -168,21 +168,15 @@
                                                 <tr>
                                                     <th>Оценка</th>
                                                     <th>Имя</th>
-                                                    <th>Группа</th>
                                                     <th>Урок</th>
-                                                    <th>Дата</th>
-                                                    <th>Предмет</th>
                                                 </tr>
                                                 </thead>
                                                 <tbody>
                                                 <c:forEach items="${requestScope.get('progress')}" var="progress">
                                                     <tr>
                                                         <td>${progress.value}</td>
-                                                        <td>${progress.firstName} ${progress.secondName}</td>
-                                                        <td>${progress.groupName}</td>
-                                                        <td>${progress.lessonsName}</td>
-                                                        <td>${progress.date}</td>
-                                                        <td>${progress.subjectName}</td>
+                                                        <td>${progress.student.id}</td>
+                                                        <td>${progress.lesson.id}</td>
                                                     </tr>
                                                 </c:forEach>
                                                 </tbody>
@@ -274,7 +268,7 @@
                                         <c:forEach items="${requestScope.get('lessons')}" var="lessons">
                                             <tr>
                                                 <td>${lessons.id}</td>
-                                                <td>${lessons.subjectId}</td>
+                                                <td>${lessons.subject.id}</td>
                                                 <td>${lessons.date}</td>
                                                 <td>${lessons.name}</td>
                                             </tr>

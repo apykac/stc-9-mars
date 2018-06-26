@@ -9,7 +9,7 @@ public interface SubjectDao {
 
     boolean deleteSubject(int subjectId);
 
-    List<Subject> findAllSubject();
+    List findAllSubject();
 
     Subject findById(int id);
 }

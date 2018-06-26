@@ -27,7 +27,7 @@ public class StudentController {
     public String viewLessonForSubject(@PathVariable("subjectId") int subjectId, Model model) {
         ArrayList<Lessons> lessons = new ArrayList<>();
         for(Lessons l: lessonsService.findAllLessons()) {
-            if (l.getSubjectId() == subjectId) {
+            if (l.getSubject().getId() == subjectId) {
                 lessons.add(l);
             }
         }

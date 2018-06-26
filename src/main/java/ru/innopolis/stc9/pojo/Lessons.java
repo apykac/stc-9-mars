@@ -20,6 +20,7 @@ public class Lessons {
     private int id;
     @Getter
     @Setter
+    @Transient
     private String sname;
     @Getter
     @Setter
@@ -44,30 +45,25 @@ public class Lessons {
     @Setter
     @OneToMany(mappedBy = "lesson", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<Mark> marks;
-    @Getter
-    @Setter
-    @Transient
-    //TODO need to delete
-    private long subjectId;
 
-    public Lessons(int id, int subjectId, String sname, Date date, String name) {
+    public Lessons(int id, Subject subject, String sname, Date date, String name) {
         this.id = id;
-        this.subjectId = subjectId;
+        this.subject = subject;
         this.sname = sname;
         this.date = date;
         this.name = name;
     }
 
 
-    public Lessons(int id, int subjectId, Date date, String name) {
+    public Lessons(int id, Subject subject, Date date, String name) {
         this.id = id;
-        this.subjectId = subjectId;
+        this.subject = subject;
         this.date = date;
         this.name = name;
     }
 
-    public Lessons(int subjectId, Date date, String name) {
-        this.subjectId = subjectId;
+    public Lessons(Subject subject, Date date, String name) {
+        this.subject = subject;
         this.date = date;
         this.name = name;
     }

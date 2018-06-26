@@ -46,7 +46,7 @@ public class MarkServiceImpl implements MarkService {
             return result;
         }
         for (Mark mark : markDao.getMarksByLessonId(lessonId)) {
-            User student = userDao.findUserByUserId(mark.getUserId());
+            User student = userDao.findUserByUserId(mark.getStudent().getId());
             String name = getFullStudentName(student);
             result.put(name, mark);
         }
@@ -66,7 +66,7 @@ public class MarkServiceImpl implements MarkService {
     @Override
     public String getFullStudentNameInOneString(int markId) {
         Mark mark = getMarkById(markId);
-        User user = userDao.findUserByUserId(mark.getUserId());
+        User user = userDao.findUserByUserId(mark.getStudent().getId());
         return user.getSecondName() +
                 " " +
                 user.getFirstName() +
@@ -77,7 +77,7 @@ public class MarkServiceImpl implements MarkService {
     @Override
     public String getLessonNameByMarkId(int markId) {
         Mark mark = getMarkById(markId);
-        Lessons lesson = lessonsDao.getLessonById(mark.getLessonId());
+        Lessons lesson = lessonsDao.getLessonById(mark.getLesson().getId());
         return lesson.getName();
     }
 

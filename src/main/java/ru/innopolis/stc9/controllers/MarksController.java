@@ -45,7 +45,7 @@ public class MarksController {
         mark.setComment(comment);
         markService.updateMark(mark);
 
-        return new ModelAndView("redirect:/university/teacher/marks?lessonId=" + mark.getLessonId());
+        return new ModelAndView("redirect:/university/teacher/marks?lessonId=" + mark.getLesson().getId());
     }
 }
 
