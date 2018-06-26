@@ -13,7 +13,6 @@ import ru.innopolis.stc9.dao.implementation.HomeWorkDaoImpl;
 import ru.innopolis.stc9.dao.interfaces.HomeWorkDao;
 import ru.innopolis.stc9.dao.interfaces.MarkDao;
 import ru.innopolis.stc9.pojo.HomeWork;
-import ru.innopolis.stc9.pojo.Mark;
 import ru.innopolis.stc9.service.implementation.HomeWorkServiceImpl;
 import ru.innopolis.stc9.service.interfaces.HomeWorkService;
 
@@ -119,8 +118,8 @@ public class HomeWorkServiceImplTest {
 
     @Test
     public void findHomeWorkByMarkId() {
-        Mark mark = new Mark(1, 40, 1, 1, "some comment");
-        PowerMockito.when(markDao.getMarkById(1)).thenReturn(mark);
+        //Mark mark = new Mark(1, 40, 1, 1, "some comment");
+        //PowerMockito.when(markDao.getMarkById(1)).thenReturn(mark);
         PowerMockito.when(homeWorkDao.findHomeWorkByStudentIdAndLessonId(1, 1)).thenReturn(
                 new HomeWork(1, "url", 1, 1));
         Assert.assertEquals("url", homeWorkService.findHomeWorkByMarkId(1));

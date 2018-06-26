@@ -39,22 +39,22 @@
                                         </tr>
                                         </thead>
                                         <tbody>
-                                        <c:forEach items="${requestScope.get('lessons')}" var="lessons">
+                                        <c:forEach items="${lessons}" var="lesson">
                                             <tr class="m_editLessons"
-                                                idless="${lessons.id}" subjidless="${lessons.subject.id}"
-                                                snameless="${lessons.sname}"
-                                                dateless="${lessons.date}" nameless="${lessons.name}"
+                                                idless="${lesson.id}" subjidless="${lesson.subject.id}"
+                                                snameless="${lesson.subject.name}"
+                                                dateless="${lesson.date}" nameless="${lesson.name}"
                                                 style="cursor:pointer">
-                                                <td>${lessons.sname}</td>
-                                                <td>${lessons.date}</td>
-                                                <td>${lessons.name}</td>
+                                                <td>${lesson.subject.name}</td>
+                                                <td>${lesson.date}</td>
+                                                <td>${lesson.name}</td>
                                                 <td>
-                                                    <a href=${pageContext.request.contextPath}/university/teacher/attendance?lessonId=${lessons.id}>
+                                                    <a href=${pageContext.request.contextPath}/university/teacher/attendance?lessonId=${lesson.id}>
                                                         Посещаемость
                                                     </a>
                                                 </td>
                                                 <td>
-                                                    <a href=${pageContext.request.contextPath}/university/teacher/marks?lessonId=${lessons.id}>
+                                                    <a href=${pageContext.request.contextPath}/university/teacher/marks?lessonId=${lesson.id}>
                                                         Проверка ДЗ
                                                     </a>
                                                 </td>
@@ -88,8 +88,8 @@
                             <div class="form-group">
                                 <label for="add_sname">Предмет</label>
                                 <select id="add_sname" class="form-control" name="add_subject_id">
-                                    <c:forEach items="${subjects}" var="subj">
-                                        <option value="${subj.id}">${subj.name}</option>
+                                    <c:forEach items="${subjects}" var="subject">
+                                        <option value="${subject.id}">${subject.name}</option>
                                     </c:forEach>
                                 </select>
                                 <label for="add_date">Дата урока</label>

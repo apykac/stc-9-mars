@@ -38,9 +38,9 @@ public class MarkServiceImplTest {
 
     @Before
     public void setUp() {
-        mark = new Mark(1, 5, 1, 1, "Acceptable");
+        //mark = new Mark(1, 5, 1, 1, "Acceptable");
         user = new User("admin", "123", "Admin", "Adminov", "Adminovich");
-        lesson = new Lessons(1, 1, "Subject", null, "Lesson");
+        //lesson = new Lessons(1, 1, "Subject", null, "Lesson");
         fullName = "Adminov Admin Adminovich";
         getMarksByLessonIdResult = new HashMap<>();
         getMarksByLessonIdResult.put(fullName, mark);

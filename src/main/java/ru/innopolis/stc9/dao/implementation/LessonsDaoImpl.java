@@ -1,5 +1,6 @@
 package ru.innopolis.stc9.dao.implementation;
 
+import org.hibernate.Hibernate;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.query.Query;
@@ -45,10 +46,13 @@ public class LessonsDaoImpl implements LessonsDao {
     }
 
     @Override
-    public List<Lessons> findAllLessons() {
+    public List<Lessons> findAllLessonsWithSubjects() {
         Session session = factory.getCurrentSession();
         Query query = session.createQuery("FROM Lessons");
-        return query.getResultList();
+        List<Lessons> lessons = query.getResultList();
+        for (Lessons lesson : lessons)
+            Hibernate.initialize(lesson.getSubject());
+        return lessons;
     }
 
     @Override

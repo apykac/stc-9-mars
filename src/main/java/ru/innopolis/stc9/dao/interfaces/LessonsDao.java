@@ -9,7 +9,7 @@ public interface LessonsDao {
 
     boolean deleteLesson(int lessonId);
 
-    List<Lessons> findAllLessons();
+    List<Lessons> findAllLessonsWithSubjects();
 
     Lessons getLessonById(int id);
 }

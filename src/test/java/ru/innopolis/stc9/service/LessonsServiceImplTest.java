@@ -35,7 +35,7 @@ public class LessonsServiceImplTest {
         when(mockLessonDao.addLesson(lesson)).thenReturn(true);
         when(mockLessonDao.deleteLesson(1)).thenReturn(true);
         when(mockLessonDao.deleteLesson(2)).thenReturn(false);
-        when(mockLessonDao.findAllLessons()).thenReturn(list);
+        when(mockLessonDao.findAllLessonsWithSubjects()).thenReturn(list);
         lessonsService = new LessonsServiceImpl(mockLessonDao);
     }
 
@@ -73,10 +73,10 @@ public class LessonsServiceImplTest {
 
     @Test
     public void findAllLessonsTest() {
-        List<Lessons> result = lessonsService.findAllLessons();
+        List<Lessons> result = lessonsService.findAllLessonsWithSubjects();
         assertEquals(result.get(0).getName(), "some");
         assertEquals(result.get(0).getDate(), dateSql);
-        assertEquals(result.get(0).getSubjectId(), 1);
+        assertEquals(result.get(0).getSubject().getId(), 1);
     }
 
     @Test
