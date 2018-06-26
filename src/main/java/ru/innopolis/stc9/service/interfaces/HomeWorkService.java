@@ -22,7 +22,7 @@ public interface HomeWorkService {
 
     HomeWork findByLessonId(int lessonId);
 
-    String findHomeWorkByMarkId(int markId);
+    HomeWork findHomeWorkByMarkId(int markId);
 
     boolean homeWorkIsURL(String homeWork);
 

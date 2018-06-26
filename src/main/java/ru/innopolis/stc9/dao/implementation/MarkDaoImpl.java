@@ -1,8 +1,9 @@
 package ru.innopolis.stc9.dao.implementation;
 
+import org.hibernate.Hibernate;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
-import org.hibernate.Transaction;
+import org.hibernate.query.Query;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import ru.innopolis.stc9.dao.interfaces.MarkDao;
@@ -10,7 +11,6 @@ import ru.innopolis.stc9.dao.mappers.MarkMapper;
 import ru.innopolis.stc9.pojo.Mark;
 
 import javax.persistence.criteria.CriteriaBuilder;
-import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.CriteriaUpdate;
 import javax.persistence.criteria.Root;
 import java.util.ArrayList;
@@ -24,26 +24,22 @@ public class MarkDaoImpl implements MarkDao {
     @Override
     public List<Mark> getMarksByLessonId(int lessonId) {
         if (lessonId < 0) return new ArrayList<>();
-        List<Mark> resultList;
-        try (Session session = factory.openSession()) {
-            CriteriaBuilder builder = session.getCriteriaBuilder();
-            CriteriaQuery<Mark> criteria = builder.createQuery(Mark.class);
-            Root<Mark> root = criteria.from(Mark.class);
-            criteria.select(root);
-            criteria.where(builder.equal(root.get(MarkMapper.LESSONID), lessonId));
-            resultList = session.createQuery(criteria).getResultList();
+        Session session = factory.getCurrentSession();
+        Query query = session.createQuery("FROM Mark m WHERE m.lesson.id = :lessonId");
+        query.setParameter("lessonId", lessonId);
+        List<Mark> marks = query.getResultList();
+        for (Mark mark : marks) {
+            Hibernate.initialize(mark.getStudent());
+            Hibernate.initialize(mark.getLesson());
         }
-        return resultList;
+        return marks;
     }
 
     @Override
     public Mark getMarkById(int id) {
         if (id < 0) return null;
-        Mark mark;
-        try (Session session = factory.openSession()) {
-            mark = session.get(Mark.class, id);
-        }
-        return mark;
+        Session session = factory.getCurrentSession();
+        return session.get(Mark.class, id);
     }
 
     @Override
@@ -51,11 +47,8 @@ public class MarkDaoImpl implements MarkDao {
         if (mark == null) return false;
         mark.setComment("");
         mark.setValue(0);
-        try (Session session = factory.openSession()) {
-            session.beginTransaction();
-            session.save(mark);
-            session.getTransaction().commit();
-        }
+        Session session = factory.getCurrentSession();
+        session.save(mark);
         return true;
     }
 
@@ -63,18 +56,25 @@ public class MarkDaoImpl implements MarkDao {
     public boolean updateMark(Mark mark) {
         if (mark == null) return false;
         int result;
-        try (Session session = factory.openSession()) {
-            CriteriaBuilder builder = session.getCriteriaBuilder();
-            CriteriaUpdate<Mark> criteria = builder.createCriteriaUpdate(Mark.class);
-            Root<Mark> root = criteria.from(Mark.class);
-            criteria.set(root.get(MarkMapper.VALUE), mark.getValue()).
-                    set(root.get(MarkMapper.COMMENT), mark.getComment()).
-                    where(builder.equal(root.get(MarkMapper.ID), mark.getId()));
-            Transaction transaction = session.beginTransaction();
-            result = session.createQuery(criteria).executeUpdate();
-            transaction.commit();
-        }
+        Session session = factory.getCurrentSession();
+        CriteriaBuilder builder = session.getCriteriaBuilder();
+        CriteriaUpdate<Mark> criteria = builder.createCriteriaUpdate(Mark.class);
+        Root<Mark> root = criteria.from(Mark.class);
+        criteria.set(root.get(MarkMapper.VALUE), mark.getValue()).
+                set(root.get(MarkMapper.COMMENT), mark.getComment()).
+                where(builder.equal(root.get(MarkMapper.ID), mark.getId()));
+        result = session.createQuery(criteria).executeUpdate();
         return result != 0;
+    }
+
+    @Override
+    public Mark getMarkByIdWithFullInfo(int id) {
+        if (id < 0) return null;
+        Session session = factory.getCurrentSession();
+        Mark mark = session.get(Mark.class, id);
+        Hibernate.initialize(mark.getLesson());
+        Hibernate.initialize(mark.getStudent());
+        return mark;
     }
 
 

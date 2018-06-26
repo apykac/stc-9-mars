@@ -12,4 +12,6 @@ public interface MarkDao {
     boolean addMark(Mark mark);
 
     boolean updateMark(Mark mark);
+
+    Mark getMarkByIdWithFullInfo(int id);
 }

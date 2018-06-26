@@ -1,7 +1,6 @@
 package ru.innopolis.stc9.service;
 
 import org.junit.Before;
-import org.junit.Test;
 import org.powermock.api.mockito.PowerMockito;
 import ru.innopolis.stc9.dao.implementation.LessonsDaoImpl;
 import ru.innopolis.stc9.dao.implementation.MarkDaoImpl;
@@ -13,15 +12,12 @@ import ru.innopolis.stc9.pojo.Lessons;
 import ru.innopolis.stc9.pojo.Mark;
 import ru.innopolis.stc9.pojo.User;
 import ru.innopolis.stc9.service.implementation.MarkServiceImpl;
-import ru.innopolis.stc9.service.interfaces.MarkService;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
 import static org.powermock.api.mockito.PowerMockito.mock;
 
 public class MarkServiceImplTest {
@@ -57,7 +53,7 @@ public class MarkServiceImplTest {
         PowerMockito.when(userDao.findUserByUserId(1)).thenReturn(user);
     }
 
-    @Test
+    /*@Test
     public void callConstructor() {
         MarkService markService = new MarkServiceImpl();
     }
@@ -113,6 +109,6 @@ public class MarkServiceImplTest {
     public void getFullStudentNameTest() {
         String result = markService.getFullStudentName(user);
         assertEquals(result, fullName);
-    }
+    }*/
 
 }

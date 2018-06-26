@@ -24,8 +24,10 @@
                         <div class="dataTables_wrapper form-inline dt-bootstrap">
                             <div class="row">
                                 <div class="col-sm-12">
-                                    <p>Студент: <b>${requestScope.get("studentName")}</b></p>
-                                    <p>Урок: <b>${requestScope.get("lessonName")}</b></p>
+                                    <p>Студент:
+                                        <b>${mark.student.firstName} ${mark.student.secondName} ${mark.student.middleName}</b>
+                                    </p>
+                                    <p>Урок: <b>${mark.lesson.name}</b></p>
                                 </div>
                             </div>
                             <!-- /.table-responsive -->
@@ -47,19 +49,19 @@
                     <div class="box-body">
                         <form class="form-horizontal" id="homeWorkContent">
 
-                            <c:set var="homeWorkIsUrl" value="${requestScope.get('homeWorkIsUrl')}"/>
+                            <c:set var="homeWorkIsUrl" value="${homeWorkIsUrl}"/>
 
                             <div class="form-group">
                                 <label for="comment" class="col-sm-3 control-label">Ссылка на ДЗ</label>
                                 <div class="col-sm-9">
 
                                     <c:if test="${homeWorkIsUrl==true}">
-                                        <a href="${requestScope.get("homeworkContent")}">${requestScope.get("homeworkContent")}</a>
+                                        <a href="${homework.homeWorkURL}">${homework.homeWorkURL}</a>
                                     </c:if>
 
                                     <c:if test="${homeWorkIsUrl==false}">
                             <textarea class="form-control" id="homeWork" name="homeWork"
-                                      rows="1">${requestScope.get("homeworkContent")}</textarea>
+                                      rows="1">${homework.homeWorkURL}</textarea>
                                     </c:if>
 
                                 </div>
@@ -85,16 +87,16 @@
                                 <div class="col-sm-9"><input type="text" class="form-control" id="value"
                                                              placeholder="Mark value"
                                                              name="value"
-                                                             value="${requestScope.get("value")}"></div>
+                                                             value="${mark.value}"></div>
                             </div>
                             <div class="form-group">
                                 <label for="comment" class="col-sm-3 control-label">Комментарий</label>
                                 <div class="col-sm-9">
                             <textarea class="form-control" id="comment" name="comment"
-                                      rows="3">${requestScope.get("comment")}</textarea>
+                                      rows="3">${mark.value}</textarea>
                                 </div>
                             </div>
-                            <input type="hidden" value="${requestScope.get("id")}" name="id">
+                            <input type="hidden" value="${mark.id}" name="id">
                             <div class="form-group">
                                 <div class="col-sm-offset-2 col-sm-10">
                                     <button type="submit" class="btn btn-primary">Сохранить</button>
