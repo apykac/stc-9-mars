@@ -20,9 +20,9 @@ public interface HomeWorkDao {
 
     List<HomeWork> getHomeWorkListByLessonId(int lessonId);
 
-    HomeWork findHomeWorkByStudentIdAndLessonId(int studentId, int lessonId);
-
     List<HomeWork> findAllHomeWork();
 
     boolean deleteHomeWork(int id);
+
+    HomeWork findHomeWorkByMarkId(int markId);
 }

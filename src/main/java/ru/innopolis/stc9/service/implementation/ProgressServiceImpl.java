@@ -62,7 +62,7 @@ public class ProgressServiceImpl implements ProgressService {
 
     @Override
     public List<Lessons> getLessons() {
-        return lessonsService.findAllLessons();
+        return lessonsService.findAllLessonsWithSubjects();
     }
 
     @Override

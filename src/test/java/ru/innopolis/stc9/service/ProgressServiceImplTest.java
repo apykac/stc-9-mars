@@ -73,7 +73,7 @@ public class ProgressServiceImplTest {
         Lessons lesson = new Lessons(); //new Lessons(1, null, "some");
         List<Lessons> lessonsList = new ArrayList<>();
         lessonsList.add(lesson);
-        when(lessonsServiceMock.findAllLessons()).thenReturn(lessonsList);
+        when(lessonsServiceMock.findAllLessonsWithSubjects()).thenReturn(lessonsList);
         assertEquals(progressService.getLessons(), lessonsList);
     }
 

@@ -1,5 +1,6 @@
 package ru.innopolis.stc9.dao.implementation;
 
+import org.hibernate.Hibernate;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.query.Query;
@@ -23,6 +24,9 @@ public class ProgressDaoImpl implements ProgressDao {
     public List<Mark> getMark() {
         Session session = factory.getCurrentSession();
         Query query = session.createQuery("from Mark");
-        return query.getResultList();
+        List<Mark> marks = query.getResultList();
+        for (Mark mark : marks)
+            Hibernate.initialize(mark.getStudent());
+        return marks;
     }
 }

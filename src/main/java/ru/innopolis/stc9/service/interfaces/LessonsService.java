@@ -10,7 +10,7 @@ public interface LessonsService {
 
     boolean deleteLesson(int lessonId);
 
-    List<Lessons> findAllLessons();
+    List<Lessons> findAllLessonsWithSubjects();
 
     Date stringToDate(String strDate);
 }

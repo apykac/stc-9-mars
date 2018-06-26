@@ -26,7 +26,7 @@ public class StudentController {
     @RequestMapping("/university/student/subject/{subjectId}")
     public String viewLessonForSubject(@PathVariable("subjectId") int subjectId, Model model) {
         ArrayList<Lessons> lessons = new ArrayList<>();
-        for(Lessons l: lessonsService.findAllLessons()) {
+        for (Lessons l : lessonsService.findAllLessonsWithSubjects()) {
             if (l.getSubject().getId() == subjectId) {
                 lessons.add(l);
             }

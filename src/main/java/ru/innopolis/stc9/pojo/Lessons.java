@@ -20,10 +20,6 @@ public class Lessons {
     private int id;
     @Getter
     @Setter
-    @Transient
-    private String sname;
-    @Getter
-    @Setter
     private Date date;
     @Getter
     @Setter
@@ -46,14 +42,6 @@ public class Lessons {
     @OneToMany(mappedBy = "lesson", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<Mark> marks;
 
-    public Lessons(int id, Subject subject, String sname, Date date, String name) {
-        this.id = id;
-        this.subject = subject;
-        this.sname = sname;
-        this.date = date;
-        this.name = name;
-    }
-
 
     public Lessons(int id, Subject subject, Date date, String name) {
         this.id = id;
@@ -64,6 +52,12 @@ public class Lessons {
 
     public Lessons(Subject subject, Date date, String name) {
         this.subject = subject;
+        this.date = date;
+        this.name = name;
+    }
+
+    public Lessons(int id, Date date, String name) {
+        this.id = id;
         this.date = date;
         this.name = name;
     }

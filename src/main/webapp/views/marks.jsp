@@ -13,7 +13,7 @@
                 <div class="box box-info">
                     <div class="box-header with-border">
                         <h3 class="box-title">Список студентов, сдавших домашнее задание по
-                            уроку <b>${requestScope.get("lessonName")}</b></h3>
+                            уроку <b>${lessonName}</b></h3>
 
                         <div class="box-tools pull-right">
                             <button type="button" class="btn btn-box-tool" data-widget="collapse"><i
@@ -33,12 +33,12 @@
                                         </tr>
                                         </thead>
                                         <tbody>
-                                        <c:forEach items="${requestScope.get('marks')}" var="pair">
+                                        <c:forEach items="${marks}" var="mark">
                                             <tr>
-                                                <td>${pair.key}</td>
-                                                <td>${pair.value.value}</td>
+                                                <td>${mark.student.firstName} ${mark.student.secondName} ${mark.student.middleName}</td>
+                                                <td>${mark.value}</td>
                                                 <td>
-                                                    <a href="${pageContext.request.contextPath}/university/teacher/editMark/${pair.value.id}">Просмотр
+                                                    <a href="${pageContext.request.contextPath}/university/teacher/editMark/${mark.id}">Просмотр
                                                         ДЗ/Редактирование оценки</a></td>
                                             </tr>
                                         </c:forEach>

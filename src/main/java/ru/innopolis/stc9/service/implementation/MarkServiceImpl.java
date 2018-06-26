@@ -2,6 +2,7 @@ package ru.innopolis.stc9.service.implementation;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import ru.innopolis.stc9.dao.interfaces.LessonsDao;
 import ru.innopolis.stc9.dao.interfaces.MarkDao;
 import ru.innopolis.stc9.dao.interfaces.UserDao;
@@ -10,19 +11,16 @@ import ru.innopolis.stc9.pojo.Mark;
 import ru.innopolis.stc9.pojo.User;
 import ru.innopolis.stc9.service.interfaces.MarkService;
 
-import java.util.HashMap;
-import java.util.Map;
+import java.util.List;
 
 @Service
+@Transactional
 public class MarkServiceImpl implements MarkService {
-
-    @Autowired
     private MarkDao markDao;
-    @Autowired
     private UserDao userDao;
-    @Autowired
     private LessonsDao lessonsDao;
 
+    @Autowired
     public MarkServiceImpl(MarkDao markDao, UserDao userDao, LessonsDao lessonsDao) {
         this.markDao = markDao;
         this.userDao = userDao;
@@ -40,17 +38,8 @@ public class MarkServiceImpl implements MarkService {
      * @return
      */
     @Override
-    public Map<String, Mark> getMarksByLessonId(int lessonId) {
-        Map<String, Mark> result = new HashMap<>();
-        if (lessonId < 1) {
-            return result;
-        }
-        for (Mark mark : markDao.getMarksByLessonId(lessonId)) {
-            User student = userDao.findUserByUserId(mark.getStudent().getId());
-            String name = getFullStudentName(student);
-            result.put(name, mark);
-        }
-        return result;
+    public List<Mark> getMarksByLessonId(int lessonId) {
+        return markDao.getMarksByLessonId(lessonId);
     }
 
     @Override
@@ -61,6 +50,12 @@ public class MarkServiceImpl implements MarkService {
     @Override
     public boolean updateMark(Mark mark) {
         return markDao.updateMark(mark);
+    }
+
+    @Override
+    public Mark getMarkByIdWithFullInfo(int id) {
+        if (id < 0) return null;
+        return markDao.getMarkByIdWithFullInfo(id);
     }
 
     @Override

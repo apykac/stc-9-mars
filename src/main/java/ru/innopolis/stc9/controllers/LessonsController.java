@@ -28,7 +28,7 @@ public class LessonsController {
      */
     @RequestMapping(method = RequestMethod.GET)
     private String doGet(Model model) {
-        model.addAttribute("lessons", lessonsService.findAllLessons());
+        model.addAttribute("lessons", lessonsService.findAllLessonsWithSubjects());
         model.addAttribute("subjects", subjectService.findAllSubject());
         return "views/lessons";
     }
