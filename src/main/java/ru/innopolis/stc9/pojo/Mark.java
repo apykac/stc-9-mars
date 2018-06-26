@@ -34,22 +34,12 @@ public class Mark {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "lessonId", nullable = false)
     private Lessons lesson;
-    @Getter
-    @Setter
-    @Transient
-    //TODO need to delete
-    private int userId;
-    @Getter
-    @Setter
-    @Transient
-    //TODO need to delete
-    private int lessonId;
 
-    public Mark(int id, int value, int userId, int lessonId, String comment) {
+    public Mark(int id, int value, User student, Lessons lesson, String comment) {
         this.id = id;
         this.value = value;
         this.comment = comment;
-        this.userId = userId;
-        this.lessonId = lessonId;
+        this.student = student;
+        this.lesson = lesson;
     }
 }

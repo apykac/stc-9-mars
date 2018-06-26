@@ -20,6 +20,7 @@ public class Lessons {
     private int id;
     @Getter
     @Setter
+    @Transient
     private String sname;
     @Getter
     @Setter

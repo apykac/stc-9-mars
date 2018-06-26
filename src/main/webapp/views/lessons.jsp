@@ -45,7 +45,7 @@
                                                 snameless="${lessons.sname}"
                                                 dateless="${lessons.date}" nameless="${lessons.name}"
                                                 style="cursor:pointer">
-                                                <td>${lessons.subject.id}</td>
+                                                <td>${lessons.sname}</td>
                                                 <td>${lessons.date}</td>
                                                 <td>${lessons.name}</td>
                                                 <td>

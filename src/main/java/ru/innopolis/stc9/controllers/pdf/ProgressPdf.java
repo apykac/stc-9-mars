@@ -4,7 +4,7 @@ import com.lowagie.text.Document;
 import com.lowagie.text.pdf.PdfPTable;
 import com.lowagie.text.pdf.PdfWriter;
 import org.springframework.web.servlet.view.document.AbstractPdfView;
-import ru.innopolis.stc9.pojo.Progress;
+import ru.innopolis.stc9.pojo.Mark;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -25,14 +25,14 @@ public class ProgressPdf extends AbstractPdfView {
         table.addCell("Lesson");
         table.addCell("Date");
         table.addCell("Subject");
-        List<Progress> progressList = (List<Progress>) model.get("getpdf");
-        for (Progress progress : progressList) {
-            table.addCell(String.valueOf(progress.getValue()));
-            table.addCell(progress.getFirstName() + " " + progress.getSecondName());
-            table.addCell(progress.getGroupName());
-            table.addCell(progress.getLessonsName());
-            table.addCell(String.valueOf(progress.getDate()));
-            table.addCell(progress.getSubjectName());
+        List<Mark> markList = (List<Mark>) model.get("getpdf");
+        for (Mark mark : markList) {
+            table.addCell(String.valueOf(mark.getValue()));
+            table.addCell(mark.getStudent().getFirstName() + " " + mark.getStudent().getSecondName());
+            table.addCell(mark.getStudent().getGroup().getName());
+            table.addCell(mark.getLesson().getName());
+            table.addCell(String.valueOf(mark.getLesson().getDate()));
+            table.addCell(mark.getLesson().getSubject().getName());
         }
         document.add(table);
 
