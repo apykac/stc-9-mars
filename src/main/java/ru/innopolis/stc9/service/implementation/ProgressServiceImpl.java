@@ -1,10 +1,12 @@
 package ru.innopolis.stc9.service.implementation;
 
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import ru.innopolis.stc9.dao.interfaces.ProgressDao;
 import ru.innopolis.stc9.pojo.Lessons;
-import ru.innopolis.stc9.pojo.Progress;
+import ru.innopolis.stc9.pojo.Mark;
 import ru.innopolis.stc9.pojo.User;
 import ru.innopolis.stc9.service.interfaces.AttendanceService;
 import ru.innopolis.stc9.service.interfaces.LessonsService;
@@ -15,6 +17,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Service
+@Transactional
 public class ProgressServiceImpl implements ProgressService {
     private final ProgressDao progressDao;
     private final UserService userService;
@@ -34,11 +37,11 @@ public class ProgressServiceImpl implements ProgressService {
      */
     @Override
     public List<Integer> getAmountMarks(String login) {
-        List<Progress> progressList = getResultList(progressDao.getProgress(), login);
+        List<Mark> progressList = getResultList(progressDao.getMark(), login);
         List<Integer> marks = new ArrayList<>();
-        marks.add(0, selectMarksInProgressList(0, 5, progressList).size());
+        marks.add(0, selectMarksInMarkList(0, 5, progressList).size());
         for (int i = 1; i < 6; i++) {
-            int amountMarks = selectMarksInProgressList(i, i, progressList).size();
+            int amountMarks = selectMarksInMarkList(i, i, progressList).size();
             marks.add(i, amountMarks);
         }
         return marks;
@@ -51,9 +54,9 @@ public class ProgressServiceImpl implements ProgressService {
      * @param lessOrEqualMark    Оценка меньше или равно
      */
     @Override
-    public List<Progress> getProgress(int greaterOrEqualMark, int lessOrEqualMark, String login) {
-        List<Progress> progressList =
-                selectMarksInProgressList(greaterOrEqualMark, lessOrEqualMark, progressDao.getProgress());
+    public List<Mark> getProgress(int greaterOrEqualMark, int lessOrEqualMark, String login) {
+        List<Mark> progressList =
+                selectMarksInMarkList(greaterOrEqualMark, lessOrEqualMark, progressDao.getMark());
         return getResultList(progressList, login);
     }
 
@@ -63,20 +66,21 @@ public class ProgressServiceImpl implements ProgressService {
     }
 
     @Override
+    //TODO переделать
     public int getNumberOfMissedLessons(String login) {
         int id = getUser(login).getId();
-        return attendanceService.getNumberOfMissedLessons(id);
+        return 0;//attendanceService.getNumberOfMissedLessons(id);
     }
 
     /**
      * Из session вытаскиваем роль и логин и отбираем список по этим параметрам
      */
-    private List<Progress> getResultList(List<Progress> progressList, String login) {
+    private List<Mark> getResultList(List<Mark> markList, String login) {
         String role = getUser(login).getPermissionGroup();
         if (isStudent(role)) {
-            return progressByLogin(login, progressList);
+            return markByLogin(login, markList);
         }
-        return progressList;
+        return markList;
     }
 
     private User getUser(String login) {
@@ -87,18 +91,18 @@ public class ProgressServiceImpl implements ProgressService {
      * Отбираем по @param greaterOrEqualMark @param lessOrEqualMark
      *
      * @param greaterOrEqualMark Оценка больше или равно
-     * @param lessOrEqualMark    Оценка меньше или равно
-     * @param progressList       изначальный список
+     * @param lessOrEqualMark Оценка меньше или равно
+     * @param markList изначальный список
      * @return Возвращаем отфильтрованный по оценкам список
      */
-    private List<Progress> selectMarksInProgressList(int greaterOrEqualMark,
-                                                     int lessOrEqualMark,
-                                                     List<Progress> progressList) {
-        List<Progress> result = new ArrayList<>();
-        for (Progress progress : progressList) {
-            int mark = progress.getValue();
-            if (mark >= greaterOrEqualMark && mark <= lessOrEqualMark) {
-                result.add(progress);
+    private List<Mark> selectMarksInMarkList(int greaterOrEqualMark,
+                                             int lessOrEqualMark,
+                                             List<Mark> markList) {
+        List<Mark> result = new ArrayList<>();
+        for (Mark mark : markList) {
+            int tempMark = mark.getValue();
+            if (tempMark >= greaterOrEqualMark && tempMark <= lessOrEqualMark) {
+                result.add(mark);
             }
         }
         return result;
@@ -107,15 +111,15 @@ public class ProgressServiceImpl implements ProgressService {
     /**
      * Отбираем по @param login
      *
-     * @param login        логин пользователя
-     * @param progressList Отфильтрованный список оценок
+     * @param login логин пользователя
+     * @param markList Отфильтрованный список оценок
      * @return Возвращаем отфильтрованный по логину список оценок
      */
-    private List<Progress> progressByLogin(String login, List<Progress> progressList) {
-        List<Progress> result = new ArrayList<>();
-        for (Progress progress : progressList) {
-            if (login.equals(progress.getLogin())) {
-                result.add(progress);
+    private List<Mark> markByLogin(String login, List<Mark> markList) {
+        List<Mark> result = new ArrayList<>();
+        for (Mark mark : markList) {
+            if (login.equals(mark.getStudent().getLogin())) {
+                result.add(mark);
             }
         }
         return result;

@@ -28,8 +28,8 @@ public class HomeWorkServiceImpl implements HomeWorkService {
         boolean addHomeWorkSuccess = homeWorkDao.addHomeWork(homeWork);
         if (addHomeWorkSuccess) {
             Mark mark = new Mark();
-            mark.setUserId(homeWork.getStudentId());
-            mark.setLessonId(homeWork.getLessonId());
+            /*mark.setUserId(homeWork.getStudentId());
+            mark.setLessonId(homeWork.getLessonId());*/
             markDao.addMark(mark);
         }
         return addHomeWorkSuccess;
@@ -63,8 +63,8 @@ public class HomeWorkServiceImpl implements HomeWorkService {
     @Override
     public String findHomeWorkByMarkId(int markId) {
         Mark mark = markDao.getMarkById(markId);
-        int studentId = mark.getUserId();
-        int lessonId = mark.getLessonId();
+        int studentId = mark.getStudent().getId();
+        int lessonId = mark.getLesson().getId();
         HomeWork homeWork = homeWorkDao.findHomeWorkByStudentIdAndLessonId(studentId, lessonId);
         return homeWork.getHomeWorkURL();
     }

@@ -2,17 +2,12 @@ package ru.innopolis.stc9.dao.implementation;
 
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
-import org.hibernate.Transaction;
+import org.hibernate.query.Query;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import ru.innopolis.stc9.dao.interfaces.SubjectDao;
-import ru.innopolis.stc9.dao.mappers.SubjectMapper;
 import ru.innopolis.stc9.pojo.Subject;
 
-import javax.persistence.criteria.CriteriaBuilder;
-import javax.persistence.criteria.CriteriaDelete;
-import javax.persistence.criteria.CriteriaQuery;
-import javax.persistence.criteria.Root;
 import java.util.List;
 
 /**
@@ -20,57 +15,43 @@ import java.util.List;
  */
 @Repository
 public class SubjectDaoImpl implements SubjectDao {
+    private final SessionFactory factory;
+
     @Autowired
-    private SessionFactory factory;
+    public SubjectDaoImpl(SessionFactory factory) {
+        this.factory = factory;
+    }
 
     @Override
     public boolean addSubject(Subject subject) {
-
         if (subject == null) return false;
-        try (Session session = factory.openSession()) {
-            session.beginTransaction();
-            session.save(subject);
-            session.getTransaction().commit();
-        }
+        Session session = factory.getCurrentSession();
+        session.save(subject);
         return true;
     }
 
     @Override
     public boolean deleteSubject(int subjectId) {
         if (subjectId < 0) return false;
-        int result;
-        try (Session session = factory.openSession()) {
-            CriteriaBuilder builder = session.getCriteriaBuilder();
-            CriteriaDelete<Subject> criteria = builder.createCriteriaDelete(Subject.class);
-            Root<Subject> root = criteria.from(Subject.class);
-            criteria.where(builder.equal(root.get(SubjectMapper.ID), subjectId));
-            Transaction transaction = session.beginTransaction();
-            result = session.createQuery(criteria).executeUpdate();
-            transaction.commit();
-        }
-        return result != 0;
+        Session session = factory.getCurrentSession();
+        Subject subject = findById(subjectId);
+        session.delete(subject);
+        return true;
     }
 
     @Override
     public List<Subject> findAllSubject() {
-        List<Subject> resultList;
-        try (Session session = factory.openSession()) {
-            CriteriaBuilder builder = session.getCriteriaBuilder();
-            CriteriaQuery<Subject> criteria = builder.createQuery(Subject.class);
-            Root<Subject> root = criteria.from(Subject.class);
-            criteria.select(root);
-            resultList = session.createQuery(criteria).getResultList();
-        }
-        return resultList;
+        Session session = factory.getCurrentSession();
+        Query query = session.createQuery("FROM Subject");
+        return query.getResultList();
     }
 
     @Override
     public Subject findById(int id) {
         if (id < 0) return null;
         Subject subject;
-        try (Session session = factory.openSession()) {
-            subject = session.get(Subject.class, id);
-        }
+        Session session = factory.getCurrentSession();
+        subject = session.get(Subject.class, id);
         return subject;
     }
 }

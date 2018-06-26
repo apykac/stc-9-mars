@@ -2,6 +2,7 @@ package ru.innopolis.stc9.service.implementation;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import ru.innopolis.stc9.dao.interfaces.SubjectDao;
 import ru.innopolis.stc9.pojo.Education;
 import ru.innopolis.stc9.pojo.Subject;
@@ -12,6 +13,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Service
+@Transactional
 public class SubjectServiceImpl implements SubjectService {
     private final SubjectDao subjectDao;
     private final EducationService educationService;

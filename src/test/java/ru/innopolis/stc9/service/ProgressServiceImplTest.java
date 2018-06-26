@@ -5,7 +5,7 @@ import org.junit.Test;
 import ru.innopolis.stc9.dao.implementation.ProgressDaoImpl;
 import ru.innopolis.stc9.dao.interfaces.ProgressDao;
 import ru.innopolis.stc9.pojo.Lessons;
-import ru.innopolis.stc9.pojo.Progress;
+import ru.innopolis.stc9.pojo.Mark;
 import ru.innopolis.stc9.pojo.User;
 import ru.innopolis.stc9.service.implementation.AttendanceServiceImpl;
 import ru.innopolis.stc9.service.implementation.LessonsServiceImpl;
@@ -24,7 +24,7 @@ import static org.mockito.Mockito.when;
 
 public class ProgressServiceImplTest {
     private ProgressServiceImpl progressService;
-    private List<Progress> progressList;
+    private List<Mark> markList;
     private LessonsService lessonsServiceMock;
     private AttendanceService attendanceServiceMock;
     private UserService userServiceMock;
@@ -33,9 +33,9 @@ public class ProgressServiceImplTest {
 
     @Before
     public void setUp() throws Exception {
-        Progress progress = new Progress(1, 4, "some", "some", "some", null, "some", "some", "some");
-        progressList = new ArrayList<>();
-        progressList.add(progress);
+        Mark mark = new Mark();//(1, 4, "some", "some", "some", null, "some", "some", "some");
+        markList = new ArrayList<>();
+        markList.add(mark);
         user = new User("some", "some", "some", "some", "some");
 
         progressDaoMock = mock(ProgressDaoImpl.class);
@@ -56,21 +56,21 @@ public class ProgressServiceImplTest {
 
     @Test
     public void getProgressTest() {
-        when(progressDaoMock.getProgress()).thenReturn(progressList);
-        assertEquals(progressService.getProgress(0, 5, "some"), progressList);
+        when(progressDaoMock.getMark()).thenReturn(markList);
+        assertEquals(progressService.getProgress(0, 5, "some"), markList);
     }
 
     @Test
     public void getLessonsTestWithNotStudent() {
         user.setPermissionGroup("ROLE_ADMIN");
-        List<Progress> beforeMethodList = new ArrayList<>(progressList);
-        when(progressDaoMock.getProgress()).thenReturn(progressList);
+        List<Mark> beforeMethodList = new ArrayList<>(markList);
+        when(progressDaoMock.getMark()).thenReturn(markList);
         assertEquals(beforeMethodList, progressService.getProgress(0, 5, "some"));
     }
 
     @Test
     public void getLessonsTest() {
-        Lessons lesson = new Lessons(1, null, "some");
+        Lessons lesson = new Lessons(); //new Lessons(1, null, "some");
         List<Lessons> lessonsList = new ArrayList<>();
         lessonsList.add(lesson);
         when(lessonsServiceMock.findAllLessons()).thenReturn(lessonsList);
