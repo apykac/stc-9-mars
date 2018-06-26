@@ -1,6 +1,8 @@
 package ru.innopolis.stc9.dao.interfaces;
 
 import ru.innopolis.stc9.pojo.HomeWork;
+import ru.innopolis.stc9.pojo.Lessons;
+import ru.innopolis.stc9.pojo.User;
 
 import java.util.List;
 
@@ -21,6 +23,8 @@ public interface HomeWorkDao {
     List<HomeWork> getHomeWorkListByLessonId(int lessonId);
 
     HomeWork findHomeWorkByStudentIdAndLessonId(int studentId, int lessonId);
+
+    HomeWork findHomeWorkByStudentAndLesson(User student, Lessons lesson);
 
     List<HomeWork> findAllHomeWork();
 

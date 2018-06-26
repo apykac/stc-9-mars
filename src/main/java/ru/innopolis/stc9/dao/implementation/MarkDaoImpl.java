@@ -2,21 +2,22 @@ package ru.innopolis.stc9.dao.implementation;
 
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
-import org.hibernate.Transaction;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 import ru.innopolis.stc9.dao.interfaces.MarkDao;
 import ru.innopolis.stc9.dao.mappers.MarkMapper;
+import ru.innopolis.stc9.pojo.Lessons;
 import ru.innopolis.stc9.pojo.Mark;
 
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
-import javax.persistence.criteria.CriteriaUpdate;
 import javax.persistence.criteria.Root;
 import java.util.ArrayList;
 import java.util.List;
 
 @Repository
+@Transactional
 public class MarkDaoImpl implements MarkDao {
     @Autowired
     private SessionFactory factory;
@@ -34,6 +35,16 @@ public class MarkDaoImpl implements MarkDao {
             resultList = session.createQuery(criteria).getResultList();
         }
         return resultList;
+    }
+
+    @Override
+    public List<Mark> getMarksByLesson(Lessons lesson) {
+        if (lesson == null) return new ArrayList<>();
+        List result;
+        Session session = factory.openSession();
+        result = session.createQuery("FROM Mark WHERE lesson = :lesson").setParameter("lesson", lesson).list();
+        session.close();
+        return result;
     }
 
     @Override
@@ -59,7 +70,7 @@ public class MarkDaoImpl implements MarkDao {
         return true;
     }
 
-    @Override
+    /*@Override
     public boolean updateMark(Mark mark) {
         if (mark == null) return false;
         int result;
@@ -75,6 +86,14 @@ public class MarkDaoImpl implements MarkDao {
             transaction.commit();
         }
         return result != 0;
+    }*/
+
+    @Override
+    public boolean updateMark(Mark mark) {
+        if (mark == null) return false;
+        Session session = factory.getCurrentSession();
+        session.update(mark);
+        return true;
     }
 
 
