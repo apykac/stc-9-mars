@@ -33,7 +33,7 @@ public class MessageController {
 
     @RequestMapping(value = "/university/profile/feedback", method = RequestMethod.GET)
     public String feedbackGet(Model model) {
-        return "/views/feedbackPage";
+        return "views/feedbackPage";
     }
 
     @RequestMapping(value = "/university/profile/feedback", method = RequestMethod.POST)
@@ -55,20 +55,20 @@ public class MessageController {
 
     @RequestMapping(value = "/university/messages", method = RequestMethod.GET)
     public String messagesToPage(HttpSession session, Model model) {
-        User user = userService.findUserById((int)session.getAttribute(SessionDataInform.ID));
+        User user = userService.findUserById((int) session.getAttribute(SessionDataInform.ID));
         List<Message>[] commonMessagesList = messageService.getAllMessages(user);
         session.setAttribute(SessionDataInform.MSG, commonMessagesList[0].size() + commonMessagesList[1].size());
-        model.addAttribute("commonList", commonMessagesList[0] == null ? new ArrayList<>() : commonMessagesList[0]);
-        model.addAttribute("privateList", commonMessagesList[1] == null ? new ArrayList<>() : commonMessagesList[1]);
-        return "/views/allMessages";
+        model.addAttribute("commonList", commonMessagesList[0]);
+        model.addAttribute("privateList", commonMessagesList[1]);
+        return "views/allMessages";
     }
 
     @RequestMapping(value = "/university/messages/{id}", method = RequestMethod.GET)
     public String editMessageGet(@PathVariable("id") int id, Model model, HttpSession session) {
         Message message = messageService.getMessageByIdWithFromUser(id);
         model.addAttribute("message", message);
-        model.addAttribute("fromUser",session.getAttribute(SessionDataInform.ID));
-        return "/views/messagePage";
+        model.addAttribute("fromUser", session.getAttribute(SessionDataInform.ID));
+        return "views/messagePage";
     }
 
     @RequestMapping(value = "/university/messages/{id}/delete", method = RequestMethod.GET)
@@ -99,7 +99,7 @@ public class MessageController {
                                    Model model) {
         if (!messageService.isCorrectData(incParam).isEmpty())
             model.addAttribute(error, "Сообщение пустое, введите текст");
-        else{
+        else {
 
             tryToAddMessage(incParam, session, model);
         }

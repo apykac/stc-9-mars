@@ -15,9 +15,13 @@ import java.util.List;
 @Controller
 @RequestMapping("/registration")
 public class RegistrationController {
-    private String regPath = "registration";
-    @Autowired
+    private String regPath = "registrationPage";
     private UserService userService;
+
+    @Autowired
+    public RegistrationController(UserService userService) {
+        this.userService = userService;
+    }
 
     @RequestMapping(method = RequestMethod.GET)
     public String infoHandlerOfGet() {
@@ -27,7 +31,8 @@ public class RegistrationController {
     @RequestMapping(method = RequestMethod.POST)
     public String registrationFormHandler(@RequestBody MultiValueMap<String, String> incParam, Model model) {
         List<String> errorList = new ArrayList<>();
-        if (userService.isExist(incParam.get("login").get(0))) errorList.add("Login is Exist");
+        if (userService.isExist(incParam.get("login").get(0)))
+            errorList.add("Login is Exist");
         else errorList = userService.isCorrectData(incParam);
         if (!errorList.isEmpty()) {
             model.addAttribute("errorMsg", errorList);
