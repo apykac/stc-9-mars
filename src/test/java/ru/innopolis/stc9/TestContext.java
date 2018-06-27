@@ -1,15 +1,9 @@
 package ru.innopolis.stc9;
 
-import org.hibernate.SessionFactory;
 import org.mockito.Mockito;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.PropertySource;
-import org.springframework.core.env.Environment;
-import org.springframework.jdbc.datasource.DriverManagerDataSource;
-import org.springframework.orm.hibernate4.HibernateTransactionManager;
-import org.springframework.orm.hibernate4.LocalSessionFactoryBean;
 import ru.innopolis.stc9.dao.implementation.GroupDaoImpl;
 import ru.innopolis.stc9.dao.implementation.UserDaoImpl;
 import ru.innopolis.stc9.dao.interfaces.GroupDao;
@@ -22,17 +16,14 @@ import ru.innopolis.stc9.service.interfaces.MessageService;
 import ru.innopolis.stc9.service.interfaces.StudentService;
 import ru.innopolis.stc9.service.interfaces.UserService;
 
-import javax.sql.DataSource;
-import java.util.Properties;
-
 /**
  * Created by Сергей on 11.06.2018.
  */
 @Configuration
 @PropertySource(value = {"classpath:application.properties"})
 public class TestContext {
-    @Autowired
-    private Environment environment;
+    /*@Autowired
+    private Environment environment;*/
 
 
     @Bean
@@ -65,7 +56,7 @@ public class TestContext {
         return Mockito.mock(MessageService.class);
     }
 
-    @Bean
+    /*@Bean
     public LocalSessionFactoryBean sessionFactory() {
         LocalSessionFactoryBean sessionFactory = new LocalSessionFactoryBean();
         sessionFactory.setDataSource(dataSource());
@@ -98,5 +89,5 @@ public class TestContext {
         HibernateTransactionManager txManager = new HibernateTransactionManager();
         txManager.setSessionFactory(s);
         return txManager;
-    }
+    }*/
 }

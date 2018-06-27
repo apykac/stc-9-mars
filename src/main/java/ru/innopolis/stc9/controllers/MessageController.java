@@ -33,7 +33,7 @@ public class MessageController {
 
     @RequestMapping(value = "/university/profile/feedback", method = RequestMethod.GET)
     public String feedbackGet(Model model) {
-        return "/views/feedbackPage";
+        return "views/feedbackPage";
     }
 
     @RequestMapping(value = "/university/profile/feedback", method = RequestMethod.POST)
@@ -60,7 +60,7 @@ public class MessageController {
         session.setAttribute(SessionDataInform.MSG, commonMessagesList[0].size() + commonMessagesList[1].size());
         model.addAttribute("commonList", commonMessagesList[0]);
         model.addAttribute("privateList", commonMessagesList[1]);
-        return "/views/allMessages";
+        return "views/allMessages";
     }
 
     @RequestMapping(value = "/university/messages/{id}", method = RequestMethod.GET)
@@ -68,7 +68,7 @@ public class MessageController {
         Message message = messageService.getMessageByIdWithFromUser(id);
         model.addAttribute("message", message);
         model.addAttribute("fromUser", session.getAttribute(SessionDataInform.ID));
-        return "/views/messagePage";
+        return "views/messagePage";
     }
 
     @RequestMapping(value = "/university/messages/{id}/delete", method = RequestMethod.GET)

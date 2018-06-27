@@ -51,7 +51,7 @@ public class MessageControllerTest {
     public void feedbackGetTest() throws Exception {
         mockMvc.perform(MockMvcRequestBuilders.get("/university/profile/feedback")).
                 andExpect(MockMvcResultMatchers.status().isOk()).
-                andExpect(MockMvcResultMatchers.view().name("/views/feedbackPage"));
+                andExpect(MockMvcResultMatchers.view().name("views/feedbackPage"));
     }
 
     @Test
@@ -67,7 +67,7 @@ public class MessageControllerTest {
                 sessionAttrs(sessionAttr).
                 session(new MockHttpSession())).
                 andExpect(MockMvcResultMatchers.status().isOk()).
-                andExpect(MockMvcResultMatchers.view().name("/views/allMessages")).
+                andExpect(MockMvcResultMatchers.view().name("views/allMessages")).
                 andExpect(MockMvcResultMatchers.model().attribute("commonList", commonList)).
                 andExpect(MockMvcResultMatchers.model().attribute("privateList", privateList));
     }
@@ -80,7 +80,7 @@ public class MessageControllerTest {
                 sessionAttrs(sessionAttr).
                 session(new MockHttpSession())).
                 andExpect(MockMvcResultMatchers.status().isOk()).
-                andExpect(MockMvcResultMatchers.view().name("/views/messagePage")).
+                andExpect(MockMvcResultMatchers.view().name("views/messagePage")).
                 andExpect(MockMvcResultMatchers.model().attribute("message", message)).
                 andExpect(MockMvcResultMatchers.model().attribute("fromUser", 1));
     }
@@ -107,7 +107,7 @@ public class MessageControllerTest {
 
         mockMvc.perform(builder).
                 andExpect(MockMvcResultMatchers.status().isOk()).
-                andExpect(MockMvcResultMatchers.view().name("/views/messagePage")).
+                andExpect(MockMvcResultMatchers.view().name("views/messagePage")).
                 andExpect(MockMvcResultMatchers.model().attribute("error", "Fail to delete message by DAO")).
                 andExpect(MockMvcResultMatchers.model().attribute("message", message)).
                 andExpect(MockMvcResultMatchers.model().attribute("fromUser", 1));
@@ -134,7 +134,7 @@ public class MessageControllerTest {
 
         mockMvc.perform(builder).
                 andExpect(MockMvcResultMatchers.status().isOk()).
-                andExpect(MockMvcResultMatchers.view().name("/views/feedbackPage")).
+                andExpect(MockMvcResultMatchers.view().name("views/feedbackPage")).
                 andExpect(MockMvcResultMatchers.model().attribute("errors", new ArrayList<>())).
                 andExpect(MockMvcResultMatchers.model().attribute("success_list", success));
 
@@ -142,7 +142,7 @@ public class MessageControllerTest {
 
         mockMvc.perform(builder).
                 andExpect(MockMvcResultMatchers.status().isOk()).
-                andExpect(MockMvcResultMatchers.view().name("/views/feedbackPage")).
+                andExpect(MockMvcResultMatchers.view().name("views/feedbackPage")).
                 andExpect(MockMvcResultMatchers.model().attribute("errors", errors)).
                 andExpect(MockMvcResultMatchers.model().attribute("success_list", new ArrayList<>()));
 
@@ -150,7 +150,7 @@ public class MessageControllerTest {
 
         mockMvc.perform(builder).
                 andExpect(MockMvcResultMatchers.status().isOk()).
-                andExpect(MockMvcResultMatchers.view().name("/views/feedbackPage")).
+                andExpect(MockMvcResultMatchers.view().name("views/feedbackPage")).
                 andExpect(MockMvcResultMatchers.model().attribute("errors", errors)).
                 andExpect(MockMvcResultMatchers.model().attribute("success_list", new ArrayList<>()));
     }
@@ -172,7 +172,8 @@ public class MessageControllerTest {
 
         mockMvc.perform(builder).
                 andExpect(MockMvcResultMatchers.status().isOk()).
-                andExpect(MockMvcResultMatchers.view().name("/views/messagePage")).
+                andExpect(MockMvcResultMatchers.view().name("views/messagePage")).
+                andExpect(MockMvcResultMatchers.model().attributeDoesNotExist("error")).
                 andExpect(MockMvcResultMatchers.model().attribute("success", "Сообщение отправлено успешно")).
                 andExpect(MockMvcResultMatchers.model().attribute("message", message)).
                 andExpect(MockMvcResultMatchers.model().attribute("fromUser", 1));
@@ -181,8 +182,9 @@ public class MessageControllerTest {
 
         mockMvc.perform(builder).
                 andExpect(MockMvcResultMatchers.status().isOk()).
-                andExpect(MockMvcResultMatchers.view().name("/views/messagePage")).
+                andExpect(MockMvcResultMatchers.view().name("views/messagePage")).
                 andExpect(MockMvcResultMatchers.model().attribute("error", "Fail to add message by DAO")).
+                andExpect(MockMvcResultMatchers.model().attributeDoesNotExist("success")).
                 andExpect(MockMvcResultMatchers.model().attribute("message", message)).
                 andExpect(MockMvcResultMatchers.model().attribute("fromUser", 1));
 
@@ -191,8 +193,9 @@ public class MessageControllerTest {
 
         mockMvc.perform(builder).
                 andExpect(MockMvcResultMatchers.status().isOk()).
-                andExpect(MockMvcResultMatchers.view().name("/views/messagePage")).
+                andExpect(MockMvcResultMatchers.view().name("views/messagePage")).
                 andExpect(MockMvcResultMatchers.model().attribute("error", "Сообщение пустое, введите текст")).
+                andExpect(MockMvcResultMatchers.model().attributeDoesNotExist("success")).
                 andExpect(MockMvcResultMatchers.model().attribute("message", message)).
                 andExpect(MockMvcResultMatchers.model().attribute("fromUser", 1));
     }
