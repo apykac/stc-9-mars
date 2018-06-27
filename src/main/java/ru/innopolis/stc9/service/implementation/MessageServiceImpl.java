@@ -51,7 +51,6 @@ public class MessageServiceImpl implements MessageService {
 
     @Override
     public List<Message>[] getAllMessages(User user) {
-        if (user == null) return new List[2];
         List<Message>[] result = new List[2];
         result[0] = messageDao.getAllMessagesByRole(user);
         result[1] = messageDao.getAllMessagesByToUserId(user);

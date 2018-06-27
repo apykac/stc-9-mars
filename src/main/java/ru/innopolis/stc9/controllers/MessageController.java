@@ -55,11 +55,11 @@ public class MessageController {
 
     @RequestMapping(value = "/university/messages", method = RequestMethod.GET)
     public String messagesToPage(HttpSession session, Model model) {
-        User user = userService.findUserById((int)session.getAttribute(SessionDataInform.ID));
+        User user = userService.findUserById((int) session.getAttribute(SessionDataInform.ID));
         List<Message>[] commonMessagesList = messageService.getAllMessages(user);
         session.setAttribute(SessionDataInform.MSG, commonMessagesList[0].size() + commonMessagesList[1].size());
-        model.addAttribute("commonList", commonMessagesList[0] == null ? new ArrayList<>() : commonMessagesList[0]);
-        model.addAttribute("privateList", commonMessagesList[1] == null ? new ArrayList<>() : commonMessagesList[1]);
+        model.addAttribute("commonList", commonMessagesList[0]);
+        model.addAttribute("privateList", commonMessagesList[1]);
         return "/views/allMessages";
     }
 
@@ -67,7 +67,7 @@ public class MessageController {
     public String editMessageGet(@PathVariable("id") int id, Model model, HttpSession session) {
         Message message = messageService.getMessageByIdWithFromUser(id);
         model.addAttribute("message", message);
-        model.addAttribute("fromUser",session.getAttribute(SessionDataInform.ID));
+        model.addAttribute("fromUser", session.getAttribute(SessionDataInform.ID));
         return "/views/messagePage";
     }
 
@@ -99,7 +99,7 @@ public class MessageController {
                                    Model model) {
         if (!messageService.isCorrectData(incParam).isEmpty())
             model.addAttribute(error, "Сообщение пустое, введите текст");
-        else{
+        else {
 
             tryToAddMessage(incParam, session, model);
         }
