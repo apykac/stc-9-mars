@@ -12,6 +12,7 @@ import javax.persistence.*;
 @IdClass(AttendancePK.class)
 @Table(name = "attendance")
 @NoArgsConstructor
+//@AllArgsConstructor
 @EqualsAndHashCode
 public class Attendance {
     /*@Getter
@@ -35,4 +36,10 @@ public class Attendance {
     @ManyToOne(optional = false, fetch = FetchType.LAZY)
     @JoinColumn(name = "userId", nullable = false)
     private User user;
+
+    public Attendance(boolean attended, Lessons lesson, User user) {
+        this.attended = attended;
+        this.lesson = lesson;
+        this.user = user;
+    }
 }

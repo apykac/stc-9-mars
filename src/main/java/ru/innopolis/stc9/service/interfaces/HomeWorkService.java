@@ -18,9 +18,9 @@ public interface HomeWorkService {
 
     List<HomeWork> getHomeWorkListByLessonId(int lessonId);
 
-    HomeWork findByStudentId(int studentId);
+    /*HomeWork findByStudentId(int studentId);*/
 
-    HomeWork findByLessonId(int lessonId);
+    /*HomeWork findByLessonId(int lessonId);*/
 
     String findHomeWorkByMarkId(int markId);
 

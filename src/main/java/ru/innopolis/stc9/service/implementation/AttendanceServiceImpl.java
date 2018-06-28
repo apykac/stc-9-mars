@@ -15,6 +15,7 @@ import java.util.List;
 import java.util.Map;
 
 @Service
+@Transactional
 public class AttendanceServiceImpl implements AttendanceService {
 
     @Autowired
@@ -33,8 +34,8 @@ public class AttendanceServiceImpl implements AttendanceService {
     }*/
 
     @Override
-    @Transactional
     public void addLessonAttendance(int groupId, int lessonId, int[] studentsList) {
+        deleteLessonAttendance(lessonId, groupId);
         attendanceDao.addLessonAttendance(lessonId, studentsList);
         Map<Integer, Boolean> savedAttendance = getLessonAttendance(lessonId, groupId);
         for (Map.Entry<Integer, Boolean> entry : savedAttendance.entrySet()) {
@@ -54,7 +55,6 @@ public class AttendanceServiceImpl implements AttendanceService {
     }
 
     @Override
-    @Transactional
     public void clearLessonAttendance(int lessonId, int groupId) {
         if (lessonId < 1 || groupId < 1) {
             return;
@@ -67,6 +67,15 @@ public class AttendanceServiceImpl implements AttendanceService {
             attendance.setLesson(lessonDao.getLessonById(lessonId));
             attendance.setAttended(false);
             attendanceDao.updateAttendance(attendance);
+        }
+    }
+
+
+    @Override
+    public void deleteLessonAttendance(int lessonId, int groupId) {
+        List<Attendance> lessonAttendance = attendanceDao.getLessonAttendance(lessonId, groupId);
+        for (Attendance attendance : lessonAttendance) {
+            attendanceDao.deleteAttendance(attendance);
         }
     }
 

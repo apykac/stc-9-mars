@@ -32,21 +32,16 @@ public class AttendanceDaoImpl implements AttendanceDao {
         boolean result = true;
         if (lessonId < 1 || students == null || students.length < 1)
             result = false;
+        Session session = factory.getCurrentSession();
         for (int studentId : students) {
-            Attendance attendance = new Attendance();
-            Lessons lesson = lessonDao.getLessonById(lessonId);
-            User student = userDao.findUserByUserId(studentId);
-            attendance.setLesson(lesson);
-            attendance.setUser(student);
-            attendance.setAttended(true);
-            try (Session session = factory.openSession()) {
-                session.beginTransaction();
-                session.save(attendance);
-                session.getTransaction().commit();
-            }
+            Lessons lesson = session.load(Lessons.class, lessonId);
+            User student = session.load(User.class, studentId);
+            Attendance attendance = new Attendance(true, lesson, student);
+            session.save(attendance);
         }
         return result;
     }
+
 
     @Override
     public boolean updateAttendance(Attendance attendance) {
@@ -80,7 +75,16 @@ public class AttendanceDaoImpl implements AttendanceDao {
     public int getNumberOfMissedLessons(int id) {
         int result = 0;
         if (id <= 0) return result;
-        try (Session session = factory.openSession()) {
+
+        Session session = factory.getCurrentSession();
+        int attended = session.createQuery("SELECT FROM Attendance WHERE user.id = :id AND attended=true)")
+                .setParameter("id", id)
+                .getResultList()
+                .size();
+
+        result = session.createQuery("FROM Lessons").getResultList().size() - attended;
+
+        /*try (Session session = factory.openSession()) {
             CriteriaBuilder builder = session.getCriteriaBuilder();
             CriteriaQuery<Attendance> criteriaAttendance = builder.createQuery(Attendance.class);
             CriteriaQuery<Lessons> criteriaLessons = builder.createQuery(Lessons.class);
@@ -95,7 +99,7 @@ public class AttendanceDaoImpl implements AttendanceDao {
             List<Lessons> totalLessons = session.createQuery(criteriaLessons).getResultList();
             List<Attendance> totalAttendance = session.createQuery(criteriaAttendance).getResultList();
             result = totalLessons.size() - totalAttendance.size();
-        }
+        }*/
         return result;
     }
 
@@ -127,5 +131,15 @@ public class AttendanceDaoImpl implements AttendanceDao {
             result = session.createQuery(criteria).getResultList();
         }
         return result;
+    }
+
+    @Override
+    public boolean deleteAttendance(Attendance attendance) {
+        if (attendance == null) {
+            return false;
+        }
+        Session session = factory.getCurrentSession();
+        session.delete(attendance);
+        return true;
     }
 }

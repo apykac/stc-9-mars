@@ -52,15 +52,15 @@ public class HomeWorkServiceImpl implements HomeWorkService {
         return homeWorkDao.getHomeWorkListByLessonId(lessonId);
     }
 
-    @Override
+    /*@Override
     public HomeWork findByStudentId(int studentId) {
         return homeWorkDao.findByStudentId(studentId);
-    }
+    }*/
 
-    @Override
+    /*@Override
     public HomeWork findByLessonId(int lessonId) {
         return homeWorkDao.findByLessonId(lessonId);
-    }
+    }*/
 
     @Override
     public String findHomeWorkByMarkId(int markId) {
