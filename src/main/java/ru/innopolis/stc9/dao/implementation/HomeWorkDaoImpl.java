@@ -2,6 +2,7 @@ package ru.innopolis.stc9.dao.implementation;
 
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
+import org.hibernate.Transaction;
 import org.hibernate.query.Query;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
@@ -9,7 +10,10 @@ import ru.innopolis.stc9.dao.interfaces.HomeWorkDao;
 import ru.innopolis.stc9.dao.mappers.HomeWokMapper;
 import ru.innopolis.stc9.pojo.HomeWork;
 
-import javax.persistence.criteria.*;
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaDelete;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Root;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -21,63 +25,30 @@ public class HomeWorkDaoImpl implements HomeWorkDao {
     @Override
     public boolean addHomeWork(HomeWork homeWork) {
         if (homeWork == null) return false;
-        Session session = factory.getCurrentSession();
-        session.save(homeWork);
+        try (Session session = factory.openSession()) {
+            session.beginTransaction();
+            session.save(homeWork);
+            session.getTransaction().commit();
+        }
         return true;
     }
 
     @Override
     public boolean updateHomeWork(HomeWork homeWork) {
         if (homeWork == null) return false;
-        int result;
         Session session = factory.getCurrentSession();
-        CriteriaBuilder builder = session.getCriteriaBuilder();
-        CriteriaUpdate<HomeWork> criteria = builder.createCriteriaUpdate(HomeWork.class);
-        Root<HomeWork> root = criteria.from(HomeWork.class);
-        criteria.set(root.get(HomeWokMapper.HWURL), homeWork.getHomeWorkURL()).
-                set(root.get(HomeWokMapper.STID), homeWork.getStudentId()).
-                set(root.get(HomeWokMapper.LESSID), homeWork.getLessonId()).
-                where(builder.equal(root.get(HomeWokMapper.ID), homeWork.getId()));
-        result = session.createQuery(criteria).executeUpdate();
-        return result != 0;
+        session.update(homeWork);
+        return true;
     }
 
     @Override
     public HomeWork findById(int id) {
         if (id < 0) return null;
-        Session session = factory.getCurrentSession();
-        return session.get(HomeWork.class, id);
-    }
-
-    @Override
-    public HomeWork findByStudentId(int studentId) {
-        if (studentId < 0) return null;
-        List<HomeWork> resultList;
-        Session session = factory.getCurrentSession();
-        CriteriaBuilder builder = session.getCriteriaBuilder();
-        CriteriaQuery<HomeWork> criteria = builder.createQuery(HomeWork.class);
-        Root<HomeWork> root = criteria.from(HomeWork.class);
-        criteria.select(root);
-        criteria.where(builder.equal(root.get(HomeWokMapper.STID), studentId));
-        resultList = session.createQuery(criteria).getResultList();
-
-        if (!resultList.isEmpty()) return resultList.get(resultList.size() - 1);
-        else return null;
-    }
-
-    @Override
-    public HomeWork findByLessonId(int lessonId) {
-        if (lessonId < 0) return null;
-        List<HomeWork> resultList;
-        Session session = factory.getCurrentSession();
-        CriteriaBuilder builder = session.getCriteriaBuilder();
-        CriteriaQuery<HomeWork> criteria = builder.createQuery(HomeWork.class);
-        Root<HomeWork> root = criteria.from(HomeWork.class);
-        criteria.select(root);
-        criteria.where(builder.equal(root.get(HomeWokMapper.LESSID), lessonId));
-        resultList = session.createQuery(criteria).getResultList();
-        if (!resultList.isEmpty()) return resultList.get(resultList.size() - 1);
-        else return null;
+        HomeWork homeWork;
+        try (Session session = factory.openSession()) {
+            homeWork = session.get(HomeWork.class, id);
+        }
+        return homeWork;
     }
 
     @Override
@@ -88,30 +59,40 @@ public class HomeWorkDaoImpl implements HomeWorkDao {
         CriteriaQuery<HomeWork> criteria = builder.createQuery(HomeWork.class);
         Root<HomeWork> root = criteria.from(HomeWork.class);
         criteria.select(root).
-                where(builder.equal(root.get(HomeWokMapper.LESSID), lessonId));
+                where(builder.equal(root.get("lesson").get("id"), lessonId));
         return session.createQuery(criteria).getResultList();
+    }
+
+    @Override
+    public HomeWork findHomeWorkByStudentIdAndLessonId(int studentId, int lessonId) {
+        if (lessonId < 0 || studentId < 0) return null;
+        Session session = factory.getCurrentSession();
+        CriteriaBuilder builder = session.getCriteriaBuilder();
+        CriteriaQuery<HomeWork> criteria = builder.createQuery(HomeWork.class);
+        Root<HomeWork> root = criteria.from(HomeWork.class);
+        criteria.where(builder.and(builder.equal(root.get("lesson").get("id"), lessonId), builder.equal(root.get("student").get("id"), studentId)));
+        return session.createQuery(criteria).uniqueResult();
     }
 
     @Override
     public List<HomeWork> findAllHomeWork() {
         Session session = factory.getCurrentSession();
-        CriteriaBuilder builder = session.getCriteriaBuilder();
-        CriteriaQuery<HomeWork> criteria = builder.createQuery(HomeWork.class);
-        Root<HomeWork> root = criteria.from(HomeWork.class);
-        criteria.select(root);
-        return session.createQuery(criteria).getResultList();
+        return session.createQuery("from HomeWork").getResultList();
     }
 
     @Override
     public boolean deleteHomeWork(int id) {
         if (id < 0) return false;
         int result;
-        Session session = factory.getCurrentSession();
-        CriteriaBuilder builder = session.getCriteriaBuilder();
-        CriteriaDelete<HomeWork> criteria = builder.createCriteriaDelete(HomeWork.class);
-        Root<HomeWork> root = criteria.from(HomeWork.class);
-        criteria.where(builder.equal(root.get(HomeWokMapper.ID), id));
-        result = session.createQuery(criteria).executeUpdate();
+        try (Session session = factory.openSession()) {
+            CriteriaBuilder builder = session.getCriteriaBuilder();
+            CriteriaDelete<HomeWork> criteria = builder.createCriteriaDelete(HomeWork.class);
+            Root<HomeWork> root = criteria.from(HomeWork.class);
+            criteria.where(builder.equal(root.get(HomeWokMapper.ID), id));
+            Transaction transaction = session.beginTransaction();
+            result = session.createQuery(criteria).executeUpdate();
+            transaction.commit();
+        }
         return result != 0;
     }
 

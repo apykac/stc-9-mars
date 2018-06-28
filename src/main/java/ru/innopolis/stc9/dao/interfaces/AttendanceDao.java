@@ -12,4 +12,6 @@ public interface AttendanceDao {
     boolean updateAttendance(Attendance attendance);
 
     List<Attendance> getLessonAttendance(int lessonId, int groupId);
+
+    boolean deleteAttendance(Attendance attendance);
 }

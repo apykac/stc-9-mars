@@ -5,9 +5,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.innopolis.stc9.dao.interfaces.HomeWorkDao;
+import ru.innopolis.stc9.dao.interfaces.LessonsDao;
 import ru.innopolis.stc9.dao.interfaces.MarkDao;
 import ru.innopolis.stc9.pojo.HomeWork;
+import ru.innopolis.stc9.pojo.Lessons;
 import ru.innopolis.stc9.pojo.Mark;
+import ru.innopolis.stc9.pojo.User;
 import ru.innopolis.stc9.service.interfaces.HomeWorkService;
 
 import java.util.List;
@@ -22,16 +25,20 @@ public class HomeWorkServiceImpl implements HomeWorkService {
     private HomeWorkDao homeWorkDao;
     @Autowired
     private MarkDao markDao;
+    @Autowired
+    private LessonsDao lessonDao;
 
     private static UrlValidator urlValidator = new UrlValidator();
 
     @Override
-    public boolean addHomeWork(HomeWork homeWork) {
+    public boolean addHomeWork(String url, User student, int lessonId) {
+        Lessons lesson = lessonDao.getLessonById(lessonId);
+        HomeWork homeWork = new HomeWork(url, student, lesson);
         boolean addHomeWorkSuccess = homeWorkDao.addHomeWork(homeWork);
         if (addHomeWorkSuccess) {
             Mark mark = new Mark();
-            /*mark.setUserId(homeWork.getStudentId());
-            mark.setLessonId(homeWork.getLessonId());*/
+            mark.setLesson(lesson);
+            mark.setStudent(student);
             markDao.addMark(mark);
         }
         return addHomeWorkSuccess;
@@ -52,15 +59,6 @@ public class HomeWorkServiceImpl implements HomeWorkService {
         return homeWorkDao.getHomeWorkListByLessonId(lessonId);
     }
 
-    @Override
-    public HomeWork findByStudentId(int studentId) {
-        return homeWorkDao.findByStudentId(studentId);
-    }
-
-    @Override
-    public HomeWork findByLessonId(int lessonId) {
-        return homeWorkDao.findByLessonId(lessonId);
-    }
 
     @Override
     public HomeWork findHomeWorkByMarkId(int markId) {

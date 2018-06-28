@@ -13,6 +13,7 @@ import java.util.List;
 import java.util.Map;
 
 @Service
+@Transactional
 public class AttendanceServiceImpl implements AttendanceService {
 
     @Autowired
@@ -21,50 +22,25 @@ public class AttendanceServiceImpl implements AttendanceService {
     public AttendanceServiceImpl() {
     }
 
-    public AttendanceServiceImpl(AttendanceDao attendanceDao) {
-        this.attendanceDao = attendanceDao;
-    }
-
     @Override
-    @Transactional
     public void addLessonAttendance(int groupId, int lessonId, int[] studentsList) {
+        deleteLessonAttendance(lessonId, groupId);
         attendanceDao.addLessonAttendance(lessonId, studentsList);
-        Map<Integer, Boolean> savedAttendance = getLessonAttendance(lessonId, groupId);
-        for (Map.Entry<Integer, Boolean> entry : savedAttendance.entrySet()) {
-            Integer key = entry.getKey();
-            Boolean value = false;
-            for (int i : studentsList) {
-                if (key == i) {
-                    value = true;
-                }
-            }
-            Attendance attendance = new Attendance();
-            attendance.setUserId(key);
-            attendance.setLessonId(lessonId);
-            attendance.setAttended(value);
-            attendanceDao.updateAttendance(attendance);
-        }
     }
 
+
     @Override
-    @Transactional
-    public void clearLessonAttendance(int lessonId, int groupId) {
+    public void deleteLessonAttendance(int lessonId, int groupId) {
         if (lessonId < 1 || groupId < 1) {
             return;
         }
-        Map<Integer, Boolean> savedAttendance = getLessonAttendance(lessonId, groupId);
-        for (Map.Entry<Integer, Boolean> entry : savedAttendance.entrySet()) {
-            Integer key = entry.getKey();
-            Attendance attendance = new Attendance();
-            attendance.setUserId(key);
-            attendance.setLessonId(lessonId);
-            attendance.setAttended(false);
-            attendanceDao.updateAttendance(attendance);
+        List<Attendance> lessonAttendance = attendanceDao.getLessonAttendance(lessonId, groupId);
+        for (Attendance attendance : lessonAttendance) {
+            attendanceDao.deleteAttendance(attendance);
         }
     }
 
     @Override
-    @Transactional
     public Map<Integer, Boolean> getLessonAttendance(int lessonId, int groupId) {
         Map<Integer, Boolean> result = new HashMap<>();
         if (lessonId < 1 || groupId < 1) {
@@ -72,13 +48,12 @@ public class AttendanceServiceImpl implements AttendanceService {
         }
         List<Attendance> attendances = attendanceDao.getLessonAttendance(lessonId, groupId);
         for (Attendance attendance : attendances) {
-            result.put(attendance.getUserId(), attendance.isAttended());
+            result.put(attendance.getUser().getId(), attendance.isAttended());
         }
         return result;
     }
 
     @Override
-    @Transactional
     public int getNumberOfMissedLessons(int id) {
         return attendanceDao.getNumberOfMissedLessons(id);
     }

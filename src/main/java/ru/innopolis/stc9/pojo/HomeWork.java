@@ -40,16 +40,16 @@ public class HomeWork {
     //TODO need to delete
     private int lessonId;
 
-    public HomeWork(String homeWorkURL, int studentId, int lessonId) {
+    public HomeWork(String homeWorkURL, User student, Lessons lesson) {
         this.homeWorkURL = homeWorkURL;
-        this.studentId = studentId;
-        this.lessonId = lessonId;
+        this.student = student;
+        this.lesson = lesson;
     }
 
-    public HomeWork(int id, String homeWorkURL, int studentId, int lessonId) {
+    public HomeWork(int id, String homeWorkURL, User student, Lessons lesson) {
         this.id = id;
         this.homeWorkURL = homeWorkURL;
-        this.studentId = studentId;
-        this.lessonId = lessonId;
+        this.student = student;
+        this.lesson = lesson;
     }
 }
