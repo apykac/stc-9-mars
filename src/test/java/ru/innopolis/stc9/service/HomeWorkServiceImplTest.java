@@ -86,17 +86,6 @@ public class HomeWorkServiceImplTest {
         assertEquals(homeWorkService.findById(1), homeWork);
     }
 
-    @Test
-    public void findByStudentId() {
-        PowerMockito.when(homeWorkDao.findByStudentId(1)).thenReturn(homeWork);
-        assertEquals(homeWorkService.findByStudentId(1), homeWork);
-    }
-
-    @Test
-    public void findByLessonId() {
-        PowerMockito.when(homeWorkDao.findByLessonId(1)).thenReturn(homeWork);
-        assertEquals(homeWorkService.findByLessonId(1), homeWork);
-    }
 
     @Test
     public void findAllHomeWork() {

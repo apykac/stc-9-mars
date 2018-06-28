@@ -6,7 +6,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import ru.innopolis.stc9.dao.interfaces.LessonsDao;
 import ru.innopolis.stc9.dao.interfaces.MarkDao;
-import ru.innopolis.stc9.pojo.Lessons;
 import ru.innopolis.stc9.pojo.Mark;
 
 import java.util.ArrayList;
@@ -24,8 +23,7 @@ public class MarkDaoImpl implements MarkDao {
         if (lessonId < 0) return new ArrayList<>();
         List<Mark> resultList;
         Session session = factory.getCurrentSession();
-        Lessons lesson = lessonsDao.getLessonById(lessonId);
-        resultList = session.createQuery("FROM Mark WHERE lesson = :lesson").setParameter("lesson", lesson).list();
+        resultList = session.createQuery("FROM Mark WHERE lesson.id = :lessonId").setParameter("lessonId", lessonId).list();
         return resultList;
     }
 

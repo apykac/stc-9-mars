@@ -45,7 +45,7 @@ public class AttendanceController {
     private String sendStudentsList(@RequestParam(value = "list", required = false) int[] studentsList, @RequestParam("lessonId") int lessonId, @RequestParam("groupSelected") int groupSelected, Model model) {
         addHeadAttributesToModel(model, lessonId);
         if (studentsList == null) {
-            attendanceService.clearLessonAttendance(lessonId, groupSelected);
+            attendanceService.deleteLessonAttendance(lessonId, groupSelected);
         } else {
             attendanceService.addLessonAttendance(groupSelected, lessonId, studentsList);
         }
