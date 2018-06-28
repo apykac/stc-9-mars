@@ -91,8 +91,8 @@ public class ProgressServiceImpl implements ProgressService {
      * Отбираем по @param greaterOrEqualMark @param lessOrEqualMark
      *
      * @param greaterOrEqualMark Оценка больше или равно
-     * @param lessOrEqualMark Оценка меньше или равно
-     * @param markList изначальный список
+     * @param lessOrEqualMark    Оценка меньше или равно
+     * @param markList           изначальный список
      * @return Возвращаем отфильтрованный по оценкам список
      */
     private List<Mark> selectMarksInMarkList(int greaterOrEqualMark,
@@ -111,7 +111,7 @@ public class ProgressServiceImpl implements ProgressService {
     /**
      * Отбираем по @param login
      *
-     * @param login логин пользователя
+     * @param login    логин пользователя
      * @param markList Отфильтрованный список оценок
      * @return Возвращаем отфильтрованный по логину список оценок
      */

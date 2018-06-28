@@ -4,7 +4,6 @@ import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
-import ru.innopolis.stc9.dao.interfaces.LessonsDao;
 import ru.innopolis.stc9.dao.interfaces.MarkDao;
 import ru.innopolis.stc9.pojo.Mark;
 
@@ -15,8 +14,7 @@ import java.util.List;
 public class MarkDaoImpl implements MarkDao {
     @Autowired
     private SessionFactory factory;
-    @Autowired
-    private LessonsDao lessonsDao;
+
 
     @Override
     public List<Mark> getMarksByLessonId(int lessonId) {
@@ -57,24 +55,5 @@ public class MarkDaoImpl implements MarkDao {
         session.update(mark);
         return true;
     }
-
-    /*@Override
-    public boolean updateMark(Mark mark) {
-        if (mark == null) return false;
-        int result;
-        try (Session session = factory.openSession()) {
-            CriteriaBuilder builder = session.getCriteriaBuilder();
-            CriteriaUpdate<Mark> criteria = builder.createCriteriaUpdate(Mark.class);
-            Root<Mark> root = criteria.from(Mark.class);
-            criteria.set(root.get(MarkMapper.VALUE), mark.getValue()).
-                    set(root.get(MarkMapper.COMMENT), mark.getComment()).
-                    where(builder.equal(root.get(MarkMapper.ID), mark.getId()));
-            Transaction transaction = session.beginTransaction();
-            result = session.createQuery(criteria).executeUpdate();
-            transaction.commit();
-        }
-        return result != 0;
-    }*/
-
 
 }

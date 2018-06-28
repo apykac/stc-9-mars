@@ -22,7 +22,6 @@ public class AttendanceServiceImpl implements AttendanceService {
     public AttendanceServiceImpl() {
     }
 
-
     @Override
     public void addLessonAttendance(int groupId, int lessonId, int[] studentsList) {
         deleteLessonAttendance(lessonId, groupId);
