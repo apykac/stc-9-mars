@@ -8,7 +8,6 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import ru.innopolis.stc9.pojo.HomeWork;
 import ru.innopolis.stc9.service.interfaces.HomeWorkService;
 import ru.innopolis.stc9.service.interfaces.UserService;
 
@@ -46,7 +45,7 @@ public class HomeWorkController {
         }
         org.springframework.security.core.userdetails.User activeUser =
                 (org.springframework.security.core.userdetails.User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        homeWorkService.addHomeWork(new HomeWork(url, userService.findUserByLogin(activeUser.getUsername()).getId(), lessonId));
+        homeWorkService.addHomeWork(url, userService.findUserByLogin(activeUser.getUsername()), lessonId);
         model.addAttribute(attributeLessonId, lessonId);
         logger.info("Homework added");
         return "redirect:/university/profile";

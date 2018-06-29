@@ -14,11 +14,9 @@ public interface HomeWorkDao {
 
     HomeWork findById(int id);
 
-    HomeWork findByStudentId(int studentId);
-
-    HomeWork findByLessonId(int lessonId);
-
     List<HomeWork> getHomeWorkListByLessonId(int lessonId);
+
+    HomeWork findHomeWorkByStudentIdAndLessonId(int studentId, int lessonId);
 
     List<HomeWork> findAllHomeWork();
 

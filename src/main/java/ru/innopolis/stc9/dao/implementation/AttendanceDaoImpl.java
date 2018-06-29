@@ -2,11 +2,9 @@ package ru.innopolis.stc9.dao.implementation;
 
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
-import org.hibernate.Transaction;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import ru.innopolis.stc9.dao.interfaces.AttendanceDao;
-import ru.innopolis.stc9.dao.mappers.AttendanceMapper;
 import ru.innopolis.stc9.dao.mappers.UserMapper;
 import ru.innopolis.stc9.pojo.Attendance;
 import ru.innopolis.stc9.pojo.Lessons;
@@ -14,7 +12,6 @@ import ru.innopolis.stc9.pojo.User;
 
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
-import javax.persistence.criteria.CriteriaUpdate;
 import javax.persistence.criteria.Root;
 import java.util.ArrayList;
 import java.util.List;
@@ -29,16 +26,12 @@ public class AttendanceDaoImpl implements AttendanceDao {
         boolean result = true;
         if (lessonId < 1 || students == null || students.length < 1)
             result = false;
+        Session session = factory.getCurrentSession();
         for (int studentId : students) {
-            Attendance attendance = new Attendance();
-            attendance.setLessonId(lessonId);
-            attendance.setUserId(studentId);
-            attendance.setAttended(true);
-            try (Session session = factory.openSession()) {
-                session.beginTransaction();
-                session.save(attendance);
-                session.getTransaction().commit();
-            }
+            Lessons lesson = session.load(Lessons.class, lessonId);
+            User student = session.load(User.class, studentId);
+            Attendance attendance = new Attendance(true, lesson, student);
+            session.save(attendance);
         }
         return result;
     }
@@ -46,43 +39,25 @@ public class AttendanceDaoImpl implements AttendanceDao {
     @Override
     public boolean updateAttendance(Attendance attendance) {
         if (attendance == null) return false;
-        int result;
-        try (Session session = factory.openSession()) {
-            CriteriaBuilder builder = session.getCriteriaBuilder();
-            CriteriaUpdate<Attendance> criteria = builder.createCriteriaUpdate(Attendance.class);
-            Root<Attendance> root = criteria.from(Attendance.class);
-            criteria.set(root.get(AttendanceMapper.ATTENDED), attendance.isAttended()).
-                    where(builder.and(
-                            builder.equal(root.get(AttendanceMapper.LESSONID), attendance.getLessonId()),
-                            builder.equal(root.get(AttendanceMapper.USERID), attendance.getUserId())
-                    ));
-            Transaction transaction = session.beginTransaction();
-            result = session.createQuery(criteria).executeUpdate();
-            transaction.commit();
-        }
-        return result != 0;
+        Session session = factory.getCurrentSession();
+        session.update(attendance);
+        return true;
     }
+
 
     @Override
     public int getNumberOfMissedLessons(int id) {
         int result = 0;
         if (id <= 0) return result;
-        try (Session session = factory.openSession()) {
-            CriteriaBuilder builder = session.getCriteriaBuilder();
-            CriteriaQuery<Attendance> criteriaAttendance = builder.createQuery(Attendance.class);
-            CriteriaQuery<Lessons> criteriaLessons = builder.createQuery(Lessons.class);
 
-            Root<Attendance> rootAttendance = criteriaAttendance.from(Attendance.class);
-            Root<Lessons> rootLesson = criteriaLessons.from(Lessons.class);
+        Session session = factory.getCurrentSession();
+        int attended = session.createQuery("SELECT FROM Attendance WHERE user.id = :id AND attended=true)")
+                .setParameter("id", id)
+                .getResultList()
+                .size();
 
-            criteriaAttendance.select(rootAttendance).
-                    where(builder.equal(rootAttendance.get(AttendanceMapper.USERID), id));
-            criteriaLessons.select(rootLesson);
+        result = session.createQuery("FROM Lessons").getResultList().size() - attended;
 
-            List<Lessons> totalLessons = session.createQuery(criteriaLessons).getResultList();
-            List<Attendance> totalAttendance = session.createQuery(criteriaAttendance).getResultList();
-            result = totalLessons.size() - totalAttendance.size();
-        }
         return result;
     }
 
@@ -105,14 +80,24 @@ public class AttendanceDaoImpl implements AttendanceDao {
             Root<User> rootUser = criteria.from(User.class);
             criteria.select(rootAttendance).
                     where(builder.and(
-                            builder.equal(rootAttendance.get(AttendanceMapper.USERID), rootUser.get(UserMapper.ID)),
+                            builder.equal(rootAttendance.get("user").get("id"), rootUser.get(UserMapper.ID)),
                             builder.and(
-                                    builder.equal(rootAttendance.get(AttendanceMapper.LESSONID), lessonId),
-                                    builder.equal(rootUser.get(UserMapper.GROUPID), groupId)
+                                    builder.equal(rootAttendance.get("lesson").get("id"), lessonId),
+                                    builder.equal(rootUser.get("group").get("id"), groupId)
                             )
                     ));
             result = session.createQuery(criteria).getResultList();
         }
         return result;
+    }
+
+    @Override
+    public boolean deleteAttendance(Attendance attendance) {
+        if (attendance == null) {
+            return false;
+        }
+        Session session = factory.getCurrentSession();
+        session.delete(attendance);
+        return true;
     }
 }
