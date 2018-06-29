@@ -4,11 +4,8 @@ import org.junit.Before;
 import org.junit.Test;
 import ru.innopolis.stc9.dao.implementation.SubjectDaoImpl;
 import ru.innopolis.stc9.dao.interfaces.SubjectDao;
-import ru.innopolis.stc9.pojo.Education;
 import ru.innopolis.stc9.pojo.Subject;
-import ru.innopolis.stc9.service.implementation.EducationServiceImpl;
 import ru.innopolis.stc9.service.implementation.SubjectServiceImpl;
-import ru.innopolis.stc9.service.interfaces.EducationService;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -24,21 +21,16 @@ public class SubjectServiceImplTest {
     @Before
     public void setUp() {
         Subject subject = new Subject("some");
-        Education education = new Education(1, 1);
         List<Subject> listSubject = new ArrayList<>();
         listSubject.add(subject);
-        List<Education> listEducation = new ArrayList<>();
-        listEducation.add(education);
 
         SubjectDao mockSubjectDao = mock(SubjectDaoImpl.class);
-        EducationService mockEducationService = mock(EducationServiceImpl.class);
         when(mockSubjectDao.addSubject(subject)).thenReturn(false);
         when(mockSubjectDao.deleteSubject(1)).thenReturn(true);
         when(mockSubjectDao.findAllSubject()).thenReturn(listSubject);
         when(mockSubjectDao.findById(1)).thenReturn(subject);
-        when(mockEducationService.findAllEducations()).thenReturn(listEducation);
 
-        subjectService = new SubjectServiceImpl(mockSubjectDao, mockEducationService);
+        subjectService = new SubjectServiceImpl(mockSubjectDao);
     }
 
     @Test
@@ -78,14 +70,9 @@ public class SubjectServiceImplTest {
     }
 
     @Test
-    public void findByGroupIdTest() {
-        List<Subject> result = subjectService.findByGroupId(1);
-        assertEquals(result.get(0).getName(), "some");
-    }
-
-    @Test
     public void checkSubjectNameTest() {
         boolean result = subjectService.checkSubjectName("some");
         assertTrue(result);
     }
+
 }

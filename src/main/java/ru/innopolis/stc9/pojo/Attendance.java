@@ -12,7 +12,6 @@ import javax.persistence.*;
 @IdClass(AttendancePK.class)
 @Table(name = "attendance")
 @NoArgsConstructor
-//@AllArgsConstructor
 @EqualsAndHashCode
 public class Attendance {
     @Getter

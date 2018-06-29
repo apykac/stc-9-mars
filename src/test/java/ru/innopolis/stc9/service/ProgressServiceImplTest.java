@@ -76,10 +76,4 @@ public class ProgressServiceImplTest {
         when(lessonsServiceMock.findAllLessonsWithSubjects()).thenReturn(lessonsList);
         assertEquals(progressService.getLessons(), lessonsList);
     }
-
-    @Test
-    public void getNumberOfMissedLessonsTest() {
-        when(attendanceServiceMock.getNumberOfMissedLessons(1)).thenReturn(0);
-        assertEquals(progressService.getNumberOfMissedLessons("some"), 0);
-    }
 }

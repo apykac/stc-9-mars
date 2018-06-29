@@ -58,12 +58,6 @@ public class MessageServiceImpl implements MessageService {
     }
 
     @Override
-    public Message getMessageById(int id) {
-        if (id < 0) return null;
-        return messageDao.getMessageById(id);
-    }
-
-    @Override
     public Message getMessageByIdWithFromUser(int id) {
         if (id < 0) return null;
         return messageDao.getMessageByIdWithFromUser(id);

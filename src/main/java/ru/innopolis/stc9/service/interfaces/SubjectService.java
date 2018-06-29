@@ -13,7 +13,5 @@ public interface SubjectService {
 
     Subject findById(int id);
 
-    List<Subject> findByGroupId(Integer id);
-
     boolean checkSubjectName(String name);
 }

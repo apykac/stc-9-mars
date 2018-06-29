@@ -56,6 +56,17 @@ public class LessonsDaoImpl implements LessonsDao {
     }
 
     @Override
+    public List<Lessons> findAllLessonsByWithSubject(int subjectId) {
+        Session session = factory.getCurrentSession();
+        Query query = session.createQuery("FROM Lessons l WHERE l.subject.id = :subjectId");
+        query.setParameter("subjectId", subjectId);
+        List<Lessons> lessons = query.getResultList();
+        for (Lessons lesson : lessons)
+            Hibernate.initialize(lesson.getSubject());
+        return lessons;
+    }
+
+    @Override
     public Lessons getLessonById(int id) {
         if (id < 0) return null;
         Lessons lesson;

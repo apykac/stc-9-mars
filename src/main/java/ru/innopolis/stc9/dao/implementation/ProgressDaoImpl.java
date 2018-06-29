@@ -25,8 +25,10 @@ public class ProgressDaoImpl implements ProgressDao {
         Session session = factory.getCurrentSession();
         Query query = session.createQuery("from Mark");
         List<Mark> marks = query.getResultList();
-        for (Mark mark : marks)
+        for (Mark mark : marks) {
             Hibernate.initialize(mark.getStudent());
+            Hibernate.initialize(mark.getLesson());
+        }
         return marks;
     }
 }

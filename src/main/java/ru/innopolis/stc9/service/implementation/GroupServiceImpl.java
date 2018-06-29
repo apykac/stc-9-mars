@@ -52,12 +52,6 @@ public class GroupServiceImpl implements GroupService {
     }
 
     @Override
-    public Group findGroupByName(String name) {
-        if ((name == null) || name.isEmpty()) return null;
-        return groupDao.findGroupByName(name);
-    }
-
-    @Override
     public List<Group> findAllGroups() {
         return groupDao.findAllGroups();
     }

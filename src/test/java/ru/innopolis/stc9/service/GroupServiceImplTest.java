@@ -20,9 +20,7 @@ import java.util.List;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
-/**
- * Created by Сергей on 23.05.2018.
- */
+
 @RunWith(PowerMockRunner.class)
 @PrepareForTest({GroupServiceImpl.class})
 public class GroupServiceImplTest {
@@ -64,12 +62,6 @@ public class GroupServiceImplTest {
     public void findGroupById() throws Exception {
         PowerMockito.when(groupDao.findGroupById(1)).thenReturn(group);
         assertEquals(groupService.findGroupById(1), group);
-    }
-
-    @Test
-    public void findGroupByName() throws Exception {
-        PowerMockito.when(groupDao.findGroupByName("test")).thenReturn(group);
-        assertEquals(groupService.findGroupByName("test"), group);
     }
 
     @Test

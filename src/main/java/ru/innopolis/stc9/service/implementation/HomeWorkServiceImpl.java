@@ -13,20 +13,22 @@ import ru.innopolis.stc9.pojo.Mark;
 import ru.innopolis.stc9.pojo.User;
 import ru.innopolis.stc9.service.interfaces.HomeWorkService;
 
-import java.util.List;
-
 /**
  * Created by Сергей on 31.05.2018.
  */
 @Service
 @Transactional
 public class HomeWorkServiceImpl implements HomeWorkService {
-    @Autowired
     private HomeWorkDao homeWorkDao;
-    @Autowired
     private MarkDao markDao;
-    @Autowired
     private LessonsDao lessonDao;
+
+    @Autowired
+    public HomeWorkServiceImpl(HomeWorkDao homeWorkDao, MarkDao markDao, LessonsDao lessonDao) {
+        this.homeWorkDao = homeWorkDao;
+        this.markDao = markDao;
+        this.lessonDao = lessonDao;
+    }
 
     private static UrlValidator urlValidator = new UrlValidator();
 
@@ -45,18 +47,8 @@ public class HomeWorkServiceImpl implements HomeWorkService {
     }
 
     @Override
-    public boolean updateHomeWork(HomeWork homeWork) {
-        return homeWorkDao.updateHomeWork(homeWork);
-    }
-
-    @Override
     public HomeWork findById(int id) {
         return homeWorkDao.findById(id);
-    }
-
-    @Override
-    public List<HomeWork> getHomeWorkListByLessonId(int lessonId) {
-        return homeWorkDao.getHomeWorkListByLessonId(lessonId);
     }
 
 
@@ -69,15 +61,5 @@ public class HomeWorkServiceImpl implements HomeWorkService {
     @Override
     public boolean homeWorkIsURL(String homeWork) {
         return urlValidator.isValid(homeWork);
-    }
-
-    @Override
-    public List<HomeWork> findAllHomeWork() {
-        return homeWorkDao.findAllHomeWork();
-    }
-
-    @Override
-    public boolean deleteHomeWork(int id) {
-        return homeWorkDao.deleteHomeWork(id);
     }
 }

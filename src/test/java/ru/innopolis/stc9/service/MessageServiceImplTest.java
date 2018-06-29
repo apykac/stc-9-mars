@@ -91,31 +91,12 @@ public class MessageServiceImplTest {
     }
 
     @Test
-    public void getMessageByIdCorrectDataTest() {
-        Message message = new Message();
-        PowerMockito.when(messageDao.getMessageById(1)).thenReturn(message);
-        Assert.assertEquals(message, messageService.getMessageById(1));
-        PowerMockito.when(messageDao.getMessageById(1)).thenReturn(null);
-        Assert.assertNull(messageService.getMessageById(1));
-    }
-
-    @Test
-    public void getMessageByIdIncorrectDataTest() {
-        Assert.assertNull(messageService.getMessageById(-1));
-    }
-
-    @Test
     public void getMessageByIdWithFromUserCorrectDataTest() {
         Message message = new Message();
         PowerMockito.when(messageDao.getMessageByIdWithFromUser(1)).thenReturn(message);
         Assert.assertEquals(message, messageService.getMessageByIdWithFromUser(1));
         PowerMockito.when(messageDao.getMessageByIdWithFromUser(1)).thenReturn(null);
         Assert.assertNull(messageService.getMessageByIdWithFromUser(1));
-    }
-
-    @Test
-    public void getMessageByIdWithFromUserIncorrectDataTest() {
-        Assert.assertNull(messageService.getMessageById(-1));
     }
 
     @Test
@@ -148,8 +129,8 @@ public class MessageServiceImplTest {
     @Test
     public void getAllMessagesIncorrectDataTest() {
         List<Message>[] result = messageService.getAllMessages(null);
-        Assert.assertNull(result[0]);
-        Assert.assertNull(result[0]);
+        Assert.assertEquals(result[0], new ArrayList<>());
+        Assert.assertEquals(result[1], new ArrayList<>());
     }
 
     @Test

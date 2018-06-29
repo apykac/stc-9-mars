@@ -8,9 +8,8 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import ru.innopolis.stc9.pojo.Lessons;
 import ru.innopolis.stc9.service.interfaces.LessonsService;
-import ru.innopolis.stc9.service.interfaces.SubjectService;
 
-import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by Сергей on 01.06.2018.
@@ -18,22 +17,18 @@ import java.util.ArrayList;
 @Controller
 public class StudentController {
     private Logger logger = Logger.getLogger(HomeWorkController.class);
-    @Autowired
-    private SubjectService subjectService;
-    @Autowired
     private LessonsService lessonsService;
+
+    @Autowired
+    public StudentController(LessonsService lessonsService) {
+        this.lessonsService = lessonsService;
+    }
 
     @RequestMapping("/university/student/subject/{subjectId}")
     public String viewLessonForSubject(@PathVariable("subjectId") int subjectId, Model model) {
-        ArrayList<Lessons> lessons = new ArrayList<>();
-        for (Lessons l : lessonsService.findAllLessonsWithSubjects()) {
-            if (l.getSubject().getId() == subjectId) {
-                lessons.add(l);
-            }
-        }
+        List<Lessons> lessons = lessonsService.findAllLessonsByWithSubject(subjectId);
         model.addAttribute("lessons", lessons);
-        model.addAttribute("subject", subjectService.findById(subjectId).getName());
-        logger.info("view lessons for subject id= "+ subjectId);
+        logger.info("view lessons for subject id= " + subjectId);
         return "views/studentLessons";
     }
 }
