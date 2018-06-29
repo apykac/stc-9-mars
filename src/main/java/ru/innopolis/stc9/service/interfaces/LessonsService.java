@@ -12,5 +12,7 @@ public interface LessonsService {
 
     List<Lessons> findAllLessonsWithSubjects();
 
+    List<Lessons> findAllLessonsByWithSubject(int subjectId);
+
     Date stringToDate(String strDate);
 }

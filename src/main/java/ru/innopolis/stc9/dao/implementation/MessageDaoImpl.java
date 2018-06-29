@@ -13,7 +13,6 @@ import ru.innopolis.stc9.pojo.User;
 
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaDelete;
-import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
 import java.util.ArrayList;
 import java.util.List;
@@ -64,13 +63,6 @@ public class MessageDaoImpl implements MessageDao {
         Root<Message> root = criteria.from(Message.class);
         criteria.where(builder.equal(root.get(MessageMapper.ID), id));
         return session.createQuery(criteria).executeUpdate() != 0;
-    }
-
-    @Override
-    public Message getMessageById(int id) {
-        if (id < 0) return null;
-        Session session = factory.getCurrentSession();
-        return session.get(Message.class, id);
     }
 
     @Override

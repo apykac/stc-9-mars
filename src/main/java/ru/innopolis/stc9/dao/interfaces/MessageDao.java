@@ -14,8 +14,6 @@ public interface MessageDao {
 
     boolean deleteMessageById(int id);
 
-    Message getMessageById(int id);
-
     Message getMessageByIdWithFromUser(int id);
 
     int getNumberOfMessage(User user);

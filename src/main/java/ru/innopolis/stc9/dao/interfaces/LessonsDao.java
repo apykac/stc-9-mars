@@ -11,5 +11,7 @@ public interface LessonsDao {
 
     List<Lessons> findAllLessonsWithSubjects();
 
+    List<Lessons> findAllLessonsByWithSubject(int subjectId);
+
     Lessons getLessonById(int id);
 }

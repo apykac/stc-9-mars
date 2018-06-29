@@ -15,11 +15,11 @@ import java.util.Map;
 @Service
 @Transactional
 public class AttendanceServiceImpl implements AttendanceService {
-
-    @Autowired
     private AttendanceDao attendanceDao;
 
-    public AttendanceServiceImpl() {
+    @Autowired
+    public AttendanceServiceImpl(AttendanceDao attendanceDao) {
+        this.attendanceDao = attendanceDao;
     }
 
     @Override
@@ -51,10 +51,5 @@ public class AttendanceServiceImpl implements AttendanceService {
             result.put(attendance.getUser().getId(), attendance.isAttended());
         }
         return result;
-    }
-
-    @Override
-    public int getNumberOfMissedLessons(int id) {
-        return attendanceDao.getNumberOfMissedLessons(id);
     }
 }

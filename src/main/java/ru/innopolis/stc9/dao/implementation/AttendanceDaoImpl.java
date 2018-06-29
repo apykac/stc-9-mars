@@ -36,31 +36,6 @@ public class AttendanceDaoImpl implements AttendanceDao {
         return result;
     }
 
-    @Override
-    public boolean updateAttendance(Attendance attendance) {
-        if (attendance == null) return false;
-        Session session = factory.getCurrentSession();
-        session.update(attendance);
-        return true;
-    }
-
-
-    @Override
-    public int getNumberOfMissedLessons(int id) {
-        int result = 0;
-        if (id <= 0) return result;
-
-        Session session = factory.getCurrentSession();
-        int attended = session.createQuery("SELECT FROM Attendance WHERE user.id = :id AND attended=true)")
-                .setParameter("id", id)
-                .getResultList()
-                .size();
-
-        result = session.createQuery("FROM Lessons").getResultList().size() - attended;
-
-        return result;
-    }
-
     /**
      * Возвращает список студентов из определенной группы, отмеченных ранее присутствующими на определенном уроке.
      *

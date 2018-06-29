@@ -8,6 +8,4 @@ public interface AttendanceService {
     void deleteLessonAttendance(int lessonId, int groupId);
 
     Map<Integer, Boolean> getLessonAttendance(int lessonId, int groupId);
-
-    int getNumberOfMissedLessons(int id);
 }

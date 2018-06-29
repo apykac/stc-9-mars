@@ -29,25 +29,8 @@ public class HomeWork {
     @ManyToOne(optional = false, fetch = FetchType.LAZY)
     @JoinColumn(name = "lessonId", nullable = false)
     private Lessons lesson;
-    @Getter
-    @Setter
-    @Transient
-    //TODO need to delete
-    private int studentId;
-    @Getter
-    @Setter
-    @Transient
-    //TODO need to delete
-    private int lessonId;
 
     public HomeWork(String homeWorkURL, User student, Lessons lesson) {
-        this.homeWorkURL = homeWorkURL;
-        this.student = student;
-        this.lesson = lesson;
-    }
-
-    public HomeWork(int id, String homeWorkURL, User student, Lessons lesson) {
-        this.id = id;
         this.homeWorkURL = homeWorkURL;
         this.student = student;
         this.lesson = lesson;

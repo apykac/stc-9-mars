@@ -66,18 +66,6 @@ public class GroupDaoImpl implements GroupDao {
     }
 
     @Override
-    public Group findGroupByName(String name) {
-        Query query;
-        Group group;
-        Session session = factory.getCurrentSession();
-        query = session.createQuery("from Group where group.name = name");
-        query.setParameter("name", name);
-        group = (Group) query.iterate().next();
-        Hibernate.initialize(group.getUsers());
-        return group;
-    }
-
-    @Override
     public List<Group> findAllGroups() {
         Session session = factory.getCurrentSession();
         Query query = session.createQuery("from Group");

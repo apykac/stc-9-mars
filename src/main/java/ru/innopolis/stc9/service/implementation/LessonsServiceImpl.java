@@ -53,6 +53,11 @@ public class LessonsServiceImpl implements LessonsService {
     }
 
     @Override
+    public List<Lessons> findAllLessonsByWithSubject(int subjectId) {
+        return lessonsDao.findAllLessonsByWithSubject(subjectId);
+    }
+
+    @Override
     public java.sql.Date stringToDate(String strDate) {
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
         java.sql.Date result = null;

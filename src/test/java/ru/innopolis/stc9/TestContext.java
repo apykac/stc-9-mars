@@ -11,10 +11,7 @@ import ru.innopolis.stc9.dao.interfaces.UserDao;
 import ru.innopolis.stc9.service.implementation.GroupServiceImpl;
 import ru.innopolis.stc9.service.implementation.StudentServiceImpl;
 import ru.innopolis.stc9.service.implementation.UserServiceImpl;
-import ru.innopolis.stc9.service.interfaces.GroupService;
-import ru.innopolis.stc9.service.interfaces.MessageService;
-import ru.innopolis.stc9.service.interfaces.StudentService;
-import ru.innopolis.stc9.service.interfaces.UserService;
+import ru.innopolis.stc9.service.interfaces.*;
 
 /**
  * Created by Сергей on 11.06.2018.
@@ -54,6 +51,11 @@ public class TestContext {
     @Bean
     public MessageService messageService() {
         return Mockito.mock(MessageService.class);
+    }
+
+    @Bean
+    public LessonsService lessonsService() {
+        return Mockito.mock(LessonsService.class);
     }
 
     /*@Bean

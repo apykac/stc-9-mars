@@ -16,8 +16,8 @@
                     element: 'line-chart',
                     resize: true,
                     data: [
-                        <c:forEach items="${requestScope.get('progress')}" var="progress">
-                        {y: '${progress.date}', item1: ${progress.value}},
+                        <c:forEach items="${progress}" var="progress">
+                        {y: '${progress.lesson.date}', item1: ${progress.value}},
                         </c:forEach>
                     ],
                     xkey: 'y',
@@ -158,7 +158,7 @@
                             <div class="row">
                                 <div class="col-sm-12">
                                     <c:choose>
-                                        <c:when test="${requestScope.get('progress') == null}">
+                                        <c:when test="${progress == null}">
                                             <div class='alert alert-danger'>Ошибка: no data</div>
                                         </c:when>
                                         <c:otherwise>
@@ -172,7 +172,7 @@
                                                 </tr>
                                                 </thead>
                                                 <tbody>
-                                                <c:forEach items="${requestScope.get('progress')}" var="progress">
+                                                <c:forEach items="${progress}" var="progress">
                                                     <tr>
                                                         <td>${progress.value}</td>
                                                         <td>${progress.student.id}</td>

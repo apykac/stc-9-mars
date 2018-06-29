@@ -26,13 +26,13 @@
                     </tr>
                     </thead>
                     <tbody>
-                    <c:forEach items="${requestScope.get('lessons')}" var="lessons">
+                    <c:forEach items="${lessons}" var="lesson">
                         <tr>
-                            <td>${requestScope.get('subject')}</td>
-                            <td>${lessons.date}</td>
-                            <td>${lessons.name}</td>
+                            <td>${lesson.subject.name}</td>
+                            <td>${lesson.date}</td>
+                            <td>${lesson.name}</td>
                             <td>
-                                <a href=${pageContext.request.contextPath}/university/student/homework/lessonId/${lessons.id}>Добавить
+                                <a href=${pageContext.request.contextPath}/university/student/homework/lessonId/${lesson.id}>Добавить
                                     ДЗ</a></td>
                         </tr>
                     </c:forEach>

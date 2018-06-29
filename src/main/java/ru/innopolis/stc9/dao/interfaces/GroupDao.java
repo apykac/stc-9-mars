@@ -17,7 +17,5 @@ public interface GroupDao {
 
     Group findGroupById(Integer id);
 
-    Group findGroupByName(String name);
-
     List<Group> findAllGroups();
 }

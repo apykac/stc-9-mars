@@ -17,8 +17,6 @@ public interface GroupService {
 
     Group findGroupById(Integer id);
 
-    Group findGroupByName(String name);
-
     List<Group> findAllGroups();
 
     boolean isEntityFound(int groupId, int studentId);
