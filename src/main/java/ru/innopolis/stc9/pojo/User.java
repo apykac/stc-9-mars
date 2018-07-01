@@ -43,7 +43,7 @@ public class User implements DBObject {
     private int enabled = 1;
     @Getter
     @Setter
-    @ManyToOne(fetch = FetchType.EAGER)
+    @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.REFRESH)
     @JoinTable(name = "user_group",
             joinColumns = @JoinColumn( name="userId"),
             inverseJoinColumns = @JoinColumn( name="groupId"))

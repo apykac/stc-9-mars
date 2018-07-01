@@ -31,7 +31,7 @@ public class Group {
     private List<Subject> subjects;
     @Getter
     @Setter
-    @OneToMany(fetch = FetchType.LAZY)
+    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.REFRESH)
     @JoinTable(name = "user_group",
             joinColumns = @JoinColumn( name="groupId"),
             inverseJoinColumns = @JoinColumn( name="userId"))

@@ -47,10 +47,11 @@ public class StudentServiceImpl implements StudentService {
             return;
         List<Group> allGroupsList = groupService.findAllGroups();
         List<User> allStudentsList = userService.getAllStudents();
+        Group group = groupService.findGroupById(id);
         model.addAttribute("groups", allGroupsList);
-        model.addAttribute("groupName", groupService.findGroupById(id).getName());
+        model.addAttribute("groupName", group.getName());
         model.addAttribute("id", id);
-        model.addAttribute("students", groupService.findGroupById(id).getUsers());
+        model.addAttribute("students", group.getUsers());
         model.addAttribute("studentsWOG", studentFilter(allStudentsList, filterId, id));
     }
 
