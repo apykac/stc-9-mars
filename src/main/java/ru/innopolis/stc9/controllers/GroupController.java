@@ -138,6 +138,19 @@ public class GroupController {
         return forUpdateGroup(id, 0, model);
     }
 
+    /**
+     * добавляет предмет в группу
+     *
+     * @param id        - идентификатор группы
+     * @param subjectId - идентификатор студента
+     */
+    @RequestMapping("/university/teacher/addSubjectToGroup")
+    public String addSubjectToGroup(@RequestParam("id") int id, @RequestParam("subjectId") int subjectId, Model model) {
+        groupService.addSubjectToGroup(id, subjectId);
+        logger.info("subject added in group " + id);
+        return forUpdateGroup(id, 0, model);
+    }
+
     //обработчик ошибки error 404
     @RequestMapping(value = "/404", method = RequestMethod.GET)
     public String error404Keeper(){

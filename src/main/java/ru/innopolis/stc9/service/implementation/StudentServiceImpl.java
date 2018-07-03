@@ -9,6 +9,7 @@ import ru.innopolis.stc9.pojo.Group;
 import ru.innopolis.stc9.pojo.User;
 import ru.innopolis.stc9.service.interfaces.GroupService;
 import ru.innopolis.stc9.service.interfaces.StudentService;
+import ru.innopolis.stc9.service.interfaces.SubjectService;
 import ru.innopolis.stc9.service.interfaces.UserService;
 
 import java.util.ArrayList;
@@ -20,11 +21,13 @@ public class StudentServiceImpl implements StudentService {
     private static Logger logger = Logger.getLogger(StudentServiceImpl.class);
     GroupService groupService;
     UserService userService;
+    SubjectService subjectService;
 
     @Autowired
-    public StudentServiceImpl(GroupService groupService, UserService userService) {
+    public StudentServiceImpl(GroupService groupService, UserService userService, SubjectService subjectService) {
         this.groupService = groupService;
         this.userService = userService;
+        this.subjectService = subjectService;
     }
 
     @Override
@@ -48,10 +51,12 @@ public class StudentServiceImpl implements StudentService {
         List<Group> allGroupsList = groupService.findAllGroups();
         List<User> allStudentsList = userService.getAllStudents();
         model.addAttribute("groups", allGroupsList);
+        model.addAttribute("groupSubjects", groupService.findGroupById(id).getSubjects());
         model.addAttribute("groupName", groupService.findGroupById(id).getName());
         model.addAttribute("id", id);
         model.addAttribute("students", groupService.findGroupById(id).getUsers());
         model.addAttribute("studentsWOG", studentFilter(allStudentsList, filterId, id));
+        model.addAttribute("allSubjects", subjectService.findAllSubject());
     }
 
     @Override
