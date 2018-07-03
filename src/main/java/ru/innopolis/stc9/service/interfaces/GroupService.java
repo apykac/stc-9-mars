@@ -22,4 +22,6 @@ public interface GroupService {
     boolean isEntityFound(int groupId, int studentId);
 
     void addSubjectToGroup(int groupId, int subjectId);
+
+    void deleteSubjectFromGroup(int groupId, int subjectId);
 }

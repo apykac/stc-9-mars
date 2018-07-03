@@ -151,6 +151,19 @@ public class GroupController {
         return forUpdateGroup(id, 0, model);
     }
 
+    /**
+     * удаляет предмет из группы
+     *
+     * @param id        - идентификатор группы
+     * @param subjectId - идентификатор студента
+     */
+    @RequestMapping("/university/teacher/group/deleteSubjectFromGroup/{id}/{subjectId}")
+    public String deleteSubjectFromGroup(@PathVariable("id") int id, @PathVariable("subjectId") int subjectId, Model model) {
+        groupService.deleteSubjectFromGroup(id, subjectId);
+        logger.info("subject deleted from group " + id);
+        return forUpdateGroup(id, 0, model);
+    }
+
     //обработчик ошибки error 404
     @RequestMapping(value = "/404", method = RequestMethod.GET)
     public String error404Keeper(){

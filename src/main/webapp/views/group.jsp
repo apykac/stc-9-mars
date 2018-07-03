@@ -192,7 +192,7 @@
                                 <tr>
                                     <td><h5>${subject.name}</h5></td>
                                     <td>
-                                        <a href="#"
+                                        <a href="${pageContext.request.contextPath}/university/teacher/group/deleteSubjectFromGroup/${requestScope.get("id")}/${subject.id}"
                                            name="${subject.id}">Удалить</a></td>
                                 </tr>
                             </c:forEach>

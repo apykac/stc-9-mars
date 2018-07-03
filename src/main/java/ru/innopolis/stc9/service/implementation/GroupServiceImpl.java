@@ -102,4 +102,12 @@ public class GroupServiceImpl implements GroupService {
         groupDao.updateGroup(tempGroup);
     }
 
+    public void deleteSubjectFromGroup(int groupId, int subjectId) {
+        Group tempGroup = groupDao.findGroupById(groupId);
+        List<Subject> subjects = tempGroup.getSubjects();
+        subjects.remove(subjectDao.findById(subjectId));
+        tempGroup.setSubjects(subjects);
+        groupDao.updateGroup(tempGroup);
+    }
+
 }
