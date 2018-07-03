@@ -20,4 +20,6 @@ public interface GroupService {
     List<Group> findAllGroups();
 
     boolean isEntityFound(int groupId, int studentId);
+
+    void addSubjectToGroup(int groupId, int subjectId);
 }

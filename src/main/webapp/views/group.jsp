@@ -137,6 +137,74 @@
             <div class="col-md-6">
                 <div class="box box-info">
                     <div class="box-header with-border">
+                        <h3 class="box-title">Список предметов</h3>
+                        <div class="box-tools pull-right">
+                            <button type="button" class="btn btn-box-tool" data-widget="collapse"><i
+                                    class="fa fa-minus"></i>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="box-body">
+
+                        <form id="addSubject"
+                              action="${pageContext.request.contextPath}/university/teacher/addSubjectToGroup"
+                              method="post">
+                            <div class="form-group">
+                                <label for="groupStatus">Выбрать предмет</label>
+                                <div class="input-group input-group-lg">
+                                    <select class="form-control" name="subjectId" id="subjectName"
+                                            data-toggle="tooltip" data-placement="top"
+                                            title="Выбрать предмет для добавления в список предметов группы">
+                                        <c:forEach var="subj" items="${requestScope.get('allSubjects')}">
+                                            <option name="subjectId"
+
+                                                    <c:set var="contains" value="false"/>
+                                                    <c:forEach var="subjj" items="${requestScope.get('groupSubjects')}">
+                                                        <c:if test="${subjj eq subj}">
+                                                            <c:set var="contains" value="true"/>
+                                                        </c:if>
+                                                    </c:forEach>
+
+                                                    value="${subj.id}"
+                                                    <c:if test="${contains==true}">disabled</c:if>
+                                            >${subj.name}
+                                            </option>
+                                        </c:forEach>
+                                    </select>
+                                    <input type="hidden" value="${requestScope.get("id")}" name="id">
+                                    <span class="input-group-btn">
+                                        <button type="submit" class="btn btn-primary">Добавить</button>
+                                    </span>
+                                </div>
+                            </div>
+                        </form>
+
+
+                        <table class="table">
+                            <thead>
+                            <tr>
+                                <th>Предмет</th>
+                                <th>Действие</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <c:forEach var="subject" items="${requestScope.get('groupSubjects')}">
+                                <tr>
+                                    <td><h5>${subject.name}</h5></td>
+                                    <td>
+                                        <a href="#"
+                                           name="${subject.id}">Удалить</a></td>
+                                </tr>
+                            </c:forEach>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-6">
+                <div class="box box-info">
+                    <div class="box-header with-border">
                         <h3 class="box-title">Список студентов</h3>
                         <div class="box-tools pull-right">
                             <button type="button" class="btn btn-box-tool" data-widget="collapse"><i

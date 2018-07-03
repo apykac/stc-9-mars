@@ -71,7 +71,55 @@
                 </div>
             </div>
             <div class="col-md-4">
-                <div class="box box-primary" id="win_less" style="display:none;">
+
+                    <%--<div class="row">
+                        <div class="box box-primary" id="edit_less" style="display:none;">
+                            <div class="box-header with-border">
+                                <h3 class="box-title">Редактирование урока</h3>
+
+                                <div class="box-tools pull-right">
+                                    <button type="button" class="btn btn-box-tool" data-widget="collapse"><i
+                                            class="fa fa-minus"></i>
+                                    </button>
+                                </div>
+                                <div class="box-body">
+                                    <form id="edit" action="${pageContext.request.contextPath}/university/teacher/lessons"
+                                          method="post">
+                                        <div class="form-group">
+                                            <label for="edit_sname">Предмет</label>
+                                            <select id="edit_sname" class="form-control" name="edit_subject_id">
+                                                <c:forEach items="${subjects}" var="subject">
+                                                    <option value="${subject.id}">${subject.name}</option>
+                                                </c:forEach>
+                                            </select>
+                                            <label for="edit_date">Дата урока</label>
+                                            <div class="input-group">
+                                                <div class="input-group-addon">
+                                                    <i class="fa fa-calendar"></i>
+                                                </div>
+                                                <input type="date" class="form-control" id="edit_date"
+                                                       data-inputmask="'alias': 'dd/mm/yyyy'" data-mask="" name="add_date">
+                                            </div>
+                                            <label for="add_name">Название урока</label>
+                                            <div class="input-group input-group-lg">
+                                                <input type="text" class="form-control" id="edit_name" name="add_name">
+                                                <span class="input-group-btn">
+                                            <button type="submit" class="btn btn-info btn-flat">Сохранить</button>
+                                        </span>
+                                            </div>
+                                        </div>
+                                    </form>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+
+                    </div>--%>
+
+
+                <div class="box box-primary" id="win_less" <%--style="display:none;"--%>>
                     <div class="box-header with-border">
                         <h3 class="box-title">Настройки</h3>
 
@@ -133,6 +181,8 @@
                     <!-- /.box-body -->
                 </div>
             </div>
+
+
         </div>
     </jsp:body>
 </t:wrapper>

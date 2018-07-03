@@ -4,7 +4,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.innopolis.stc9.dao.interfaces.GroupDao;
+import ru.innopolis.stc9.dao.interfaces.SubjectDao;
 import ru.innopolis.stc9.pojo.Group;
+import ru.innopolis.stc9.pojo.Subject;
 import ru.innopolis.stc9.pojo.User;
 import ru.innopolis.stc9.service.interfaces.GroupService;
 import ru.innopolis.stc9.service.interfaces.UserService;
@@ -20,11 +22,13 @@ import java.util.List;
 public class GroupServiceImpl implements GroupService {
     private GroupDao groupDao;
     private UserService userService;
+    private SubjectDao subjectDao;
 
     @Autowired
-    public GroupServiceImpl(GroupDao groupDao, UserService userService) {
+    public GroupServiceImpl(GroupDao groupDao, UserService userService, SubjectDao subjectDao) {
         this.groupDao = groupDao;
         this.userService = userService;
+        this.subjectDao = subjectDao;
     }
 
     @Override
@@ -89,4 +93,13 @@ public class GroupServiceImpl implements GroupService {
         }
         return (foundGroup && foundStudent);
     }
+
+    public void addSubjectToGroup(int groupId, int subjectId) {
+        Group tempGroup = groupDao.findGroupById(groupId);
+        List<Subject> subjects = tempGroup.getSubjects();
+        subjects.add(subjectDao.findById(subjectId));
+        tempGroup.setSubjects(subjects);
+        groupDao.updateGroup(tempGroup);
+    }
+
 }
