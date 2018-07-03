@@ -81,7 +81,7 @@
                 <!-- small box -->
                 <div class="small-box bg-yellow">
                     <div class="inner">
-                        <h3><c:out value="${requestScope.get('missedLessons')}"/></h3>
+                        <h3><c:out value="${missedLessons}"/></h3>
 
                         <p>Пропуски</p>
                     </div>
@@ -175,8 +175,8 @@
                                                 <c:forEach items="${progress}" var="progress">
                                                     <tr>
                                                         <td>${progress.value}</td>
-                                                        <td>${progress.student.id}</td>
-                                                        <td>${progress.lesson.id}</td>
+                                                        <td>${progress.student.login}</td>
+                                                        <td>${progress.lesson.name}</td>
                                                     </tr>
                                                 </c:forEach>
                                                 </tbody>
@@ -235,7 +235,7 @@
                 </div>
             </div>
         </div>
-        <div class="row">
+        <%--<div class="row">
             <div class="col-md-12 panel-warning">
                 <div class="box box-success">
                     <div class="box-header with-border">
@@ -265,7 +265,7 @@
                                         </tr>
                                         </thead>
                                         <tbody>
-                                        <c:forEach items="${requestScope.get('lessons')}" var="lessons">
+                                        <c:forEach items="${lessons}" var="lessons">
                                             <tr>
                                                 <td>${lessons.id}</td>
                                                 <td>${lessons.subject.id}</td>
@@ -284,6 +284,6 @@
                 </div>
 
             </div>
-        </div>
+        </div>--%>
     </jsp:body>
 </t:wrapper>

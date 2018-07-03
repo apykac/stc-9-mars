@@ -32,12 +32,11 @@ public class ProgressController {
      */
     @RequestMapping(method = RequestMethod.GET)
     private String doGet(HttpSession session, Model model) {
+        String role = (String) session.getAttribute(SessionDataInform.ROLE);
         String login = (String) session.getAttribute(SessionDataInform.LOGIN);
-        List<Mark> markList = progressService.getProgress(greaterOrEqualMark, lessOrEqualMark, login);
+        List<Mark> markList = progressService.getProgress(greaterOrEqualMark, lessOrEqualMark, role, login);
         model.addAttribute("progress", markList);
-        model.addAttribute("amountMarks", progressService.getAmountMarks(login));
-        model.addAttribute("lessons", progressService.getLessons());
-        model.addAttribute("missedLessons", progressService.getNumberOfMissedLessons(login));
+        model.addAttribute("amountMarks", progressService.getAmountMarks(role, markList));
         return "views/progress";
     }
 
@@ -55,8 +54,9 @@ public class ProgressController {
 
     @RequestMapping(value = "/pdf", method = RequestMethod.GET)
     private ModelAndView getPdf(HttpSession session) {
+        String role = (String) session.getAttribute(SessionDataInform.ROLE);
         String login = (String) session.getAttribute(SessionDataInform.LOGIN);
-        List<Mark> markList = progressService.getProgress(greaterOrEqualMark, lessOrEqualMark, login);
+        List<Mark> markList = progressService.getProgress(greaterOrEqualMark, lessOrEqualMark, role, login);
 
         return new ModelAndView("progressPdf", "getpdf", markList);
     }
