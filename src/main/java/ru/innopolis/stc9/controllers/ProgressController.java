@@ -22,6 +22,8 @@ public class ProgressController {
     private int greaterOrEqualMark = 0;
     private int lessOrEqualMark = 5;
 
+    private List<Mark> markList;
+
     @Autowired
     public ProgressController(ProgressService progressService) {
         this.progressService = progressService;
@@ -33,10 +35,9 @@ public class ProgressController {
     @RequestMapping(method = RequestMethod.GET)
     private String doGet(HttpSession session, Model model) {
         String role = (String) session.getAttribute(SessionDataInform.ROLE);
-        String login = (String) session.getAttribute(SessionDataInform.LOGIN);
-        List<Mark> markList = progressService.getProgress(greaterOrEqualMark, lessOrEqualMark, role, login);
-        model.addAttribute("progress", markList);
-        model.addAttribute("amountMarks", progressService.getAmountMarks(role, markList));
+        List<Mark> mark = getMarkList(session, true);
+        model.addAttribute("progress", mark);
+        model.addAttribute("amountMarks", progressService.getAmountMarks(role, mark));
         return "views/progress";
     }
 
@@ -54,11 +55,7 @@ public class ProgressController {
 
     @RequestMapping(value = "/pdf", method = RequestMethod.GET)
     private ModelAndView getPdf(HttpSession session) {
-        String role = (String) session.getAttribute(SessionDataInform.ROLE);
-        String login = (String) session.getAttribute(SessionDataInform.LOGIN);
-        List<Mark> markList = progressService.getProgress(greaterOrEqualMark, lessOrEqualMark, role, login);
-
-        return new ModelAndView("progressPdf", "getpdf", markList);
+        return new ModelAndView("progressPdf", "getpdf", getMarkList(session, false));
     }
 
     /**
@@ -69,5 +66,16 @@ public class ProgressController {
      */
     private int[] getMarks(String marks) {
         return Arrays.stream(marks.split("\\-")).mapToInt(Integer::parseInt).toArray();
+    }
+
+    private List<Mark> getMarkList(HttpSession session, boolean isDoGet) {
+        String role = (String) session.getAttribute(SessionDataInform.ROLE);
+        String login = (String) session.getAttribute(SessionDataInform.LOGIN);
+
+        if (isDoGet || markList == null) {
+            markList = progressService.getProgress(greaterOrEqualMark, lessOrEqualMark, role, login);
+        }
+
+        return markList;
     }
 }

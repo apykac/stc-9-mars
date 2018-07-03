@@ -18,13 +18,12 @@ public class ProgressPdf extends AbstractPdfView {
                                     PdfWriter writer,
                                     HttpServletRequest request,
                                     HttpServletResponse response) throws Exception {
-        PdfPTable table = new PdfPTable(6);
+        PdfPTable table = new PdfPTable(5);
         table.addCell("Value");
         table.addCell("Name");
         table.addCell("Group");
         table.addCell("Lesson");
         table.addCell("Date");
-        table.addCell("Subject");
         List<Mark> markList = (List<Mark>) model.get("getpdf");
         for (Mark mark : markList) {
             table.addCell(String.valueOf(mark.getValue()));
@@ -32,7 +31,6 @@ public class ProgressPdf extends AbstractPdfView {
             table.addCell(mark.getStudent().getGroup().getName());
             table.addCell(mark.getLesson().getName());
             table.addCell(String.valueOf(mark.getLesson().getDate()));
-            table.addCell(mark.getLesson().getSubject().getName());
         }
         document.add(table);
 

@@ -167,16 +167,18 @@
                                                 <thead>
                                                 <tr>
                                                     <th>Оценка</th>
-                                                    <th>Имя</th>
+                                                    <th>Студент</th>
                                                     <th>Урок</th>
+                                                    <th>Дата</th>
                                                 </tr>
                                                 </thead>
                                                 <tbody>
                                                 <c:forEach items="${progress}" var="progress">
                                                     <tr>
                                                         <td>${progress.value}</td>
-                                                        <td>${progress.student.login}</td>
+                                                        <td>${progress.student.firstName} ${progress.student.secondName}</td>
                                                         <td>${progress.lesson.name}</td>
+                                                        <td>${progress.lesson.date}</td>
                                                     </tr>
                                                 </c:forEach>
                                                 </tbody>
