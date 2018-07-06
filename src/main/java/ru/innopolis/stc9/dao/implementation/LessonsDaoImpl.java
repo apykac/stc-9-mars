@@ -7,7 +7,6 @@ import org.hibernate.query.Query;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import ru.innopolis.stc9.dao.interfaces.LessonsDao;
-import ru.innopolis.stc9.dao.mappers.LessonMapper;
 import ru.innopolis.stc9.pojo.Lessons;
 
 import javax.persistence.criteria.CriteriaBuilder;
@@ -40,7 +39,7 @@ public class LessonsDaoImpl implements LessonsDao {
         CriteriaBuilder builder = session.getCriteriaBuilder();
         CriteriaDelete<Lessons> criteria = builder.createCriteriaDelete(Lessons.class);
         Root<Lessons> root = criteria.from(Lessons.class);
-        criteria.where(builder.equal(root.get(LessonMapper.ID), lessonId));
+        criteria.where(builder.equal(root.get("id"), lessonId));
         result = session.createQuery(criteria).executeUpdate();
         return result != 0;
     }
