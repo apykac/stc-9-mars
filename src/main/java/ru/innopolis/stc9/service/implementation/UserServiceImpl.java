@@ -1,6 +1,7 @@
 package ru.innopolis.stc9.service.implementation;
 
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import org.apache.commons.io.IOUtils;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.HttpClient;
@@ -55,7 +56,6 @@ public class UserServiceImpl implements UserService {
     public boolean isExist(String login) {
         if ((login == null) || login.equals("")) return false;
         String postUrl = "http://localhost:8181/findLoginByName/" + login;
-        Gson gson = new Gson();
         HttpClient httpClient = HttpClientBuilder.create().build();
         HttpGet get = new HttpGet(postUrl);
         //HttpPost post = new HttpPost(postUrl);
@@ -64,13 +64,16 @@ public class UserServiceImpl implements UserService {
         //post.setHeader("Content-type", "application/json");
         //HttpResponse response = httpClient.execute(post);
         HttpResponse response;
+        GsonBuilder builder = new GsonBuilder();
+        Gson gson = builder.create();
+        User user = null;
         try {
             response = httpClient.execute(get);
-            gson.fromJson(IOUtils.toString(response.getEntity().getContent(), "UTF-8"), Boolean.class);
+            user = gson.fromJson(IOUtils.toString(response.getEntity().getContent(), "UTF-8"), User.class);
         } catch (IOException e) {
             e.printStackTrace();
         }
-        return true;
+        return user != null;
     }
 
     @Override
