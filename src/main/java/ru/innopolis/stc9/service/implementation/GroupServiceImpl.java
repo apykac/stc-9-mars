@@ -1,15 +1,8 @@
 package ru.innopolis.stc9.service.implementation;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-import ru.innopolis.stc9.dao.interfaces.GroupDao;
-import ru.innopolis.stc9.dao.interfaces.SubjectDao;
 import ru.innopolis.stc9.pojo.Group;
-import ru.innopolis.stc9.pojo.Subject;
-import ru.innopolis.stc9.pojo.User;
 import ru.innopolis.stc9.service.interfaces.GroupService;
-import ru.innopolis.stc9.service.interfaces.UserService;
 
 import java.util.List;
 
@@ -18,56 +11,77 @@ import java.util.List;
  * Реализация интерфейса GroupService
  */
 @Service
-@Transactional
 public class GroupServiceImpl implements GroupService {
-    private GroupDao groupDao;
-    private UserService userService;
-    private SubjectDao subjectDao;
-
-    @Autowired
-    public GroupServiceImpl(GroupDao groupDao, UserService userService, SubjectDao subjectDao) {
-        this.groupDao = groupDao;
-        this.userService = userService;
-        this.subjectDao = subjectDao;
-    }
-
     @Override
     public boolean addGroup(Group group) {
-        if (group == null) return false;
-        return groupDao.addGroup(group);
+        return false;
     }
 
     @Override
     public boolean updateGroup(Group group) {
-        if (group == null) return false;
-        return groupDao.updateGroup(group);
+        return false;
     }
 
     @Override
     public boolean deleteGroup(int groupId) {
-        if (groupId < 0) return false;
-        return groupDao.deleteGroup(groupId);
+        return false;
     }
 
     @Override
     public Group findGroupById(Integer id) {
-        if ((id == null) || (id < 0)) return null;
-        return groupDao.findGroupById(id);
+        return null;
     }
 
     @Override
     public List<Group> findAllGroups() {
-        return groupDao.findAllGroups();
+        return null;
     }
 
-    /**
-     * Метод проверяет, есть ли в БД группа и студент с заданными id.
-     *
-     * @param groupId   - id группы, если не нужно проверять, то указываем "0"
-     * @param studentId - id тудента, если не нужно проверять, то указываем "0"
-     * @return true - если сущности найдены; false - если хотя б одной сущности нет
-     */
     @Override
+    public boolean isEntityFound(int groupId, int studentId) {
+        return false;
+    }
+
+    @Override
+    public void addSubjectToGroup(int groupId, int subjectId) {
+
+    }
+
+    @Override
+    public void deleteSubjectFromGroup(int groupId, int subjectId) {
+
+    }
+
+    /*@Override
+    public boolean addGroup(Group group) {
+        if (group == null) return false;
+        return groupDao.addGroup(group);
+    }*/
+
+    /*@Override
+    public boolean updateGroup(Group group) {
+        if (group == null) return false;
+        return groupDao.updateGroup(group);
+    }*/
+
+    /*@Override
+    public boolean deleteGroup(int groupId) {
+        if (groupId < 0) return false;
+        return groupDao.deleteGroup(groupId);
+    }*/
+
+    /*@Override
+    public Group findGroupById(Integer id) {
+        if ((id == null) || (id < 0)) return null;
+        return groupDao.findGroupById(id);
+    }*/
+
+    /*@Override
+    public List<Group> findAllGroups() {
+        return groupDao.findAllGroups();
+    }*/
+
+    /*@Override
     public boolean isEntityFound(int groupId, int studentId) {
         boolean foundGroup = false;
         boolean foundStudent = false;
@@ -92,22 +106,22 @@ public class GroupServiceImpl implements GroupService {
             foundStudent = true;
         }
         return (foundGroup && foundStudent);
-    }
+    }*/
 
-    public void addSubjectToGroup(int groupId, int subjectId) {
+    /*public void addSubjectToGroup(int groupId, int subjectId) {
         Group tempGroup = groupDao.findGroupById(groupId);
         List<Subject> subjects = tempGroup.getSubjects();
         subjects.add(subjectDao.findById(subjectId));
         tempGroup.setSubjects(subjects);
         groupDao.updateGroup(tempGroup);
-    }
+    }*/
 
-    public void deleteSubjectFromGroup(int groupId, int subjectId) {
+    /*public void deleteSubjectFromGroup(int groupId, int subjectId) {
         Group tempGroup = groupDao.findGroupById(groupId);
         List<Subject> subjects = tempGroup.getSubjects();
         subjects.remove(subjectDao.findById(subjectId));
         tempGroup.setSubjects(subjects);
         groupDao.updateGroup(tempGroup);
-    }
+    }*/
 
 }

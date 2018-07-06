@@ -1,10 +1,7 @@
 package ru.innopolis.stc9.service.implementation;
 
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-import ru.innopolis.stc9.dao.interfaces.ProgressDao;
 import ru.innopolis.stc9.pojo.Mark;
 import ru.innopolis.stc9.service.interfaces.ProgressService;
 
@@ -12,18 +9,13 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Service
-@Transactional
 public class ProgressServiceImpl implements ProgressService {
-    private final ProgressDao progressDao;
 
-    @Autowired
-    public ProgressServiceImpl(ProgressDao progressDao) {
-        this.progressDao = progressDao;
+    @Override
+    public List<Mark> getProgress(int greaterOrEqualMark, int lessOrEqualMark, String role, String login) {
+        return null;
     }
 
-    /**
-     * Получаем количество оценок
-     */
     @Override
     public List<Integer> getAmountMarks(String role, List<Mark> markList) {
         List<Integer> marks = new ArrayList<>();
@@ -35,18 +27,12 @@ public class ProgressServiceImpl implements ProgressService {
         return marks;
     }
 
-    /**
-     * Список с отфильтрованными логином и оценками
-     *
-     * @param greaterOrEqualMark Оценка больше или равно
-     * @param lessOrEqualMark    Оценка меньше или равно
-     */
-    @Override
+    /*@Override
     public List<Mark> getProgress(int greaterOrEqualMark, int lessOrEqualMark, String role, String login) {
         List<Mark> progressList =
                 selectMarksInMarkList(greaterOrEqualMark, lessOrEqualMark, progressDao.getMark());
         return getResultList(progressList, role, login);
-    }
+    }*/
 
     @Override
     //TODO переделать
@@ -55,9 +41,6 @@ public class ProgressServiceImpl implements ProgressService {
         return 0;//attendanceService.getNumberOfMissedLessons(id);
     }
 
-    /**
-     * Из session вытаскиваем роль и логин и отбираем список по этим параметрам
-     */
     private List<Mark> getResultList(List<Mark> markList, String role, String login) {
         if (isStudent(role)) {
             return markByLogin(login, markList);
@@ -65,14 +48,6 @@ public class ProgressServiceImpl implements ProgressService {
         return markList;
     }
 
-    /**
-     * Отбираем по @param greaterOrEqualMark @param lessOrEqualMark
-     *
-     * @param greaterOrEqualMark Оценка больше или равно
-     * @param lessOrEqualMark Оценка меньше или равно
-     * @param markList изначальный список
-     * @return Возвращаем отфильтрованный по оценкам список
-     */
     private List<Mark> selectMarksInMarkList(int greaterOrEqualMark,
                                              int lessOrEqualMark,
                                              List<Mark> markList) {
@@ -86,13 +61,6 @@ public class ProgressServiceImpl implements ProgressService {
         return result;
     }
 
-    /**
-     * Отбираем по @param login
-     *
-     * @param login логин пользователя
-     * @param markList Отфильтрованный список оценок
-     * @return Возвращаем отфильтрованный по логину список оценок
-     */
     private List<Mark> markByLogin(String login, List<Mark> markList) {
         List<Mark> result = new ArrayList<>();
         for (Mark mark : markList) {
@@ -103,11 +71,6 @@ public class ProgressServiceImpl implements ProgressService {
         return result;
     }
 
-    /**
-     * Проверяем является ли пользователь студентом
-     *
-     * @param role роль пользователя
-     */
     private boolean isStudent(String role) {
         return role.equals("ROLE_STUDENT");
     }

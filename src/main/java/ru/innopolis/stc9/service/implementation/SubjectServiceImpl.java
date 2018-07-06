@@ -1,25 +1,39 @@
 package ru.innopolis.stc9.service.implementation;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-import ru.innopolis.stc9.dao.interfaces.SubjectDao;
 import ru.innopolis.stc9.pojo.Subject;
 import ru.innopolis.stc9.service.interfaces.SubjectService;
 
 import java.util.List;
 
 @Service
-@Transactional
 public class SubjectServiceImpl implements SubjectService {
-    private final SubjectDao subjectDao;
-
-    @Autowired
-    public SubjectServiceImpl(SubjectDao subjectDao) {
-        this.subjectDao = subjectDao;
+    @Override
+    public boolean addSubject(String name) {
+        return false;
     }
 
     @Override
+    public boolean deleteSubject(int subjectId) {
+        return false;
+    }
+
+    @Override
+    public List<Subject> findAllSubject() {
+        return null;
+    }
+
+    @Override
+    public Subject findById(int id) {
+        return null;
+    }
+
+    @Override
+    public boolean checkSubjectName(String name) {
+        return false;
+    }
+
+    /*@Override
     public boolean addSubject(String name) {
         if ("".equals(name)) {
             return false;
@@ -27,34 +41,28 @@ public class SubjectServiceImpl implements SubjectService {
             Subject subject = new Subject(name);
             return subjectDao.addSubject(subject);
         }
-    }
+    }*/
 
-    @Override
+    /*@Override
     public boolean deleteSubject(int subjectId) {
         if (subjectId < 0) {
             return false;
         } else {
             return subjectDao.deleteSubject(subjectId);
         }
-    }
+    }*/
 
-    @Override
+    /*@Override
     public List<Subject> findAllSubject() {
         return subjectDao.findAllSubject();
-    }
+    }*/
 
-    @Override
+    /*@Override
     public Subject findById(int id) {
         return subjectDao.findById(id);
-    }
+    }*/
 
-
-    /**
-     * Проверка на совпадение
-     *
-     * @param name название предмета
-     */
-    @Override
+    /*@Override
     public boolean checkSubjectName(String name) {
         boolean existSubject = false;
         for (Subject subject : findAllSubject()) {
@@ -63,5 +71,5 @@ public class SubjectServiceImpl implements SubjectService {
             }
         }
         return existSubject;
-    }
+    }*/
 }

@@ -8,7 +8,6 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import ru.innopolis.stc9.dao.mappers.MessageMapper;
 import ru.innopolis.stc9.pojo.Message;
 import ru.innopolis.stc9.pojo.User;
 import ru.innopolis.stc9.service.interfaces.MessageService;
@@ -40,8 +39,8 @@ public class MessageController {
     public String feedbackPost(@RequestBody MultiValueMap<String, String> incParam,
                                HttpSession session,
                                Model model) {
-        incParam.add(MessageMapper.USERID, session.getAttribute(SessionDataInform.ID).toString());
-        incParam.add(MessageMapper.UNAME, "[" + session.getAttribute(SessionDataInform.LOGIN) + "] " +
+        incParam.add("fromUserId", session.getAttribute(SessionDataInform.ID).toString());
+        incParam.add("uname", "[" + session.getAttribute(SessionDataInform.LOGIN) + "] " +
                 session.getAttribute(SessionDataInform.NAME));
         List<String> errors = messageService.isCorrectData(incParam);
         List<String> successList = new ArrayList<>();
@@ -107,7 +106,7 @@ public class MessageController {
     }
 
     private void tryToAddMessage(MultiValueMap<String, String> incParam, HttpSession session, Model model) {
-        incParam.add(MessageMapper.UNAME, "[" + session.getAttribute(SessionDataInform.LOGIN) + "] " +
+        incParam.add("uname", "[" + session.getAttribute(SessionDataInform.LOGIN) + "] " +
                 session.getAttribute(SessionDataInform.NAME));
         if (!messageService.addMessage(incParam)) model.addAttribute(error, "Fail to add message by DAO");
         else model.addAttribute("success", "Сообщение отправлено успешно");

@@ -1,30 +1,40 @@
 package ru.innopolis.stc9.service.implementation;
 
-import org.apache.log4j.Logger;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-import ru.innopolis.stc9.dao.interfaces.LessonsDao;
 import ru.innopolis.stc9.pojo.Lessons;
 import ru.innopolis.stc9.service.interfaces.LessonsService;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
+import java.sql.Date;
 import java.util.List;
 
 @Service
-@Transactional
 public class LessonsServiceImpl implements LessonsService {
-    private final Logger logger = Logger.getLogger(LessonsServiceImpl.class);
-    private final LessonsDao lessonsDao;
-
-    @Autowired
-    public LessonsServiceImpl(LessonsDao lessonsDao) {
-        this.lessonsDao = lessonsDao;
+    @Override
+    public boolean addLesson(Lessons lesson) {
+        return false;
     }
 
+    @Override
+    public boolean deleteLesson(int lessonId) {
+        return false;
+    }
 
     @Override
+    public List<Lessons> findAllLessonsWithSubjects() {
+        return null;
+    }
+
+    @Override
+    public List<Lessons> findAllLessonsByWithSubject(int subjectId) {
+        return null;
+    }
+
+    @Override
+    public Date stringToDate(String strDate) {
+        return null;
+    }
+
+    /*@Override
     public boolean addLesson(Lessons lesson) {
         if (lesson.getName() == null) {
             return false;
@@ -35,9 +45,9 @@ public class LessonsServiceImpl implements LessonsService {
             } else
                 return false;
         }
-    }
+    }*/
 
-    @Override
+    /*@Override
     public boolean deleteLesson(int lessonId) {
         if (lessonsDao.deleteLesson(lessonId)) {
             logger.info("lesson " + lessonId + " deleted");
@@ -45,19 +55,19 @@ public class LessonsServiceImpl implements LessonsService {
         } else {
             return false;
         }
-    }
+    }*/
 
-    @Override
+    /*@Override
     public List<Lessons> findAllLessonsWithSubjects() {
         return lessonsDao.findAllLessonsWithSubjects();
-    }
+    }*/
 
-    @Override
+    /*@Override
     public List<Lessons> findAllLessonsByWithSubject(int subjectId) {
         return lessonsDao.findAllLessonsByWithSubject(subjectId);
-    }
+    }*/
 
-    @Override
+    /*@Override
     public java.sql.Date stringToDate(String strDate) {
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
         java.sql.Date result = null;
@@ -68,5 +78,5 @@ public class LessonsServiceImpl implements LessonsService {
             logger.error(e.getMessage());
         }
         return result;
-    }
+    }*/
 }
