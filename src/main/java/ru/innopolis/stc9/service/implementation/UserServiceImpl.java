@@ -1,10 +1,18 @@
 package ru.innopolis.stc9.service.implementation;
 
+import com.google.gson.Gson;
+import org.apache.commons.io.IOUtils;
+import org.apache.http.HttpResponse;
+import org.apache.http.client.HttpClient;
+import org.apache.http.client.methods.HttpGet;
+import org.apache.http.impl.client.HttpClientBuilder;
 import org.springframework.stereotype.Service;
 import org.springframework.util.MultiValueMap;
 import ru.innopolis.stc9.pojo.User;
 import ru.innopolis.stc9.service.interfaces.UserService;
 
+import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 @Service("userServiceImpl")
@@ -16,7 +24,21 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public List<String> isCorrectData(MultiValueMap<String, String> incParam) {
-        return null;
+        List<String> result = new ArrayList<>();
+        if ((incParam == null) || incParam.isEmpty()) return result;
+        nameCheck(result, incParam);
+        return result;
+    }
+
+    private void nameCheck(List<String> result, MultiValueMap<String, String> incParam) {
+        String pattern = "^\\D*$";
+        if (nameCheckSingle(incParam, "firstName", pattern)) result.add("Invalid first name");
+        if (nameCheckSingle(incParam, "secondName", pattern)) result.add("Invalid second name");
+        if (nameCheckSingle(incParam, "middleName", pattern)) result.add("Invalid middle name");
+    }
+
+    private boolean nameCheckSingle(MultiValueMap<String, String> incParam, String name, String pattern) {
+        return (incParam.get(name) != null) && !incParam.get(name).get(0).matches(pattern);
     }
 
     @Override
@@ -31,7 +53,24 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public boolean isExist(String login) {
-        return false;
+        if ((login == null) || login.equals("")) return false;
+        String postUrl = "http://localhost:8181/findLoginByName/" + login;
+        Gson gson = new Gson();
+        HttpClient httpClient = HttpClientBuilder.create().build();
+        HttpGet get = new HttpGet(postUrl);
+        //HttpPost post = new HttpPost(postUrl);
+        //StringEntity postingString = new StringEntity(gson.toJson(pojo1));
+        //post.setEntity(postingString);
+        //post.setHeader("Content-type", "application/json");
+        //HttpResponse response = httpClient.execute(post);
+        HttpResponse response;
+        try {
+            response = httpClient.execute(get);
+            gson.fromJson(IOUtils.toString(response.getEntity().getContent(), "UTF-8"), Boolean.class);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return true;
     }
 
     @Override
