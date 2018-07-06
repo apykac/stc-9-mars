@@ -6,13 +6,16 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
+import javax.xml.bind.annotation.XmlRootElement;
+import java.io.Serializable;
 import java.util.List;
 
 @Entity
 @Table(name = "subject")
 @NoArgsConstructor
 @EqualsAndHashCode
-public class Subject {
+@XmlRootElement
+public class Subject implements Serializable {
     @Getter
     @Setter
     @Id

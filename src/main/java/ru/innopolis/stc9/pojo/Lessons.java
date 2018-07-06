@@ -3,6 +3,8 @@ package ru.innopolis.stc9.pojo;
 import lombok.*;
 
 import javax.persistence.*;
+import javax.xml.bind.annotation.XmlRootElement;
+import java.io.Serializable;
 import java.sql.Date;
 import java.util.List;
 
@@ -11,7 +13,8 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @EqualsAndHashCode
-public class Lessons {
+@XmlRootElement
+public class Lessons implements Serializable {
     @Getter
     @Setter
     @Id

@@ -3,13 +3,16 @@ package ru.innopolis.stc9.pojo;
 import lombok.*;
 
 import javax.persistence.*;
+import javax.xml.bind.annotation.XmlRootElement;
+import java.io.Serializable;
 
 @Entity
 @Table(name = "homework")
 @NoArgsConstructor
 @AllArgsConstructor
 @EqualsAndHashCode
-public class HomeWork {
+@XmlRootElement
+public class HomeWork implements Serializable {
     @Getter
     @Setter
     @Id

@@ -7,7 +7,6 @@ import org.hibernate.query.Query;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import ru.innopolis.stc9.dao.interfaces.MessageDao;
-import ru.innopolis.stc9.dao.mappers.MessageMapper;
 import ru.innopolis.stc9.pojo.Message;
 import ru.innopolis.stc9.pojo.User;
 
@@ -61,7 +60,7 @@ public class MessageDaoImpl implements MessageDao {
         CriteriaBuilder builder = session.getCriteriaBuilder();
         CriteriaDelete<Message> criteria = builder.createCriteriaDelete(Message.class);
         Root<Message> root = criteria.from(Message.class);
-        criteria.where(builder.equal(root.get(MessageMapper.ID), id));
+        criteria.where(builder.equal(root.get("id"), id));
         return session.createQuery(criteria).executeUpdate() != 0;
     }
 

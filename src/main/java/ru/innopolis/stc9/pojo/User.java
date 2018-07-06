@@ -6,13 +6,16 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
+import javax.xml.bind.annotation.XmlRootElement;
+import java.io.Serializable;
 import java.util.List;
 
 @Entity
 @Table(name = "users")
 @EqualsAndHashCode
 @NoArgsConstructor
-public class User implements DBObject {
+@XmlRootElement
+public class User implements Serializable {
     @Getter
     @Setter
     @Id
@@ -51,23 +54,23 @@ public class User implements DBObject {
     @Getter
     @Setter
     @OneToMany(mappedBy = "toUser", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    private List<Message> incomingMessages;
+    private List<Message> incomingMessages = null;
     @Getter
     @Setter
     @OneToMany(mappedBy = "fromUser", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    private List<Message> upcomingMessages;
+    private List<Message> upcomingMessages = null;
     @Getter
     @Setter
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    private List<Attendance> attendances;
+    private List<Attendance> attendances = null;
     @Getter
     @Setter
     @OneToMany(mappedBy = "student", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    private List<HomeWork> homeWorks;
+    private List<HomeWork> homeWorks = null;
     @Getter
     @Setter
     @OneToMany(mappedBy = "student", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    private List<Mark> marks;
+    private List<Mark> marks = null;
 
     public User(String login, String hashPassword, String firstName, String secondName, String middleName) {
         this.login = login;
