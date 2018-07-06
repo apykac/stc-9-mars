@@ -17,7 +17,7 @@ import java.util.List;
  */
 @Repository
 public class GroupDaoImpl implements GroupDao {
-
+    /////DOROVA
     private final SessionFactory factory;
 
     @Autowired
