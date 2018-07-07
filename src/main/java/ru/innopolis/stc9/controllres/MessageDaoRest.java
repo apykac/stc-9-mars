@@ -4,11 +4,13 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.util.MultiValueMap;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 import ru.innopolis.stc9.dao.interfaces.MessageDao;
+import ru.innopolis.stc9.dao.mappers.MessageMapper;
 import ru.innopolis.stc9.pojo.Message;
 import ru.innopolis.stc9.pojo.User;
 
@@ -42,7 +44,10 @@ public class MessageDaoRest {
         Type type = new TypeToken<List<Object>>() {
         }.getType();
         List<Object> param = gson.fromJson(incParam, type);
-        return gson.toJson(messageDao.addMessage((Message) param.get(0), (Integer) param.get(1), (Integer) param.get(2)));
+        return gson.toJson(messageDao.addMessage(
+                MessageMapper.getByParam((MultiValueMap<String, String>) param.get(0)),
+                (Integer) param.get(1),
+                (Integer) param.get(2)));
     }
 
     @RequestMapping(
@@ -85,10 +90,7 @@ public class MessageDaoRest {
         Message message = messageDao.getMessageByIdWithFromUser(gson.fromJson(messageId, Integer.class));
         message.setToUser(null);
         if (message.getFromUser() != null) {
-            if (message.getFromUser().getGroup() != null) {
-                message.getFromUser().getGroup().setUsers(null);
-                message.getFromUser().getGroup().setSubjects(null);
-            }
+            message.getFromUser().setGroup(null);
             message.getFromUser().setAttendances(null);
             message.getFromUser().setHomeWorks(null);
             message.getFromUser().setIncomingMessages(null);
