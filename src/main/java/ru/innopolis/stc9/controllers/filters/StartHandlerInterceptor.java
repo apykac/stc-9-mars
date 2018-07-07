@@ -28,9 +28,8 @@ public class StartHandlerInterceptor implements HandlerInterceptor {
         HttpSession session = request.getSession();
         if (session.getAttribute(SessionDataInform.ID) == null) {
             User user = userService.findUserByLogin(SecurityContextHolder.getContext().getAuthentication().getName());
-            //int numberOfMessage = messageService.getNumberOfMessage(user);
-            //addStartAttributeToSession(session, user, numberOfMessage);
-            addStartAttributeToSession(session, user, 0);
+            int numberOfMessage = messageService.getNumberOfMessage(user);
+            addStartAttributeToSession(session, user, numberOfMessage);
             response.sendRedirect(request.getContextPath() + "/university/start");
         }
         return true;
