@@ -6,7 +6,7 @@ import com.google.gson.reflect.TypeToken;
 import org.springframework.stereotype.Service;
 import org.springframework.util.MultiValueMap;
 import ru.innopolis.stc9.pojo.User;
-import ru.innopolis.stc9.pojo.UserMapper;
+import ru.innopolis.stc9.pojo.mappers.UserMapper;
 import ru.innopolis.stc9.service.CryptService;
 import ru.innopolis.stc9.service.interfaces.UserService;
 

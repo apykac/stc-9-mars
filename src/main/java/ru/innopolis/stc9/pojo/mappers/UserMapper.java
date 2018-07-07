@@ -1,6 +1,7 @@
-package ru.innopolis.stc9.pojo;
+package ru.innopolis.stc9.pojo.mappers;
 
 import org.springframework.util.MultiValueMap;
+import ru.innopolis.stc9.pojo.User;
 
 public class UserMapper {
     public static final String ID = "id";

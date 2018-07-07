@@ -6,8 +6,8 @@ import com.google.gson.reflect.TypeToken;
 import org.springframework.stereotype.Service;
 import org.springframework.util.MultiValueMap;
 import ru.innopolis.stc9.pojo.Message;
-import ru.innopolis.stc9.pojo.MessageMapper;
 import ru.innopolis.stc9.pojo.User;
+import ru.innopolis.stc9.pojo.mappers.MessageMapper;
 import ru.innopolis.stc9.service.interfaces.MessageService;
 
 import java.lang.reflect.Type;
@@ -38,16 +38,24 @@ public class MessageServiceImpl implements MessageService {
     public boolean addMessage(MultiValueMap<String, String> incParam) {
         if ((incParam == null) || incParam.isEmpty())
             return false;
-        String toUser = "toUserId";
-        String fromUser = "fromUserId";
-        Integer toUserId = incParam.get(toUser) == null ? null : Integer.parseInt(incParam.get(toUser).get(0));
-        Integer fromUserId = incParam.get(fromUser) == null ? null : Integer.parseInt(incParam.get(fromUser).get(0));
+        Message toUserIdMessage = messageInitByInteger(incParam, "toUserId");
+        Message fromUserIdMessage = messageInitByInteger(incParam, "fromUserId");
         Message message = MessageMapper.getByParam(incParam);
-        List<Object> param = new ArrayList<>(Arrays.asList(message, toUserId, fromUserId));
+        List<Message> param = new ArrayList<>(Arrays.asList(message, toUserIdMessage, fromUserIdMessage));
         Boolean isSuccess = gson.fromJson(
                 RestBridge.doConnectAction("http://localhost:8181/message/addMessage",
                         param, gson, true), Boolean.class);
         return isSuccess;
+    }
+
+    private Message messageInitByInteger(MultiValueMap<String, String> initValue, String value) {
+        if (initValue.get(value) == null) {
+            return null;
+        } else {
+            Message message = new Message();
+            message.setId(Integer.parseInt(initValue.get(value).get(0)));
+            return message;
+        }
     }
 
     @Override
