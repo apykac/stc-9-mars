@@ -36,7 +36,7 @@ public class User {
     private int enabled = 1;
     @Getter
     @Setter
-    private Group group = null;
+    private Group group;
     @Getter
     @Setter
     private List<Message> incomingMessages;

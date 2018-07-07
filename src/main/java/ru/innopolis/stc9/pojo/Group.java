@@ -2,7 +2,6 @@ package ru.innopolis.stc9.pojo;
 
 import lombok.*;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @AllArgsConstructor
@@ -20,7 +19,7 @@ public class Group {
     private List<Subject> subjects;
     @Getter
     @Setter
-    private List<User> users = new ArrayList<>();
+    private List<User> users;
 
     public Group(String name) {
         this.name = name;
