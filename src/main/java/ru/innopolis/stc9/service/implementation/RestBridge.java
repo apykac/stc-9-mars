@@ -22,9 +22,8 @@ public class RestBridge {
         HttpResponse response;
         try {
             if (isWithObject) {
-                StringEntity postingString = new StringEntity(gson.toJson(o));
-                post.setEntity(postingString);
-                post.setHeader("Content-type", "application/json");
+                post.setHeader("Content-type", "application/json; charset=UTF-8");
+                post.setEntity(new StringEntity(gson.toJson(o), "UTF-8"));
             }
             response = httpClient.execute(post);
             return IOUtils.toString(response.getEntity().getContent(), "UTF-8");
