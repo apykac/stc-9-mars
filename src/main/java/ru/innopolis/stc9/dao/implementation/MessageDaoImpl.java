@@ -6,6 +6,8 @@ import org.hibernate.SessionFactory;
 import org.hibernate.query.Query;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.EnableTransactionManagement;
+import org.springframework.transaction.annotation.Transactional;
 import ru.innopolis.stc9.dao.interfaces.MessageDao;
 import ru.innopolis.stc9.pojo.Message;
 import ru.innopolis.stc9.pojo.User;
@@ -17,6 +19,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Repository
+@EnableTransactionManagement
+@Transactional
 public class MessageDaoImpl implements MessageDao {
     private SessionFactory factory;
 
