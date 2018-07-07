@@ -2,25 +2,25 @@ package ru.innopolis.stc9.service.implementation;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import org.apache.commons.io.IOUtils;
-import org.apache.http.HttpResponse;
-import org.apache.http.client.HttpClient;
-import org.apache.http.client.methods.HttpGet;
-import org.apache.http.impl.client.HttpClientBuilder;
+import com.google.gson.reflect.TypeToken;
 import org.springframework.stereotype.Service;
 import org.springframework.util.MultiValueMap;
 import ru.innopolis.stc9.pojo.User;
+import ru.innopolis.stc9.pojo.UserMapper;
+import ru.innopolis.stc9.service.CryptService;
 import ru.innopolis.stc9.service.interfaces.UserService;
 
-import java.io.IOException;
+import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
 
 @Service("userServiceImpl")
 public class UserServiceImpl implements UserService {
-    @Override
-    public String checkPasswordUpdateIsPossible(MultiValueMap<String, String> incParam, User user) {
-        return null;
+    private Gson gson;
+
+    public UserServiceImpl() {
+        GsonBuilder builder = new GsonBuilder();
+        this.gson = builder.create();
     }
 
     @Override
@@ -44,189 +44,114 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public boolean addUserByParam(MultiValueMap<String, String> incParam) {
-        return false;
+        if ((incParam == null) || incParam.isEmpty()) return false;
+        User user = new User(
+                incParam.get("login").get(0),
+                CryptService.crypting(incParam.get("hashPassword").get(0)),
+                incParam.get("firstName").get(0),
+                incParam.get("secondName").get(0),
+                incParam.get("middleName").get(0));
+        Boolean isSuccess = gson.fromJson(
+                RestBridge.doConnectAction("http://localhost:8181/user/addUser",
+                        user, gson, true), Boolean.class);
+        return isSuccess;
     }
 
     @Override
     public boolean delUserById(int id) {
-        return false;
+        if (id < 0) return false;
+        Boolean isSuccess = gson.fromJson(
+                RestBridge.doConnectAction("http://localhost:8181/user/addUser",
+                        new Integer(id), gson, true), Boolean.class);
+        return isSuccess;
     }
 
     @Override
     public boolean isExist(String login) {
         if ((login == null) || login.equals("")) return false;
-        String postUrl = "http://localhost:8181/findLoginByName/" + login;
-        HttpClient httpClient = HttpClientBuilder.create().build();
-        HttpGet get = new HttpGet(postUrl);
-        //HttpPost post = new HttpPost(postUrl);
-        //StringEntity postingString = new StringEntity(gson.toJson(pojo1));
-        //post.setEntity(postingString);
-        //post.setHeader("Content-type", "application/json");
-        //HttpResponse response = httpClient.execute(post);
-        HttpResponse response;
-        GsonBuilder builder = new GsonBuilder();
-        Gson gson = builder.create();
-        User user = null;
-        try {
-            response = httpClient.execute(get);
-            user = gson.fromJson(IOUtils.toString(response.getEntity().getContent(), "UTF-8"), User.class);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        User user = gson.fromJson(
+                RestBridge.doConnectAction("http://localhost:8181/user/findLoginByName",
+                        login, gson, true), User.class);
         return user != null;
     }
 
     @Override
     public List<User> getUserList() {
-        return null;
+        Type type = new TypeToken<List<User>>() {
+        }.getType();
+        List<User> users = gson.fromJson(
+                RestBridge.doConnectAction("http://localhost:8181/user/getUsersList",
+                        null, gson, false), type);
+        return users;
     }
 
     @Override
     public List<User> getStudentsByGroupId(Integer groupId) {
-        return null;
+        if ((groupId == null) || (groupId < 0))
+            return new ArrayList<>();
+        Type type = new TypeToken<List<User>>() {
+        }.getType();
+        List<User> users = gson.fromJson(
+                RestBridge.doConnectAction("http://localhost:8181/user/getStudentsByGroupId",
+                        groupId, gson, true), type);
+        return users;
     }
 
     @Override
     public List<User> getAllStudents() {
-        return null;
+        Type type = new TypeToken<List<User>>() {
+        }.getType();
+        List<User> users = gson.fromJson(
+                RestBridge.doConnectAction("http://localhost:8181/user/getAllStudents",
+                        null, gson, false), type);
+        return users;
     }
 
     @Override
     public User findUserById(int userId) {
-        return null;
+        if (userId < 0) return null;
+        User user = gson.fromJson(
+                RestBridge.doConnectAction("http://localhost:8181/user/findUserByUserId",
+                        new Integer(userId), gson, true), User.class);
+        return user;
     }
 
     @Override
     public User findUserByIdWithSubjectList(int userId) {
-        return null;
+        if (userId < 0) return null;
+        User user = gson.fromJson(
+                RestBridge.doConnectAction("http://localhost:8181/user/findUserByIdWithSubjectList",
+                        new Integer(userId), gson, true), User.class);
+        return user;
     }
 
     @Override
     public User findUserByLogin(String login) {
-        return null;
+        if ((login == null) || login.equals("")) return null;
+        User user = gson.fromJson(
+                RestBridge.doConnectAction("http://localhost:8181/user/findLoginByName",
+                        login, gson, true), User.class);
+        return user;
     }
 
     @Override
     public boolean deactivationCurrentAccount(int id) {
-        return false;
-    }
-
-    @Override
-    public boolean checkPasswordOfCurrentAccount(int id, String candidate) {
-        return false;
-    }
-
-    @Override
-    public Object[] editUser(MultiValueMap<String, String> incParam) {
-        return new Object[0];
-    }
-
-    @Override
-    public boolean updateGroupId(int userId, Integer groupId) {
-        return false;
-    }
-
-    /*@Override
-    public List<String> isCorrectData(MultiValueMap<String, String> incParam) {
-        List<String> result = new ArrayList<>();
-        if ((incParam == null) || incParam.isEmpty()) return result;
-        nameCheck(result, incParam);
-        if ((incParam.get(UserMapper.ENABLED) != null)) {
-            try {
-                int enabled = Integer.parseInt(incParam.get(UserMapper.ENABLED).get(0));
-                if ((enabled != 1) && (enabled != 0)) result.add("Enabled must be 0 or 1");
-            } catch (NumberFormatException e) {
-                result.add("Invalid enabled value");
-            }
-        }
-        return result;
-    }*/
-
-    /*private void nameCheck(List<String> result, MultiValueMap<String, String> incParam) {
-        String pattern = "^\\D*$";
-        if (nameCheckSingle(incParam, UserMapper.FNAME, pattern)) result.add("Invalid first name");
-        if (nameCheckSingle(incParam, UserMapper.SNAME, pattern)) result.add("Invalid second name");
-        if (nameCheckSingle(incParam, UserMapper.MNAME, pattern)) result.add("Invalid middle name");
-    }*/
-
-    /*private boolean nameCheckSingle(MultiValueMap<String, String> incParam, String name, String pattern) {
-        return (incParam.get(name) != null) && !incParam.get(name).get(0).matches(pattern);
-    }*/
-
-    /*@Override
-    public boolean addUserByParam(MultiValueMap<String, String> incParam) {
-        if ((incParam == null) || incParam.isEmpty()) return false;
-        User user = new User(
-                incParam.get(UserMapper.LOGIN).get(0),
-                CryptService.crypting(incParam.get(UserMapper.HASH).get(0)),
-                incParam.get(UserMapper.FNAME).get(0),
-                incParam.get(UserMapper.SNAME).get(0),
-                incParam.get(UserMapper.MNAME).get(0));
-        return userDao.addUser(user);
-    }*/
-
-    /*@Override
-    public boolean delUserById(int id) {
         if (id < 0) return false;
-        return userDao.delUserById(id);
-    }*/
+        Boolean isSuccess = gson.fromJson(
+                RestBridge.doConnectAction("http://localhost:8181/user/deactivateUser",
+                        new Integer(id), gson, true), Boolean.class);
+        return isSuccess;
+    }
 
-    /*@Override
-    public boolean isExist(String login) {
-        if ((login == null) || login.equals("")) return false;
-        return userDao.findLoginByName(login) != null;
-    }*/
-
-    /*@Override
-    public List<User> getUserList() {
-        return userDao.getUsersList();
-    }*/
-
-    /*@Override
-    public User findUserById(int userId) {
-        if (userId < 0) return null;
-        return userDao.findUserByUserId(userId);
-    }*/
-
-    /*@Override
-    public User findUserByIdWithSubjectList(int userId) {
-        if (userId < 0) return null;
-        return userDao.findUserByIdWithSubjectList(userId);
-    }*/
-
-    /*@Override
-    public User findUserByLogin(String login) {
-        if ((login == null) || login.equals("")) return null;
-        return userDao.findLoginByName(login);
-    }*/
-
-    /*@Override
-    public List<User> getStudentsByGroupId(Integer groupId) {
-        if ((groupId == null) || (groupId < 0))
-            return new ArrayList<>();
-        return userDao.getStudentsByGroupId(groupId);
-    }*/
-
-    /*@Override
-    public List<User> getAllStudents() {
-        return userDao.getAllStudents();
-    }*/
-
-    /*@Override
+    @Override
     public boolean checkPasswordOfCurrentAccount(int id, String candidate) {
         if ((id < 0) || (candidate == null) || candidate.equals("")) return false;
         User user = findUserById(id);
         if (user == null) return false;
         return CryptService.isMatched(candidate, user.getHashPassword());
-    }*/
+    }
 
-    /*@Override
-    public boolean deactivationCurrentAccount(int id) {
-        if (id < 0) return false;
-        return userDao.deactivateUser(id);
-    }*/
-
-    /*@Override
+    @Override
     public Object[] editUser(MultiValueMap<String, String> incParam) {
         Object[] result = new Object[3];
         if ((incParam == null) || incParam.isEmpty()) return result;
@@ -236,8 +161,11 @@ public class UserServiceImpl implements UserService {
         result[1] = success;
         result[2] = false;
         if (!errors.isEmpty()) return result;
-        User user = (User) mapper.getByParam(incParam);
-        if (!userDao.updateUserByFIOL(user)) errors.add("Invalid/Exist Login");
+        User user = UserMapper.getByParam(incParam);
+        boolean isSuccess = gson.fromJson(
+                RestBridge.doConnectAction("http://localhost:8181/user/updateUserByFIOL",
+                        user, gson, true), Boolean.class);
+        if (!isSuccess) errors.add("Invalid/Exist Login");
         else {
             result[2] = true;
             success.add("Updating profile FIO success successfully");
@@ -249,33 +177,41 @@ public class UserServiceImpl implements UserService {
                 return result;
             }
             user.setHashPassword(CryptService.crypting(incParam.get("newPassword").get(0)));
-            if (!userDao.updateUserPassword(user)) errors.add("Updating profile password error");
+            isSuccess = gson.fromJson(
+                    RestBridge.doConnectAction("http://localhost:8181/user/updateUserPassword",
+                            user, gson, true), Boolean.class);
+            if (!isSuccess) errors.add("Updating profile password error");
             else success.add("Updating profile password successfully");
         }
         return result;
-    }*/
+    }
 
-    /*@Override
+    @Override
     public String checkPasswordUpdateIsPossible(MultiValueMap<String, String> incParam, User user) {
         if ((incParam == null) || incParam.isEmpty() || (user == null)) return "Wrong old password";
         String result = "";
-        if (CryptService.isMatched(user.getHashPassword(), userDao.findUserByUserId(user.getId()).getHashPassword())) {
+        if (CryptService.isMatched(user.getHashPassword(), findUserById(user.getId()).getHashPassword())) {
             if ((incParam.get("newPassword") == null) ||
                     (incParam.get("repeatNewPassword") == null) ||
                     !checkNewPassword(incParam.get("newPassword").get(0), incParam.get("repeatNewPassword").get(0)))
                 result = "Passwords not match";
         } else result = "Wrong old password";
         return result;
-    }*/
+    }
 
-    /*private boolean checkNewPassword(String newPassword, String repeatNewPassword) {
+    private boolean checkNewPassword(String newPassword, String repeatNewPassword) {
         return (newPassword != null) && !newPassword.isEmpty() && newPassword.equals(repeatNewPassword);
-    }*/
+    }
 
-    /*@Override
+    @Override
     public boolean updateGroupId(int userId, Integer groupId) {
         if ((userId < 0) || ((groupId != null) && (groupId < 0))) return false;
-        return userDao.updateGroupId(userId, groupId);
-    }*/
-
+        List<Integer> param = new ArrayList<>();
+        param.add(userId);
+        param.add(groupId);
+        Boolean isSuccess = gson.fromJson(
+                RestBridge.doConnectAction("http://localhost:8181/user/updateGroupId",
+                        param, gson, true), Boolean.class);
+        return isSuccess;
+    }
 }
