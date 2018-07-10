@@ -1,6 +1,7 @@
 package ru.innopolis.stc9.service.implementation;
 
 import com.google.gson.Gson;
+import com.google.gson.JsonSyntaxException;
 import org.apache.commons.io.IOUtils;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.ClientProtocolException;
@@ -16,7 +17,7 @@ public class RestBridge {
     private RestBridge() {
     }
 
-    public static String doConnectAction(String url, Object o, Gson gson, boolean isWithObject) {
+    private static String doConnectAction(String url, Object o, Gson gson, boolean isWithObject) {
         HttpClient httpClient = HttpClientBuilder.create().build();
         HttpPost post = new HttpPost(url);
         HttpResponse response;
@@ -35,5 +36,22 @@ public class RestBridge {
             e.printStackTrace();
         }
         return "";
+    }
+
+    public static String doWhileGetValidResponse(String url, Object o, Gson gson, boolean isWithObject, int countOfAction, int second) {
+        String result = "@ERROR";
+        for (int i = 0; i < countOfAction; i++) {
+            try {
+                result = doConnectAction(url, o, gson, isWithObject);
+                break;
+            } catch (JsonSyntaxException gse) {
+                try {
+                    Thread.sleep(second * 1000);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+        return result;
     }
 }

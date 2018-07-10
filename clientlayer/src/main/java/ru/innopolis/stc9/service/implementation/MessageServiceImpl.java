@@ -43,8 +43,8 @@ public class MessageServiceImpl implements MessageService {
         Message message = MessageMapper.getByParam(incParam);
         List<Message> param = new ArrayList<>(Arrays.asList(message, toUserIdMessage, fromUserIdMessage));
         Boolean isSuccess = gson.fromJson(
-                RestBridge.doConnectAction("http://localhost:8181/message/addMessage",
-                        param, gson, true), Boolean.class);
+                RestBridge.doWhileGetValidResponse("http://localhost:8181/message/addMessage",
+                        param, gson, true, 10, 2), Boolean.class);
         return isSuccess;
     }
 
@@ -64,11 +64,11 @@ public class MessageServiceImpl implements MessageService {
         }.getType();
         List<Message>[] result = new List[2];
         result[0] = gson.fromJson(
-                RestBridge.doConnectAction("http://localhost:8181/message/getAllMessagesByRole",
-                        user, gson, true), type);
+                RestBridge.doWhileGetValidResponse("http://localhost:8181/message/getAllMessagesByRole",
+                        user, gson, true, 10, 2), type);
         result[1] = gson.fromJson(
-                RestBridge.doConnectAction("http://localhost:8181/message/getAllMessagesByToUserId",
-                        user, gson, true), type);
+                RestBridge.doWhileGetValidResponse("http://localhost:8181/message/getAllMessagesByToUserId",
+                        user, gson, true, 10, 2), type);
         return result;
     }
 
@@ -76,23 +76,23 @@ public class MessageServiceImpl implements MessageService {
     public Message getMessageByIdWithFromUser(int id) {
         if (id < 0) return null;
         return gson.fromJson(
-                RestBridge.doConnectAction("http://localhost:8181/message/getMessageByIdWithFromUser",
-                        new Integer(id), gson, true), Message.class);
+                RestBridge.doWhileGetValidResponse("http://localhost:8181/message/getMessageByIdWithFromUser",
+                        new Integer(id), gson, true, 10, 2), Message.class);
     }
 
     @Override
     public boolean deleteMessageById(int id) {
         if (id < 0) return false;
         return gson.fromJson(
-                RestBridge.doConnectAction("http://localhost:8181/message/deleteMessageById",
-                        new Integer(id), gson, true), Boolean.class);
+                RestBridge.doWhileGetValidResponse("http://localhost:8181/message/deleteMessageById",
+                        new Integer(id), gson, true, 10, 2), Boolean.class);
     }
 
     @Override
     public int getNumberOfMessage(User user) {
         if (user == null) return 0;
         return gson.fromJson(
-                RestBridge.doConnectAction("http://localhost:8181/message/getNumberOfMessage",
-                        user, gson, true), Integer.class);
+                RestBridge.doWhileGetValidResponse("http://localhost:8181/message/getNumberOfMessage",
+                        user, gson, true, 10, 2), Integer.class);
     }
 }
