@@ -17,6 +17,7 @@ import java.util.List;
 @Service("userServiceImpl")
 public class UserServiceImpl implements UserService {
     private Gson gson;
+    private String error = "@ERROR";
 
     public UserServiceImpl() {
         GsonBuilder builder = new GsonBuilder();
@@ -51,38 +52,39 @@ public class UserServiceImpl implements UserService {
                 incParam.get("firstName").get(0),
                 incParam.get("secondName").get(0),
                 incParam.get("middleName").get(0));
-        Boolean isSuccess = gson.fromJson(
-                RestBridge.doWhileGetValidResponse("http://localhost:8181/user/addUser",
-                        user, gson, true, 10, 2), Boolean.class);
-        return isSuccess;
+        String response = RestBridge.doWhileGetValidResponse("http://localhost:8181/user/addUser",
+                user, gson, true, 10, 2);
+        if (response.equals(error)) return false;
+        return gson.fromJson(response, Boolean.class);
     }
 
     @Override
     public boolean delUserById(int id) {
         if (id < 0) return false;
-        Boolean isSuccess = gson.fromJson(
-                RestBridge.doWhileGetValidResponse("http://localhost:8181/user/addUser",
-                        new Integer(id), gson, true, 10, 2), Boolean.class);
-        return isSuccess;
+        String response = RestBridge.doWhileGetValidResponse("http://localhost:8181/user/delUserById",
+                new Integer(id), gson, true, 10, 2);
+        if (response.equals(error)) return false;
+        return gson.fromJson(response, Boolean.class);
     }
 
     @Override
     public boolean isExist(String login) {
         if ((login == null) || login.equals("")) return false;
-        User user = gson.fromJson(
-                RestBridge.doWhileGetValidResponse("http://localhost:8181/user/findLoginByName",
-                        login, gson, true, 10, 2), User.class);
-        return user != null;
+        /*String response = RestBridge.doWhileGetValidResponse("http://localhost:8181/user/findLoginByName",
+                login, gson, true, 10, 2);
+        if (response.equals(error)) return false;
+        return gson.fromJson(response, User.class) != null;*/
+        return findUserByLogin(login) != null;
     }
 
     @Override
     public List<User> getUserList() {
         Type type = new TypeToken<List<User>>() {
         }.getType();
-        List<User> users = gson.fromJson(
-                RestBridge.doWhileGetValidResponse("http://localhost:8181/user/getUsersList",
-                        null, gson, false, 10, 2), type);
-        return users;
+        String response = RestBridge.doWhileGetValidResponse("http://localhost:8181/user/getUsersList",
+                null, gson, false, 10, 2);
+        if (response.equals(error)) return new ArrayList<>();
+        return gson.fromJson(response, type);
     }
 
     @Override
@@ -91,56 +93,56 @@ public class UserServiceImpl implements UserService {
             return new ArrayList<>();
         Type type = new TypeToken<List<User>>() {
         }.getType();
-        List<User> users = gson.fromJson(
-                RestBridge.doWhileGetValidResponse("http://localhost:8181/user/getStudentsByGroupId",
-                        groupId, gson, true, 10, 2), type);
-        return users;
+        String response = RestBridge.doWhileGetValidResponse("http://localhost:8181/user/getStudentsByGroupId",
+                groupId, gson, true, 10, 2);
+        if (response.equals(error)) return new ArrayList<>();
+        return gson.fromJson(response, type);
     }
 
     @Override
     public List<User> getAllStudents() {
         Type type = new TypeToken<List<User>>() {
         }.getType();
-        List<User> users = gson.fromJson(
-                RestBridge.doWhileGetValidResponse("http://localhost:8181/user/getAllStudents",
-                        null, gson, false, 10, 2), type);
-        return users;
+        String response = RestBridge.doWhileGetValidResponse("http://localhost:8181/user/getAllStudents",
+                null, gson, false, 10, 2);
+        if (response.equals(error)) return new ArrayList<>();
+        return gson.fromJson(response, type);
     }
 
     @Override
     public User findUserById(int userId) {
         if (userId < 0) return null;
-        User user = gson.fromJson(
-                RestBridge.doWhileGetValidResponse("http://localhost:8181/user/findUserByUserId",
-                        new Integer(userId), gson, true, 10, 2), User.class);
-        return user;
+        String response = RestBridge.doWhileGetValidResponse("http://localhost:8181/user/findUserByUserId",
+                new Integer(userId), gson, true, 10, 2);
+        if (response.equals(error)) return null;
+        return gson.fromJson(response, User.class);
     }
 
     @Override
     public User findUserByIdWithSubjectList(int userId) {
         if (userId < 0) return null;
-        User user = gson.fromJson(
-                RestBridge.doWhileGetValidResponse("http://localhost:8181/user/findUserByIdWithSubjectList",
-                        new Integer(userId), gson, true, 10, 2), User.class);
-        return user;
+        String response = RestBridge.doWhileGetValidResponse("http://localhost:8181/user/findUserByIdWithSubjectList",
+                new Integer(userId), gson, true, 10, 2);
+        if (response.equals(error)) return null;
+        return gson.fromJson(response, User.class);
     }
 
     @Override
     public User findUserByLogin(String login) {
         if ((login == null) || login.equals("")) return null;
-        User user = gson.fromJson(
-                RestBridge.doWhileGetValidResponse("http://localhost:8181/user/findLoginByName",
-                        login, gson, true, 10, 2), User.class);
-        return user;
+        String response = RestBridge.doWhileGetValidResponse("http://localhost:8181/user/findLoginByName",
+                login, gson, true, 12, 2);
+        if (response.equals(error)) return null;
+        return gson.fromJson(response, User.class);
     }
 
     @Override
     public boolean deactivationCurrentAccount(int id) {
         if (id < 0) return false;
-        Boolean isSuccess = gson.fromJson(
-                RestBridge.doWhileGetValidResponse("http://localhost:8181/user/deactivateUser",
-                        new Integer(id), gson, true, 10, 2), Boolean.class);
-        return isSuccess;
+        String response = RestBridge.doWhileGetValidResponse("http://localhost:8181/user/deactivateUser",
+                new Integer(id), gson, true, 10, 2);
+        if (response.equals(error)) return false;
+        return gson.fromJson(response, Boolean.class);
     }
 
     @Override
@@ -162,9 +164,9 @@ public class UserServiceImpl implements UserService {
         result[2] = false;
         if (!errors.isEmpty()) return result;
         User user = UserMapper.getByParam(incParam);
-        boolean isSuccess = gson.fromJson(
-                RestBridge.doWhileGetValidResponse("http://localhost:8181/user/updateUserByFIOL",
-                        user, gson, true, 10, 2), Boolean.class);
+        String response = RestBridge.doWhileGetValidResponse("http://localhost:8181/user/updateUserByFIOL",
+                user, gson, true, 10, 2);
+        boolean isSuccess = response.equals(error) ? false : gson.fromJson(response, Boolean.class);
         if (!isSuccess) errors.add("Invalid/Exist Login");
         else {
             result[2] = true;
@@ -177,9 +179,9 @@ public class UserServiceImpl implements UserService {
                 return result;
             }
             user.setHashPassword(CryptService.crypting(incParam.get("newPassword").get(0)));
-            isSuccess = gson.fromJson(
-                    RestBridge.doWhileGetValidResponse("http://localhost:8181/user/updateUserPassword",
-                            user, gson, true, 10, 2), Boolean.class);
+            response = RestBridge.doWhileGetValidResponse("http://localhost:8181/user/updateUserPassword",
+                    user, gson, true, 10, 2);
+            isSuccess = response.equals(error) ? false : gson.fromJson(response, Boolean.class);
             if (!isSuccess) errors.add("Updating profile password error");
             else success.add("Updating profile password successfully");
         }
@@ -209,9 +211,9 @@ public class UserServiceImpl implements UserService {
         List<Integer> param = new ArrayList<>();
         param.add(userId);
         param.add(groupId);
-        Boolean isSuccess = gson.fromJson(
-                RestBridge.doWhileGetValidResponse("http://localhost:8181/user/updateGroupId",
-                        param, gson, true, 10, 2), Boolean.class);
-        return isSuccess;
+        String response = RestBridge.doWhileGetValidResponse("http://localhost:8181/user/updateGroupId",
+                param, gson, true, 10, 2);
+        if (response.equals(error)) return false;
+        return gson.fromJson(response, Boolean.class);
     }
 }

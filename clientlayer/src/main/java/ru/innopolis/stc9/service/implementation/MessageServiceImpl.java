@@ -18,6 +18,7 @@ import java.util.List;
 @Service
 public class MessageServiceImpl implements MessageService {
     private Gson gson;
+    private String error = "@ERROR";
 
     public MessageServiceImpl() {
         GsonBuilder builder = new GsonBuilder();
@@ -42,10 +43,10 @@ public class MessageServiceImpl implements MessageService {
         Message fromUserIdMessage = messageInitByInteger(incParam, "fromUserId");
         Message message = MessageMapper.getByParam(incParam);
         List<Message> param = new ArrayList<>(Arrays.asList(message, toUserIdMessage, fromUserIdMessage));
-        Boolean isSuccess = gson.fromJson(
-                RestBridge.doWhileGetValidResponse("http://localhost:8181/message/addMessage",
-                        param, gson, true, 10, 2), Boolean.class);
-        return isSuccess;
+        String response = RestBridge.doWhileGetValidResponse("http://localhost:8181/message/addMessage",
+                param, gson, true, 10, 2);
+        if (response.equals(error)) return false;
+        return gson.fromJson(response, Boolean.class);
     }
 
     private Message messageInitByInteger(MultiValueMap<String, String> initValue, String value) {
@@ -63,36 +64,39 @@ public class MessageServiceImpl implements MessageService {
         Type type = new TypeToken<List<Message>>() {
         }.getType();
         List<Message>[] result = new List[2];
-        result[0] = gson.fromJson(
-                RestBridge.doWhileGetValidResponse("http://localhost:8181/message/getAllMessagesByRole",
-                        user, gson, true, 10, 2), type);
-        result[1] = gson.fromJson(
-                RestBridge.doWhileGetValidResponse("http://localhost:8181/message/getAllMessagesByToUserId",
-                        user, gson, true, 10, 2), type);
+        String response = RestBridge.doWhileGetValidResponse("http://localhost:8181/message/getAllMessagesByRole",
+                user, gson, true, 10, 2);
+        result[0] = response.equals(error) ? new ArrayList<>() : gson.fromJson(response, type);
+        response = RestBridge.doWhileGetValidResponse("http://localhost:8181/message/getAllMessagesByToUserId",
+                user, gson, true, 10, 2);
+        result[1] = response.equals(error) ? new ArrayList<>() : gson.fromJson(response, type);
         return result;
     }
 
     @Override
     public Message getMessageByIdWithFromUser(int id) {
         if (id < 0) return null;
-        return gson.fromJson(
-                RestBridge.doWhileGetValidResponse("http://localhost:8181/message/getMessageByIdWithFromUser",
-                        new Integer(id), gson, true, 10, 2), Message.class);
+        String response = RestBridge.doWhileGetValidResponse("http://localhost:8181/message/getMessageByIdWithFromUser",
+                new Integer(id), gson, true, 10, 2);
+        if (response.equals(error)) return null;
+        return gson.fromJson(response, Message.class);
     }
 
     @Override
     public boolean deleteMessageById(int id) {
         if (id < 0) return false;
-        return gson.fromJson(
-                RestBridge.doWhileGetValidResponse("http://localhost:8181/message/deleteMessageById",
-                        new Integer(id), gson, true, 10, 2), Boolean.class);
+        String response = RestBridge.doWhileGetValidResponse("http://localhost:8181/message/deleteMessageById",
+                new Integer(id), gson, true, 10, 2);
+        if (response.equals(error)) return false;
+        return gson.fromJson(response, Boolean.class);
     }
 
     @Override
     public int getNumberOfMessage(User user) {
         if (user == null) return 0;
-        return gson.fromJson(
-                RestBridge.doWhileGetValidResponse("http://localhost:8181/message/getNumberOfMessage",
-                        user, gson, true, 10, 2), Integer.class);
+        String response = RestBridge.doWhileGetValidResponse("http://localhost:8181/message/getNumberOfMessage",
+                user, gson, true, 10, 2);
+        if (response.equals(error)) return 0;
+        return gson.fromJson(response, Integer.class);
     }
 }
